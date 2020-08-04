@@ -1,0 +1,4 @@
+enum MessageOption {
+  referenceMessage,
+  deleteMessage,
+}
