@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import "package:flutter/material.dart";
-import 'package:tundr/pages/verification/recaptchaverificationpage.dart';
 import 'package:tundr/pages/registration/setupaboutmepage.dart';
 import 'package:tundr/pages/registration/setupextramediapage.dart';
 import 'package:tundr/pages/registration/setupinterestspage.dart';
@@ -47,7 +45,7 @@ class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) =>
-            kIsWeb ? RecaptchaVerificationPage() : SetupPhoneNumberPage(),
+            SetupPhoneNumberPage(),
         transitionsBuilder: (context, animation1, animation2, child) {
           return SlideTransition(
             position: Tween<Offset>(

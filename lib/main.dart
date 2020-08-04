@@ -111,11 +111,9 @@ class _AppState extends State<App> {
               home: user.theme == null
                   ? SetupThemePage()
                   : AppStateHandler(
-                      child: kIsWeb
-                          ? HomePage()
-                          : NotificationHandler(
-                              child: HomePage(),
-                            ),
+                      child: NotificationHandler(
+                        child: HomePage(),
+                      ),
                       onExit: () {
                         print("went offline");
                         final User user =

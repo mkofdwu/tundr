@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import "package:flutter/widgets.dart";
 import 'package:provider/provider.dart';
@@ -58,7 +59,8 @@ class ChatTile extends StatelessWidget {
                       decoration: BoxDecoration(
                         border: Border.all(color: AppColors.white),
                         image: DecorationImage(
-                          image: getNetworkImageProvider(user.profileImageUrl),
+                          image:
+                              CachedNetworkImageProvider(user.profileImageUrl),
                           fit: BoxFit.cover,
                         ),
                       ),

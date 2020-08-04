@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import "package:flutter/material.dart";
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/user.dart';
@@ -7,7 +8,6 @@ import 'package:tundr/pages/main/chatpage.dart';
 import 'package:tundr/utils/constants/colors.dart';
 import 'package:tundr/utils/constants/enums/chattype.dart';
 import 'package:tundr/utils/constants/gradients.dart';
-import 'package:tundr/utils/getnetworkimage.dart';
 
 class ItsAMatchPage extends StatelessWidget {
   // FUTURE: create enum `MatchAction` with undo, saySomething, continue, which is popped back to swipingpage which performs the action
@@ -30,7 +30,7 @@ class ItsAMatchPage extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: getNetworkImageProvider(user.profileImageUrl),
+                  image: CachedNetworkImageProvider(user.profileImageUrl),
                   fit: BoxFit.cover,
                 ),
               ),

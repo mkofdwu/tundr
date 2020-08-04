@@ -1,10 +1,10 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import "package:flutter/widgets.dart";
 import 'package:photo_view/photo_view.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/utils/constants/enums/mediatype.dart';
-import 'package:tundr/utils/getnetworkimage.dart';
 import 'package:tundr/widgets/media/simplevideoplayer.dart';
 
 class MediaViewer extends StatelessWidget {
@@ -30,7 +30,7 @@ class MediaViewer extends StatelessWidget {
                   minScale: PhotoViewComputedScale.contained,
                   imageProvider: media.isLocalFile
                       ? FileImage(File(media.url))
-                      : getNetworkImageProvider(media.url),
+                      : CachedNetworkImageProvider(media.url),
                 ),
               );
       case MediaType.video:

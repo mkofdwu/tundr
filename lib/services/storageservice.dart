@@ -41,17 +41,12 @@ class StorageService {
       print("media is in bytes");
       Uint8List compressedData;
       switch (media.type) {
-        // FIXME: FUTURE: file compression algorithm on web
         case MediaType.image:
-          if (kIsWeb) {
-            compressedData = media.bytes;
-          } else {
-            compressedData =
-                Uint8List.fromList(await FlutterImageCompress.compressWithList(
-              media.bytes.toList(),
-              quality: 70,
-            ));
-          }
+          compressedData =
+              Uint8List.fromList(await FlutterImageCompress.compressWithList(
+            media.bytes.toList(),
+            quality: 70,
+          ));
           print("length in bytes: ${compressedData.lengthInBytes}");
           if (compressedData.lengthInBytes > maxImageSizeInBytes)
             throw FileTooLargeError();
