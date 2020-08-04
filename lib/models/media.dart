@@ -1,7 +1,6 @@
 import 'package:tundr/utils/constants/enums/mediatype.dart';
 
 class Media {
-  // FUTURE: FIXME: use MediaSource instead of isInBytes and isLocalFile
   MediaType type;
   String url;
   bool isLocalFile;
