@@ -182,7 +182,6 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                           oldUrl: user.extraMedia[i]?.url,
                           prefix: "extra_media",
                         );
-                        media.isInBytes = false;
                         media.isLocalFile = false;
                         if (mounted) {
                           setState(() => Provider.of<ProviderData>(context)

@@ -16,23 +16,15 @@ class MediaViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (media.type) {
       case MediaType.image:
-        return media.isInBytes
-            ? Hero(
-                tag: media.name,
-                child: PhotoView(
-                  minScale: PhotoViewComputedScale.contained,
-                  imageProvider: MemoryImage(media.bytes),
-                ),
-              )
-            : Hero(
-                tag: media.url,
-                child: PhotoView(
-                  minScale: PhotoViewComputedScale.contained,
-                  imageProvider: media.isLocalFile
-                      ? FileImage(File(media.url))
-                      : CachedNetworkImageProvider(media.url),
-                ),
-              );
+        return Hero(
+          tag: media.url,
+          child: PhotoView(
+            minScale: PhotoViewComputedScale.contained,
+            imageProvider: media.isLocalFile
+                ? FileImage(File(media.url))
+                : CachedNetworkImageProvider(media.url),
+          ),
+        );
       case MediaType.video:
         return SimpleVideoPlayer(media: media);
       default:

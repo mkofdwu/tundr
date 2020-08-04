@@ -16,20 +16,15 @@ class MediaThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (media.type) {
       case MediaType.image:
-        return media.isInBytes
-            ? Hero(
-                tag: media.name,
-                child: Image.memory(media.bytes, fit: BoxFit.cover),
-              )
-            : Hero(
-                tag: media.url,
-                child: media.isLocalFile
-                    ? Image.file(
-                        File(media.url),
-                        fit: BoxFit.cover,
-                      )
-                    : getNetworkImage(media.url),
-              );
+        return Hero(
+          tag: media.url,
+          child: media.isLocalFile
+              ? Image.file(
+                  File(media.url),
+                  fit: BoxFit.cover,
+                )
+              : getNetworkImage(media.url),
+        );
       case MediaType.video:
         return VideoThumbnail(media: media);
       default:

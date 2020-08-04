@@ -148,9 +148,7 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30.0),
-              child: profilePic.isInBytes
-                  ? Image.memory(profilePic.bytes, fit: BoxFit.cover)
-                  : Image.file(File(profilePic.url), fit: BoxFit.cover),
+              child: Image.file(File(profilePic.url), fit: BoxFit.cover),
             ),
           ),
         ),

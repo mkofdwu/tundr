@@ -36,40 +36,7 @@ class StorageService {
       RegExpMatch match = exp.firstMatch(oldUrl);
       if (match != null) id = match[1];
     }
-
-    if (media.isInBytes) {
-      print("media is in bytes");
-      Uint8List compressedData;
-      switch (media.type) {
-        case MediaType.image:
-          compressedData =
-              Uint8List.fromList(await FlutterImageCompress.compressWithList(
-            media.bytes.toList(),
-            quality: 70,
-          ));
-          print("length in bytes: ${compressedData.lengthInBytes}");
-          if (compressedData.lengthInBytes > maxImageSizeInBytes)
-            throw FileTooLargeError();
-          storagePath = "images/$uid/${prefix}_$id";
-          break;
-        case MediaType.video:
-          if (media.bytes.lengthInBytes > maxVideoSizeInBytes)
-            throw FileTooLargeError();
-          compressedData = media.bytes;
-          storagePath = "videos/$uid/${prefix}_$id";
-          break;
-        default:
-          throw Exception("Invalid media type: ${media.type}");
-      }
-
-      final StorageUploadTask uploadTask =
-          storageRef.child(storagePath).putData(compressedData);
-      print("put data, waiting for complete");
-      final StorageTaskSnapshot storageTaskSnapshot =
-          await uploadTask.onComplete;
-      print("upload task complete");
-      return (await storageTaskSnapshot.ref.getDownloadURL()) as String;
-    } else if (media.isLocalFile) {
+    if (media.isLocalFile) {
       File compressedFile;
       switch (media.type) {
         case MediaType.image:

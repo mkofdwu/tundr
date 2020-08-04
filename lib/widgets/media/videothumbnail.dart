@@ -22,8 +22,6 @@ class _VideoThumbnailState extends State<VideoThumbnail> {
   @override
   void initState() {
     super.initState();
-    assert(!widget.media
-        .isInBytes); // videoplayercontroller cannot read from bytes, however local videos are never used in the app, so this should be ok on web.
     _controller = widget.media
             .isLocalFile // however, local videos are never used in the app
         ? VideoPlayerController.file(File(widget.media.url))
