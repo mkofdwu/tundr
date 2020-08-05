@@ -1,4 +1,4 @@
-import 'package:tundr/utils/constants/enums/mediatype.dart';
+import 'package:tundr/constants/enums/mediatype.dart';
 
 class Media {
   MediaType type;

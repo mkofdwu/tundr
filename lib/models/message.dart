@@ -1,5 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:tundr/utils/constants/enums/mediatype.dart";
+import "package:tundr/constants/enums/mediatype.dart";
 
 import 'media.dart';
 

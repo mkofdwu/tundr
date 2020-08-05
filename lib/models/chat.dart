@@ -1,5 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:tundr/utils/constants/enums/chattype.dart";
+import "package:tundr/constants/enums/chattype.dart";
 
 class Chat {
   String id;

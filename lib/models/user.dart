@@ -1,8 +1,8 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import 'package:tundr/utils/constants/enums/apptheme.dart';
-import "package:tundr/utils/constants/enums/gender.dart";
+import 'package:tundr/constants/enums/apptheme.dart';
+import "package:tundr/constants/enums/gender.dart";
 import 'package:tundr/models/media.dart';
-import 'package:tundr/utils/constants/personalinfofields.dart';
+import 'package:tundr/constants/personal-info-fields.dart';
 
 class User {
   String uid;
@@ -22,8 +22,6 @@ class User {
   bool online;
   DateTime lastSeen;
   num popularityScore;
-  num conversationalScore;
-  num blockedScore;
   // filters
   bool showMeBoys;
   bool showMeGirls;
@@ -62,8 +60,6 @@ class User {
     this.online,
     this.lastSeen,
     this.popularityScore,
-    this.conversationalScore,
-    this.blockedScore,
     this.showMeBoys,
     this.showMeGirls,
     this.ageRangeMin,
@@ -115,8 +111,6 @@ class User {
       lastSeen:
           doc.data["lastSeen"] == null ? null : doc.data["lastSeen"].toDate(),
       popularityScore: doc.data["popularityScore"],
-      conversationalScore: doc.data["conversationalScore"],
-      blockedScore: doc.data["blockedScore"],
       showMeBoys: doc.data["showMeBoys"],
       showMeGirls: doc.data["showMeGirls"],
       ageRangeMin: doc.data["ageRangeMin"],
