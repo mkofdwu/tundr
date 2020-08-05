@@ -3,4 +3,5 @@ import 'package:tundr/models/user.dart';
 
 class CurrentUser extends ChangeNotifier {
   User user;
+  String fcmToken;
 }

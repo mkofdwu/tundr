@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/models/personal-info-field.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/repositories/theme-notifier.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/about.dart';
@@ -94,8 +94,8 @@ class _SettingsPageState extends State<SettingsPage> {
     if (signOut) {
       // unsubscribe from notifications for this user
       DatabaseService.removeToken(
-        Provider.of<ProviderData>(context).user.uid,
-        Provider.of<ProviderData>(context).fcmToken,
+        Provider.of<CurrentUser>(context).user.uid,
+        Provider.of<CurrentUser>(context).fcmToken,
       );
       FirebaseMessaging().deleteInstanceID();
 
@@ -112,7 +112,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<ProviderData>(context).user;
+    final User user = Provider.of<CurrentUser>(context).user;
     final String uid = user.uid;
     return Scaffold(
       appBar: AppBar(
@@ -236,7 +236,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 selected: user.showInMostPopular,
                 onChanged: (value) {
                   DatabaseService.setUserField(uid, "showInMostPopular", value);
-                  Provider.of<ProviderData>(context).user.showInMostPopular =
+                  Provider.of<CurrentUser>(context).user.showInMostPopular =
                       value;
                 },
               ),
@@ -249,7 +249,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 onChanged: (value) {
                   DatabaseService.setUserField(
                       uid, "blockUnknownMessages", value);
-                  Provider.of<ProviderData>(context).user.blockUnknownMessages =
+                  Provider.of<CurrentUser>(context).user.blockUnknownMessages =
                       value;
                 },
               ),
@@ -280,7 +280,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 selected: user.readReceipts,
                 onChanged: (value) {
                   DatabaseService.setUserField(uid, "readReceipts", value);
-                  Provider.of<ProviderData>(context).user.readReceipts = value;
+                  Provider.of<CurrentUser>(context).user.readReceipts = value;
                 },
               ),
               SizedBox(height: 20.0),

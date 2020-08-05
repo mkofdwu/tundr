@@ -2,7 +2,7 @@
 // import "package:flutter/widgets.dart";
 // import 'package:provider/provider.dart';
 // import 'package:tundr/models/message.dart';
-// import 'package:tundr/repositories/provider-data.dart';
+// import 'package:tundr/repositories/current-user.dart';
 // import 'package:tundr/services/firestoreservice.dart';
 // import 'package:tundr/services/localdatabaseservice.dart';
 // import 'package:tundr/constants/enums/mediatype.dart';
@@ -19,11 +19,11 @@
 // class _MessagesHandlerState extends State<MessagesHandler> {
 //   Future<void> _loadMessages(List<DocumentSnapshot> messageDocs) {
 //     final LocalDatabaseService localDatabaseService =
-//         Provider.of<ProviderData>(context).localDatabaseService;
+//         Provider.of<CurrentUser>(context).localDatabaseService;
 
 //     return Future.wait(messageDocs.map((doc) async {
 //       if (!(await FirestoreService.blocked(
-//         Provider.of<ProviderData>(context).user.uid,
+//         Provider.of<CurrentUser>(context).user.uid,
 //         doc.data["uid"],
 //       ))) {
 //         localDatabaseService.saveMessage(Message(
@@ -54,7 +54,7 @@
 //   Widget build(BuildContext context) {
 //     return StreamBuilder<QuerySnapshot>(
 //       stream: FirestoreService.messagesStream(
-//           Provider.of<ProviderData>(context).user.uid),
+//           Provider.of<CurrentUser>(context).user.uid),
 //       builder: (context, snapshot) {
 //         if (snapshot.hasData)
 //           _loadMessages(snapshot.data.documents).then((_) => setState(() {}));

@@ -6,7 +6,7 @@ import "package:flutter/widgets.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/chat/chat.dart';
 import 'package:tundr/services/database-service.dart';
@@ -45,7 +45,7 @@ class ChatTile extends StatelessWidget {
           future: Future.wait([
             DatabaseService.getUser(chat.uid),
             DatabaseService.blocked(
-                chat.uid, Provider.of<ProviderData>(context).user.uid),
+                chat.uid, Provider.of<CurrentUser>(context).user.uid),
           ]),
           builder: (context, snapshot) {
             if (!snapshot.hasData) return SizedBox.shrink();
@@ -124,7 +124,7 @@ class ChatTile extends StatelessWidget {
                                     messages.reversed.map(
                                       (message) {
                                         final bool fromMe = message.senderUid ==
-                                            Provider.of<ProviderData>(context)
+                                            Provider.of<CurrentUser>(context)
                                                 .user
                                                 .uid;
                                         return Align(
@@ -191,7 +191,7 @@ class ChatTile extends StatelessWidget {
           future: Future.wait([
             DatabaseService.getUser(chat.uid),
             DatabaseService.blocked(
-                chat.uid, Provider.of<ProviderData>(context).user.uid),
+                chat.uid, Provider.of<CurrentUser>(context).user.uid),
           ]),
           builder: (context, snapshot) {
             if (!snapshot.hasData) return SizedBox.shrink();
@@ -301,7 +301,7 @@ class ChatTile extends StatelessWidget {
                                         (message) {
                                           final bool fromMe = message
                                                   .senderUid ==
-                                              Provider.of<ProviderData>(context)
+                                              Provider.of<CurrentUser>(context)
                                                   .user
                                                   .uid;
                                           return Align(

@@ -2,7 +2,7 @@
 
 import "package:flutter/widgets.dart";
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/models/suggestion.dart';
 import 'package:tundr/models/suggestion-gone-through.dart';
 import 'package:tundr/models/user.dart';
@@ -42,7 +42,7 @@ class _SwipingPageState extends State<SwipingPage> {
   @override
   void deactivate() {
     DatabaseService.addUserSuggestionsGoneThrough(
-        Provider.of<ProviderData>(context).user.uid, _goneThrough);
+        Provider.of<CurrentUser>(context).user.uid, _goneThrough);
     super.deactivate();
   }
 
@@ -50,7 +50,7 @@ class _SwipingPageState extends State<SwipingPage> {
     // TODO: FUTURE: move load suggestions to when the app starts
     if (mounted) setState(() => _loading = true);
 
-    final User user = Provider.of<ProviderData>(context).user;
+    final User user = Provider.of<CurrentUser>(context).user;
 
     final List<Suggestion> storedSuggestions =
         await DatabaseService.getUserSuggestions(user.uid);
@@ -101,7 +101,7 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   Future<void> _handlePreviousSuggestion() async {
-    final User user = Provider.of<ProviderData>(context).user;
+    final User user = Provider.of<CurrentUser>(context).user;
     final User otherUser = _suggestions[_i - 1].user;
 
     if (_handledUpToSuggestion < _i - 1) {
@@ -161,7 +161,7 @@ class _SwipingPageState extends State<SwipingPage> {
   void _like() async {
     // animate card slide to right (ease out)
 
-    final User user = Provider.of<ProviderData>(context).user;
+    final User user = Provider.of<CurrentUser>(context).user;
 
     print("current index: " + _i.toString());
 
@@ -185,7 +185,7 @@ class _SwipingPageState extends State<SwipingPage> {
         ),
       );
       if (!undo) {
-        DatabaseService.match(Provider.of<ProviderData>(context).user.uid,
+        DatabaseService.match(Provider.of<CurrentUser>(context).user.uid,
             _suggestions[_i].user.uid);
         setState(() {
           _sendPreviousSuggestion = false;

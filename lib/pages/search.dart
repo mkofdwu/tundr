@@ -3,7 +3,7 @@ import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
 import 'package:tundr/widgets/buttons/tile-icon.dart';
 import 'package:tundr/widgets/profile-tile.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
@@ -74,7 +74,7 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                     ),
                   );
-                final String uid = Provider.of<ProviderData>(context).user.uid;
+                final String uid = Provider.of<CurrentUser>(context).user.uid;
                 return SingleChildScrollView(
                   child: Column(
                     children: List<Widget>.from(

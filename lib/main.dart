@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/repositories/registration-info.dart';
 import 'package:tundr/repositories/theme-notifier.dart';
 import 'package:tundr/models/user.dart';
@@ -32,8 +32,8 @@ void main() {
     () async {
       runApp(MultiProvider(
         providers: [
-          ChangeNotifierProvider<ProviderData>(
-              create: (context) => ProviderData()),
+          ChangeNotifierProvider<CurrentUser>(
+              create: (context) => CurrentUser()),
           ChangeNotifierProvider<ThemeNotifier>(
               create: (context) => ThemeNotifier()),
           ChangeNotifierProvider<RegistrationInfo>(
@@ -71,8 +71,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ProviderData>(
-            create: (context) => ProviderData()),
+        ChangeNotifierProvider<CurrentUser>(create: (context) => CurrentUser()),
         ChangeNotifierProvider<ThemeNotifier>(
             create: (context) => ThemeNotifier()),
         ChangeNotifierProvider<RegistrationInfo>(
@@ -104,7 +103,7 @@ class _AppState extends State<App> {
 
               final user = snapshot.data;
 
-              Provider.of<ProviderData>(context).user = user;
+              Provider.of<CurrentUser>(context).user = user;
               Provider.of<ThemeNotifier>(context).theme =
                   user.theme ?? AppTheme.dark;
 
@@ -120,9 +119,9 @@ class _AppState extends State<App> {
                         onExit: () {
                           print("went offline");
                           final User user =
-                              Provider.of<ProviderData>(context).user;
+                              Provider.of<CurrentUser>(context).user;
                           DatabaseService.setUserFields(
-                            Provider.of<ProviderData>(context).user.uid,
+                            Provider.of<CurrentUser>(context).user.uid,
                             {
                               "online": false,
                               "lastSeen": Timestamp.now(),
@@ -133,7 +132,7 @@ class _AppState extends State<App> {
                         onStart: () {
                           print("back online");
                           DatabaseService.setUserField(
-                            Provider.of<ProviderData>(context).user.uid,
+                            Provider.of<CurrentUser>(context).user.uid,
                             "online",
                             true,
                           );

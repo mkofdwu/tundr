@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/repositories/theme-notifier.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
@@ -15,7 +15,7 @@ class _SetupThemePageState extends State<SetupThemePage> {
   Future<void> _selectTheme(AppTheme theme) async {
     Provider.of<ThemeNotifier>(context).setTheme(theme);
     DatabaseService.setUserField(
-      Provider.of<ProviderData>(context).user.uid,
+      Provider.of<CurrentUser>(context).user.uid,
       "theme",
       AppTheme.values.indexOf(theme),
     );

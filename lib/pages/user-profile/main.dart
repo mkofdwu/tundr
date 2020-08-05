@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/models/chat.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/chat/chat.dart';
 import 'package:tundr/pages/user-profile/about-me.dart';
@@ -58,7 +58,7 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    final User my = Provider.of<ProviderData>(context).user;
+    final User my = Provider.of<CurrentUser>(context).user;
     final User user = ModalRoute.of(context).settings.arguments;
     return GestureDetector(
       child: SafeArea(

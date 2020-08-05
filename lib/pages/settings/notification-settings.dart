@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/models/user.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/widgets/buttons/tile-icon.dart';
 import 'widgets/switch-setting-field.dart';
@@ -9,7 +9,7 @@ import 'widgets/switch-setting-field.dart';
 class NotificationSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<ProviderData>(context).user;
+    final User user = Provider.of<CurrentUser>(context).user;
     return Scaffold(
       // FUTURE: DESIGN: make this nicer
       appBar: AppBar(
@@ -51,7 +51,7 @@ class NotificationSettingsPage extends StatelessWidget {
                   "messageNotification",
                   value,
                 );
-                Provider.of<ProviderData>(context).user.newMatchNotification =
+                Provider.of<CurrentUser>(context).user.newMatchNotification =
                     value;
               },
             ),

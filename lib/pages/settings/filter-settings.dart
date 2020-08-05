@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/models/filter.dart';
 import 'package:tundr/models/personal-info-field.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/pages/filters/checkbox-filter.dart';
 import 'package:tundr/pages/filters/range-slider-filter.dart';
 import 'package:tundr/pages/filters/text-list-filter.dart';
@@ -46,7 +46,7 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
       ),
     );
     DatabaseService.setUserFilter(
-      uid: Provider.of<ProviderData>(context).user.uid,
+      uid: Provider.of<CurrentUser>(context).user.uid,
       filter: filter,
     );
     setState(() {});
@@ -66,7 +66,7 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: DatabaseService.getUserFiltersDoc(
-            Provider.of<ProviderData>(context).user.uid),
+            Provider.of<CurrentUser>(context).user.uid),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Center(child: Loader());
           final Map<String, dynamic> filters = snapshot.data.data;

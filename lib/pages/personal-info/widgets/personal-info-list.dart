@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:flutter/widgets.dart";
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/constants/personal-info-fields.dart';
 import 'package:tundr/pages/personal-info/widgets/personal-info-field-button.dart';
 
@@ -13,7 +13,7 @@ class PersonalInfoList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> userPersonalInfo =
-        Provider.of<ProviderData>(context).user.personalInfo;
+        Provider.of<CurrentUser>(context).user.personalInfo;
     return Column(
       children: List<Widget>.from(
         personalInfoFields.keys.map(

@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/interests/interests-edit.dart';
 import 'package:tundr/services/database-service.dart';
@@ -24,20 +24,20 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
   _previewProfile() => Navigator.pushNamed(
         context,
         "userprofile",
-        arguments: Provider.of<ProviderData>(context).user,
+        arguments: Provider.of<CurrentUser>(context).user,
       );
 
   _updateAboutMe() {
-    Provider.of<ProviderData>(context).user.aboutMe = _aboutMeController.text;
-    DatabaseService.setUserField(Provider.of<ProviderData>(context).user.uid,
+    Provider.of<CurrentUser>(context).user.aboutMe = _aboutMeController.text;
+    DatabaseService.setUserField(Provider.of<CurrentUser>(context).user.uid,
         "aboutMe", _aboutMeController.text);
   }
 
   _updateMedia() {
     DatabaseService.setUserField(
-      Provider.of<ProviderData>(context).user.uid,
+      Provider.of<CurrentUser>(context).user.uid,
       "extraMedia",
-      List<Map<String, dynamic>>.from(Provider.of<ProviderData>(context)
+      List<Map<String, dynamic>>.from(Provider.of<CurrentUser>(context)
           .user
           .extraMedia
           .map((media) => media == null
@@ -84,7 +84,7 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
   @override
   Widget build(BuildContext context) {
     // FUTURE: refractor
-    final User user = Provider.of<ProviderData>(context).user;
+    final User user = Provider.of<CurrentUser>(context).user;
     _aboutMeController.text = user.aboutMe;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -184,7 +184,7 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                         );
                         media.isLocalFile = false;
                         if (mounted) {
-                          setState(() => Provider.of<ProviderData>(context)
+                          setState(() => Provider.of<CurrentUser>(context)
                               .user
                               .extraMedia[i] = media);
                           _updateMedia();

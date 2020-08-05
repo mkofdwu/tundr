@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
@@ -30,7 +30,7 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
       ),
       body: FutureBuilder<List<String>>(
         future: DatabaseService.getUserBlockedUids(
-            Provider.of<ProviderData>(context).user.uid),
+            Provider.of<CurrentUser>(context).user.uid),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
             return Center(child: CircularProgressIndicator());
@@ -95,7 +95,7 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                         padding: 10.0,
                         onTap: () {
                           DatabaseService.unblockUser(
-                              Provider.of<ProviderData>(context).user.uid,
+                              Provider.of<CurrentUser>(context).user.uid,
                               user.uid);
                           setState(() {});
                         },

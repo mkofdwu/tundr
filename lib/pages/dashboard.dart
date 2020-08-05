@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import "package:intl/intl.dart";
 import 'package:tundr/models/media.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/own-profile.dart';
 import 'package:tundr/pages/settings/settings.dart';
@@ -36,7 +36,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((duration) =>
-        _nameController.text = Provider.of<ProviderData>(context).user.name);
+        _nameController.text = Provider.of<CurrentUser>(context).user.name);
   }
 
   @override
@@ -48,7 +48,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<ProviderData>(context).user;
+    final User user = Provider.of<CurrentUser>(context).user;
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     return SafeArea(
@@ -245,9 +245,9 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   _changeName() {
-    Provider.of<ProviderData>(context).user.name = _nameController.text;
+    Provider.of<CurrentUser>(context).user.name = _nameController.text;
     DatabaseService.setUserField(
-      Provider.of<ProviderData>(context).user.uid,
+      Provider.of<CurrentUser>(context).user.uid,
       "name",
       _nameController.text,
     );
@@ -280,16 +280,16 @@ class _DashboardPageState extends State<DashboardPage> {
     );
     if (imageMedia == null) return;
     final String newProfileImageUrl = await StorageService.uploadMedia(
-      uid: Provider.of<ProviderData>(context).user.uid,
+      uid: Provider.of<CurrentUser>(context).user.uid,
       media: imageMedia,
       prefix: "profile_image",
     );
     DatabaseService.setUserField(
-      Provider.of<ProviderData>(context).user.uid,
+      Provider.of<CurrentUser>(context).user.uid,
       "profileImageUrl",
       newProfileImageUrl,
     );
-    setState(() => Provider.of<ProviderData>(context).user.profileImageUrl =
+    setState(() => Provider.of<CurrentUser>(context).user.profileImageUrl =
         newProfileImageUrl);
   }
 

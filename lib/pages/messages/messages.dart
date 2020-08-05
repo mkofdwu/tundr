@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/models/chat.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
@@ -21,7 +21,7 @@ class _MessagesPageState extends State<MessagesPage> {
   //   final LocalDatabaseService localDatabaseService =
   //       DatabaseService;
   //   return DatabaseService.saveNewMessages(
-  //     uid: Provider.of<ProviderData>(context).user.uid,
+  //     uid: Provider.of<CurrentUser>(context).user.uid,
   //     saveMessage: localDatabaseService.saveMessage,
   //     addChatIfDoesNotExistElseSetUpdated: (uid) async {
   //       if (await localDatabaseService.chatExists(uid)) {
@@ -35,7 +35,7 @@ class _MessagesPageState extends State<MessagesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<ProviderData>(context).user;
+    final User user = Provider.of<CurrentUser>(context).user;
     return FutureBuilder<bool>(
       future: DatabaseService.noChats(user.uid),
       builder: (context, snapshot) {

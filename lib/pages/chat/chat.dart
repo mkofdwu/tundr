@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/repositories/provider-data.dart';
+import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/services/media-picker-service.dart';
@@ -62,7 +62,7 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
     _textController.addListener(() => setState(() {})); // FUTURE: optimize this
     SchedulerBinding.instance.addPostFrameCallback((duration) async {
-      final User user = Provider.of<ProviderData>(context).user;
+      final User user = Provider.of<CurrentUser>(context).user;
 
       if (widget.chat.type != ChatType.nonExistent &&
           user.readReceipts &&
@@ -153,7 +153,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _sendMessage() async {
-    final String uid = Provider.of<ProviderData>(context).user.uid;
+    final String uid = Provider.of<CurrentUser>(context).user.uid;
     final String text = _textController
         .text; // copy the value of the text to clear the textfield and thus prevent spamming empty messages
     final String referencedMessageId = _referencedMessageId;
@@ -174,7 +174,7 @@ class _ChatPageState extends State<ChatPage> {
       ));
     });
 
-    Provider.of<ProviderData>(context).user.totalWordsSent +=
+    Provider.of<CurrentUser>(context).user.totalWordsSent +=
         text.split(RegExp("\\s")).length;
 
     if (widget.chat.type == ChatType.nonExistent) {
@@ -232,13 +232,13 @@ class _ChatPageState extends State<ChatPage> {
 
   void _blockUser() {
     DatabaseService.blockUser(
-        Provider.of<ProviderData>(context).user.uid, widget.user.uid);
+        Provider.of<CurrentUser>(context).user.uid, widget.user.uid);
     _deleteChat();
   }
 
   void _deleteChat() {
     DatabaseService.deleteChat(
-      Provider.of<ProviderData>(context).user.uid,
+      Provider.of<CurrentUser>(context).user.uid,
       widget.chat.id,
     );
     Navigator.pop(context);
@@ -255,7 +255,7 @@ class _ChatPageState extends State<ChatPage> {
 
     if (imageMedia == null) return;
 
-    final String uid = Provider.of<ProviderData>(context).user.uid;
+    final String uid = Provider.of<CurrentUser>(context).user.uid;
     final String wallpaperUrl = await StorageService.uploadMedia(
       uid: uid,
       media: imageMedia,
@@ -488,7 +488,7 @@ class _ChatPageState extends State<ChatPage> {
                             final int messageIndex = i - _unsentMessages.length;
                             final Message message = messages[messageIndex];
                             final bool fromMe = message.senderUid ==
-                                Provider.of<ProviderData>(context).user.uid;
+                                Provider.of<CurrentUser>(context).user.uid;
                             return Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 20.0,
