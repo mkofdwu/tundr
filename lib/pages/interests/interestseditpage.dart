@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/models/providerdata.dart';
 import 'package:tundr/services/databaseservice.dart';
 import 'package:tundr/widgets/buttons/tileiconbutton.dart';
-import 'package:tundr/widgets/interests/interestsbrowser.dart';
+import 'package:tundr/pages/interests/widgets/interestsbrowser.dart';
 
 class InterestsEditPage extends StatelessWidget {
   _return(BuildContext context) {

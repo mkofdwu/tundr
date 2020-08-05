@@ -4,7 +4,7 @@ import 'package:tundr/models/user.dart';
 import 'package:tundr/models/providerdata.dart';
 import 'package:tundr/services/databaseservice.dart';
 import 'package:tundr/widgets/buttons/tileiconbutton.dart';
-import 'package:tundr/widgets/settings/switchsettingfield.dart';
+import './widgets/switchsettingfield.dart';
 
 class NotificationSettingsPage extends StatelessWidget {
   @override

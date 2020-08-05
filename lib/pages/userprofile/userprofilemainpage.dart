@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/providerdata.dart';
 import 'package:tundr/models/user.dart';
-import 'package:tundr/pages/main/chatpage.dart';
+import 'package:tundr/pages/chat/chatpage.dart';
 import 'package:tundr/pages/userprofile/userprofileaboutmepage.dart';
 import 'package:tundr/pages/userprofile/userprofileextramediapage.dart';
 import 'package:tundr/pages/userprofile/userprofilepersonalinfo.dart';

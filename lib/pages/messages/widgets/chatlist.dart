@@ -1,6 +1,6 @@
 import "package:flutter/widgets.dart";
 import 'package:tundr/models/chat.dart';
-import 'package:tundr/widgets/messagespage/chattile.dart';
+import './chattile.dart';
 
 class ChatList extends StatelessWidget {
   final List<Chat> chats; // list of chat uids

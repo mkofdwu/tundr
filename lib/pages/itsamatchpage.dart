@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import "package:flutter/material.dart";
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/user.dart';
-import 'package:tundr/pages/main/chatpage.dart';
+import 'package:tundr/pages/chat/chatpage.dart';
 import 'package:tundr/utils/constants/colors.dart';
 import 'package:tundr/utils/constants/enums/chattype.dart';
 import 'package:tundr/utils/constants/gradients.dart';

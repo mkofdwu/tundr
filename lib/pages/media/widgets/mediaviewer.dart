@@ -5,7 +5,7 @@ import "package:flutter/widgets.dart";
 import 'package:photo_view/photo_view.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/utils/constants/enums/mediatype.dart';
-import 'package:tundr/widgets/media/simplevideoplayer.dart';
+import 'package:tundr/pages/media/widgets/simplevideoplayer.dart';
 
 class MediaViewer extends StatelessWidget {
   final Media media;

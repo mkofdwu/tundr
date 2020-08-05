@@ -4,7 +4,7 @@ import 'package:tundr/models/providerdata.dart';
 import 'package:tundr/models/suggestion.dart';
 import 'package:tundr/models/suggestiongonethrough.dart';
 import 'package:tundr/models/user.dart';
-import 'package:tundr/pages/main/itsamatchpage.dart';
+import 'package:tundr/pages/itsamatchpage.dart';
 import 'package:tundr/services/databaseservice.dart';
 import 'package:tundr/utils/constants/colors.dart';
 
@@ -12,7 +12,7 @@ import "package:flutter/material.dart";
 import 'package:tundr/utils/constants/values.dart';
 import 'package:tundr/utils/constants/shadows.dart';
 import 'package:tundr/widgets/loaders/loader.dart';
-import 'package:tundr/widgets/swipingpage/suggestioncard.dart';
+import 'package:tundr/pages/swiping/widgets/suggestioncard.dart';
 import 'package:tundr/widgets/themebuilder.dart'; // for icons, remove when alternative image has been found
 
 class SwipingPage extends StatefulWidget {

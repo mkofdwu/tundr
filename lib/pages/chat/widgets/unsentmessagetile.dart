@@ -4,7 +4,7 @@ import 'package:tundr/models/message.dart';
 import 'package:tundr/utils/constants/colors.dart';
 import 'package:tundr/utils/constants/shadows.dart';
 import 'package:tundr/utils/fromtheme.dart';
-import 'package:tundr/widgets/chatpage/referencedmessagetile.dart';
+import './referencedmessagetile.dart';
 import 'package:tundr/widgets/loaders/loader.dart';
 import 'package:tundr/widgets/media/mediathumbnail.dart';
 

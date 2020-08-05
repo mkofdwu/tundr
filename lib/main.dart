@@ -9,7 +9,7 @@ import 'package:tundr/models/registrationinfo.dart';
 import 'package:tundr/models/themenotifier.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/loadingpage.dart';
-import 'package:tundr/pages/main/homepage.dart';
+import 'package:tundr/pages/homepage.dart';
 import 'package:tundr/pages/registration/setupthemepage.dart';
 import 'package:tundr/pages/userprofile/userprofilemainpage.dart';
 import 'package:tundr/pages/welcomepage.dart';

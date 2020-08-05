@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:tundr/utils/constants/colors.dart';
 import 'package:tundr/utils/constants/interests.dart';
-import 'package:tundr/widgets/interests/addcustominterestchip.dart';
+import './addcustominterestchip.dart';
 import 'package:tundr/widgets/loaders/loader.dart';
 import 'package:tundr/widgets/tabbars/simpletabbar.dart';
 import 'package:tundr/widgets/textfields/plaintextfield.dart';
