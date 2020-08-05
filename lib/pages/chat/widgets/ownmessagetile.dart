@@ -2,12 +2,12 @@ import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/pages/main/mediaviewpage.dart';
+import 'package:tundr/pages/media/mediaviewpage.dart';
 import 'package:tundr/utils/constants/colors.dart';
 import 'package:tundr/utils/constants/enums/messageoption.dart';
 import 'package:tundr/utils/constants/shadows.dart';
 import 'package:tundr/utils/fromtheme.dart';
-import 'package:tundr/widgets/chatpage/referencedmessagetile.dart';
+import './referencedmessagetile.dart';
 import 'package:tundr/widgets/media/mediathumbnail.dart';
 
 class OwnMessageTile extends StatelessWidget {

@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/models/registrationinfo.dart';
 import 'package:tundr/utils/constants/colors.dart';
-import 'package:tundr/widgets/interests/interestsbrowser.dart';
+import 'package:tundr/pages/interests/widgets/interestsbrowser.dart';
 import 'package:tundr/widgets/buttons/tileiconbutton.dart';
 
 class SetupInterestsPage extends StatefulWidget {

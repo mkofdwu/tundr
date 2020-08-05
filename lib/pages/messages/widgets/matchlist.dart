@@ -1,5 +1,5 @@
 import "package:flutter/widgets.dart";
-import 'package:tundr/widgets/messagespage/matchtile.dart';
+import './matchtile.dart';
 
 class MatchList extends StatelessWidget {
   final List<String> matches;

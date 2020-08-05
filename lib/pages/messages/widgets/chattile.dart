@@ -8,7 +8,7 @@ import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/models/providerdata.dart';
 import 'package:tundr/models/user.dart';
-import 'package:tundr/pages/main/chatpage.dart';
+import 'package:tundr/pages/chat/chatpage.dart';
 import 'package:tundr/services/databaseservice.dart';
 import 'package:tundr/utils/constants/colors.dart';
 import 'package:tundr/utils/constants/shadows.dart';

@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import 'package:tundr/models/filter.dart';
 import 'package:tundr/utils/constants/colors.dart';
 import 'package:tundr/widgets/buttons/tileiconbutton.dart';
-import 'package:tundr/widgets/filters/filtermethodselector.dart';
+import 'package:tundr/pages/filters/widgets/filtermethodselector.dart';
 import 'package:tundr/widgets/pages/stackscrollpage.dart';
 
 class TextListFilterPage extends StatefulWidget {

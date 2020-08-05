@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import 'package:tundr/models/media.dart';
 import 'package:tundr/utils/constants/colors.dart';
 import 'package:tundr/widgets/buttons/tileiconbutton.dart';
-import 'package:tundr/widgets/media/mediaviewer.dart';
+import 'package:tundr/pages/media/widgets/mediaviewer.dart';
 
 class MediaViewPage extends StatelessWidget {
   final Media media;

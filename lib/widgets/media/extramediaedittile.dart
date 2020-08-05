@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:image_picker/image_picker.dart';
 import 'package:tundr/models/media.dart';
-import 'package:tundr/pages/main/extramediaeditpage.dart';
+import 'package:tundr/pages/media/extramediaeditpage.dart';
 import 'package:tundr/services/mediapickerservice.dart';
 import 'package:tundr/utils/constants/colors.dart';
 import 'package:tundr/utils/constants/enums/mediatype.dart';

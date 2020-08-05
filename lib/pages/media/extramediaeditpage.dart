@@ -7,7 +7,7 @@ import 'package:tundr/utils/constants/enums/mediatype.dart';
 import 'package:tundr/utils/constants/gradients.dart';
 import 'package:tundr/utils/fromtheme.dart';
 import 'package:tundr/widgets/buttons/tileiconbutton.dart';
-import 'package:tundr/widgets/media/mediaviewer.dart';
+import 'package:tundr/pages/media/widgets/mediaviewer.dart';
 import 'package:tundr/widgets/popupmenus/menudivider.dart';
 import 'package:tundr/widgets/popupmenus/menuoption.dart';
 import 'package:tundr/widgets/popupmenus/popupmenu.dart';

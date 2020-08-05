@@ -7,7 +7,7 @@ import "package:intl/intl.dart";
 import 'package:tundr/models/media.dart';
 import 'package:tundr/models/providerdata.dart';
 import 'package:tundr/models/user.dart';
-import 'package:tundr/pages/main/ownprofilepage.dart';
+import 'package:tundr/pages/ownprofilepage.dart';
 import 'package:tundr/pages/settings/settingspage.dart';
 
 import "package:tundr/services/databaseservice.dart";

@@ -7,9 +7,9 @@ import 'package:tundr/services/databaseservice.dart';
 import 'package:tundr/utils/constants/colors.dart';
 import 'package:tundr/utils/constants/enums/chattype.dart';
 import 'package:tundr/widgets/loaders/loader.dart';
-import 'package:tundr/widgets/messagespage/chatlist.dart';
-import 'package:tundr/widgets/messagespage/chatsgroup.dart';
-import 'package:tundr/widgets/messagespage/matchlist.dart';
+import './widgets/chatlist.dart';
+import './widgets/chatsgroup.dart';
+import './widgets/matchlist.dart';
 
 class MessagesPage extends StatefulWidget {
   @override

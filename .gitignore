@@ -30,13 +30,13 @@
 .pub/
 /build/
 
-# Web related
-lib/generated_plugin_registrant.dart
+# Android related
+
+android/key.jks
+android/key.properties
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
-
-android/gradle.properties
 
 # Firebase related
 .firebase/

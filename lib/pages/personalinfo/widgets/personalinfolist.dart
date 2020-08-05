@@ -3,7 +3,7 @@ import "package:flutter/widgets.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/models/providerdata.dart';
 import 'package:tundr/utils/constants/personalinfofields.dart';
-import 'package:tundr/widgets/personalinfo/personalinfofieldbutton.dart';
+import 'package:tundr/pages/personalinfo/widgets/personalinfofieldbutton.dart';
 
 class PersonalInfoList extends StatelessWidget {
   final Function(String, dynamic) onChanged;

@@ -4,7 +4,7 @@ import 'package:tundr/models/registrationinfo.dart';
 import 'package:tundr/models/themenotifier.dart';
 import 'package:tundr/utils/constants/enums/apptheme.dart';
 import 'package:tundr/utils/constants/personalinfofields.dart';
-import 'package:tundr/widgets/personalinfo/personalinfofieldbutton.dart';
+import 'package:tundr/pages/personalinfo/widgets/personalinfofieldbutton.dart';
 import 'package:tundr/widgets/buttons/tileiconbutton.dart';
 
 class SetupPersonalInfoPage extends StatefulWidget {

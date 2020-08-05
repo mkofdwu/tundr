@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/utils/constants/colors.dart';
 import 'package:tundr/widgets/buttons/tileiconbutton.dart';
-import 'package:tundr/widgets/interests/interestswrap.dart';
+import 'package:tundr/pages/interests/widgets/interestswrap.dart';
 
 class UserProfilePersonalInfoPage extends StatefulWidget {
   final User user;

@@ -2,14 +2,14 @@ import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/models/providerdata.dart';
 import 'package:tundr/models/user.dart';
-import 'package:tundr/pages/main/interestseditpage.dart';
+import 'package:tundr/pages/interests/interestseditpage.dart';
 import 'package:tundr/services/databaseservice.dart';
 import 'package:tundr/services/storageservice.dart';
 import 'package:tundr/utils/constants/colors.dart';
 import 'package:tundr/utils/constants/enums/mediatype.dart';
-import 'package:tundr/widgets/interests/interestswrap.dart';
+import 'package:tundr/pages/interests/widgets/interestswrap.dart';
 import 'package:tundr/widgets/media/extramediagrid.dart';
-import 'package:tundr/widgets/personalinfo/personalinfolist.dart';
+import 'package:tundr/pages/personalinfo/widgets/personalinfolist.dart';
 import 'package:tundr/widgets/buttons/tileiconbutton.dart';
 
 class OwnProfileEditPage extends StatefulWidget {

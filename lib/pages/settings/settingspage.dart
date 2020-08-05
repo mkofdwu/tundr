@@ -21,9 +21,9 @@ import 'package:tundr/widgets/buttons/lighttilebutton.dart';
 import 'package:tundr/widgets/buttons/tileiconbutton.dart';
 import 'package:tundr/widgets/checkboxes/simplecheckbox.dart';
 import 'package:tundr/widgets/radiogroups/roundradiogroup.dart';
-import 'package:tundr/widgets/settings/separatepagesettingfield.dart';
-import 'package:tundr/widgets/settings/settingfield.dart';
-import 'package:tundr/widgets/settings/switchsettingfield.dart';
+import './widgets/separatepagesettingfield.dart';
+import './widgets/settingfield.dart';
+import './widgets/switchsettingfield.dart';
 import 'package:tundr/widgets/sliders/simplerangeslider.dart';
 
 class SettingsPage extends StatefulWidget {

@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
-import 'package:tundr/pages/main/dashboardpage.dart';
-import 'package:tundr/pages/main/messagespage.dart';
-import 'package:tundr/pages/main/mostpopularpage.dart';
-import 'package:tundr/pages/main/searchpage.dart';
-import 'package:tundr/pages/main/swipingpage.dart';
+import 'package:tundr/pages/dashboardpage.dart';
+import 'package:tundr/pages/messages/messagespage.dart';
+import 'package:tundr/pages/mostpopularpage.dart';
+import 'package:tundr/pages/searchpage.dart';
+import 'package:tundr/pages/swiping/swipingpage.dart';
 import 'package:tundr/utils/constants/colors.dart';
 
 class HomePage extends StatefulWidget {
