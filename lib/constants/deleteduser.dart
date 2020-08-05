@@ -52,8 +52,6 @@ final User deletedUser = User(
   online: false,
   lastSeen: DateTime(0, 0, 0),
   popularityScore: 100,
-  conversationalScore: 0,
-  blockedScore: 0,
   showMeBoys: false,
   showMeGirls: false,
   ageRangeMin: 0,
