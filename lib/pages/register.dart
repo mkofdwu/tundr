@@ -36,12 +36,8 @@ class _RegisterPageState extends State<RegisterPage> {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
 
-    print(username);
-
     final bool usernameAlreadyExists =
         await DatabaseService.usernameAlreadyExists(username);
-
-    print(usernameAlreadyExists);
 
     setState(() {
       _usernameContainsWhitespace = username.contains(RegExp(r"\s"));
@@ -76,8 +72,6 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ).then((value) => setState(() => _loading = false));
     } else {
-      print(username);
-      print(password);
       setState(() => _loading = false);
     }
   }

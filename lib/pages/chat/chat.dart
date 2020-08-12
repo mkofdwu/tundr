@@ -210,8 +210,6 @@ class _ChatPageState extends State<ChatPage> {
             media: media,
           );
 
-    print("sending message, media url: " + mediaUrl);
-
     await DatabaseService.sendMessage(
       chatId: widget.chat.id,
       fromUid: uid,

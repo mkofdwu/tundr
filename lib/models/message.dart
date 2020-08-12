@@ -64,7 +64,7 @@ class Message {
   }
 
   // factory Message.fromMap(Map<String, dynamic> map) {
-  //   print("message media type: " + map["media_type"].toString());
+  //
   //   return Message(
   //     id: map["id"],
   //     uid: map["uid"],

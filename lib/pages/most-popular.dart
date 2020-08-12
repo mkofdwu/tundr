@@ -44,12 +44,10 @@ class _MostPopularPageState extends State<MostPopularPage> {
     sortedUsers
         .forEach((user) => devSqSum += pow(user.popularityScore - 100, 2));
     final double std = sqrt(devSqSum / sortedUsers.length);
-    print(std);
+
     final double tileSize = std / 100;
-    print(tileSize);
-    sortedUsers.forEach((user) {
-      print("user ${user.name}: ${user.popularityScore}");
-    });
+
+    sortedUsers.forEach((user) {});
 
     final num highestScore = sortedUsers.first.popularityScore;
     List<Rect> tiles = [];
@@ -60,7 +58,7 @@ class _MostPopularPageState extends State<MostPopularPage> {
               highestScore *
               min(widget.width, widget.height) *
               tileSize;
-          print(user.popularityScore / highestScore);
+
           Rect tile = Rect.fromLTWH(
             random.nextDouble() * (widget.width - size),
             random.nextDouble() * (widget.height - size),
@@ -78,7 +76,7 @@ class _MostPopularPageState extends State<MostPopularPage> {
             );
             ++attempts;
           }
-          print("found tile of size $size: $tile, took $attempts attempts");
+
           tiles.add(tile);
           return Positioned(
             left: tile.left,

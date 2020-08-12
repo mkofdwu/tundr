@@ -36,9 +36,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       });
       if (_passwordLessThan6Chars || _passwordsDoNotMatch) return;
       final bool incorrect = !await AuthService.changePassword(
-        currentUid: Provider.of<CurrentUser>(context).user.uid,
-        currentUsername: Provider.of<CurrentUser>(context).user.username,
-        currentPassword: _currentPasswordController.text,
+        userUid: Provider.of<CurrentUser>(context).user.uid,
+        userUsername: Provider.of<CurrentUser>(context).user.username,
+        oldPassword: _currentPasswordController.text,
         newPassword: _newPasswordController.text,
       );
       if (incorrect)

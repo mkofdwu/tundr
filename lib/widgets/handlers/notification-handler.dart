@@ -30,8 +30,6 @@ class _NotificationHandlerState extends State<NotificationHandler> {
     }
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print(message);
-        print(message["notification"]);
         // switch (message["data"]["type"]) {
         //   case "newMatch":
         //     _openItsAMatch(message["data"]["uid"]);
@@ -74,8 +72,6 @@ class _NotificationHandlerState extends State<NotificationHandler> {
   // }
 
   Future<void> _handleNotificationClick(Map<String, dynamic> message) async {
-    print("message: $message");
-    print(message["notification"]);
     // switch (message["data"]["type"]) {
     //   case "newMatch":
     //     _openItsAMatch(message["data"]["uid"]);

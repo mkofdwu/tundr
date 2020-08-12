@@ -29,7 +29,6 @@ class PersonalInfoFieldButton extends StatelessWidget {
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) {
-          print(value);
           switch (field.type) {
             case PersonalInfoType.numInput:
               return NumberFieldPage(field: field, value: value);

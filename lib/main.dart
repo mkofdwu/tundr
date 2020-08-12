@@ -13,9 +13,11 @@ import 'package:tundr/pages/home.dart';
 import 'package:tundr/pages/profile-setup/theme.dart';
 import 'package:tundr/pages/user-profile/main.dart';
 import 'package:tundr/pages/welcome.dart';
+import 'package:tundr/repositories/user-suggestions.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
 import 'package:tundr/constants/enums/apptheme.dart';
+import 'package:tundr/utils/load-user-suggestions.dart';
 import 'package:tundr/widgets/handlers/app-state-handler.dart';
 import 'package:tundr/widgets/handlers/notification-handler.dart';
 
@@ -43,7 +45,6 @@ void main() {
       ));
     },
     (error, stackTrace) {
-      print(error.runtimeType);
       runApp(
         MaterialApp(
           title: "error",
@@ -76,12 +77,14 @@ class _AppState extends State<App> {
             create: (context) => ThemeNotifier()),
         ChangeNotifierProvider<RegistrationInfo>(
             create: (context) => RegistrationInfo()),
+        ChangeNotifierProvider<UserSuggestions>(
+          create: (context) => UserSuggestions(),
+        ),
       ],
       child: StreamBuilder<FirebaseUser>(
         stream: FirebaseAuth.instance.onAuthStateChanged,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            print("waiting for auth");
             return loadingApp;
           }
 
@@ -97,7 +100,6 @@ class _AppState extends State<App> {
             future: DatabaseService.getUser(uid, returnDeletedUser: false),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                print("waiting for user");
                 return loadingApp;
               }
 
@@ -106,6 +108,8 @@ class _AppState extends State<App> {
               Provider.of<CurrentUser>(context).user = user;
               Provider.of<ThemeNotifier>(context).theme =
                   user.theme ?? AppTheme.dark;
+
+              loadUserSuggestions(context);
 
               return MaterialApp(
                 title: "tundr",
@@ -117,7 +121,6 @@ class _AppState extends State<App> {
                           child: HomePage(),
                         ),
                         onExit: () {
-                          print("went offline");
                           final User user =
                               Provider.of<CurrentUser>(context).user;
                           DatabaseService.setUserFields(
@@ -130,7 +133,6 @@ class _AppState extends State<App> {
                           );
                         },
                         onStart: () {
-                          print("back online");
                           DatabaseService.setUserField(
                             Provider.of<CurrentUser>(context).user.uid,
                             "online",
