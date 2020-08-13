@@ -125,7 +125,7 @@ class DatabaseService {
 
   static Future<List<Suggestion>> getUserSuggestions(String uid) async {
     // get list of users you were suggested to
-    print("getting user suggestions for $uid");
+
     return Future.wait<Suggestion>((await userSuggestionsRef
             .document(uid)
             .collection("suggestions")
@@ -148,14 +148,13 @@ class DatabaseService {
   }
 
   static Future<void> createAccount(RegistrationInfo info) async {
-    print("creating account");
     String profileImageUrl = "";
     // String profileImageUrl = await StorageService.uploadMedia(
     //   uid: info.uid,
     //   media: info.profilePic,
     //   prefix: "profile_image",
     // );
-    print("uploaded profile pic");
+
     List<Map<String, dynamic>> extraMediaMaps = await Future.wait(
       info.extraMedia.map<Future<Map<String, dynamic>>>(
         (media) async => media == null
@@ -170,7 +169,6 @@ class DatabaseService {
               },
       ),
     );
-    print("upload extra media");
 
     final int age = DateTime.now().difference(info.birthday).inDays ~/ 365;
 
@@ -212,11 +210,10 @@ class DatabaseService {
       "lastGeneratedSuggestionsTimestamp": 0,
       "numRightSwiped": 0,
     });
-    print("done with setData");
+
     await userSuggestionsGoneThroughRef
         .document(info.uid)
         .setData({"suggestionsGoneThrough": []});
-    print("done creating account");
   }
 
   static Future<void> deleteAccount(String uid) {
@@ -281,65 +278,60 @@ class DatabaseService {
     }
   }
 
-  static Future<bool> otherUserFiltersAllow(
-      User currentUser, User otherUser) async {
+  static Future<bool> otherUserFiltersAllow(User user, User otherUser) async {
     // final Map<String, dynamic> otherUserFilters =
     //     (await userFiltersRef.document(otherUid).get()).data;
-    if (currentUser.gender == Gender.male && !otherUser.showMeBoys) {
-      print("1a");
+    if (user.gender == Gender.male && !otherUser.showMeBoys) {
       return false;
     }
-    if (currentUser.gender == Gender.female && !otherUser.showMeGirls) {
-      print("1b");
+    if (user.gender == Gender.female && !otherUser.showMeGirls) {
       return false;
     }
-    if (currentUser.ageInYears > otherUser.ageRangeMax ||
-        otherUser.ageRangeMin > currentUser.ageInYears) {
-      print("1c");
+    if (user.ageInYears > otherUser.ageRangeMax ||
+        otherUser.ageRangeMin > user.ageInYears) {
       return false;
     }
     return true;
   }
 
   static Future<Query> filterUsers({
-    User currentUser,
+    User user,
   }) async {
     // final now = DateTime.now();
     Query usersQuery = usersRef.where("asleep", isEqualTo: false).where(
       "gender",
       whereIn: [
-        if (currentUser.showMeBoys) 0,
-        if (currentUser.showMeGirls) 1,
+        if (user.showMeBoys) 0,
+        if (user.showMeGirls) 1,
       ],
     );
     // .where(
     //   "birthday",
     //   isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime(
-    //     now.year - currentUser.ageRangeMax,
+    //     now.year - user.ageRangeMax,
     //     now.month,
     //     now.day,
     //   )),
     //   isLessThanOrEqualTo: Timestamp.fromDate(DateTime(
-    //     now.year - currentUser.ageRangeMin,
+    //     now.year - user.ageRangeMin,
     //     now.month,
     //     now.day,
     //   )),
     // )
-    print("secondary filters for users");
-    (await getUserFilters(currentUser.uid)).map((filter) {
-      print("filter: ${filter.field.name}");
+
+    (await getUserFilters(user.uid)).map((filter) {
       usersQuery = secondaryFilterUsers(usersQuery, filter);
     });
     return usersQuery;
   }
 
   static Future<List<Suggestion>> generateSuggestions({
-    User currentUser,
+    User user,
     int n,
     List<String> storedSuggestionUids,
     List<SuggestionGoneThrough> suggestionsGoneThrough,
   }) async {
-    final Query usersQuery = await filterUsers(currentUser: currentUser);
+    final Query usersQuery = await filterUsers(user: user);
 
     final Query orderedByPopScoreHalf = usersQuery
         .orderBy("popularityScore")
@@ -347,12 +339,11 @@ class DatabaseService {
     final List<DocumentSnapshot> orderedByPopScoreDocs =
         (await orderedByPopScoreHalf.getDocuments()).documents +
             (await orderedByPopScoreHalf
-                    .startAt([currentUser.popularityScore]).getDocuments())
+                    .startAt([user.popularityScore]).getDocuments())
                 .documents;
 
     final List<String> suggestionUids = [];
     final List<Suggestion> newSuggestions = [];
-
     final List<String> uidsGoneThrough = storedSuggestionUids +
         suggestionsGoneThrough.map((suggestion) => suggestion.uid).toList();
 
@@ -361,34 +352,30 @@ class DatabaseService {
     orderedByPopScoreDocs.forEach((doc) {
       if (suggestionUids.contains(doc.documentID) ||
           uidsGoneThrough.contains(doc.documentID) ||
-          doc.documentID == currentUser.uid) return;
+          doc.documentID == user.uid) return;
 
       final DateTime birthday = doc.data["birthday"].toDate();
 
       if (birthday.isBefore(DateTime(
-            now.year - currentUser.ageRangeMax,
+            now.year - user.ageRangeMax,
             now.month,
             now.day,
           )) ||
           birthday.isAfter(DateTime(
-            now.year - currentUser.ageRangeMin,
+            now.year - user.ageRangeMin,
             now.month,
             now.day,
           ))) return;
 
       suggestionUids.add(doc.documentID);
 
-      final User user = User.fromDoc(doc);
-      print(
-          "generated similarity score for ${user.name}: ${userSimilarity(currentUser, user)}");
+      final User otherUser = User.fromDoc(doc);
       newSuggestions.add(Suggestion(
-        user: user,
+        user: otherUser,
         liked: null,
-        similarityScore: userSimilarity(currentUser, user),
+        similarityScore: userSimilarity(user, otherUser),
       ));
     });
-
-    print("generated ${newSuggestions.length} suggestions");
 
     newSuggestions.sort((suggestion1, suggestion2) => suggestion2
         .similarityScore
@@ -915,5 +902,14 @@ class DatabaseService {
           .map((goneThrough) => goneThrough.toMap())
           .toList())
     });
+  }
+
+  static Future<void> undoSentSuggestion(
+      String userId, String suggestionUserUid) {
+    return userSuggestionsRef
+        .document(suggestionUserUid)
+        .collection('suggestions')
+        .document(userId)
+        .delete();
   }
 }

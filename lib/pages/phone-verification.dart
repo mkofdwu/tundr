@@ -64,7 +64,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
         // if (result.user == null) {
         //   setState(() => _creatingAccount = false);
         // } else {
-        //   print("context: $context");
+        //
         //   info.uid = result.user.uid;
         //   await DatabaseService.createAccount(info);
 
@@ -107,14 +107,12 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   }
 
   _verifyCode() {
-    print(_verificationCode);
     if (!_verificationCode.contains(null)) {
       AuthCredential credential = PhoneAuthProvider.getCredential(
         verificationId: _verificationId,
         smsCode: _verificationCode.join(),
       );
       if (credential != null) {
-        print("manually verified code, creating account");
         _createAccount(credential);
       }
     }
@@ -125,17 +123,14 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
       phoneNumber: Provider.of<RegistrationInfo>(context).phoneNumber,
       timeout: const Duration(seconds: 120),
       verificationCompleted: (AuthCredential credential) {
-        print("code auto retrieved, creating account");
         _createAccount(credential);
       },
       verificationFailed: (AuthException exception) =>
           print("verification failed: " + exception.message),
       codeSent: (String verificationId, [int]) {
-        print("code sent: " + verificationId);
         setState(() => _verificationId = verificationId);
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        print("code auto retrieval timeout");
         setState(() => _verificationId = verificationId);
       },
     );

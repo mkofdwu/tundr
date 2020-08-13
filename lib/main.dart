@@ -13,9 +13,11 @@ import 'package:tundr/pages/home.dart';
 import 'package:tundr/pages/profile-setup/theme.dart';
 import 'package:tundr/pages/user-profile/main.dart';
 import 'package:tundr/pages/welcome.dart';
+import 'package:tundr/repositories/user-suggestions.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
 import 'package:tundr/constants/enums/apptheme.dart';
+import 'package:tundr/utils/load-user-suggestions.dart';
 import 'package:tundr/widgets/handlers/app-state-handler.dart';
 import 'package:tundr/widgets/handlers/notification-handler.dart';
 
@@ -35,7 +37,6 @@ void main() {
       ));
     },
     (error, stackTrace) {
-      print(error.runtimeType);
       runApp(
         MaterialApp(
           title: "error",
@@ -68,6 +69,9 @@ class _AppState extends State<App> {
             create: (context) => ThemeNotifier()),
         ChangeNotifierProvider<RegistrationInfo>(
             create: (context) => RegistrationInfo()),
+        ChangeNotifierProvider<UserSuggestions>(
+          create: (context) => UserSuggestions(),
+        ),
       ],
       child: StreamBuilder<FirebaseUser>(
         stream: FirebaseAuth.instance.onAuthStateChanged,

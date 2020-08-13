@@ -76,7 +76,7 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
         .substring(3); // FUTURE: change this when more country codes are added
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
-    print("width: $width, height: $height");
+
     return GestureDetector(
       child: SafeArea(
         child: Material(

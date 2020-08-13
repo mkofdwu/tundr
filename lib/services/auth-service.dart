@@ -12,19 +12,9 @@ class AuthService {
       AuthResult result = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: "$username@example.com", password: password);
-      print("returned user: ${result.user.email}");
+
       return result.user != null;
-    } on PlatformException catch (exception) {
-      print(exception.message);
-      return false;
-    } on AuthException catch (exception) {
-      print(exception.message);
-      return false;
-    } on Exception catch (exception) {
-      print(exception.runtimeType);
-      return false;
     } catch (e) {
-      print(e.runtimeType);
       return false;
     }
   }
@@ -35,23 +25,23 @@ class AuthService {
       (await FirebaseAuth.instance.currentUser()).delete();
 
   static Future<bool> changePassword({
-    String currentUid,
-    String currentUsername,
-    String currentPassword,
+    String userUid,
+    String userUsername,
+    String oldPassword,
     String newPassword,
   }) async {
     try {
+      // TODO: is this correct?
       AuthResult res = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: "$currentUsername@example.com",
-        password: currentPassword,
+        email: "$userUsername@example.com",
+        password: oldPassword,
       );
-      if (res.user.uid == currentUid) {
+      if (res.user.uid == userUid) {
         res.user.updatePassword(newPassword);
         return true;
       }
       return false;
-    } on PlatformException catch (exception) {
-      print("error: " + exception.message);
+    } on PlatformException {
       return false;
     }
   }

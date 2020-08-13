@@ -175,7 +175,6 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                       size: constraints.maxWidth,
                       extraMedia: user.extraMedia,
                       onChangeMedia: (i, media) async {
-                        print("changing media (uploading)");
                         media.url = await StorageService.uploadMedia(
                           uid: user.uid,
                           media: media,

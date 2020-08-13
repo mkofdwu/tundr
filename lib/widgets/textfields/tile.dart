@@ -71,9 +71,7 @@ class TileTextField extends StatelessWidget {
           if (onEditingComplete != null) onEditingComplete();
           if (moveFocus) FocusScope.of(context).nextFocus();
         },
-        onSubmitted: (String value) {
-          print("submitted");
-        },
+        onSubmitted: (String value) {},
       ),
     );
   }

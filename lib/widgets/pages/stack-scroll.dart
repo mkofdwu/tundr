@@ -25,11 +25,11 @@ class _StackScrollPageState extends State<StackScrollPage> {
   // void initState() {
   //   super.initState();
   //   _scrollController.addListener(() {
-  //     // print("out of range: ${_scrollController.position.outOfRange}");
+  //     //
   //     if (MediaQuery.of(context).viewInsets.bottom == 0) {
   //       print(
   //           "max scroll extent: ${_scrollController.position.maxScrollExtent}");
-  //       print("scroll offset: " + _scrollController.offset.toString());
+  //
   //       if (_scrollController.offset == 0)
   //         Navigator.pop(context);
   //       else if (_scrollController.offset ==

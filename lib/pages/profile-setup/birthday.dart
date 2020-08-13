@@ -31,7 +31,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((duration) {
       final DateTime birthday = Provider.of<RegistrationInfo>(context).birthday;
-      print("previously set birthday: $birthday");
+
       if (birthday != null) {
         setState(() {
           _day1 = birthday.day ~/ 10;

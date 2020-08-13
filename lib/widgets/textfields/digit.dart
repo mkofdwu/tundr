@@ -91,7 +91,6 @@ class _DigitEntryState extends State<DigitEntry> {
         enableInteractiveSelection: false,
         keyboardType: TextInputType.number,
         onChanged: (value) {
-          print("DigitEntry received change: $value");
           if (value.isEmpty) {
             // user pressed backspace either while it contained
             // hint text or while there was a digit in it,
