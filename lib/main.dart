@@ -19,14 +19,6 @@ import 'package:tundr/constants/enums/apptheme.dart';
 import 'package:tundr/widgets/handlers/app-state-handler.dart';
 import 'package:tundr/widgets/handlers/notification-handler.dart';
 
-final Widget loadingApp = MaterialApp(
-  theme: ThemeData(
-    canvasColor: AppColors.black,
-    accentColor: AppColors.white,
-  ),
-  home: LoadingPage(),
-);
-
 void main() {
   runZonedGuarded<Future<void>>(
     () async {
@@ -80,68 +72,61 @@ class _AppState extends State<App> {
       child: StreamBuilder<FirebaseUser>(
         stream: FirebaseAuth.instance.onAuthStateChanged,
         builder: (context, snapshot) {
+          Widget home;
+
           if (snapshot.connectionState == ConnectionState.waiting) {
-            print("waiting for auth");
-            return loadingApp;
+            home = LoadingPage();
+          } else if (snapshot.data?.uid == null) {
+            Provider.of<ThemeNotifier>(context).theme = AppTheme.dark;
+            home = WelcomePage();
+          } else {
+            home = FutureBuilder(
+                future: DatabaseService.getUser(snapshot.data.uid,
+                    returnDeletedUser: false),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return LoadingPage();
+
+                  final user = snapshot.data;
+
+                  Provider.of<CurrentUser>(context).user = user;
+                  Provider.of<ThemeNotifier>(context).theme =
+                      user.theme ?? AppTheme.dark;
+
+                  return user.theme == null
+                      ? SetupThemePage()
+                      : AppStateHandler(
+                          child: NotificationHandler(child: HomePage()),
+                          onExit: () {
+                            print("went offline");
+                            final User user =
+                                Provider.of<CurrentUser>(context).user;
+                            DatabaseService.setUserFields(
+                              Provider.of<CurrentUser>(context).user.uid,
+                              {
+                                "online": false,
+                                "lastSeen": Timestamp.now(),
+                                "totalWordsSent": user.totalWordsSent,
+                              },
+                            );
+                          },
+                          onStart: () {
+                            print("back online");
+                            DatabaseService.setUserField(
+                              Provider.of<CurrentUser>(context).user.uid,
+                              "online",
+                              true,
+                            );
+                          },
+                        );
+                });
           }
 
-          final String uid = snapshot.data?.uid;
-          if (uid == null)
-            return MaterialApp(
-              title: "tundr",
-              theme: _getThemeData(AppTheme.dark),
-              home: WelcomePage(),
-            );
-
-          return FutureBuilder<User>(
-            future: DatabaseService.getUser(uid, returnDeletedUser: false),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                print("waiting for user");
-                return loadingApp;
-              }
-
-              final user = snapshot.data;
-
-              Provider.of<CurrentUser>(context).user = user;
-              Provider.of<ThemeNotifier>(context).theme =
-                  user.theme ?? AppTheme.dark;
-
-              return MaterialApp(
-                title: "tundr",
-                theme: _getThemeData(Provider.of<ThemeNotifier>(context).theme),
-                home: user.theme == null
-                    ? SetupThemePage()
-                    : AppStateHandler(
-                        child: NotificationHandler(
-                          child: HomePage(),
-                        ),
-                        onExit: () {
-                          print("went offline");
-                          final User user =
-                              Provider.of<CurrentUser>(context).user;
-                          DatabaseService.setUserFields(
-                            Provider.of<CurrentUser>(context).user.uid,
-                            {
-                              "online": false,
-                              "lastSeen": Timestamp.now(),
-                              "totalWordsSent": user.totalWordsSent,
-                            },
-                          );
-                        },
-                        onStart: () {
-                          print("back online");
-                          DatabaseService.setUserField(
-                            Provider.of<CurrentUser>(context).user.uid,
-                            "online",
-                            true,
-                          );
-                        },
-                      ),
-                routes: {
-                  "userprofile": (context) => UserProfileMainPage(),
-                },
-              );
+          return MaterialApp(
+            title: "tundr",
+            theme: _getThemeData(Provider.of<ThemeNotifier>(context).theme),
+            home: home,
+            routes: {
+              'user-profile': (context) => UserProfileMainPage(),
             },
           );
         },

@@ -28,21 +28,35 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   }
 
   void _createAccount(AuthCredential credential) async {
-    print("CREATING ACCOUNT");
     if (!_creatingAccount) {
       setState(() => _creatingAccount = true);
       try {
         final info = Provider.of<RegistrationInfo>(context);
         final result = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-                email: "${info.username}@example.com", password: info.password);
+                email: "${info.username.trim()}@example.com",
+                password: info.password);
         if (result.user == null) {
           setState(() => _creatingAccount = false);
+          showDialog(
+            context: context,
+            child: AlertDialog(
+              title: Text('User could not be created: result.user is null'),
+              titleTextStyle: TextStyle(color: AppColors.red),
+              actions: <Widget>[
+                FlatTileButton(
+                  text: "Ok",
+                  color: AppColors.gold,
+                  onTap: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          );
         } else {
           // TODO: TEST if this still works
           info.uid = result.user.uid;
           await DatabaseService.createAccount(info);
-          result.user.updatePhoneNumberCredential(credential);
+          await result.user.updatePhoneNumberCredential(credential);
         }
 
         // AuthResult result = await FirebaseAuth.instance.signInWithCredential(
@@ -126,24 +140,6 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
       },
     );
   }
-
-  // _nextPage() {
-  //   Navigator.push(
-  //     context,
-  //     PageRouteBuilder(
-  //       pageBuilder: (context, animation1, animation2) => SetupThemePage(),
-  //       transitionsBuilder: (context, animation1, animation2, child) {
-  //         return SlideTransition(
-  //           position: Tween<Offset>(
-  //             begin: Offset(0.0, 1.0),
-  //             end: Offset(0.0, 0.0),
-  //           ).animate(animation1),
-  //           child: child,
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
