@@ -21,14 +21,6 @@ import 'package:tundr/utils/load-user-suggestions.dart';
 import 'package:tundr/widgets/handlers/app-state-handler.dart';
 import 'package:tundr/widgets/handlers/notification-handler.dart';
 
-final Widget loadingApp = MaterialApp(
-  theme: ThemeData(
-    canvasColor: AppColors.black,
-    accentColor: AppColors.white,
-  ),
-  home: LoadingPage(),
-);
-
 void main() {
   runZonedGuarded<Future<void>>(
     () async {
@@ -80,14 +72,14 @@ class _TundrAppState extends State<TundrApp> {
 
         if (snapshot.connectionState == ConnectionState.waiting) {
           home = LoadingPage();
-        }
-
-        final uid = snapshot.data?.uid;
-        if (uid == null) {
+        } else if (snapshot.data?.uid == null) {
           home = WelcomePage();
         } else {
           home = FutureBuilder<User>(
-            future: DatabaseService.getUser(uid, returnDeletedUser: false),
+            future: DatabaseService.getUser(
+              snapshot.data.uid,
+              returnDeletedUser: false,
+            ),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return LoadingPage();

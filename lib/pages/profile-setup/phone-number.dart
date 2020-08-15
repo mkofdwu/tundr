@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration-info.dart';
-import 'package:tundr/pages/verification/phone-verification.dart';
+import 'package:tundr/pages/phone-verification.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
 import 'package:tundr/widgets/scroll-down-arrow.dart';
