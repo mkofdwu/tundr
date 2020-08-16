@@ -32,8 +32,11 @@ void main() {
               create: (context) => ThemeNotifier()),
           ChangeNotifierProvider<RegistrationInfo>(
               create: (context) => RegistrationInfo()),
+          ChangeNotifierProvider<UserSuggestions>(
+            create: (context) => UserSuggestions(),
+          ),
         ],
-        child: App(),
+        child: TundrApp(),
       ));
     },
     (error, stackTrace) {
@@ -54,87 +57,84 @@ void main() {
   );
 }
 
-class App extends StatefulWidget {
+class TundrApp extends StatefulWidget {
   @override
-  _AppState createState() => _AppState();
+  _TundrAppState createState() => _TundrAppState();
 }
 
-class _AppState extends State<App> {
+class _TundrAppState extends State<TundrApp> {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<CurrentUser>(create: (context) => CurrentUser()),
-        ChangeNotifierProvider<ThemeNotifier>(
-            create: (context) => ThemeNotifier()),
-        ChangeNotifierProvider<RegistrationInfo>(
-            create: (context) => RegistrationInfo()),
-        ChangeNotifierProvider<UserSuggestions>(
-          create: (context) => UserSuggestions(),
-        ),
-      ],
-      child: StreamBuilder<FirebaseUser>(
-        stream: FirebaseAuth.instance.onAuthStateChanged,
-        builder: (context, snapshot) {
-          Widget home;
+    return StreamBuilder<FirebaseUser>(
+      stream: FirebaseAuth.instance.onAuthStateChanged,
+      builder: (context, snapshot) {
+        Widget home;
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            home = LoadingPage();
-          } else if (snapshot.data?.uid == null) {
-            Provider.of<ThemeNotifier>(context).theme = AppTheme.dark;
-            home = WelcomePage();
-          } else {
-            home = FutureBuilder(
-                future: DatabaseService.getUser(snapshot.data.uid,
-                    returnDeletedUser: false),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) return LoadingPage();
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          home = LoadingPage();
+        } else if (snapshot.data?.uid == null) {
+          home = WelcomePage();
+        } else {
+          home = FutureBuilder<User>(
+            future: DatabaseService.getUser(
+              snapshot.data.uid,
+              returnDeletedUser: false,
+            ),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return LoadingPage();
+              }
 
-                  final user = snapshot.data;
+              final user = snapshot.data;
+              Provider.of<CurrentUser>(context).user = user;
+              loadUserSuggestions(context);
 
-                  Provider.of<CurrentUser>(context).user = user;
-                  Provider.of<ThemeNotifier>(context).theme =
-                      user.theme ?? AppTheme.dark;
-
-                  return user.theme == null
-                      ? SetupThemePage()
-                      : AppStateHandler(
-                          child: NotificationHandler(child: HomePage()),
-                          onExit: () {
-                            print("went offline");
-                            final User user =
-                                Provider.of<CurrentUser>(context).user;
-                            DatabaseService.setUserFields(
-                              Provider.of<CurrentUser>(context).user.uid,
-                              {
-                                "online": false,
-                                "lastSeen": Timestamp.now(),
-                                "totalWordsSent": user.totalWordsSent,
-                              },
-                            );
-                          },
-                          onStart: () {
-                            print("back online");
-                            DatabaseService.setUserField(
-                              Provider.of<CurrentUser>(context).user.uid,
-                              "online",
-                              true,
-                            );
-                          },
-                        );
-                });
-          }
-
-          return MaterialApp(
-            title: "tundr",
-            theme: _getThemeData(Provider.of<ThemeNotifier>(context).theme),
-            home: home,
-            routes: {
-              'user-profile': (context) => UserProfileMainPage(),
+              if (user.theme == null) {
+                return SetupThemePage();
+              } else {
+                Provider.of<ThemeNotifier>(context).theme = user.theme;
+                return AppStateHandler(
+                  child: NotificationHandler(
+                    child: HomePage(),
+                  ),
+                  onExit: () {
+                    final User user = Provider.of<CurrentUser>(context).user;
+                    DatabaseService.setUserFields(
+                      Provider.of<CurrentUser>(context).user.uid,
+                      {
+                        "online": false,
+                        "lastSeen": Timestamp.now(),
+                        "totalWordsSent": user.totalWordsSent,
+                      },
+                    );
+                  },
+                  onStart: () {
+                    DatabaseService.setUserField(
+                      Provider.of<CurrentUser>(context).user.uid,
+                      "online",
+                      true,
+                    );
+                  },
+                );
+              }
             },
           );
-        },
-      ),
+        }
+
+        return Consumer<ThemeNotifier>(
+          builder: (context, themeNotifier, child) {
+            return MaterialApp(
+              title: 'tundr',
+              theme: _getThemeData(themeNotifier.theme),
+              home: home,
+              routes: {
+                // TODO: test if this is still necessary, or if it is possible to just set an id variable directly on the page
+                "userprofile": (context) => UserProfileMainPage(),
+              },
+            );
+          },
+        );
+      },
     );
   }
 

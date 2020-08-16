@@ -13,13 +13,13 @@ class SetupThemePage extends StatefulWidget {
 
 class _SetupThemePageState extends State<SetupThemePage> {
   Future<void> _selectTheme(AppTheme theme) async {
-    Provider.of<ThemeNotifier>(context).setTheme(theme);
+    Provider.of<ThemeNotifier>(context).theme = theme;
     DatabaseService.setUserField(
       Provider.of<CurrentUser>(context).user.uid,
       "theme",
       AppTheme.values.indexOf(theme),
     );
-    // Navigator.popUntil(context, (route) => route.isFirst);
+    Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   @override

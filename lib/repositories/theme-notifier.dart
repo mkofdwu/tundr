@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/constants/enums/apptheme.dart';
 
-class ThemeNotifier with ChangeNotifier {
-  AppTheme theme;
+class ThemeNotifier extends ChangeNotifier {
+  AppTheme _theme = AppTheme.dark;
 
-  // ThemeNotifier(this._theme); // is this ok?
+  AppTheme get theme => _theme;
 
-  // AppTheme get theme => _theme;
-
-  void setTheme(AppTheme theme) {
-    this.theme = theme;
+  set theme(AppTheme theme) {
+    this._theme = theme;
     notifyListeners();
   }
 }

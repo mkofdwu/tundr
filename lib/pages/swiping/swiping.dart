@@ -1,5 +1,3 @@
-// TODO: redo this completely (don't save everything in local storage and make everything complicated)
-
 import "package:flutter/widgets.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/current-user.dart';
@@ -65,10 +63,12 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   void _undo() {
-    // TODO: undo suggestion from database
     String suggestionUserUid =
         Provider.of<UserSuggestions>(context).suggestions[_i - 1].user.uid;
-    DatabaseService.undoSentSuggestion(suggestionUserUid);
+    DatabaseService.undoSentSuggestion(
+      Provider.of<CurrentUser>(context).user.uid,
+      suggestionUserUid,
+    );
     setState(() {
       _i--;
       _canUndo = false;
@@ -99,11 +99,13 @@ class _SwipingPageState extends State<SwipingPage> {
             Provider.of<CurrentUser>(context).user.uid, otherUser.uid);
         setState(() {
           _i++;
+          _canUndo = false;
         });
       }
     } else if (suggestions[_i].liked == null) {
       setState(() {
         _i++;
+        _canUndo = true;
       });
       DatabaseService.sendSuggestion(
         fromUid: user.uid,
@@ -113,10 +115,10 @@ class _SwipingPageState extends State<SwipingPage> {
     } else {
       setState(() {
         _i++;
+        _canUndo = true;
       });
     }
 
-    setState(() => _canUndo = true);
     DatabaseService.deleteSuggestion(uid: user.uid, otherUid: otherUser.uid);
     _goneThrough.add(SuggestionGoneThrough(
       uid: user.uid,
