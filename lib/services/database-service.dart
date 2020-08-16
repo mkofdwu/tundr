@@ -297,27 +297,26 @@ class DatabaseService {
   static Future<Query> filterUsers({
     User user,
   }) async {
-    // final now = DateTime.now();
+    final now = DateTime.now();
     Query usersQuery = usersRef.where("asleep", isEqualTo: false).where(
       "gender",
       whereIn: [
         if (user.showMeBoys) 0,
         if (user.showMeGirls) 1,
       ],
+    ).where(
+      "birthday",
+      isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime(
+        now.year - user.ageRangeMax,
+        now.month,
+        now.day,
+      )),
+      isLessThanOrEqualTo: Timestamp.fromDate(DateTime(
+        now.year - user.ageRangeMin,
+        now.month,
+        now.day,
+      )),
     );
-    // .where(
-    //   "birthday",
-    //   isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime(
-    //     now.year - user.ageRangeMax,
-    //     now.month,
-    //     now.day,
-    //   )),
-    //   isLessThanOrEqualTo: Timestamp.fromDate(DateTime(
-    //     now.year - user.ageRangeMin,
-    //     now.month,
-    //     now.day,
-    //   )),
-    // )
 
     (await getUserFilters(user.uid)).map((filter) {
       usersQuery = secondaryFilterUsers(usersQuery, filter);
@@ -347,25 +346,25 @@ class DatabaseService {
     final List<String> uidsGoneThrough = storedSuggestionUids +
         suggestionsGoneThrough.map((suggestion) => suggestion.uid).toList();
 
-    final now = DateTime.now();
+    // final now = DateTime.now();
 
     orderedByPopScoreDocs.forEach((doc) {
       if (suggestionUids.contains(doc.documentID) ||
           uidsGoneThrough.contains(doc.documentID) ||
           doc.documentID == user.uid) return;
 
-      final DateTime birthday = doc.data["birthday"].toDate();
+      // final DateTime birthday = doc.data["birthday"].toDate();
 
-      if (birthday.isBefore(DateTime(
-            now.year - user.ageRangeMax,
-            now.month,
-            now.day,
-          )) ||
-          birthday.isAfter(DateTime(
-            now.year - user.ageRangeMin,
-            now.month,
-            now.day,
-          ))) return;
+      // if (birthday.isBefore(DateTime(
+      //       now.year - user.ageRangeMax,
+      //       now.month,
+      //       now.day,
+      //     )) ||
+      //     birthday.isAfter(DateTime(
+      //       now.year - user.ageRangeMin,
+      //       now.month,
+      //       now.day,
+      //     ))) return;
 
       suggestionUids.add(doc.documentID);
 

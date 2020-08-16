@@ -266,8 +266,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   selected: AppTheme.values
                       .indexOf(Provider.of<ThemeNotifier>(context).theme),
                   onChanged: (option) {
-                    Provider.of<ThemeNotifier>(context)
-                        .setTheme(AppTheme.values[option]);
+                    Provider.of<ThemeNotifier>(context).theme =
+                        AppTheme.values[option];
                     DatabaseService.setUserField(uid, "theme", option);
                   },
                 ),
