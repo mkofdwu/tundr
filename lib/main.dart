@@ -126,6 +126,7 @@ class _TundrAppState extends State<TundrApp> {
             return MaterialApp(
               title: 'tundr',
               theme: _getThemeData(themeNotifier.theme),
+              debugShowCheckedModeBanner: false,
               home: home,
               routes: {
                 // TODO: test if this is still necessary, or if it is possible to just set an id variable directly on the page
