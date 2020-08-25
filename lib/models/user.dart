@@ -3,6 +3,7 @@ import 'package:tundr/constants/enums/apptheme.dart';
 import "package:tundr/constants/enums/gender.dart";
 import 'package:tundr/models/media.dart';
 import 'package:tundr/constants/personal-info-fields.dart';
+import 'package:tundr/models/suggestion.dart';
 
 class User {
   String uid;
@@ -37,10 +38,11 @@ class User {
   bool showInMostPopular;
   //
   Map<int, double> popularityHistory;
-  int totalWordsSent;
+  // suggestions
+  List<Suggestion> generatedDailySuggestions;
+  List<Suggestion> responseSuggestions;
   // shared preferences
   AppTheme theme;
-  int lastGeneratedSuggestionsTimestamp;
   int numRightSwiped;
 
   User({
@@ -71,9 +73,9 @@ class User {
     this.readReceipts,
     this.showInMostPopular,
     this.popularityHistory,
-    this.totalWordsSent,
+    this.generatedDailySuggestions,
+    this.responseSuggestions,
     this.theme,
-    this.lastGeneratedSuggestionsTimestamp,
     this.numRightSwiped,
   });
 
@@ -125,16 +127,11 @@ class User {
       showInMostPopular: doc.data["showInMostPopular"],
       popularityHistory:
           Map<int, double>.from(doc.data["popularityHistory"] ?? {}),
-      totalWordsSent: doc.data["totalWordsSent"],
       theme: doc.data.containsKey("theme") // BACKWARDS COMPATIBILITY
           ? doc.data["theme"] == null
               ? null
               : AppTheme.values.elementAt(doc.data["theme"])
           : null,
-      lastGeneratedSuggestionsTimestamp: doc.data.containsKey(
-              "lastGeneratedSuggestionsTimestamp") // BACKWARDS COMPATIBILITY
-          ? doc.data["lastGeneratedSuggestionsTimestamp"]
-          : 0,
       numRightSwiped:
           doc.data.containsKey("numRightSwiped") // BACKWARDS COMPATIBILITY
               ? doc.data["numRightSwiped"]

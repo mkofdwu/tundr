@@ -30,9 +30,7 @@ final Map<String, dynamic> deletedUserMap = {
   "readReceipts": false,
   "showInMostPopular": false,
   "popularityHistory": {},
-  "totalWordsSent": 0,
   "theme": AppTheme.dark,
-  "lastGeneratedSuggestionsTimestamp": 0,
   "numRightSwiped": 0,
 };
 
@@ -63,8 +61,6 @@ final User deletedUser = User(
   readReceipts: false,
   showInMostPopular: false,
   popularityHistory: {},
-  totalWordsSent: 0,
   theme: AppTheme.dark,
-  lastGeneratedSuggestionsTimestamp: 0,
   numRightSwiped: 0,
 );

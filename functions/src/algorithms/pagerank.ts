@@ -1,4 +1,4 @@
-export const pageRank = (graph: Array<Array<number>>): number[] => {
+export default (graph: Array<Array<number>>): number[] => {
   let n: number = graph.length;
   let R: number[][] = Array(n);
   for (let i: number = 0; i < n; i++) {
@@ -7,7 +7,7 @@ export const pageRank = (graph: Array<Array<number>>): number[] => {
   graph.forEach((nodes, i) => {
     if (nodes.length == 0) return;
     let value: number = 1 / nodes.length;
-    nodes.forEach(node => (R[node][i] = value));
+    nodes.forEach((node) => (R[node][i] = value));
   });
 
   console.log(R);

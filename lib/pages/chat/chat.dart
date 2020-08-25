@@ -174,9 +174,6 @@ class _ChatPageState extends State<ChatPage> {
       ));
     });
 
-    Provider.of<CurrentUser>(context).user.totalWordsSent +=
-        text.split(RegExp("\\s")).length;
-
     if (widget.chat.type == ChatType.nonExistent) {
       widget.chat.id =
           await DatabaseService.startConversation(uid, widget.user.uid);

@@ -65,7 +65,7 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
         title: Text("Filters"),
       ),
       body: FutureBuilder<DocumentSnapshot>(
-        future: DatabaseService.getUserFiltersDoc(
+        future: DatabaseService.getUserFilters(
             Provider.of<CurrentUser>(context).user.uid),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Center(child: Loader());
