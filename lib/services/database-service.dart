@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tundr/models/chat.dart';
@@ -17,8 +16,6 @@ import 'package:tundr/models/suggestion.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/services/storage-service.dart';
 import 'package:tundr/constants/enums/mediatype.dart';
-import 'package:tundr/constants/enums/personalinfotype.dart';
-import 'package:tundr/utils/algorithms/similarity-score.dart';
 import "package:tundr/constants/firebaseref.dart";
 import 'package:tundr/constants/personal-info-fields.dart';
 
@@ -72,31 +69,31 @@ class DatabaseService {
     return (await userFiltersRef.document(uid).get()).data[filter];
   }
 
-  static Future<DocumentSnapshot> getUserFiltersDoc(String uid) {
+  static Future<DocumentSnapshot> getUserFilters(String uid) {
     return userFiltersRef.document(uid).get();
   }
 
-  static Future<List<Filter>> getUserFilters(String uid) async {
-    final filtersDoc = (await userFiltersRef.document(uid).get());
-    if (!filtersDoc.exists) return [];
+  // static Future<List<Filter>> getUserFilters(String uid) async {
+  //   final filtersDoc = (await userFiltersRef.document(uid).get());
+  //   if (!filtersDoc.exists) return [];
 
-    List<Filter> filters = [];
-    filtersDoc.data.forEach(
-      (name, value) async {
-        if (["ageRangeMin", "ageRangeMax", "showMeBoys", "showMeGirls"]
-            .contains(name)) {
-          // backwards compatibility
-          return;
-        }
-        filters.add(Filter(
-          field: PersonalInfoField.fromMap(name, personalInfoFields[name]),
-          options: value["options"],
-          method: FilterMethod.values.elementAt(value["method"]),
-        ));
-      },
-    );
-    return filters;
-  }
+  //   List<Filter> filters = [];
+  //   filtersDoc.data.forEach(
+  //     (name, value) async {
+  //       if (["ageRangeMin", "ageRangeMax", "showMeBoys", "showMeGirls"]
+  //           .contains(name)) {
+  //         // backwards compatibility
+  //         return;
+  //       }
+  //       filters.add(Filter(
+  //         field: PersonalInfoField.fromMap(name, personalInfoFields[name]),
+  //         options: value["options"],
+  //         method: FilterMethod.values.elementAt(value["method"]),
+  //       ));
+  //     },
+  //   );
+  //   return filters;
+  // }
 
   static Future<void> setUserFilter({
     String uid,
@@ -148,12 +145,11 @@ class DatabaseService {
   }
 
   static Future<void> createAccount(RegistrationInfo info) async {
-    String profileImageUrl = "";
-    // String profileImageUrl = await StorageService.uploadMedia(
-    //   uid: info.uid,
-    //   media: info.profilePic,
-    //   prefix: "profile_image",
-    // );
+    String profileImageUrl = await StorageService.uploadMedia(
+      uid: info.uid,
+      media: info.profilePic,
+      prefix: "profile_image",
+    );
 
     List<Map<String, dynamic>> extraMediaMaps = await Future.wait(
       info.extraMedia.map<Future<Map<String, dynamic>>>(
@@ -172,7 +168,6 @@ class DatabaseService {
 
     final int age = DateTime.now().difference(info.birthday).inDays ~/ 365;
 
-    // FIXME: Future.wait() ?
     await usersRef.document(info.uid).setData({
       "phoneNumber": info.phoneNumber,
       "username": info.username,
@@ -187,28 +182,22 @@ class DatabaseService {
       "asleep": false,
       "online": true,
       "lastSeen": null,
-      // scores
       "popularityScore": 100,
-      "conversationalScore": 0,
-      "blockedScore": 0,
-      // filters
       "showMeBoys": info.gender == Gender.female,
       "showMeGirls": info.gender == Gender.male,
       "ageRangeMin": age - 1,
       "ageRangeMax": age + 1,
-      // personal info
       ...info.personalInfo,
-      // preferences
       "newMatchNotification": true,
       "messageNotification": true,
       "blockUnknownMessages": false,
       "readReceipts": true,
       "showInMostPopular": true,
       "popularityHistory": {},
-      "totalWordsSent": 0,
       "theme": null,
-      "lastGeneratedSuggestionsTimestamp": 0,
       "numRightSwiped": 0,
+      'generatedDailySuggestions': [],
+      "responseSuggestions": [],
     });
 
     await userSuggestionsGoneThroughRef
@@ -227,160 +216,6 @@ class DatabaseService {
       userUnknownChatsRef.document(uid).delete(),
       userSuggestionsGoneThroughRef.document(uid).delete(),
     ]);
-  }
-
-  static Query secondaryFilterUsers(dynamic users, Filter filter) {
-    // users: either DocumentReference (usersRef) or Query
-    print(
-        "filtering with: ${filter.field.name}, type ${filter.field.type}, options ${filter.field.options}");
-    if (filter.options == null) return users;
-    switch (filter.field.type) {
-      case PersonalInfoType.numInput:
-      case PersonalInfoType.slider:
-        return users.where(
-          filter.field.name,
-          isGreaterThanOrEqualTo: filter.options.first,
-          isLessThanOrEqualTo: filter.options.last,
-        );
-      case PersonalInfoType.radioGroup:
-      case PersonalInfoType.textInput:
-        return users.where(filter.field.name, whereIn: filter.options);
-      case PersonalInfoType.textList:
-        switch (filter.method) {
-          case FilterMethod.none:
-            return users;
-          case FilterMethod.ifContainsAll:
-            return users.where(
-              filter.field.name,
-              arrayContains: filter.options,
-            );
-          case FilterMethod.ifContainsAny:
-            return users.where(
-              filter.field.name,
-              arrayContainsAny: filter.options,
-            );
-          // case FilterMethod.ifDoesNotContainAll:
-          // //   return users.where(
-          // //     filter.field.name,
-          // //     !arrayContains: filter.options,
-          // //   );
-          // case FilterMethod.ifDoesNotContainAny:
-          //   //   return users.where(
-          //   //     filter.field.name,
-          //   //     !arrayContainsAny: filter.options,
-          //   //   );
-          default:
-            throw Exception("Invalid filter method: ${filter.method}");
-        }
-        break;
-      default:
-        throw Exception("Invalid personal info type: ${filter.method}");
-    }
-  }
-
-  static Future<bool> otherUserFiltersAllow(User user, User otherUser) async {
-    // final Map<String, dynamic> otherUserFilters =
-    //     (await userFiltersRef.document(otherUid).get()).data;
-    if (user.gender == Gender.male && !otherUser.showMeBoys) {
-      return false;
-    }
-    if (user.gender == Gender.female && !otherUser.showMeGirls) {
-      return false;
-    }
-    if (user.ageInYears > otherUser.ageRangeMax ||
-        otherUser.ageRangeMin > user.ageInYears) {
-      return false;
-    }
-    return true;
-  }
-
-  static Future<Query> filterUsers({
-    User user,
-  }) async {
-    final now = DateTime.now();
-    Query usersQuery = usersRef.where("asleep", isEqualTo: false).where(
-      "gender",
-      whereIn: [
-        if (user.showMeBoys) 0,
-        if (user.showMeGirls) 1,
-      ],
-    ).where(
-      "birthday",
-      isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime(
-        now.year - user.ageRangeMax,
-        now.month,
-        now.day,
-      )),
-      isLessThanOrEqualTo: Timestamp.fromDate(DateTime(
-        now.year - user.ageRangeMin,
-        now.month,
-        now.day,
-      )),
-    );
-
-    (await getUserFilters(user.uid)).map((filter) {
-      usersQuery = secondaryFilterUsers(usersQuery, filter);
-    });
-    return usersQuery;
-  }
-
-  static Future<List<Suggestion>> generateSuggestions({
-    User user,
-    int n,
-    List<String> storedSuggestionUids,
-    List<SuggestionGoneThrough> suggestionsGoneThrough,
-  }) async {
-    final Query usersQuery = await filterUsers(user: user);
-
-    final Query orderedByPopScoreHalf = usersQuery
-        .orderBy("popularityScore")
-        .limit(n); // increased to n, since some users will be filtered
-    final List<DocumentSnapshot> orderedByPopScoreDocs =
-        (await orderedByPopScoreHalf.getDocuments()).documents +
-            (await orderedByPopScoreHalf
-                    .startAt([user.popularityScore]).getDocuments())
-                .documents;
-
-    final List<String> suggestionUids = [];
-    final List<Suggestion> newSuggestions = [];
-    final List<String> uidsGoneThrough = storedSuggestionUids +
-        suggestionsGoneThrough.map((suggestion) => suggestion.uid).toList();
-
-    // final now = DateTime.now();
-
-    orderedByPopScoreDocs.forEach((doc) {
-      if (suggestionUids.contains(doc.documentID) ||
-          uidsGoneThrough.contains(doc.documentID) ||
-          doc.documentID == user.uid) return;
-
-      // final DateTime birthday = doc.data["birthday"].toDate();
-
-      // if (birthday.isBefore(DateTime(
-      //       now.year - user.ageRangeMax,
-      //       now.month,
-      //       now.day,
-      //     )) ||
-      //     birthday.isAfter(DateTime(
-      //       now.year - user.ageRangeMin,
-      //       now.month,
-      //       now.day,
-      //     ))) return;
-
-      suggestionUids.add(doc.documentID);
-
-      final User otherUser = User.fromDoc(doc);
-      newSuggestions.add(Suggestion(
-        user: otherUser,
-        liked: null,
-        similarityScore: userSimilarity(user, otherUser),
-      ));
-    });
-
-    newSuggestions.sort((suggestion1, suggestion2) => suggestion2
-        .similarityScore
-        .compareTo(suggestion1.similarityScore)); // sort descending
-
-    return newSuggestions.sublist(0, min(n, newSuggestions.length));
   }
 
   static Future<List<User>> searchForUsers(
@@ -430,10 +265,6 @@ class DatabaseService {
         .toList();
   }
 
-  // static Future<Map<String, dynamic>> getUserPersonalInfo(String uid) async {
-  //   return (await userPersonalInfoRef.document(uid).get()).data;
-  // }
-
   static Future<String> sendMessage({
     String chatId,
     String fromUid,
@@ -473,65 +304,6 @@ class DatabaseService {
         .delete();
   }
 
-  // static Future<void> saveNewMessages({
-  //   String uid,
-  //   Function(Message) saveMessage,
-  //   Function(String) addChatIfDoesNotExistElseSetUpdated,
-  // }) async {
-  //   Future.wait((await userMessagesRef
-  //           .document(uid)
-  //           .collection("messages")
-  //           .getDocuments())
-  //       .documents
-  //       .map((doc) async {
-  //     if (!(await blocked(uid, doc.data["uid"]))) {
-  //       saveMessage(Message(
-  //         id: doc.documentID,
-  //         senderUid: doc.data["senderUid"],
-  //         readTimestamp: null,
-  //         sentTimestamp: doc.data["timestamp"].toDate(),
-  //         referencedMessageId: doc.data["referencedMessageId"],
-  //         text: doc.data["text"],
-  //         mediaType: doc.data["mediaType"] == null
-  //             ? null
-  //             : MediaType.values.elementAt(doc.data["mediaType"]),
-  //         mediaUrl: doc.data["mediaUrl"],
-  //       ));
-  //       addChatIfDoesNotExistElseSetUpdated(doc.data["uid"]);
-  //     }
-  //     doc.reference.delete();
-  //   }));
-  // }
-
-  // static Future<Message> retrieveMessage(String uid, String messageId) async {
-  //   final DocumentSnapshot doc = await userMessagesRef
-  //       .document(uid)
-  //       .collection("messages")
-  //       .document(messageId)
-  //       .get();
-  //   return Message(
-  //     id: doc.documentID,
-  //     senderUid: doc.data["senderUid"],
-  //     readTimestamp: null,
-  //     sentTimestamp: doc.data["timestamp"].toDate(),
-  //     referencedMessageId: doc.data["referencedMessageId"],
-  //     text: doc.data["text"],
-  //     mediaType: doc.data["mediaType"] == null
-  //         ? null
-  //         : MediaType.values.elementAt(doc.data["mediaType"]),
-  //     mediaUrl: doc.data["mediaUrl"],
-  //   );
-  // }
-
-  // static Future<void> clearMessage(String uid, String messageId) {
-  //   // clear message after retrieving to save space
-  //   return userMessagesRef
-  //       .document(uid)
-  //       .collection("messages")
-  //       .document(messageId)
-  //       .delete();
-  // }
-
   static Future<void> deleteMessage({
     String chatId,
     String messageId,
@@ -558,18 +330,6 @@ class DatabaseService {
       "similarityScore": similarityScore,
     });
   }
-
-  // static Future<void> goThroughUser(
-  //   String uid,
-  //   String otherUserUid,
-  //   bool liked,
-  // ) {
-  //   return userGoneThroughRef
-  //       .document(uid)
-  //       .collection("gonethrough")
-  //       .document(otherUserUid)
-  //       .setData({"liked": liked});
-  // }
 
   static Stream<QuerySnapshot> messagesStream(String chatId, int n) {
     // stream of last n messages
@@ -690,22 +450,6 @@ class DatabaseService {
         .isEmpty;
   }
 
-  // static Future<void> swipeUser(
-  //     String uid, String otherUid, bool liked, double similarityScore) async {
-  //   return Future.wait([
-  //     userSuggestionsRef
-  //         .document(uid)
-  //         .collection("suggestions")
-  //         .document(otherUid)
-  //         .delete(),
-  //     userGoneThroughRef
-  //         .document(uid)
-  //         .collection("gonethrough")
-  //         .document(otherUid)
-  //         .setData({"liked": liked, "similarityScore": similarityScore}),
-  //   ]);
-  // }
-
   static Future<void> deleteSuggestion({
     String uid,
     String otherUid,
@@ -728,14 +472,6 @@ class DatabaseService {
         .document(chatId)
         .updateData({"wallpaperUrl": wallpaperUrl});
   }
-
-  // static Future<int> getTotalWordsSent() async {
-  //   int totalWordsSent = 0;
-  //   (await _database.query("messages")).forEach((row) {
-  //     totalWordsSent += row["text"].split(RegExp("\s")).length;
-  //   });
-  //   return totalWordsSent;
-  // }
 
   static Future<int> updateChatDetails(
       {String uid, String chatId, Map<String, dynamic> details}) {
@@ -779,14 +515,6 @@ class DatabaseService {
           )
         : Chat.fromDoc(chatsSnap.documents.first);
   }
-
-  // static Future<int> setMessageRead(String chatId, String messageId) {
-  //   return chatMessagesRef
-  //       .document(chatId)
-  //       .collection("messages")
-  //       .document(messageId)
-  //       .updateData({"readTimestamp": Timestamp.now()});
-  // }
 
   static Future<void> updateChatMessagesRead(
       String chatId, String otherUid) async {

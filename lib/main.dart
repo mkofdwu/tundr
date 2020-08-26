@@ -13,11 +13,9 @@ import 'package:tundr/pages/home.dart';
 import 'package:tundr/pages/profile-setup/theme.dart';
 import 'package:tundr/pages/user-profile/main.dart';
 import 'package:tundr/pages/welcome.dart';
-import 'package:tundr/repositories/user-suggestions.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
 import 'package:tundr/constants/enums/apptheme.dart';
-import 'package:tundr/utils/load-user-suggestions.dart';
 import 'package:tundr/widgets/handlers/app-state-handler.dart';
 import 'package:tundr/widgets/handlers/notification-handler.dart';
 
@@ -32,9 +30,6 @@ void main() {
               create: (context) => ThemeNotifier()),
           ChangeNotifierProvider<RegistrationInfo>(
               create: (context) => RegistrationInfo()),
-          ChangeNotifierProvider<UserSuggestions>(
-            create: (context) => UserSuggestions(),
-          ),
         ],
         child: TundrApp(),
       ));
@@ -87,7 +82,6 @@ class _TundrAppState extends State<TundrApp> {
 
               final user = snapshot.data;
               Provider.of<CurrentUser>(context).user = user;
-              loadUserSuggestions(context);
 
               if (user.theme == null) {
                 return SetupThemePage();
@@ -104,7 +98,6 @@ class _TundrAppState extends State<TundrApp> {
                       {
                         "online": false,
                         "lastSeen": Timestamp.now(),
-                        "totalWordsSent": user.totalWordsSent,
                       },
                     );
                   },
@@ -126,6 +119,7 @@ class _TundrAppState extends State<TundrApp> {
             return MaterialApp(
               title: 'tundr',
               theme: _getThemeData(themeNotifier.theme),
+              debugShowCheckedModeBanner: false,
               home: home,
               routes: {
                 // TODO: test if this is still necessary, or if it is possible to just set an id variable directly on the page

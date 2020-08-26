@@ -1,3 +1,6 @@
+// TODO: change everything according to the new suggestions system
+// (suggestions stored in CurrentUser.user.generatedDailySuggestions and .respondedSuggestions)
+
 import "package:flutter/widgets.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/current-user.dart';
@@ -5,7 +8,6 @@ import 'package:tundr/models/suggestion.dart';
 import 'package:tundr/models/suggestion-gone-through.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/its-a-match.dart';
-import 'package:tundr/repositories/user-suggestions.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
 
@@ -34,7 +36,8 @@ class _SwipingPageState extends State<SwipingPage> {
 
   void _nope() async {
     final List<Suggestion> suggestions =
-        Provider.of<UserSuggestions>(context).suggestions;
+        Provider.of<CurrentUser>(context).user.responseSuggestions +
+            Provider.of<CurrentUser>(context).user.generatedDailySuggestions;
     final User user = Provider.of<CurrentUser>(context).user;
     final User otherUser = suggestions[_i].user;
 
