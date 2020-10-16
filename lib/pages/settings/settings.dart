@@ -223,7 +223,7 @@ class _SettingsPageState extends State<SettingsPage> {
               SwitchSettingField(
                 title: "Sleep",
                 description:
-                    "You won't appear in other users' card stacks while sleeping",
+                    "While sleeping, you won't appear in other users' card stacks or get new suggestions",
                 selected: user.asleep,
                 onChanged: (value) =>
                     DatabaseService.setUserField(uid, "asleep", value),

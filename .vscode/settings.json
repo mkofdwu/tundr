@@ -1,6 +1,6 @@
 {
   "editor.fontFamily": "Consolas, Droid Sans Mono, monospace",
-  "editor.fontSize": 14,
+  "editor.fontSize": 15,
   "workbench.colorTheme": "Default Dark+",
   "workbench.iconTheme": "vscode-icons"
 }

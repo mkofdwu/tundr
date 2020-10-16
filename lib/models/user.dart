@@ -40,7 +40,8 @@ class User {
   Map<int, double> popularityHistory;
   // suggestions
   List<Suggestion> generatedDailySuggestions;
-  List<Suggestion> responseSuggestions;
+  List<Suggestion>
+      responseSuggestions; // suggestions that have already been responded to
   // shared preferences
   AppTheme theme;
   int numRightSwiped;
@@ -127,6 +128,8 @@ class User {
       showInMostPopular: doc.data["showInMostPopular"],
       popularityHistory:
           Map<int, double>.from(doc.data["popularityHistory"] ?? {}),
+      generatedDailySuggestions: doc.data['generatedDailySuggestions'],
+      responseSuggestions: doc.data['responseSuggestions'],
       theme: doc.data.containsKey("theme") // BACKWARDS COMPATIBILITY
           ? doc.data["theme"] == null
               ? null
@@ -147,6 +150,14 @@ class User {
   //   assert(other is User, "Cannot compare User with another type");
   //   return other is User && uid == other.uid;
   // }
+
+  List<Suggestion> get suggestions {
+    // remove duplicates created when users are suggested to each other
+    Set<Suggestion> suggestionsSet = Set();
+    suggestionsSet.addAll(generatedDailySuggestions);
+    suggestionsSet.addAll(responseSuggestions);
+    return suggestionsSet.toList();
+  }
 
   @override
   String toString() =>

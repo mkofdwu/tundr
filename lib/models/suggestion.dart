@@ -21,4 +21,12 @@ class Suggestion {
 
   @override
   String toString() => "Sugestion: ${user.name}";
+
+  @override
+  bool operator ==(other) {
+    return other is Suggestion && user.uid == other.user.uid;
+  }
+
+  @override
+  int get hashCode => user.uid.hashCode;
 }

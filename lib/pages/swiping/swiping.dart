@@ -36,8 +36,7 @@ class _SwipingPageState extends State<SwipingPage> {
 
   void _nope() async {
     final List<Suggestion> suggestions =
-        Provider.of<CurrentUser>(context).user.responseSuggestions +
-            Provider.of<CurrentUser>(context).user.generatedDailySuggestions;
+        Provider.of<CurrentUser>(context).user.suggestions;
     final User user = Provider.of<CurrentUser>(context).user;
     final User otherUser = suggestions[_i].user;
 
@@ -66,8 +65,11 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   void _undo() {
-    String suggestionUserUid =
-        Provider.of<UserSuggestions>(context).suggestions[_i - 1].user.uid;
+    String suggestionUserUid = Provider.of<CurrentUser>(context)
+        .user
+        .generatedDailySuggestions[_i - 1]
+        .user
+        .uid;
     DatabaseService.undoSentSuggestion(
       Provider.of<CurrentUser>(context).user.uid,
       suggestionUserUid,
@@ -80,7 +82,7 @@ class _SwipingPageState extends State<SwipingPage> {
 
   void _like() async {
     final List<Suggestion> suggestions =
-        Provider.of<UserSuggestions>(context).suggestions;
+        Provider.of<CurrentUser>(context).user.suggestions;
     final User user = Provider.of<CurrentUser>(context).user;
     final User otherUser = suggestions[_i].user;
 
@@ -255,20 +257,12 @@ class _SwipingPageState extends State<SwipingPage> {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     final List<Suggestion> suggestions =
-        Provider.of<UserSuggestions>(context).suggestions;
+        Provider.of<CurrentUser>(context).user.suggestions;
     final User user = _i < suggestions.length ? suggestions[_i].user : null;
 
     return Column(
       children: <Widget>[
-        if (Provider.of<UserSuggestions>(context).loading)
-          SizedBox(
-            width: width - 80.0,
-            height: height - 200.0,
-            child: Center(
-              child: Loader(),
-            ),
-          )
-        else if (_i == suggestions.length ||
+        if (_i == suggestions.length ||
             user.numRightSwiped >= 10) // should be just == 10
           SizedBox(
             width: width - 80.0,
