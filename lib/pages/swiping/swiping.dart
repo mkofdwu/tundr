@@ -60,7 +60,6 @@ class _SwipingPageState extends State<SwipingPage> {
     _goneThrough.add(SuggestionGoneThrough(
       uid: user.uid,
       liked: false,
-      similarityScore: suggestions[_i - 1].similarityScore,
     ));
   }
 
@@ -128,7 +127,6 @@ class _SwipingPageState extends State<SwipingPage> {
     _goneThrough.add(SuggestionGoneThrough(
       uid: user.uid,
       liked: true,
-      similarityScore: suggestions[_i - 1].similarityScore,
     ));
   }
 
@@ -297,9 +295,6 @@ class _SwipingPageState extends State<SwipingPage> {
               width: width - 80.0,
               height: height - 250.0,
               user: user,
-              similarityScore: suggestions[_i].similarityScore == null
-                  ? null
-                  : suggestions[_i].similarityScore * 25,
               onLike: _like,
               onNope: _nope,
             ),

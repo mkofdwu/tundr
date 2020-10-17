@@ -176,11 +176,6 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.0),
-                      Text(
-                        "Popularity: ${user.popularityScore}",
-                        style: TextStyle(fontSize: 16.0),
-                      ),
                       SizedBox(height: 40.0),
                       _hasInfoLeft(user)
                           ? NextPageArrow(

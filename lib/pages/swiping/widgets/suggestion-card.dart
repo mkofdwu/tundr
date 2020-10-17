@@ -8,7 +8,6 @@ class SuggestionCard extends StatefulWidget {
   final double width;
   final double height;
   final User user;
-  final double similarityScore;
   final Function onLike;
   final Function onNope;
 
@@ -17,7 +16,6 @@ class SuggestionCard extends StatefulWidget {
     this.width,
     this.height,
     @required this.user,
-    this.similarityScore,
     @required this.onLike,
     @required this.onNope,
   }) : super(key: key);
@@ -134,12 +132,7 @@ class _SuggestionCardState extends State<SuggestionCard>
               height: widget.height,
               child: Stack(
                 children: <Widget>[
-                  ProfileTile(
-                    user: widget.user,
-                    description: widget.similarityScore == null
-                        ? "Unknown similarity"
-                        : "Similarity: ${widget.similarityScore}%",
-                  ),
+                  ProfileTile(user: widget.user),
                   _goingToLike
                       ? Positioned(
                           left: 50.0,
