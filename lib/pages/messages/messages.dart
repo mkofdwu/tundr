@@ -5,7 +5,7 @@ import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/chattype.dart';
+import 'package:tundr/enums/chattype.dart';
 import 'package:tundr/widgets/loaders/loader.dart';
 import './widgets/chat-list.dart';
 import './widgets/chat-category.dart';

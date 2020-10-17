@@ -8,7 +8,7 @@ import "package:path_provider/path_provider.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:flutter_video_compress/flutter_video_compress.dart";
 import 'package:tundr/models/media.dart';
-import 'package:tundr/constants/enums/mediatype.dart';
+import 'package:tundr/enums/mediatype.dart';
 import 'package:tundr/constants/values.dart';
 import 'package:uuid/uuid.dart';
 import "package:tundr/constants/firebaseref.dart";

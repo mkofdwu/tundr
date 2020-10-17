@@ -15,7 +15,7 @@ import 'package:tundr/pages/user-profile/main.dart';
 import 'package:tundr/pages/welcome.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/apptheme.dart';
+import 'package:tundr/enums/apptheme.dart';
 import 'package:tundr/widgets/handlers/app-state-handler.dart';
 import 'package:tundr/widgets/handlers/notification-handler.dart';
 

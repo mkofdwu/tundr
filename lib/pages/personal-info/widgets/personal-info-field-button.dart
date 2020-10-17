@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:tundr/models/personal-info-field.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/personalinfotype.dart';
+import 'package:tundr/enums/personalinfotype.dart';
 import 'package:tundr/pages/personal-info/number-field.dart';
 import 'package:tundr/pages/personal-info/radio-group-field.dart';
 import 'package:tundr/pages/personal-info/slider-field.dart';

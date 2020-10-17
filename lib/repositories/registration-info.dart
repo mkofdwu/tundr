@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:tundr/constants/enums/apptheme.dart';
-import 'package:tundr/constants/enums/gender.dart';
+import 'package:tundr/enums/apptheme.dart';
+import 'package:tundr/enums/gender.dart';
 import 'package:tundr/models/media.dart';
 
 class RegistrationInfo extends ChangeNotifier {

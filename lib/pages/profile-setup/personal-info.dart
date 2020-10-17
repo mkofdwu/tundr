@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration-info.dart';
 import 'package:tundr/repositories/theme-notifier.dart';
-import 'package:tundr/constants/enums/apptheme.dart';
+import 'package:tundr/enums/apptheme.dart';
 import 'package:tundr/constants/personal-info-fields.dart';
 import 'package:tundr/pages/personal-info/widgets/personal-info-field-button.dart';
 import 'package:tundr/widgets/buttons/tile-icon.dart';

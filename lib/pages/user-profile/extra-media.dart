@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/repositories/theme-notifier.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/user-profile/personal-info.dart';
-import 'package:tundr/constants/enums/apptheme.dart';
+import 'package:tundr/enums/apptheme.dart';
 import 'package:tundr/constants/gradients.dart';
 import 'package:tundr/widgets/buttons/tile-icon.dart';
 import 'package:tundr/widgets/media/media-thumbnail.dart';

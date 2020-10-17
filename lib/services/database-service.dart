@@ -8,14 +8,14 @@ import 'package:tundr/models/message.dart';
 import 'package:tundr/models/personal-info-field.dart';
 import 'package:tundr/models/suggestion-gone-through.dart';
 import 'package:tundr/constants/deleteduser.dart';
-import 'package:tundr/constants/enums/chattype.dart';
-import 'package:tundr/constants/enums/filtermethod.dart';
-import "package:tundr/constants/enums/gender.dart";
+import 'package:tundr/enums/chattype.dart';
+import 'package:tundr/enums/filtermethod.dart';
+import "package:tundr/enums/gender.dart";
 import 'package:tundr/repositories/registration-info.dart';
 import 'package:tundr/models/suggestion.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/services/storage-service.dart';
-import 'package:tundr/constants/enums/mediatype.dart';
+import 'package:tundr/enums/mediatype.dart';
 import "package:tundr/constants/firebaseref.dart";
 import 'package:tundr/constants/personal-info-fields.dart';
 

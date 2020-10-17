@@ -1,8 +1,8 @@
 import * as functions from "firebase-functions";
 
-import { db } from "../../constants";
-import SuggestionGoneThrough from "../../models/suggestion-gone-through";
-import pageRank from "../../algorithms/pagerank";
+import { db } from "../constants";
+import SuggestionGoneThrough from "../models/suggestion-gone-through";
+import pageRank from "../utils/pagerank";
 
 export default functions.firestore
   .document(

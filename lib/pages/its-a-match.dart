@@ -6,7 +6,7 @@ import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/chat/chat.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/chattype.dart';
+import 'package:tundr/enums/chattype.dart';
 import 'package:tundr/constants/gradients.dart';
 
 class ItsAMatchPage extends StatelessWidget {

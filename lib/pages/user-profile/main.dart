@@ -9,7 +9,7 @@ import 'package:tundr/pages/user-profile/extra-media.dart';
 import 'package:tundr/pages/user-profile/personal-info.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/chattype.dart';
+import 'package:tundr/enums/chattype.dart';
 import 'package:tundr/constants/gradients.dart';
 import 'package:tundr/utils/from-theme.dart';
 import 'package:tundr/utils/get-network-image.dart';

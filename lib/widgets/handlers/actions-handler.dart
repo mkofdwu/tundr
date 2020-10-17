@@ -3,7 +3,7 @@
 // import 'package:provider/provider.dart';
 // import 'package:tundr/repositories/current-user.dart';
 // import 'package:tundr/services/databaseservice.dart';
-// import 'package:tundr/constants/enums/actiontype.dart';
+// import 'package:tundr/enums/actiontype.dart';
 // import "package:tundr/models/action.dart" as appAction;
 
 // class ActionsHandler extends StatefulWidget {

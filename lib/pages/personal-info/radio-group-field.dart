@@ -5,7 +5,7 @@ import 'package:tundr/repositories/theme-notifier.dart';
 import 'package:tundr/constants/colors.dart';
 import 'package:tundr/widgets/buttons/tile-icon.dart';
 import 'package:tundr/widgets/radio-groups/tile.dart';
-import 'package:tundr/constants/enums/apptheme.dart';
+import 'package:tundr/enums/apptheme.dart';
 
 class RadioGroupFieldPage extends StatefulWidget {
   final PersonalInfoField field;

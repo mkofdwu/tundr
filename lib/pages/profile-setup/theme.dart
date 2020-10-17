@@ -4,7 +4,7 @@ import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/repositories/theme-notifier.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/apptheme.dart';
+import 'package:tundr/enums/apptheme.dart';
 
 class SetupThemePage extends StatefulWidget {
   @override

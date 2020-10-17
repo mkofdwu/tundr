@@ -2,7 +2,7 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { randomBytes } from "crypto";
 
-import { db } from "../constants";
+import { db } from "../../constants";
 
 export default functions.firestore
   .document("haoenutaoheusahoesuhoaeu/haoseunoaeua/aoeuatohuao/aoethutnsahous")

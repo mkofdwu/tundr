@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import "package:flutter/widgets.dart";
 import 'package:tundr/models/media.dart';
-import 'package:tundr/constants/enums/mediatype.dart';
+import 'package:tundr/enums/mediatype.dart';
 import 'package:tundr/utils/get-network-image.dart';
 import 'package:tundr/widgets/media/video-thumbnail.dart';
 

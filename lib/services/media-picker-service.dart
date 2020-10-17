@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:image_cropper/image_cropper.dart';
 import "package:image_picker/image_picker.dart";
 import "package:tundr/models/media.dart";
-import 'package:tundr/constants/enums/mediatype.dart';
+import 'package:tundr/enums/mediatype.dart';
 
 class MediaPickerService {
   static Future<Media> pickMedia({

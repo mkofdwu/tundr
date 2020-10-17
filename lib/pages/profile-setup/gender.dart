@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
-import 'package:tundr/constants/enums/gender.dart';
+import 'package:tundr/enums/gender.dart';
 import 'package:tundr/repositories/registration-info.dart';
 import 'package:tundr/pages/profile-setup/profile-pic.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/apptheme.dart';
+import 'package:tundr/enums/apptheme.dart';
 import 'package:tundr/widgets/scroll-down-arrow.dart';
 import 'package:tundr/widgets/radio-groups/tile.dart';
 

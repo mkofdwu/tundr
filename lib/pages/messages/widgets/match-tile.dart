@@ -4,7 +4,7 @@ import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/chat/chat.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/chattype.dart';
+import 'package:tundr/enums/chattype.dart';
 import 'package:tundr/constants/shadows.dart';
 import 'package:tundr/utils/get-network-image.dart';
 import 'package:tundr/widgets/theme-builder.dart';

@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/pages/media/media-view.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/messageoption.dart';
+import 'package:tundr/enums/messageoption.dart';
 import 'package:tundr/constants/shadows.dart';
 import 'package:tundr/utils/from-theme.dart';
 import 'package:tundr/utils/get-network-image.dart';

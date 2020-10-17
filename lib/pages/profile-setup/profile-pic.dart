@@ -8,7 +8,7 @@ import 'package:tundr/repositories/registration-info.dart';
 import 'package:tundr/pages/profile-setup/extra-info.dart';
 import 'package:tundr/services/media-picker-service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/mediatype.dart';
+import 'package:tundr/enums/mediatype.dart';
 import 'package:tundr/constants/shadows.dart';
 import 'package:tundr/widgets/scroll-down-arrow.dart';
 import "package:tundr/models/media.dart";

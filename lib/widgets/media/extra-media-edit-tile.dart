@@ -4,7 +4,7 @@ import 'package:tundr/models/media.dart';
 import 'package:tundr/pages/media/extra-media-edit.dart';
 import 'package:tundr/services/media-picker-service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/mediatype.dart';
+import 'package:tundr/enums/mediatype.dart';
 import 'package:tundr/constants/shadows.dart';
 import 'package:tundr/widgets/media/media-thumbnail.dart';
 import 'package:tundr/widgets/theme-builder.dart';

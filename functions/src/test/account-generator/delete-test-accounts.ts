@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 
-import { db } from "../constants";
+import { db } from "../../constants";
 
 export default functions.firestore
   .document("htnsaeunahtoe/nsaeu/nashteu/ahseunseu")

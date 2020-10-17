@@ -2,7 +2,7 @@ import 'dart:math';
 
 import "package:flutter/widgets.dart";
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/apptheme.dart';
+import 'package:tundr/enums/apptheme.dart';
 import 'package:tundr/constants/shadows.dart';
 
 class TileRadioGroup extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:tundr/constants/enums/personalinfotype.dart';
+import 'package:tundr/enums/personalinfotype.dart';
 
 class PersonalInfoField {
   String name;

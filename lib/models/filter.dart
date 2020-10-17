@@ -1,5 +1,5 @@
 import 'package:tundr/models/personal-info-field.dart';
-import 'package:tundr/constants/enums/filtermethod.dart';
+import 'package:tundr/enums/filtermethod.dart';
 
 class Filter {
   PersonalInfoField field;

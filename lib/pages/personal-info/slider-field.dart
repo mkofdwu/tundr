@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/models/personal-info-field.dart';
 import 'package:tundr/repositories/theme-notifier.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/apptheme.dart';
+import 'package:tundr/enums/apptheme.dart';
 import 'package:tundr/widgets/buttons/tile-icon.dart';
 
 class SliderFieldPage extends StatefulWidget {

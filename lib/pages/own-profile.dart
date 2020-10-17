@@ -6,7 +6,7 @@ import 'package:tundr/pages/interests/interests-edit.dart';
 import 'package:tundr/services/database-service.dart';
 import 'package:tundr/services/storage-service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/mediatype.dart';
+import 'package:tundr/enums/mediatype.dart';
 import 'package:tundr/pages/interests/widgets/interests-wrap.dart';
 import 'package:tundr/widgets/media/extra-media-grid.dart';
 import 'package:tundr/pages/personal-info/widgets/personal-info-list.dart';

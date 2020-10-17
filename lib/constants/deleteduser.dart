@@ -1,5 +1,5 @@
 import 'package:tundr/models/user.dart';
-import 'package:tundr/constants/enums/apptheme.dart';
+import 'package:tundr/enums/apptheme.dart';
 
 final Map<String, dynamic> deletedUserMap = {
   "uid": "deleted",

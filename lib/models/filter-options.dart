@@ -1,4 +1,4 @@
-import 'package:tundr/constants/enums/filtermethod.dart';
+import 'package:tundr/enums/filtermethod.dart';
 
 class FilterOptions {
   dynamic value;

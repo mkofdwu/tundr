@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
-import { db, fcm } from "../../constants";
+import { db, fcm } from "../constants";
 
 export default functions.firestore
   .document("usermatches/{uid}/matches/{matchUid}")

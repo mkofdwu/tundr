@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/enums/apptheme.dart';
+import 'package:tundr/enums/apptheme.dart';
 
 class ThemeNotifier extends ChangeNotifier {
   AppTheme _theme = AppTheme.dark;

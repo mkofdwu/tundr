@@ -14,7 +14,7 @@ import 'package:tundr/services/database-service.dart';
 import 'package:tundr/services/media-picker-service.dart';
 import 'package:tundr/services/storage-service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/enums/mediatype.dart';
+import 'package:tundr/enums/mediatype.dart';
 import 'package:tundr/constants/gradients.dart';
 import 'package:tundr/utils/from-theme.dart';
 import 'package:tundr/utils/get-network-image.dart';

@@ -1,6 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import 'package:tundr/constants/enums/apptheme.dart';
-import "package:tundr/constants/enums/gender.dart";
+import 'package:tundr/enums/apptheme.dart';
+import "package:tundr/enums/gender.dart";
 import 'package:tundr/models/media.dart';
 import 'package:tundr/constants/personal-info-fields.dart';
 import 'package:tundr/models/suggestion.dart';
