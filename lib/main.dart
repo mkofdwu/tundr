@@ -1,23 +1,23 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import "package:firebase_auth/firebase_auth.dart";
-import "package:flutter/material.dart";
-import "package:provider/provider.dart";
-import 'package:tundr/repositories/current-user.dart';
-import 'package:tundr/repositories/registration-info.dart';
-import 'package:tundr/repositories/theme-notifier.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/repositories/registration_info.dart';
+import 'package:tundr/repositories/theme_notifier.dart';
 import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/loading.dart';
 import 'package:tundr/pages/home.dart';
-import 'package:tundr/pages/profile-setup/theme.dart';
-import 'package:tundr/pages/user-profile/main.dart';
+import 'package:tundr/pages/profile_setup/theme.dart';
+import 'package:tundr/pages/user_profile/main.dart';
 import 'package:tundr/pages/welcome.dart';
-import 'package:tundr/services/database-service.dart';
+import 'package:tundr/services/database_service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/enums/apptheme.dart';
-import 'package:tundr/widgets/handlers/app-state-handler.dart';
-import 'package:tundr/widgets/handlers/notification-handler.dart';
+import 'package:tundr/enums/app_theme.dart';
+import 'package:tundr/widgets/handlers/app_state_handler.dart';
+import 'package:tundr/widgets/handlers/notification_handler.dart';
 
 void main() {
   runZonedGuarded<Future<void>>(
@@ -37,7 +37,7 @@ void main() {
     (error, stackTrace) {
       runApp(
         MaterialApp(
-          title: "error",
+          title: 'error',
           home: Material(
             child: Center(
               child: Padding(
@@ -88,26 +88,25 @@ class _TundrAppState extends State<TundrApp> {
               } else {
                 Provider.of<ThemeNotifier>(context).theme = user.theme;
                 return AppStateHandler(
-                  child: NotificationHandler(
-                    child: HomePage(),
-                  ),
                   onExit: () {
-                    final User user = Provider.of<CurrentUser>(context).user;
                     DatabaseService.setUserFields(
                       Provider.of<CurrentUser>(context).user.uid,
                       {
-                        "online": false,
-                        "lastSeen": Timestamp.now(),
+                        'online': false,
+                        'lastSeen': Timestamp.now(),
                       },
                     );
                   },
                   onStart: () {
                     DatabaseService.setUserField(
                       Provider.of<CurrentUser>(context).user.uid,
-                      "online",
+                      'online',
                       true,
                     );
                   },
+                  child: NotificationHandler(
+                    child: HomePage(),
+                  ),
                 );
               }
             },
@@ -123,7 +122,7 @@ class _TundrAppState extends State<TundrApp> {
               home: home,
               routes: {
                 // TODO: test if this is still necessary, or if it is possible to just set an id variable directly on the page
-                "userprofile": (context) => UserProfileMainPage(),
+                'userprofile': (context) => UserProfileMainPage(),
               },
             );
           },
@@ -145,7 +144,7 @@ class _TundrAppState extends State<TundrApp> {
       case AppTheme.dark:
         primaryColor = AppColors.black;
         accentColor = AppColors.white;
-        dialogBackgroundColor = Color.fromARGB(255, 30, 30, 30);
+        dialogBackgroundColor = const Color.fromARGB(255, 30, 30, 30);
         break;
     }
     return ThemeData(
@@ -157,7 +156,7 @@ class _TundrAppState extends State<TundrApp> {
         headline3: TextStyle(
           color: accentColor,
           fontSize: 40.0,
-          fontFamily: "Helvetica Neue",
+          fontFamily: 'Helvetica Neue',
           fontWeight: FontWeight.bold,
         ),
         headline6: TextStyle(
@@ -169,7 +168,7 @@ class _TundrAppState extends State<TundrApp> {
           fontSize: 14.0,
         ),
       ),
-      fontFamily: ".AppleSystemUIFont",
+      fontFamily: '.AppleSystemUIFont',
       cursorColor: accentColor,
     );
   }

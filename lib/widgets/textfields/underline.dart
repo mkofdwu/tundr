@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:tundr/constants/colors.dart';
 
 class UnderlineTextField extends StatelessWidget {
@@ -15,7 +15,7 @@ class UnderlineTextField extends StatelessWidget {
     Key key,
     @required this.controller,
     this.color = AppColors.white,
-    this.hintText = "",
+    this.hintText = '',
     this.obscureText = false,
     this.autoFocus = false,
     this.moveFocus = true,

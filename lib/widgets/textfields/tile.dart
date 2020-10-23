@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:tundr/constants/colors.dart';
 import 'package:tundr/constants/shadows.dart';
 
@@ -21,7 +21,7 @@ class TileTextField extends StatelessWidget {
     this.height = 40.0,
     this.color = AppColors.white,
     @required this.controller,
-    this.hintText = "",
+    this.hintText = '',
     this.obscureText = false,
     this.maxChars,
     this.maxLines = 1,
@@ -52,14 +52,14 @@ class TileTextField extends StatelessWidget {
           hintStyle: TextStyle(
             color: AppColors.grey,
             fontSize: 20.0,
-            fontFamily: "Helvetica Neue",
+            fontFamily: 'Helvetica Neue',
           ),
-          counterText: "",
+          counterText: '',
         ),
         style: TextStyle(
           color: AppColors.black,
           fontSize: 20.0,
-          fontFamily: "Helvetica Neue",
+          fontFamily: 'Helvetica Neue',
         ),
         cursorColor: AppColors.black,
         controller: controller,

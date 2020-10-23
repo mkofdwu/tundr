@@ -1,5 +1,5 @@
-import 'package:tundr/models/personal-info-field.dart';
-import 'package:tundr/enums/filtermethod.dart';
+import 'package:tundr/models/personal_info_field.dart';
+import 'package:tundr/enums/filter_method.dart';
 
 class Filter {
   PersonalInfoField field;
@@ -15,8 +15,8 @@ class Filter {
   factory Filter.fromMap(PersonalInfoField field, Map<String, dynamic> map) {
     return Filter(
       field: field,
-      options: map["options"],
-      method: map["method"],
+      options: map['options'],
+      method: map['method'],
     );
   }
 }

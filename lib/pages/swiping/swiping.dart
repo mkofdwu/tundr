@@ -1,21 +1,18 @@
 // TODO: change everything according to the new suggestions system
 // (suggestions stored in CurrentUser.user.generatedDailySuggestions and .respondedSuggestions)
 
-import "package:flutter/widgets.dart";
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/current-user.dart';
-import 'package:tundr/models/suggestion.dart';
-import 'package:tundr/models/suggestion-gone-through.dart';
-import 'package:tundr/models/user.dart';
-import 'package:tundr/pages/its-a-match.dart';
-import 'package:tundr/services/database-service.dart';
+import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/models/suggestion_gone_through.dart';
+import 'package:tundr/pages/its_a_match.dart';
+import 'package:tundr/services/database_service.dart';
 import 'package:tundr/constants/colors.dart';
 
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:tundr/constants/shadows.dart';
-import 'package:tundr/widgets/loaders/loader.dart';
-import 'package:tundr/pages/swiping/widgets/suggestion-card.dart';
-import 'package:tundr/widgets/theme-builder.dart'; // for icons, remove when alternative image has been found
+import 'package:tundr/pages/swiping/widgets/suggestion_card.dart';
+import 'package:tundr/widgets/theme_builder.dart'; // for icons, remove when alternative image has been found
 
 class SwipingPage extends StatefulWidget {
   @override
@@ -23,7 +20,7 @@ class SwipingPage extends StatefulWidget {
 }
 
 class _SwipingPageState extends State<SwipingPage> {
-  List<SuggestionGoneThrough> _goneThrough = [];
+  final List<SuggestionGoneThrough> _goneThrough = [];
   int _i = 0;
   bool _canUndo = false;
 
@@ -35,16 +32,15 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   void _nope() async {
-    final List<Suggestion> suggestions =
-        Provider.of<CurrentUser>(context).user.suggestions;
-    final User user = Provider.of<CurrentUser>(context).user;
-    final User otherUser = suggestions[_i].user;
+    final suggestions = Provider.of<CurrentUser>(context).user.suggestions;
+    final user = Provider.of<CurrentUser>(context).user;
+    final otherUser = suggestions[_i].user;
 
     if (suggestions[_i].liked == null) {
       setState(() {
         _i++;
       });
-      DatabaseService.sendSuggestion(
+      await DatabaseService.sendSuggestion(
         fromUid: user.uid,
         toUid: otherUser.uid,
         liked: false,
@@ -56,7 +52,8 @@ class _SwipingPageState extends State<SwipingPage> {
     }
 
     setState(() => _canUndo = true);
-    DatabaseService.deleteSuggestion(uid: user.uid, otherUid: otherUser.uid);
+    await DatabaseService.deleteSuggestion(
+        uid: user.uid, otherUid: otherUser.uid);
     _goneThrough.add(SuggestionGoneThrough(
       uid: user.uid,
       liked: false,
@@ -64,7 +61,7 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   void _undo() {
-    String suggestionUserUid = Provider.of<CurrentUser>(context)
+    final suggestionUserUid = Provider.of<CurrentUser>(context)
         .user
         .generatedDailySuggestions[_i - 1]
         .user
@@ -80,17 +77,16 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   void _like() async {
-    final List<Suggestion> suggestions =
-        Provider.of<CurrentUser>(context).user.suggestions;
-    final User user = Provider.of<CurrentUser>(context).user;
-    final User otherUser = suggestions[_i].user;
+    final suggestions = Provider.of<CurrentUser>(context).user.suggestions;
+    final user = Provider.of<CurrentUser>(context).user;
+    final otherUser = suggestions[_i].user;
 
     setState(() => user.numRightSwiped += 1);
-    DatabaseService.setUserField(
-        user.uid, "numRightSwiped", user.numRightSwiped);
+    await DatabaseService.setUserField(
+        user.uid, 'numRightSwiped', user.numRightSwiped);
 
     if (suggestions[_i].liked == true) {
-      final bool undo = await Navigator.push(
+      final undo = await Navigator.push(
         context,
         PageRouteBuilder(
           // page transition
@@ -99,7 +95,7 @@ class _SwipingPageState extends State<SwipingPage> {
         ),
       );
       if (!undo) {
-        DatabaseService.match(
+        await DatabaseService.match(
             Provider.of<CurrentUser>(context).user.uid, otherUser.uid);
         setState(() {
           _i++;
@@ -111,7 +107,7 @@ class _SwipingPageState extends State<SwipingPage> {
         _i++;
         _canUndo = true;
       });
-      DatabaseService.sendSuggestion(
+      await DatabaseService.sendSuggestion(
         fromUid: user.uid,
         toUid: otherUser.uid,
         liked: true,
@@ -123,7 +119,8 @@ class _SwipingPageState extends State<SwipingPage> {
       });
     }
 
-    DatabaseService.deleteSuggestion(uid: user.uid, otherUid: otherUser.uid);
+    await DatabaseService.deleteSuggestion(
+        uid: user.uid, otherUid: otherUser.uid);
     _goneThrough.add(SuggestionGoneThrough(
       uid: user.uid,
       liked: true,
@@ -252,11 +249,10 @@ class _SwipingPageState extends State<SwipingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height;
-    final List<Suggestion> suggestions =
-        Provider.of<CurrentUser>(context).user.suggestions;
-    final User user = _i < suggestions.length ? suggestions[_i].user : null;
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final suggestions = Provider.of<CurrentUser>(context).user.suggestions;
+    final user = _i < suggestions.length ? suggestions[_i].user : null;
 
     return Column(
       children: <Widget>[
@@ -278,7 +274,7 @@ class _SwipingPageState extends State<SwipingPage> {
                   ),
                   SizedBox(height: 10.0),
                   Text(
-                    "Try editing your filters to see more people",
+                    'Try editing your filters to see more people',
                     style: TextStyle(
                       color: AppColors.grey,
                       fontSize: 14.0,

@@ -1,12 +1,12 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/registration-info.dart';
+import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/loading.dart';
-import 'package:tundr/services/database-service.dart';
+import 'package:tundr/services/database_service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/pages/profile-setup/name.dart';
+import 'package:tundr/pages/profile_setup/name.dart';
 import 'package:tundr/constants/shadows.dart';
-import 'package:tundr/widgets/pages/stack-scroll.dart';
+import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/tile.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -30,23 +30,23 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool _loading = false;
 
-  _validateAndSetup() async {
+  void _validateAndSetup() async {
     setState(() => _loading = true);
 
-    final String username = _usernameController.text;
-    final String password = _passwordController.text;
+    final username = _usernameController.text;
+    final password = _passwordController.text;
 
-    final bool usernameAlreadyExists =
+    final usernameAlreadyExists =
         await DatabaseService.usernameAlreadyExists(username);
 
     setState(() {
-      _usernameContainsWhitespace = username.contains(RegExp(r"\s"));
+      _usernameContainsWhitespace = username.contains(RegExp(r'\s'));
       _usernameLessThan4Chars = username.length < 4;
       _usernameAlreadyExists = usernameAlreadyExists;
       _passwordLessThan6Chars = password.length < 6;
       _passwordsDoNotMatch = password != _confirmPasswordController.text;
 
-      _confirmPasswordController.text = ""; //
+      _confirmPasswordController.text = ''; //
     });
 
     if (!_usernameContainsWhitespace &&
@@ -56,7 +56,7 @@ class _RegisterPageState extends State<RegisterPage> {
         !_passwordsDoNotMatch) {
       Provider.of<RegistrationInfo>(context).username = username;
       Provider.of<RegistrationInfo>(context).password = password;
-      Navigator.push(
+      await Navigator.push(
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) => SetupNamePage(),
@@ -116,11 +116,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 left: width * 67 / 375,
                 top: height * 91 / 812,
                 child: Text(
-                  "Register",
+                  'Register',
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 60.0,
-                    fontFamily: "Helvetica Neue",
+                    fontFamily: 'Helvetica Neue',
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -129,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 left: width * 89 / 375,
                 top: height * 180 / 812,
                 child: Text(
-                  "Enter a username and password",
+                  'Enter a username and password',
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16.0,
@@ -143,7 +143,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   children: <Widget>[
                     TileTextField(
-                      hintText: "Username",
+                      hintText: 'Username',
                       controller: _usernameController,
                       autoFocus: true,
                     ),
@@ -156,7 +156,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             padding: EdgeInsets.all(10.0),
                             child: Text(
-                              "Your username cannot contain any spaces",
+                              'Your username cannot contain any spaces',
                               style: TextStyle(
                                 color: AppColors.white,
                                 fontSize: 14.0,
@@ -173,7 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             padding: EdgeInsets.all(10.0),
                             child: Text(
-                              "Your username must be at least 4 characters long",
+                              'Your username must be at least 4 characters long',
                               style: TextStyle(
                                 color: AppColors.white,
                                 fontSize: 14.0,
@@ -190,7 +190,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             padding: EdgeInsets.all(10.0),
                             child: Text(
-                              "This username is already taken",
+                              'This username is already taken',
                               style: TextStyle(
                                 color: AppColors.white,
                                 fontSize: 14.0,
@@ -200,7 +200,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         : SizedBox.shrink(),
                     SizedBox(height: 20.0),
                     TileTextField(
-                      hintText: "Password",
+                      hintText: 'Password',
                       controller: _passwordController,
                       obscureText: true,
                     ),
@@ -213,7 +213,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             padding: EdgeInsets.all(10.0),
                             child: Text(
-                              "Your password must be at least 6 characters long",
+                              'Your password must be at least 6 characters long',
                               style: TextStyle(
                                 color: AppColors.white,
                                 fontSize: 14.0,
@@ -230,7 +230,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             padding: EdgeInsets.all(10.0),
                             child: Text(
-                              "The passwords do not match",
+                              'The passwords do not match',
                               style: TextStyle(
                                 color: AppColors.white,
                                 fontSize: 14.0,
@@ -240,7 +240,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         : SizedBox.shrink(),
                     SizedBox(height: 20.0),
                     TileTextField(
-                      hintText: "Confirm password",
+                      hintText: 'Confirm password',
                       controller: _confirmPasswordController,
                       obscureText: true,
                       moveFocus: false,
@@ -267,7 +267,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            "Setup",
+                            'Setup',
                             style: TextStyle(
                               color: AppColors.white,
                               fontSize: 16.0,

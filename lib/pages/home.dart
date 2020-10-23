@@ -1,7 +1,7 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:tundr/pages/dashboard.dart';
 import 'package:tundr/pages/messages/messages.dart';
-import 'package:tundr/pages/most-popular.dart';
+import 'package:tundr/pages/most_popular.dart';
 import 'package:tundr/pages/search.dart';
 import 'package:tundr/pages/swiping/swiping.dart';
 import 'package:tundr/constants/colors.dart';

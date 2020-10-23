@@ -1,13 +1,13 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/theme-notifier.dart';
-import 'package:tundr/enums/apptheme.dart';
-import 'package:tundr/widgets/buttons/tile-icon.dart';
+import 'package:tundr/repositories/theme_notifier.dart';
+import 'package:tundr/enums/app_theme.dart';
+import 'package:tundr/widgets/buttons/tile_icon.dart';
 
 class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
+    final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Material(
         color: Theme.of(context).primaryColor,
@@ -21,7 +21,7 @@ class AboutPage extends StatelessWidget {
               top: height * 100 / 812,
               right: 50,
               child: Text(
-                "About",
+                'About',
                 style: TextStyle(
                   color: Theme.of(context).accentColor,
                   fontSize: 60.0,
@@ -33,7 +33,7 @@ class AboutPage extends StatelessWidget {
               right: 20,
               width: 150.0,
               child: Image.asset(
-                  "assets/images/logo-${Provider.of<ThemeNotifier>(context).theme == AppTheme.dark ? 'dark' : 'light'}.png"),
+                  'assets/images/logo-${Provider.of<ThemeNotifier>(context).theme == AppTheme.dark ? 'dark' : 'light'}.png'),
             ),
             Positioned(
               left: 40.0,
@@ -51,14 +51,14 @@ class AboutPage extends StatelessWidget {
                   ),
                   SizedBox(height: 10.0),
                   Text(
-                    "Developed by Jia Jie",
+                    'Developed by Jia Jie',
                     style: TextStyle(
                       color: Theme.of(context).accentColor,
                       fontSize: 14.0,
                     ),
                   ),
                   Text(
-                    "Version: 0.1.0a",
+                    'Version: 0.1.0a',
                     style: TextStyle(
                       color: Theme.of(context).accentColor,
                       fontSize: 14.0,

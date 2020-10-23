@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/widgets/textfields/digit-controller.dart';
+import 'package:tundr/widgets/textfields/digit_controller.dart';
 
 class DigitEntry extends StatefulWidget {
   final String hintChar;
@@ -15,7 +15,7 @@ class DigitEntry extends StatefulWidget {
 
   DigitEntry({
     Key key,
-    this.hintChar = "\u2022",
+    this.hintChar = '\u2022',
     this.validDigits = const [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     this.autoFocus = false,
     this.moveFocus = true,
@@ -24,7 +24,7 @@ class DigitEntry extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DigitEntryState createState() => _DigitEntryState(this.controller);
+  _DigitEntryState createState() => _DigitEntryState(controller);
 }
 
 class _DigitEntryState extends State<DigitEntry> {
@@ -45,11 +45,11 @@ class _DigitEntryState extends State<DigitEntry> {
     assert(widget.hintChar.length == 1);
     _controller.text = widget.hintChar;
     _controller.addListener(() {
-      if (_controller.selection.baseOffset == 0)
-        // always input from the end so backspace events can be received
+      if (_controller.selection.baseOffset == 0) {
         setState(() {
           _controller.selection = TextSelection.collapsed(offset: 1);
         });
+      }
     });
   }
 
@@ -70,7 +70,7 @@ class _DigitEntryState extends State<DigitEntry> {
                 fontSize: 24.0,
               ),
         decoration: InputDecoration(
-          counterText: "",
+          counterText: '',
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
               color: AppColors.white,
@@ -101,7 +101,7 @@ class _DigitEntryState extends State<DigitEntry> {
             });
             FocusScope.of(context).previousFocus();
           } else {
-            int digitEntered = int.tryParse(value.substring(1));
+            final digitEntered = int.tryParse(value.substring(1));
             if (digitEntered == null ||
                 !widget.validDigits.contains(digitEntered)) {
               // not a valid integer / digit, rejected

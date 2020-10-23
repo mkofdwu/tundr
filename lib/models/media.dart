@@ -1,4 +1,4 @@
-import 'package:tundr/enums/mediatype.dart';
+import 'package:tundr/enums/media_type.dart';
 
 class Media {
   MediaType type;
@@ -8,21 +8,21 @@ class Media {
   Media({this.type, this.url, this.isLocalFile});
 
   factory Media.fromMap(Map map) {
-    if (map["type"] == null) return null;
+    if (map['type'] == null) return null;
     return Media(
-      type: MediaType.values.elementAt(map["type"]),
-      url: map["url"],
+      type: MediaType.values.elementAt(map['type']),
+      url: map['url'],
       isLocalFile: false,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      "type": MediaType.values.indexOf(type),
-      "url": url,
+      'type': MediaType.values.indexOf(type),
+      'url': url,
     };
   }
 
   @override
-  String toString() => "media, name / url: $url";
+  String toString() => 'media, name / url: $url';
 }

@@ -1,26 +1,24 @@
 import 'package:fl_chart/fl_chart.dart';
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import "package:intl/intl.dart";
-import 'package:tundr/models/media.dart';
-import 'package:tundr/repositories/current-user.dart';
-import 'package:tundr/models/user.dart';
-import 'package:tundr/pages/own-profile.dart';
+import 'package:intl/intl.dart';
+import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/pages/own_profile.dart';
 import 'package:tundr/pages/settings/settings.dart';
 
-import 'package:tundr/services/database-service.dart';
-import 'package:tundr/services/media-picker-service.dart';
-import 'package:tundr/services/storage-service.dart';
+import 'package:tundr/services/database_service.dart';
+import 'package:tundr/services/media_picker_service.dart';
+import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/enums/mediatype.dart';
+import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/constants/gradients.dart';
-import 'package:tundr/utils/from-theme.dart';
-import 'package:tundr/utils/get-network-image.dart';
-import 'package:tundr/widgets/buttons/simple-icon.dart';
-import 'package:tundr/widgets/buttons/tile-icon.dart';
-import 'package:tundr/widgets/verified-badge.dart';
+import 'package:tundr/utils/from_theme.dart';
+import 'package:tundr/utils/get_network_image.dart';
+import 'package:tundr/widgets/buttons/simple_icon.dart';
+import 'package:tundr/widgets/buttons/tile_icon.dart';
+import 'package:tundr/widgets/verified_badge.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -48,9 +46,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<CurrentUser>(context).user;
-    final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height;
+    final user = Provider.of<CurrentUser>(context).user;
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Material(
         child: Column(
@@ -133,7 +131,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       ),
                                 SizedBox(height: 5.0),
                                 Text(
-                                  "Born ${DateFormat.yMd().format(user.birthday)}",
+                                  'Born ${DateFormat.yMd().format(user.birthday)}',
                                   style: TextStyle(
                                     color: AppColors.white,
                                     fontSize: 16.0,
@@ -158,7 +156,7 @@ class _DashboardPageState extends State<DashboardPage> {
               child: user.popularityHistory.isEmpty
                   ? Center(
                       child: Text(
-                        "Your popularity history will be shown here",
+                        'Your popularity history will be shown here',
                         style: TextStyle(
                           color: AppColors.grey,
                           fontSize: 16.0,
@@ -195,7 +193,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             child: Column(
                               children: <Widget>[
                                 Text(
-                                  "Popularity",
+                                  'Popularity',
                                   style: TextStyle(
                                     color: AppColors.gold,
                                     fontSize: 20.0,
@@ -222,12 +220,12 @@ class _DashboardPageState extends State<DashboardPage> {
                 children: <Widget>[
                   SimpleIconButton(
                     icon: Icons.settings,
-                    label: "Settings",
+                    label: 'Settings',
                     onPressed: _openSettings,
                   ),
                   SimpleIconButton(
                     icon: Icons.person,
-                    label: "Profile",
+                    label: 'Profile',
                     onPressed: _openOwnProfileEdit,
                   ),
                 ],
@@ -239,61 +237,61 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  _editName() {
+  void _editName() {
     setState(() => _editingName = true);
     FocusScope.of(context).requestFocus(_nameFocusNode);
   }
 
-  _changeName() {
+  void _changeName() {
     Provider.of<CurrentUser>(context).user.name = _nameController.text;
     DatabaseService.setUserField(
       Provider.of<CurrentUser>(context).user.uid,
-      "name",
+      'name',
       _nameController.text,
     );
     setState(() => _editingName = false);
   }
 
-  _changeProfilePic() async {
+  void _changeProfilePic() async {
     // FUTURE: better ui for selecting source
-    final ImageSource source = await showDialog(
+    final source = await showDialog(
       context: context,
       child: SimpleDialog(
-        title: Text("Change profile picture"),
+        title: Text('Change profile picture'),
         children: <Widget>[
           FlatButton(
-            child: Text("Camera"),
+            child: Text('Camera'),
             onPressed: () => Navigator.pop(context, ImageSource.camera),
           ),
           FlatButton(
-            child: Text("Gallery"),
+            child: Text('Gallery'),
             onPressed: () => Navigator.pop(context, ImageSource.gallery),
           ),
         ],
       ),
     );
     if (source == null) return;
-    final Media imageMedia = await MediaPickerService.pickMedia(
+    final imageMedia = await MediaPickerService.pickMedia(
       type: MediaType.image,
       source: source,
       context: context,
     );
     if (imageMedia == null) return;
-    final String newProfileImageUrl = await StorageService.uploadMedia(
+    final newProfileImageUrl = await StorageService.uploadMedia(
       uid: Provider.of<CurrentUser>(context).user.uid,
       media: imageMedia,
-      prefix: "profile_image",
+      prefix: 'profile_image',
     );
-    DatabaseService.setUserField(
+    await DatabaseService.setUserField(
       Provider.of<CurrentUser>(context).user.uid,
-      "profileImageUrl",
+      'profileImageUrl',
       newProfileImageUrl,
     );
     setState(() => Provider.of<CurrentUser>(context).user.profileImageUrl =
         newProfileImageUrl);
   }
 
-  _openSettings() => Navigator.push(
+  void _openSettings() => Navigator.push(
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) => SettingsPage(),
@@ -303,7 +301,7 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       );
 
-  _openOwnProfileEdit() => Navigator.push(
+  void _openOwnProfileEdit() => Navigator.push(
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) =>

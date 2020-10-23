@@ -1,9 +1,9 @@
-import "package:flutter/material.dart";
-import 'package:tundr/services/database-service.dart';
+import 'package:flutter/material.dart';
+import 'package:tundr/services/database_service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/widgets/buttons/tile-icon.dart';
-import 'package:tundr/widgets/profile-tile.dart';
-import 'package:tundr/repositories/current-user.dart';
+import 'package:tundr/widgets/buttons/tile_icon.dart';
+import 'package:tundr/widgets/profile_tile.dart';
+import 'package:tundr/repositories/current_user.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
@@ -20,9 +20,9 @@ class _SearchPageState extends State<SearchPage> {
     _usernameController.addListener(() => setState(() {}));
   }
 
-  _openUser(user) => Navigator.pushNamed(
+  void _openUser(user) => Navigator.pushNamed(
         context,
-        "userprofile",
+        'userprofile',
         arguments: user,
       );
 
@@ -45,7 +45,7 @@ class _SearchPageState extends State<SearchPage> {
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
             border: InputBorder.none,
-            hintText: "Search",
+            hintText: 'Search',
             hintStyle: TextStyle(
               fontSize: 20.0,
               color: Theme.of(context).accentColor,
@@ -64,17 +64,18 @@ class _SearchPageState extends State<SearchPage> {
                   DatabaseService.searchForUsers(_usernameController.text, 10),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return SizedBox.shrink();
-                if (snapshot.data.isEmpty)
+                if (snapshot.data.isEmpty) {
                   return Center(
                     child: Text(
-                      "No users found :(",
+                      'No users found :(',
                       style: TextStyle(
                         color: AppColors.grey,
                         fontSize: 16.0,
                       ),
                     ),
                   );
-                final String uid = Provider.of<CurrentUser>(context).user.uid;
+                }
+                final uid = Provider.of<CurrentUser>(context).user.uid;
                 return SingleChildScrollView(
                   child: Column(
                     children: List<Widget>.from(

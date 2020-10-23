@@ -1,6 +1,6 @@
 // FUTURE: implement tabcontroller
 
-import "package:flutter/widgets.dart";
+import 'package:flutter/widgets.dart';
 import 'package:tundr/constants/colors.dart';
 
 // FUTURE: remove this
@@ -28,8 +28,7 @@ class _TabBarDarkState extends State<TabBarDark> {
 
   @override
   Widget build(BuildContext context) {
-    final double tabWidth =
-        MediaQuery.of(context).size.width / widget.tabs.length;
+    final tabWidth = MediaQuery.of(context).size.width / widget.tabs.length;
     return Container(child: Row(
       children: List<Widget>.from(widget.tabs.map((tab) {
         if (tab.key == _currentKey) {

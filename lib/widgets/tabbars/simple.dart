@@ -1,6 +1,6 @@
 // couldn't think of a better name
 
-import "package:flutter/widgets.dart";
+import 'package:flutter/widgets.dart';
 import 'package:tundr/constants/colors.dart';
 
 class SimpleTabBar extends StatefulWidget {

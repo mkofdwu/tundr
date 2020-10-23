@@ -1,35 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/gradients.dart';
+import 'package:tundr/constants/shadows.dart';
+import 'package:tundr/enums/chat_type.dart';
+import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/repositories/current-user.dart';
 import 'package:tundr/models/user.dart';
-import 'package:tundr/services/database-service.dart';
-import 'package:tundr/services/media-picker-service.dart';
-import 'package:tundr/services/storage-service.dart';
-import 'package:tundr/constants/colors.dart';
-import 'package:tundr/enums/chattype.dart';
-import 'package:tundr/enums/mediatype.dart';
-import 'package:tundr/constants/gradients.dart';
-import 'package:tundr/constants/shadows.dart';
-import 'package:tundr/utils/from-theme.dart';
-import 'package:tundr/utils/get-network-image.dart';
-import 'widgets/other-user-message-tile.dart';
-import 'widgets/own-message-tile.dart';
-import 'widgets/referenced-message-tile.dart';
-import './widgets/unsent-message-tile.dart';
-import 'package:tundr/widgets/media/media-thumbnail.dart';
-import 'package:tundr/widgets/popup-menus/menu-divider.dart';
-import 'package:tundr/widgets/popup-menus/menu-option.dart';
-import 'package:tundr/widgets/popup-menus/popup-menu.dart';
+import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/services/database_service.dart';
+import 'package:tundr/services/media_picker_service.dart';
+import 'package:tundr/services/storage_service.dart';
+import 'package:tundr/utils/from_theme.dart';
+import 'package:tundr/utils/get_network_image.dart';
+import 'package:tundr/widgets/buttons/simple_icon.dart';
+import 'package:tundr/widgets/buttons/tile_icon.dart';
+import 'package:tundr/widgets/media/media_thumbnail.dart';
+import 'package:tundr/widgets/popup_menus/menu_divider.dart';
+import 'package:tundr/widgets/popup_menus/menu_option.dart';
+import 'package:tundr/widgets/popup_menus/popup_menu.dart';
 import 'package:tundr/widgets/textfields/plain.dart';
-import 'package:tundr/widgets/buttons/simple-icon.dart';
-import 'package:tundr/widgets/buttons/tile-icon.dart';
-import 'package:tundr/widgets/theme-builder.dart';
+import 'package:tundr/widgets/theme_builder.dart';
+
+import 'widgets/other_user_message_tile.dart';
+import 'widgets/own_message_tile.dart';
+import 'widgets/referenced_message_tile.dart';
+import 'widgets/unsent_message_tile.dart';
 
 class ChatPage extends StatefulWidget {
   final User user;
@@ -62,16 +63,18 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
     _textController.addListener(() => setState(() {})); // FUTURE: optimize this
     SchedulerBinding.instance.addPostFrameCallback((duration) async {
-      final User user = Provider.of<CurrentUser>(context).user;
+      final user = Provider.of<CurrentUser>(context).user;
 
       if (widget.chat.type != ChatType.nonExistent &&
           user.readReceipts &&
           widget.user.readReceipts) {
         // does this take too much time?
         // FUTURE: TEST: send read receipts in real time
-        DatabaseService.updateChatMessagesRead(
+        await DatabaseService.updateChatMessagesRead(
             widget.chat.uid, widget.user.uid);
-        if (mounted) DatabaseService.setChatLastRead(user.uid, widget.chat.id);
+        if (mounted) {
+          await DatabaseService.setChatLastRead(user.uid, widget.chat.id);
+        }
       }
 
       // _updater = Timer.periodic(Duration(seconds: 1),
@@ -87,24 +90,24 @@ class _ChatPageState extends State<ChatPage> {
 
   void _selectImage() async {
     // FUTURE: this and the function below are just temporary fixes, find a better solution / dialog in the future
-    final ImageSource source = await showDialog(
+    final source = await showDialog(
       context: context,
       child: SimpleDialog(
-        title: Text("Select image source"),
+        title: Text('Select image source'),
         children: <Widget>[
           FlatButton(
-            child: Text("Camera"),
+            child: Text('Camera'),
             onPressed: () => Navigator.pop(context, ImageSource.camera),
           ),
           FlatButton(
-            child: Text("Gallery"),
+            child: Text('Gallery'),
             onPressed: () => Navigator.pop(context, ImageSource.gallery),
           ),
         ],
       ),
     );
     if (source == null) return;
-    final Media media = await MediaPickerService.pickMedia(
+    final media = await MediaPickerService.pickMedia(
       type: MediaType.image,
       source: source,
       context: context,
@@ -114,24 +117,24 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _selectVideo() async {
-    final ImageSource source = await showDialog(
+    final source = await showDialog(
       context: context,
       child: SimpleDialog(
-        title: Text("Select video source"),
+        title: Text('Select video source'),
         children: <Widget>[
           FlatButton(
-            child: Text("Camera"),
+            child: Text('Camera'),
             onPressed: () => Navigator.pop(context, ImageSource.camera),
           ),
           FlatButton(
-            child: Text("Gallery"),
+            child: Text('Gallery'),
             onPressed: () => Navigator.pop(context, ImageSource.gallery),
           ),
         ],
       ),
     );
     if (source == null) return;
-    final Media media = await MediaPickerService.pickMedia(
+    final media = await MediaPickerService.pickMedia(
       type: MediaType.video,
       source: source,
       context: context,
@@ -153,17 +156,17 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _sendMessage() async {
-    final String uid = Provider.of<CurrentUser>(context).user.uid;
-    final String text = _textController
+    final uid = Provider.of<CurrentUser>(context).user.uid;
+    final text = _textController
         .text; // copy the value of the text to clear the textfield and thus prevent spamming empty messages
-    final String referencedMessageId = _referencedMessageId;
-    final Media media = _media;
+    final referencedMessageId = _referencedMessageId;
+    final media = _media;
 
-    final int unsentMessageIndex = _unsentMessages.length;
-    final DateTime sentTimestamp = DateTime.now();
+    final unsentMessageIndex = _unsentMessages.length;
+    final sentTimestamp = DateTime.now();
 
     setState(() {
-      _textController.text = "";
+      _textController.text = '';
       _referencedMessageId = null;
       _media = null;
       _unsentMessages.add(Message(
@@ -180,17 +183,17 @@ class _ChatPageState extends State<ChatPage> {
     } else if (widget.chat.type == ChatType.newMatch) {
       widget.chat.id =
           await DatabaseService.addNormalChat(uid, widget.user.uid);
-      DatabaseService.removeMatch(uid, widget.user.uid);
+      await DatabaseService.removeMatch(uid, widget.user.uid);
     } else if (widget.chat.type == ChatType.unknown) {
       widget.chat.id =
           await DatabaseService.addNormalChat(uid, widget.user.uid);
-      DatabaseService.removeUnknownChat(uid, widget.chat.id);
+      await DatabaseService.removeUnknownChat(uid, widget.chat.id);
     }
 
     // String mediaUrl = mediaFile == null
-    //     ? ""
+    //     ? ''
     //     : mediaFile.absolute.path.isEmpty
-    //         ? ""
+    //         ? ''
     //         : await StorageService.uploadMedia(
     //             uid: uid,
     //             media: Media(
@@ -200,8 +203,8 @@ class _ChatPageState extends State<ChatPage> {
     //             ),
     //           );
 
-    String mediaUrl = media == null
-        ? ""
+    final mediaUrl = media == null
+        ? ''
         : await StorageService.uploadMedia(
             uid: uid,
             media: media,
@@ -218,11 +221,12 @@ class _ChatPageState extends State<ChatPage> {
       mediaUrl: mediaUrl,
     );
 
-    if (mounted)
+    if (mounted) {
       setState(() {
         widget.chat.type = ChatType.normal;
         _unsentMessages.removeAt(unsentMessageIndex);
       });
+    }
   }
 
   void _blockUser() {
@@ -242,7 +246,7 @@ class _ChatPageState extends State<ChatPage> {
   void _changeWallpaper() async {
     setState(() => _showChatOptions = false);
 
-    final Media imageMedia = await MediaPickerService.pickMedia(
+    final imageMedia = await MediaPickerService.pickMedia(
       type: MediaType.image,
       source: ImageSource.gallery,
       context: context,
@@ -250,12 +254,12 @@ class _ChatPageState extends State<ChatPage> {
 
     if (imageMedia == null) return;
 
-    final String uid = Provider.of<CurrentUser>(context).user.uid;
-    final String wallpaperUrl = await StorageService.uploadMedia(
+    final uid = Provider.of<CurrentUser>(context).user.uid;
+    final wallpaperUrl = await StorageService.uploadMedia(
       uid: uid,
       media: imageMedia,
     );
-    DatabaseService.setChatWallpaper(uid, widget.chat.id, wallpaperUrl);
+    await DatabaseService.setChatWallpaper(uid, widget.chat.id, wallpaperUrl);
   }
 
   Widget _buildMediaTileDark() {
@@ -278,7 +282,7 @@ class _ChatPageState extends State<ChatPage> {
       margin: const EdgeInsets.only(bottom: 20.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
-        boxShadow: [Shadows.primaryShadow],
+        boxShadow: const [Shadows.primaryShadow],
       ), // FUTURE: DESIGN
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25.0),
@@ -288,7 +292,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildMessageInputDark() => Container(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -330,7 +334,7 @@ class _ChatPageState extends State<ChatPage> {
                     Expanded(
                       child: PlainTextField(
                         controller: _textController,
-                        hintText: "Say something",
+                        hintText: 'Say something',
                         hintTextColor: AppColors.gold,
                         color: AppColors.white,
                       ),
@@ -405,7 +409,7 @@ class _ChatPageState extends State<ChatPage> {
                     Expanded(
                       child: PlainTextField(
                         controller: _textController,
-                        hintText: "Say something",
+                        hintText: 'Say something',
                         hintTextColor: AppColors.white,
                         color: AppColors.black,
                       ),
@@ -452,14 +456,15 @@ class _ChatPageState extends State<ChatPage> {
                         widget.chat.id, _pages * messagesPerPage),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return SizedBox.shrink();
-                      List<Message> messages = snapshot.data.documents
+                      final messages = snapshot.data.documents
                           .map((messageDoc) => Message.fromDoc(messageDoc))
                           .toList();
                       return NotificationListener(
                         onNotification: (ScrollNotification notification) {
                           if (notification is ScrollStartNotification &&
-                              _scrollController.position.extentBefore == 0)
+                              _scrollController.position.extentBefore == 0) {
                             setState(() => _pages++);
+                          }
                           return false;
                         },
                         child: ListView.builder(
@@ -473,16 +478,17 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                           itemCount: _unsentMessages.length + messages.length,
                           itemBuilder: (context, i) {
-                            if (i < _unsentMessages.length)
+                            if (i < _unsentMessages.length) {
                               return UnsentMessageTile(
                                 chatId: widget.chat.id,
                                 otherUserName: widget.user.name,
                                 message: _unsentMessages[
                                     _unsentMessages.length - i - 1],
                               );
-                            final int messageIndex = i - _unsentMessages.length;
-                            final Message message = messages[messageIndex];
-                            final bool fromMe = message.senderUid ==
+                            }
+                            final messageIndex = i - _unsentMessages.length;
+                            final message = messages[messageIndex];
+                            final fromMe = message.senderUid ==
                                 Provider.of<CurrentUser>(context).user.uid;
                             return Padding(
                               padding: const EdgeInsets.symmetric(
@@ -554,7 +560,7 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                           onTap: () async => Navigator.pushNamed(
                             context,
-                            "userprofile",
+                            'userprofile',
                             arguments: widget.user,
                           ),
                         ),
@@ -596,17 +602,17 @@ class _ChatPageState extends State<ChatPage> {
                     child: PopupMenu(
                       children: <Widget>[
                         MenuOption(
-                          text: "Block",
+                          text: 'Block',
                           onPressed: _blockUser,
                         ),
                         MenuDivider(),
                         MenuOption(
-                          text: "Delete",
+                          text: 'Delete',
                           onPressed: _deleteChat,
                         ),
                         MenuDivider(),
                         MenuOption(
-                          text: "Wallpaper",
+                          text: 'Wallpaper',
                           onPressed: _changeWallpaper,
                         ),
                       ],

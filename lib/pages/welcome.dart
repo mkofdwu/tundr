@@ -1,10 +1,10 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:tundr/pages/register.dart';
-import 'package:tundr/pages/sign-in.dart';
+import 'package:tundr/pages/sign_in.dart';
 import 'package:tundr/constants/colors.dart';
 
 class WelcomePage extends StatelessWidget {
-  _signInPage(BuildContext context) => Navigator.push(
+  void _signInPage(BuildContext context) => Navigator.push(
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) => SignInPage(),
@@ -15,7 +15,7 @@ class WelcomePage extends StatelessWidget {
         ),
       );
 
-  _registerPage(BuildContext context) => Navigator.push(
+  void _registerPage(BuildContext context) => Navigator.push(
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) => RegisterPage(),
@@ -49,13 +49,13 @@ class WelcomePage extends StatelessWidget {
           left: 25.0,
           top: 30.0,
           width: 230.0,
-          child: Image.asset("assets/images/logo-light.png"),
+          child: Image.asset('assets/images/logo-light.png'),
         ),
         Positioned(
           left: 191.0,
           top: 134.0,
           child: Text(
-            "By Jia Jie",
+            'By Jia Jie',
             style: TextStyle(
               color: AppColors.black,
               fontSize: 20.0,
@@ -66,8 +66,8 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Material(
         color: AppColors.white,
@@ -134,7 +134,7 @@ class WelcomePage extends StatelessWidget {
                           bottom: 10.0,
                         ),
                         child: Text(
-                          "Sign in",
+                          'Sign in',
                           style: TextStyle(
                             color: AppColors.white,
                             fontSize: 20.0,
@@ -169,7 +169,7 @@ class WelcomePage extends StatelessWidget {
                             right: 2.0,
                             bottom: 10.0,
                             child: Text(
-                              "Register",
+                              'Register',
                               style: TextStyle(
                                 color: AppColors.white,
                                 fontSize: 14.0,

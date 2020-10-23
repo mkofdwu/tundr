@@ -1,19 +1,55 @@
 import { interestsToGroupNo, numInterestGroups } from "../constants";
+import { FilterMethod } from "../enums/filter-method";
+import Filter from "../models/filter";
 import pearsonCorrelation from "../utils/pearson-correlation";
 import transposeArray from "../utils/transpose-array";
 
 const N = 10; // maximum amount of suggestions generated per day for each user
 
+const valuePassesFilter = (value: any, filter: Filter) => {
+  switch (filter.name) {
+    case "Height":
+    case "Personality":
+    case "K-Pop":
+    case "Anime":
+      return filter.options.first <= value && value <= filter.options.last;
+    case "Religion":
+    case "Star sign":
+    case "Relationship status":
+      return filter.options.includes(value);
+    case "Pets":
+      switch (filter.method) {
+        case FilterMethod.none:
+          return true;
+        case FilterMethod.ifContainsAll:
+          return value.every((item: any) => filter.options.includes(item));
+        case FilterMethod.ifContainsAny:
+          return value.some((item: any) => filter.options.includes(item));
+        default:
+          throw new Error("invalid filter method: " + filter.method);
+      }
+    default:
+      throw new Error("invalid filter field name: " + filter.name);
+  }
+};
+
 const otherUserPassesFilters = (
   user: FirebaseFirestore.DocumentData,
   otherUser: FirebaseFirestore.DocumentData
 ) => {
-  // TODO
+  // NOTE: gender is already verified to be acceptable
+  // TODO: FIXME: may encounter problems keeping filters & personal info consistent between client & functions
   if (
     (Date.now() - otherUser.birthday) / 31536000000 < user.ageRangeMin ||
     (Date.now() - otherUser.birthday) / 31536000000 > user.ageRangeMax
   )
     return false;
+  for (const filterFieldName in user.filters) {
+    const { options, method } = user.filters[filterFieldName];
+    const value = otherUser.personalInfo[filterFieldName];
+    if (!valuePassesFilter(value, { name: filterFieldName, method, options }))
+      return false;
+  }
   return true;
 };
 

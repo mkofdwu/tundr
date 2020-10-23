@@ -1,5 +1,5 @@
-import "package:cloud_firestore/cloud_firestore.dart";
-import "package:tundr/enums/chattype.dart";
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tundr/enums/chat_type.dart';
 
 class Chat {
   String id;
@@ -20,10 +20,10 @@ class Chat {
     assert(doc != null);
     return Chat(
       id: doc.documentID,
-      uid: doc.data["uid"],
-      wallpaperUrl: doc.data["wallpaperUrl"],
-      lastReadTimestamp: doc.data["lastReadTimestamp"],
-      type: doc.data["type"],
+      uid: doc.data['uid'],
+      wallpaperUrl: doc.data['wallpaperUrl'],
+      lastReadTimestamp: doc.data['lastReadTimestamp'],
+      type: doc.data['type'],
     );
   }
 }

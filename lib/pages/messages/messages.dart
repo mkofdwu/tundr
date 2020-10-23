@@ -1,15 +1,15 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/models/chat.dart';
-import 'package:tundr/repositories/current-user.dart';
-import 'package:tundr/models/user.dart';
-import 'package:tundr/services/database-service.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/enums/chattype.dart';
+import 'package:tundr/enums/chat_type.dart';
+import 'package:tundr/models/chat.dart';
+import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/services/database_service.dart';
 import 'package:tundr/widgets/loaders/loader.dart';
-import './widgets/chat-list.dart';
-import './widgets/chat-category.dart';
-import './widgets/match-list.dart';
+
+import 'widgets/chat_category.dart';
+import 'widgets/chat_list.dart';
+import 'widgets/match_list.dart';
 
 class MessagesPage extends StatefulWidget {
   @override
@@ -35,21 +35,22 @@ class _MessagesPageState extends State<MessagesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<CurrentUser>(context).user;
+    final user = Provider.of<CurrentUser>(context).user;
     return FutureBuilder<bool>(
       future: DatabaseService.noChats(user.uid),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return Center(child: Loader());
-        if (snapshot.data)
+        if (snapshot.data) {
           return Center(
             child: Text(
-              "Matches and chats will appear here.",
+              'Matches and chats will appear here.',
               style: TextStyle(
                 color: AppColors.grey,
                 fontSize: 16.0,
               ),
             ),
           );
+        }
         return RefreshIndicator(
           color: Theme.of(context).accentColor,
           backgroundColor: AppColors.gold,
@@ -70,7 +71,7 @@ class _MessagesPageState extends State<MessagesPage> {
                           if (!snapshot.hasData) return SizedBox.shrink();
                           if (snapshot.data.isEmpty) return SizedBox.shrink();
                           return ChatsGroup(
-                            title: "New Matches",
+                            title: 'New Matches',
                             child: MatchList(
                               matches: snapshot.data,
                             ),
@@ -85,7 +86,7 @@ class _MessagesPageState extends State<MessagesPage> {
                           if (!snapshot.hasData) return SizedBox.shrink();
                           if (snapshot.data.isEmpty) return SizedBox.shrink();
                           return ChatsGroup(
-                            title: "Messages",
+                            title: 'Messages',
                             child: ChatList(chats: snapshot.data),
                           );
                         },
@@ -97,7 +98,7 @@ class _MessagesPageState extends State<MessagesPage> {
                           if (!snapshot.hasData) return SizedBox.shrink();
                           if (snapshot.data.isEmpty) return SizedBox.shrink();
                           return ChatsGroup(
-                            title: "Unknown messages",
+                            title: 'Unknown messages',
                             child: ChatList(chats: snapshot.data),
                           );
                         },

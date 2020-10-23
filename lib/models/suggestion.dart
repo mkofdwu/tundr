@@ -11,13 +11,13 @@ class Suggestion {
 
   Map<String, dynamic> toMap() {
     return {
-      // "uid": user.uid,
-      "liked": liked,
+      // 'uid': user.uid,
+      'liked': liked,
     };
   }
 
   @override
-  String toString() => "Sugestion: ${user.name}";
+  String toString() => 'Sugestion: ${user.name}';
 
   @override
   bool operator ==(other) {

@@ -4,7 +4,7 @@ description: tundr clean up removing support for web. Now only supports the andr
 version: 0.1.11+14
 
 environment:
-  sdk: '>=2.2.2 <3.0.0'
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -35,6 +35,7 @@ dev_dependencies:
     sdk: flutter
   test: any
   flutter_launcher_icons: ^0.7.4
+  pedantic: ^1.9.2
 
 flutter_icons:
   image_path: assets/images/icon.png

@@ -1,4 +1,4 @@
-import "package:flutter/rendering.dart";
+import 'package:flutter/rendering.dart';
 import 'package:tundr/constants/colors.dart';
 
 class Shadows {

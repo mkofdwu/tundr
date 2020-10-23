@@ -1,6 +1,6 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:tundr/constants/colors.dart';
-import 'package:tundr/utils/from-theme.dart';
+import 'package:tundr/utils/from_theme.dart';
 
 class TileSwitch extends StatefulWidget {
   final bool selected;

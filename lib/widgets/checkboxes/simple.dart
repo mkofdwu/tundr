@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 
 class SimpleCheckbox extends StatefulWidget {
   final String text;

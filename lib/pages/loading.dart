@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:tundr/widgets/loaders/loader.dart';
 
 class LoadingPage extends StatelessWidget {
