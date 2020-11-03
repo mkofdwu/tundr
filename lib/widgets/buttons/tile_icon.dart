@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class TileIconButton extends StatefulWidget {
   final double width;
@@ -34,12 +34,12 @@ class _TileIconButtonState extends State<TileIconButton> {
       child: Container(
         width: widget.width,
         height: widget.width,
-        color: _pressed ? (widget.iconBackgroundColor ?? AppColors.gold) : null,
+        color: _pressed ? (widget.iconBackgroundColor ?? MyPalette.gold) : null,
         child: Icon(
           widget.icon,
           size: widget.iconSize,
           color: _pressed
-              ? AppColors.white
+              ? MyPalette.white
               : widget.iconColor ?? Theme.of(context).accentColor,
         ),
       ),

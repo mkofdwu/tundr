@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/pages/chat/chat.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
+
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/chat_type.dart';
-import 'package:tundr/constants/shadows.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/theme_builder.dart';
 
@@ -14,12 +14,12 @@ class MatchTile extends StatelessWidget {
   MatchTile({Key key, @required this.uid}) : super(key: key);
 
   Future<dynamic> _openChat(BuildContext context) async {
-    final user = await DatabaseService.getUser(uid);
+    final user = await UsersService.getUserProfile(uid);
     return Navigator.push(
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) => ChatPage(
-          user: user,
+          otherUser: user,
           chat: Chat(
             id: null,
             uid: uid,
@@ -37,13 +37,13 @@ class MatchTile extends StatelessWidget {
 
   Widget _buildDark(BuildContext context) => GestureDetector(
         child: FutureBuilder(
-          future: DatabaseService.getUserField(uid, 'profileImageUrl'),
+          future: UsersService.getUserField(uid, 'profileImageUrl'),
           builder: (context, snapshot) {
             return Container(
               width: 100.0,
               height: 100.0,
               decoration: BoxDecoration(
-                border: Border.all(color: AppColors.white, width: 1.0),
+                border: Border.all(color: MyPalette.white, width: 1.0),
               ),
               child: snapshot.hasData ? getNetworkImage(snapshot.data) : null,
             );
@@ -54,14 +54,14 @@ class MatchTile extends StatelessWidget {
 
   Widget _buildLight(BuildContext context) => GestureDetector(
         child: FutureBuilder(
-          future: DatabaseService.getUserField(uid, 'profileImageUrl'),
+          future: UsersService.getUserField(uid, 'profileImageUrl'),
           builder: (context, snapshot) {
             return Container(
               width: 100.0,
               height: 100.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.0),
-                boxShadow: [Shadows.secondaryShadow],
+                boxShadow: [MyPalette.secondaryShadow],
               ),
               child: snapshot.hasData
                   ? ClipRRect(

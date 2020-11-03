@@ -7,15 +7,14 @@ import 'package:provider/provider.dart';
 import 'package:tundr/repositories/current_user.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/repositories/theme_notifier.dart';
-import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/loading.dart';
 import 'package:tundr/pages/home.dart';
 import 'package:tundr/pages/profile_setup/theme.dart';
 import 'package:tundr/pages/user_profile/main.dart';
 import 'package:tundr/pages/welcome.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/app_theme.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/handlers/app_state_handler.dart';
 import 'package:tundr/widgets/handlers/notification_handler.dart';
 
@@ -60,8 +59,8 @@ class TundrApp extends StatefulWidget {
 class _TundrAppState extends State<TundrApp> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<FirebaseUser>(
-      stream: FirebaseAuth.instance.onAuthStateChanged,
+    return StreamBuilder<User>(
+      stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         Widget home;
 
@@ -70,39 +69,33 @@ class _TundrAppState extends State<TundrApp> {
         } else if (snapshot.data?.uid == null) {
           home = WelcomePage();
         } else {
-          home = FutureBuilder<User>(
-            future: DatabaseService.getUser(
-              snapshot.data.uid,
-              returnDeletedUser: false,
-            ),
+          home = FutureBuilder<CurrentUser>(
+            future: UsersService.getCurrentUser(snapshot.data.uid),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return LoadingPage();
               }
 
-              final user = snapshot.data;
-              Provider.of<CurrentUser>(context).user = user;
+              final currentUser = snapshot.data;
+              Provider.of<CurrentUser>(context).profile = currentUser.profile;
+              Provider.of<CurrentUser>(context).privateInfo =
+                  currentUser.privateInfo;
+              Provider.of<CurrentUser>(context).algorithmData =
+                  currentUser.algorithmData;
 
-              if (user.theme == null) {
+              if (currentUser.privateInfo.theme == null) {
                 return SetupThemePage();
               } else {
-                Provider.of<ThemeNotifier>(context).theme = user.theme;
+                Provider.of<ThemeNotifier>(context).theme =
+                    currentUser.privateInfo.theme;
                 return AppStateHandler(
                   onExit: () {
-                    DatabaseService.setUserFields(
-                      Provider.of<CurrentUser>(context).user.uid,
-                      {
-                        'online': false,
-                        'lastSeen': Timestamp.now(),
-                      },
-                    );
+                    UsersService.setOnline(
+                        Provider.of<CurrentUser>(context).profile.uid, false);
                   },
                   onStart: () {
-                    DatabaseService.setUserField(
-                      Provider.of<CurrentUser>(context).user.uid,
-                      'online',
-                      true,
-                    );
+                    UsersService.setOnline(
+                        Provider.of<CurrentUser>(context).profile.uid, true);
                   },
                   child: NotificationHandler(
                     child: HomePage(),
@@ -137,13 +130,13 @@ class _TundrAppState extends State<TundrApp> {
     Color dialogBackgroundColor;
     switch (theme) {
       case AppTheme.light:
-        primaryColor = AppColors.white;
-        accentColor = AppColors.black;
-        dialogBackgroundColor = AppColors.white;
+        primaryColor = MyPalette.white;
+        accentColor = MyPalette.black;
+        dialogBackgroundColor = MyPalette.white;
         break;
       case AppTheme.dark:
-        primaryColor = AppColors.black;
-        accentColor = AppColors.white;
+        primaryColor = MyPalette.black;
+        accentColor = MyPalette.white;
         dialogBackgroundColor = const Color.fromARGB(255, 30, 30, 30);
         break;
     }

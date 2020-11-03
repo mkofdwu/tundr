@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/pages/register.dart';
 import 'package:tundr/pages/sign_in.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class WelcomePage extends StatelessWidget {
   void _signInPage(BuildContext context) => Navigator.push(
@@ -33,7 +33,7 @@ class WelcomePage extends StatelessWidget {
           child: Container(
             width: 223.0,
             height: 204.0,
-            color: AppColors.black,
+            color: MyPalette.black,
           ),
         ),
         Positioned(
@@ -42,7 +42,7 @@ class WelcomePage extends StatelessWidget {
           child: Container(
             width: 254.0,
             height: 142.0,
-            color: AppColors.gold,
+            color: MyPalette.gold,
           ),
         ),
         Positioned(
@@ -57,7 +57,7 @@ class WelcomePage extends StatelessWidget {
           child: Text(
             'By Jia Jie',
             style: TextStyle(
-              color: AppColors.black,
+              color: MyPalette.black,
               fontSize: 20.0,
             ),
           ),
@@ -70,7 +70,7 @@ class WelcomePage extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Material(
-        color: AppColors.white,
+        color: MyPalette.white,
         child: Stack(
           children: _titleWidgets() +
               <Widget>[
@@ -80,7 +80,7 @@ class WelcomePage extends StatelessWidget {
                   child: Container(
                     width: width * 0.464,
                     height: height * 0.052,
-                    color: AppColors.gold,
+                    color: MyPalette.gold,
                   ),
                 ),
                 Positioned(
@@ -89,7 +89,7 @@ class WelcomePage extends StatelessWidget {
                   child: Container(
                     width: width * 111 / 375,
                     height: height * 18 / 812,
-                    color: AppColors.gold,
+                    color: MyPalette.gold,
                   ),
                 ),
                 Positioned(
@@ -98,7 +98,7 @@ class WelcomePage extends StatelessWidget {
                   child: Container(
                     width: width * 263 / 375,
                     height: height * 20 / 812,
-                    color: AppColors.black,
+                    color: MyPalette.black,
                   ),
                 ),
                 Positioned(
@@ -107,7 +107,7 @@ class WelcomePage extends StatelessWidget {
                   child: Container(
                     width: width * 136 / 375,
                     height: height * 6 / 812,
-                    color: AppColors.gold,
+                    color: MyPalette.gold,
                   ),
                 ),
                 Positioned(
@@ -116,7 +116,7 @@ class WelcomePage extends StatelessWidget {
                   child: Container(
                     width: width * 184 / 375,
                     height: height * 7 / 812,
-                    color: AppColors.black,
+                    color: MyPalette.black,
                   ),
                 ),
                 Positioned(
@@ -126,7 +126,7 @@ class WelcomePage extends StatelessWidget {
                     child: Container(
                       width: width * 184 / 375,
                       height: height * 63 / 812,
-                      color: AppColors.black,
+                      color: MyPalette.black,
                       alignment: Alignment.bottomRight,
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -136,7 +136,7 @@ class WelcomePage extends StatelessWidget {
                         child: Text(
                           'Sign in',
                           style: TextStyle(
-                            color: AppColors.white,
+                            color: MyPalette.white,
                             fontSize: 20.0,
                           ),
                         ),
@@ -151,7 +151,7 @@ class WelcomePage extends StatelessWidget {
                   child: Container(
                     width: width * 56 / 375,
                     height: height * 23 / 812,
-                    color: AppColors.black,
+                    color: MyPalette.black,
                   ),
                 ),
                 Positioned(
@@ -161,7 +161,7 @@ class WelcomePage extends StatelessWidget {
                     child: Container(
                       width: width * 132 / 375,
                       height: height * 38 / 812,
-                      color: AppColors.gold,
+                      color: MyPalette.gold,
                       child: Stack(
                         // is there a better way?
                         children: <Widget>[
@@ -171,7 +171,7 @@ class WelcomePage extends StatelessWidget {
                             child: Text(
                               'Register',
                               style: TextStyle(
-                                color: AppColors.white,
+                                color: MyPalette.white,
                                 fontSize: 14.0,
                               ),
                             ),
@@ -188,7 +188,7 @@ class WelcomePage extends StatelessWidget {
                   child: Container(
                     width: width * 81 / 375,
                     height: height * 16 / 812,
-                    color: AppColors.black,
+                    color: MyPalette.black,
                   ),
                 ),
                 Positioned(
@@ -197,7 +197,7 @@ class WelcomePage extends StatelessWidget {
                   child: Container(
                     width: width * 103 / 375,
                     height: height * 6 / 812,
-                    color: AppColors.black,
+                    color: MyPalette.black,
                   ),
                 ),
               ],

@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/shadows.dart';
+
+import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/loaders/loader.dart';
@@ -32,7 +32,7 @@ class _MostPopularPageState extends State<MostPopularPage> {
   }
 
   void _loadPositionedProfileImages() async {
-    final sortedUsers = await DatabaseService.getMostPopular(20);
+    final sortedUsers = await UsersService.getMostPopular(20);
     if (sortedUsers.isEmpty) {
       setState(() => _positionedProfileImages = []);
       return;
@@ -87,11 +87,11 @@ class _MostPopularPageState extends State<MostPopularPage> {
                 decoration: fromTheme(
                   context,
                   dark: BoxDecoration(
-                    border: Border.all(color: AppColors.white, width: 2.0),
+                    border: Border.all(color: MyPalette.white, width: 2.0),
                   ),
                   light: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.0),
-                    boxShadow: [Shadows.secondaryShadow],
+                    boxShadow: [MyPalette.secondaryShadow],
                   ),
                 ),
                 child: ClipRRect(
@@ -131,7 +131,7 @@ class _MostPopularPageState extends State<MostPopularPage> {
         child: Text(
           'There is no one here yet.',
           style: TextStyle(
-            color: AppColors.grey,
+            color: MyPalette.grey,
             fontSize: 16.0,
           ),
         ),

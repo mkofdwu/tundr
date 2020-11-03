@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class SeparatePageSettingField extends StatelessWidget {
   final String title;
@@ -17,11 +17,11 @@ class SeparatePageSettingField extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              color: AppColors.gold,
+              color: MyPalette.gold,
               fontSize: 20.0,
             ),
           ),
-          Icon(Icons.arrow_forward_ios, color: AppColors.gold),
+          Icon(Icons.arrow_forward_ios, color: MyPalette.gold),
         ],
       ),
       onTap: onNextPage,

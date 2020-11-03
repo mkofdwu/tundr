@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/models/filter.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/theme_builder.dart';
 
@@ -60,7 +60,7 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
                 child: Text(
                   widget.filter.field.name,
                   style: TextStyle(
-                    color: AppColors.white,
+                    color: MyPalette.white,
                     fontSize: 40.0,
                   ),
                 ),
@@ -74,8 +74,8 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
                   max: widget.filter.field.options.toDouble(),
                   divisions: widget.filter.field.options - 1,
                   values: _range,
-                  activeColor: AppColors.gold,
-                  inactiveColor: AppColors.white,
+                  activeColor: MyPalette.gold,
+                  inactiveColor: MyPalette.white,
                   labels: RangeLabels(
                     _range.start.toString(),
                     _range.end.toString(),
@@ -100,7 +100,7 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
       },
       child: SafeArea(
         child: Material(
-          color: AppColors.white,
+          color: MyPalette.white,
           child: Stack(
             children: <Widget>[
               TileIconButton(
@@ -117,7 +117,7 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
                 child: Text(
                   widget.filter.field.name,
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: MyPalette.black,
                     fontSize: 40.0,
                   ),
                 ),
@@ -131,8 +131,8 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
                   max: widget.filter.field.options.toDouble(),
                   divisions: widget.filter.field.options - 1,
                   values: _range,
-                  activeColor: AppColors.gold,
-                  inactiveColor: AppColors.black,
+                  activeColor: MyPalette.gold,
+                  inactiveColor: MyPalette.black,
                   labels: RangeLabels(
                     _range.start.toString(),
                     _range.end.toString(),

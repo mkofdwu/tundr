@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/models/personal_info_field.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 
@@ -100,7 +100,7 @@ class _TextListFieldPageState extends State<TextListFieldPage> {
                           ? Container(
                               width: 200.0,
                               padding: EdgeInsets.symmetric(horizontal: 10.0),
-                              color: AppColors.gold,
+                              color: MyPalette.gold,
                               child: TextField(
                                 autofocus: true,
                                 textDirection: TextDirection.rtl,
@@ -120,13 +120,13 @@ class _TextListFieldPageState extends State<TextListFieldPage> {
                                   Container(
                                     width: 50.0,
                                     height: 5.0,
-                                    color: AppColors.gold,
+                                    color: MyPalette.gold,
                                   ),
                                   SizedBox(height: 3.0),
                                   Text(
                                     '+ Add new',
                                     style: TextStyle(
-                                      color: AppColors.gold,
+                                      color: MyPalette.gold,
                                       fontSize: 20.0,
                                     ),
                                   ),

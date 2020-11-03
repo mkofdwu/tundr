@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/current_user.dart';
-import 'package:tundr/services/database_service.dart';
+import 'package:tundr/services/users_service.dart';
+
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/pages/interests/widgets/interests_browser.dart';
 
 class InterestsEditPage extends StatelessWidget {
   void _return(BuildContext context) {
-    DatabaseService.setUserField(
-      Provider.of<CurrentUser>(context).user.uid,
+    final profile = Provider.of<CurrentUser>(context).profile;
+    UsersService.setProfileField(
+      profile.uid,
       'interests',
-      Provider.of<CurrentUser>(context).user.interests +
-          Provider.of<CurrentUser>(context).user.customInterests,
+      profile.interests + profile.customInterests,
     );
     Navigator.pop(context);
   }
@@ -45,9 +46,11 @@ class InterestsEditPage extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30.0),
                   child: InterestsBrowser(
-                    interests: Provider.of<CurrentUser>(context).user.interests,
-                    customInterests:
-                        Provider.of<CurrentUser>(context).user.customInterests,
+                    interests:
+                        Provider.of<CurrentUser>(context).profile.interests,
+                    customInterests: Provider.of<CurrentUser>(context)
+                        .profile
+                        .customInterests,
                   ),
                 ),
               ),

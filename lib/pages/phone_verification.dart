@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
+
+import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/widgets/buttons/flat_tile.dart';
 import 'package:tundr/widgets/textfields/digit.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
@@ -42,11 +43,11 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
             context: context,
             child: AlertDialog(
               title: Text('User could not be created: result.user is null'),
-              titleTextStyle: TextStyle(color: AppColors.red),
+              titleTextStyle: TextStyle(color: MyPalette.red),
               actions: <Widget>[
                 FlatTileButton(
                   text: 'Ok',
-                  color: AppColors.gold,
+                  color: MyPalette.gold,
                   onTap: () => Navigator.pop(context),
                 ),
               ],
@@ -55,7 +56,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
         } else {
           // TODO: TEST if this still works
           info.uid = result.user.uid;
-          await DatabaseService.createAccount(info);
+          await AuthService.createAccount(info);
           await result.user.updatePhoneNumberCredential(credential);
         }
 
@@ -92,11 +93,11 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
           context: context,
           child: AlertDialog(
             title: Text(exception.message),
-            titleTextStyle: TextStyle(color: AppColors.red),
+            titleTextStyle: TextStyle(color: MyPalette.red),
             actions: <Widget>[
               FlatTileButton(
                 text: 'Ok',
-                color: AppColors.gold,
+                color: MyPalette.gold,
                 onTap: () => Navigator.pop(context),
               ),
             ],
@@ -155,7 +156,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
               child: Text(
                 'Enter\nverification\ncode',
                 style: TextStyle(
-                  color: AppColors.white,
+                  color: MyPalette.white,
                   fontSize: 40.0,
                   fontFamily: 'Helvetica Neue',
                   fontWeight: FontWeight.bold,
@@ -170,7 +171,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                 children: <Widget>[
                   RichText(
                     text: TextSpan(
-                      style: TextStyle(color: AppColors.white, fontSize: 16.0),
+                      style: TextStyle(color: MyPalette.white, fontSize: 16.0),
                       children: [
                         TextSpan(
                           text: 'A 6-digit verification code was\nsent to ',
@@ -189,14 +190,14 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                       Text(
                         "Didn't receive the code?",
                         style:
-                            TextStyle(color: AppColors.white, fontSize: 14.0),
+                            TextStyle(color: MyPalette.white, fontSize: 14.0),
                       ),
                       SizedBox(width: 5.0),
                       GestureDetector(
                         child: Text(
                           'Resend SMS',
                           style:
-                              TextStyle(color: AppColors.gold, fontSize: 14.0),
+                              TextStyle(color: MyPalette.gold, fontSize: 14.0),
                         ),
                         onTap: _sendSMS,
                       ),

@@ -3,9 +3,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/pages/media/extra_media_edit.dart';
 import 'package:tundr/services/media_picker_service.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
-import 'package:tundr/constants/shadows.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'package:tundr/widgets/theme_builder.dart';
 
@@ -34,14 +33,14 @@ class ExtraMediaEditTile extends StatelessWidget {
                 FlatButton(
                   child: Text(
                     'Image',
-                    style: TextStyle(color: AppColors.white),
+                    style: TextStyle(color: MyPalette.white),
                   ),
                   onPressed: () => Navigator.pop(context, MediaType.image),
                 ),
                 FlatButton(
                   child: Text(
                     'Video',
-                    style: TextStyle(color: AppColors.white),
+                    style: TextStyle(color: MyPalette.white),
                   ),
                   onPressed: () => Navigator.pop(context, MediaType.video),
                 ),
@@ -58,14 +57,14 @@ class ExtraMediaEditTile extends StatelessWidget {
               FlatButton(
                 child: Text(
                   'Camera',
-                  style: TextStyle(color: AppColors.white),
+                  style: TextStyle(color: MyPalette.white),
                 ),
                 onPressed: () => Navigator.pop(context, ImageSource.camera),
               ),
               FlatButton(
                 child: Text(
                   'Gallery',
-                  style: TextStyle(color: AppColors.white),
+                  style: TextStyle(color: MyPalette.white),
                 ),
                 onPressed: () => Navigator.pop(context, ImageSource.gallery),
               ),
@@ -120,9 +119,9 @@ class ExtraMediaEditTile extends StatelessWidget {
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: MyPalette.white,
           borderRadius: BorderRadius.circular(20.0),
-          boxShadow: [Shadows.primaryShadow],
+          boxShadow: [MyPalette.primaryShadow],
         ),
         child: media == null
             ? Center(
@@ -140,13 +139,13 @@ class ExtraMediaEditTile extends StatelessWidget {
   Widget _buildDarkTile() => Container(
         width: size,
         height: size,
-        color: AppColors.darkGrey,
+        color: MyPalette.darkGrey,
         child: media == null
             ? Center(
                 child: Icon(
                   Icons.add,
                   size: 30.0,
-                  color: AppColors.white,
+                  color: MyPalette.white,
                 ),
               )
             : MediaThumbnail(media),

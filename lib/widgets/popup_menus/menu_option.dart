@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class MenuOption extends StatelessWidget {
   final String text;
@@ -23,7 +23,7 @@ class MenuOption extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                color: AppColors.black,
+                color: MyPalette.black,
                 fontSize: 20.0,
               ),
             ),

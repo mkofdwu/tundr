@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:tundr/models/user_profile.dart';
 import 'dart:math';
 
-import 'package:tundr/models/user.dart';
 import 'package:tundr/widgets/profile_tile.dart';
 
 class SuggestionCard extends StatefulWidget {
   final double width;
   final double height;
-  final User user;
+  final UserProfile user;
   final Function onLike;
   final Function onNope;
 
@@ -132,7 +132,7 @@ class _SuggestionCardState extends State<SuggestionCard>
               height: widget.height,
               child: Stack(
                 children: <Widget>[
-                  ProfileTile(user: widget.user),
+                  ProfileTile(profile: widget.user),
                   _goingToLike
                       ? Positioned(
                           left: 50.0,

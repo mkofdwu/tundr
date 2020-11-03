@@ -8,9 +8,9 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_video_compress/flutter_video_compress.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/enums/media_type.dart';
-import 'package:tundr/constants/values.dart';
+import 'package:tundr/constants/numbers.dart';
 import 'package:uuid/uuid.dart';
-import 'package:tundr/constants/firebaseref.dart';
+import 'package:tundr/constants/firebase_ref.dart';
 import 'package:http/http.dart';
 
 class FileTooLargeError implements Exception {}

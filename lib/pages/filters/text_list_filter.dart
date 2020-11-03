@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/models/filter.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/pages/filters/widgets/filter_method_selector.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
@@ -36,7 +36,7 @@ class _TextListFilterPageState extends State<TextListFilterPage> {
               Text(
                 widget.filter.field.name,
                 style: TextStyle(
-                  color: AppColors.white,
+                  color: MyPalette.white,
                   fontSize: 60.0,
                 ),
               ),
@@ -73,12 +73,12 @@ class _TextListFilterPageState extends State<TextListFilterPage> {
                                         Container(
                                           width: text.length * 10.0,
                                           height: 5.0,
-                                          color: AppColors.white,
+                                          color: MyPalette.white,
                                         ),
                                         Text(
                                           text,
                                           style: TextStyle(
-                                            color: AppColors.white,
+                                            color: MyPalette.white,
                                             fontSize: 20.0,
                                           ),
                                         ),
@@ -98,11 +98,11 @@ class _TextListFilterPageState extends State<TextListFilterPage> {
                         ? Container(
                             width: 200.0,
                             padding: EdgeInsets.symmetric(horizontal: 10.0),
-                            color: AppColors.gold,
+                            color: MyPalette.gold,
                             child: TextField(
                               autofocus: true,
                               textDirection: TextDirection.rtl,
-                              cursorColor: AppColors.white,
+                              cursorColor: MyPalette.white,
                               style: Theme.of(context).textTheme.headline6,
                               decoration:
                                   InputDecoration(border: InputBorder.none),
@@ -121,13 +121,13 @@ class _TextListFilterPageState extends State<TextListFilterPage> {
                                 Container(
                                   width: 50.0,
                                   height: 5.0,
-                                  color: AppColors.gold,
+                                  color: MyPalette.gold,
                                 ),
                                 SizedBox(height: 3.0),
                                 Text(
                                   '+ Add new',
                                   style: TextStyle(
-                                    color: AppColors.gold,
+                                    color: MyPalette.gold,
                                     fontSize: 20.0,
                                   ),
                                 ),

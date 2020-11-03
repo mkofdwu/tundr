@@ -12,10 +12,12 @@ import 'package:tundr/pages/settings/change_password.dart';
 import 'package:tundr/pages/settings/confirm_delete_account.dart';
 import 'package:tundr/pages/settings/filter_settings.dart';
 import 'package:tundr/pages/settings/notification_settings.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
+
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/app_theme.dart';
 import 'package:tundr/enums/gender.dart';
+import 'package:tundr/services/notifications_service.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/buttons/light_tile.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/checkboxes/simple.dart';
@@ -44,7 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
-    await DatabaseService.setUserField(uid, 'username', newUsername);
+    await UsersService.setProfileField(uid, 'username', newUsername);
   }
 
   void _changePassword() => Navigator.push(
@@ -92,8 +94,8 @@ class _SettingsPageState extends State<SettingsPage> {
     );
     if (signOut) {
       // unsubscribe from notifications for this user
-      await DatabaseService.removeToken(
-        Provider.of<CurrentUser>(context).user.uid,
+      await NotificationsService.removeToken(
+        Provider.of<CurrentUser>(context).profile.uid,
         Provider.of<CurrentUser>(context).fcmToken,
       );
       await FirebaseMessaging().deleteInstanceID();
@@ -111,8 +113,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<CurrentUser>(context).user;
-    final uid = user.uid;
+    final profile = Provider.of<CurrentUser>(context).profile;
+    final privateInfo = Provider.of<CurrentUser>(context).privateInfo;
+    final settings = privateInfo.settings;
+    final algorithmData = Provider.of<CurrentUser>(context).algorithmData;
+    final uid = profile.uid;
     return Scaffold(
       appBar: AppBar(
         leading: TileIconButton(
@@ -135,13 +140,13 @@ class _SettingsPageState extends State<SettingsPage> {
               SettingField(
                 title: 'Username',
                 child: Text(
-                  user.username,
+                  profile.username,
                   style: TextStyle(
                     color: Theme.of(context).accentColor,
                     fontSize: 14.0,
                   ),
                 ),
-                onEdit: () => _changeUsername(uid, user.username),
+                onEdit: () => _changeUsername(uid, profile.username),
               ),
               SizedBox(height: 20.0),
               SeparatePageSettingField(
@@ -152,7 +157,7 @@ class _SettingsPageState extends State<SettingsPage> {
               SettingField(
                 title: 'Phone number',
                 child: Text(
-                  user.phoneNumber,
+                  privateInfo.phoneNumber,
                   style: TextStyle(
                     color: Theme.of(context).accentColor,
                     fontSize: 14.0,
@@ -164,12 +169,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: 'Gender',
                 child: RoundRadioGroup(
                   options: ['Male', 'Female'],
-                  selected: Gender.values.indexOf(user.gender),
-                  onChanged: (option) => DatabaseService.setUserField(
-                    uid,
-                    'gender',
-                    option,
-                  ),
+                  selected: Gender.values.indexOf(profile.gender),
+                  onChanged: (option) =>
+                      UsersService.setProfileField(uid, 'gender', option),
                 ),
               ),
               SizedBox(height: 20.0),
@@ -179,14 +181,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   children: <Widget>[
                     SimpleCheckbox(
                       text: 'Boys',
-                      value: user.showMeBoys,
-                      onChanged: (bool value) => DatabaseService.setUserField(
+                      value: algorithmData.showMeBoys,
+                      onChanged: (bool value) => UsersService.setAlgorithmData(
                           uid, 'showMeBoys', value),
                     ),
                     SimpleCheckbox(
                       text: 'Girls',
-                      value: user.showMeGirls,
-                      onChanged: (bool value) => DatabaseService.setUserField(
+                      value: algorithmData.showMeGirls,
+                      onChanged: (bool value) => UsersService.setAlgorithmData(
                           uid, 'showMeGirls', value),
                     ),
                   ],
@@ -194,20 +196,22 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SizedBox(height: 20.0),
               SettingField(
-                  title: 'Age range',
-                  child: SimpleRangeSlider(
-                    min: 13.0,
-                    max: 50.0,
-                    defaultRange: RangeValues(
-                      user.ageRangeMin.toDouble(),
-                      user.ageRangeMax.toDouble(),
-                    ),
-                    onChanged: (newRangeValues) =>
-                        DatabaseService.setUserFields(uid, {
-                      'ageRangeMin': newRangeValues.start.toInt(),
-                      'ageRangeMax': newRangeValues.end.toInt(),
-                    }),
-                  )),
+                title: 'Age range',
+                child: SimpleRangeSlider(
+                  min: 13.0,
+                  max: 50.0,
+                  defaultRange: RangeValues(
+                    algorithmData.ageRangeMin.toDouble(),
+                    algorithmData.ageRangeMax.toDouble(),
+                  ),
+                  onChanged: (newRangeValues) {
+                    UsersService.setAlgorithmData(
+                        uid, 'ageRangeMin', newRangeValues.start.toInt());
+                    UsersService.setAlgorithmData(
+                        uid, 'ageRangeMax', newRangeValues.end.toInt());
+                  },
+                ),
+              ),
               SizedBox(height: 20.0),
               SeparatePageSettingField(
                 title: 'Filters',
@@ -223,20 +227,26 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: 'Sleep',
                 description:
                     "While sleeping, you won't appear in other users' card stacks or get new suggestions",
-                selected: user.asleep,
+                selected: algorithmData.asleep,
                 onChanged: (value) =>
-                    DatabaseService.setUserField(uid, 'asleep', value),
+                    UsersService.setAlgorithmData(uid, 'asleep', value),
               ),
               SizedBox(height: 20.0),
               SwitchSettingField(
                 title: 'Show in most popular',
                 description:
                     'Turning this on allows you to be shown on the most popular board',
-                selected: user.showInMostPopular,
+                selected: settings.showInMostPopular,
                 onChanged: (value) {
-                  DatabaseService.setUserField(uid, 'showInMostPopular', value);
-                  Provider.of<CurrentUser>(context).user.showInMostPopular =
-                      value;
+                  UsersService.setPrivateInfo(
+                    uid,
+                    'settings',
+                    {...settings.toMap(), 'showInMostPopular': value},
+                  );
+                  Provider.of<CurrentUser>(context)
+                      .privateInfo
+                      .settings
+                      .showInMostPopular = value;
                 },
               ),
               SizedBox(height: 20.0),
@@ -244,12 +254,14 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: 'Block unknown messages',
                 description:
                     'Prevent users you were not matched with from sending you messages',
-                selected: user.blockUnknownMessages,
+                selected: settings.blockUnknownMessages,
                 onChanged: (value) {
-                  DatabaseService.setUserField(
+                  UsersService.setPrivateInfo(
                       uid, 'blockUnknownMessages', value);
-                  Provider.of<CurrentUser>(context).user.blockUnknownMessages =
-                      value;
+                  Provider.of<CurrentUser>(context)
+                      .privateInfo
+                      .settings
+                      .blockUnknownMessages = value;
                 },
               ),
               SizedBox(height: 20.0),
@@ -267,7 +279,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   onChanged: (option) {
                     Provider.of<ThemeNotifier>(context).theme =
                         AppTheme.values[option];
-                    DatabaseService.setUserField(uid, 'theme', option);
+                    UsersService.setPrivateInfo(uid, 'theme', option);
                   },
                 ),
               ),
@@ -276,10 +288,17 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: 'Read receipts',
                 description:
                     "If turned off, you won't send or receive read receipts",
-                selected: user.readReceipts,
+                selected: settings.readReceipts,
                 onChanged: (value) {
-                  DatabaseService.setUserField(uid, 'readReceipts', value);
-                  Provider.of<CurrentUser>(context).user.readReceipts = value;
+                  UsersService.setPrivateInfo(
+                    uid,
+                    'settings',
+                    {...settings.toMap(), 'readReceipts': value},
+                  );
+                  Provider.of<CurrentUser>(context)
+                      .privateInfo
+                      .settings
+                      .readReceipts = value;
                 },
               ),
               SizedBox(height: 20.0),
@@ -290,39 +309,39 @@ class _SettingsPageState extends State<SettingsPage> {
                         width: double.infinity,
                         height: 100.0,
                         padding: EdgeInsets.all(30.0),
-                        color: AppColors.gold,
+                        color: MyPalette.gold,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
                               'About tundr',
                               style: TextStyle(
-                                color: AppColors.black,
+                                color: MyPalette.black,
                                 fontSize: 30.0,
                               ),
                             ),
                             Icon(Icons.arrow_forward_ios,
-                                color: AppColors.black, size: 30.0),
+                                color: MyPalette.black, size: 30.0),
                           ],
                         ),
                       ),
                       onTap: _openAbout,
                     )
                   : LightTileButton(
-                      color: AppColors.gold,
+                      color: MyPalette.gold,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
                             'About tundr',
                             style: TextStyle(
-                              color: AppColors.white,
+                              color: MyPalette.white,
                               fontSize: 30.0,
                             ),
                           ),
                           Icon(
                             Icons.arrow_forward_ios,
-                            color: AppColors.white,
+                            color: MyPalette.white,
                             size: 30.0,
                           ),
                         ],
@@ -340,11 +359,11 @@ class _SettingsPageState extends State<SettingsPage> {
                       Text(
                         'Sign out',
                         style: TextStyle(
-                          color: AppColors.red,
+                          color: MyPalette.red,
                           fontSize: 20.0,
                         ),
                       ),
-                      Icon(Icons.power_settings_new, color: AppColors.red),
+                      Icon(Icons.power_settings_new, color: MyPalette.red),
                     ],
                   ),
                 ),
@@ -359,11 +378,11 @@ class _SettingsPageState extends State<SettingsPage> {
                       Text(
                         'Delete account',
                         style: TextStyle(
-                          color: AppColors.red,
+                          color: MyPalette.red,
                           fontSize: 20.0,
                         ),
                       ),
-                      Icon(Icons.delete, color: AppColors.red),
+                      Icon(Icons.delete, color: MyPalette.red),
                     ],
                   ),
                 ),

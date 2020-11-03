@@ -2,9 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/repositories/current_user.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/shadows.dart';
+import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 
 class ReferencedMessageTile extends StatelessWidget {
@@ -24,19 +23,19 @@ class ReferencedMessageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Message>(
-        future: DatabaseService.getMessage(chatId, messageId),
+        future: ChatsService.getMessage(chatId, messageId),
         builder: (context, snapshot) {
           return Container(
             decoration: fromTheme(
               context,
               dark: BoxDecoration(
-                color: AppColors.grey,
-                boxShadow: [Shadows.secondaryShadow],
+                color: MyPalette.grey,
+                boxShadow: [MyPalette.secondaryShadow],
               ),
               light: BoxDecoration(
-                color: AppColors.grey,
+                color: MyPalette.grey,
                 borderRadius: BorderRadius.circular(borderRadius),
-                boxShadow: [Shadows.secondaryShadow],
+                boxShadow: [MyPalette.secondaryShadow],
               ),
             ),
             padding: EdgeInsets.all(10.0),
@@ -61,7 +60,7 @@ class ReferencedMessageTile extends StatelessWidget {
                           child: Text(
                             snapshot.data.text,
                             style: TextStyle(
-                              color: AppColors.black,
+                              color: MyPalette.black,
                               fontSize: 20.0,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -71,7 +70,7 @@ class ReferencedMessageTile extends StatelessWidget {
                         Text(
                           '...',
                           style: TextStyle(
-                            color: AppColors.black,
+                            color: MyPalette.black,
                             fontSize: 40.0,
                           ),
                         ),
@@ -90,12 +89,12 @@ class ReferencedMessageTile extends StatelessWidget {
                 Text(
                   snapshot.hasData
                       ? (snapshot.data.senderUid ==
-                              Provider.of<CurrentUser>(context).user.uid
+                              Provider.of<CurrentUser>(context).profile.uid
                           ? '- You'
                           : '- $otherUserName')
                       : '- ?',
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: MyPalette.black,
                     fontSize: 12.0,
                     fontStyle: FontStyle.italic,
                   ),

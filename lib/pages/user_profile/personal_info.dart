@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:tundr/models/user.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/pages/interests/widgets/interests_wrap.dart';
 
 class UserProfilePersonalInfoPage extends StatefulWidget {
-  final User user;
+  final UserProfile profile;
 
-  UserProfilePersonalInfoPage({Key key, @required this.user}) : super(key: key);
+  UserProfilePersonalInfoPage({Key key, @required this.profile})
+      : super(key: key);
 
   @override
   _UserProfilePersonalInfoPageState createState() =>
@@ -75,8 +76,8 @@ class _UserProfilePersonalInfoPageState
                 SizedBox(height: 30.0),
                 Column(
                   children: List<Widget>.from(
-                      widget.user.personalInfo.keys.map((name) {
-                    final dynamic value = widget.user.personalInfo[name];
+                      widget.profile.personalInfo.keys.map((name) {
+                    final dynamic value = widget.profile.personalInfo[name];
                     assert(value != null);
                     if ((value is String || value is List) && value.isEmpty) {
                       return SizedBox.shrink();
@@ -118,11 +119,11 @@ class _UserProfilePersonalInfoPageState
                   color: Theme.of(context).accentColor,
                 ),
                 SizedBox(height: 30.0),
-                widget.user.interests.isEmpty
+                widget.profile.interests.isEmpty
                     ? Text(
                         'No interests',
                         style: TextStyle(
-                          color: AppColors.grey,
+                          color: MyPalette.grey,
                           fontSize: 16.0,
                         ),
                       )
@@ -134,13 +135,13 @@ class _UserProfilePersonalInfoPageState
                             child: Text(
                               'Interests',
                               style: TextStyle(
-                                color: AppColors.gold,
+                                color: MyPalette.gold,
                                 fontSize: 20.0,
                               ),
                             ),
                           ),
                           SizedBox(height: 10.0),
-                          InterestsWrap(interests: widget.user.interests),
+                          InterestsWrap(interests: widget.profile.interests),
                         ],
                       ),
               ],

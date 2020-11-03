@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/repositories/theme_notifier.dart';
-import 'package:tundr/models/user.dart';
+
 import 'package:tundr/pages/user_profile/personal_info.dart';
 import 'package:tundr/enums/app_theme.dart';
-import 'package:tundr/constants/gradients.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
 class UserProfileExtraMediaPage extends StatefulWidget {
-  final User user;
+  final UserProfile profile;
 
-  UserProfileExtraMediaPage({Key key, @required this.user}) : super(key: key);
+  UserProfileExtraMediaPage({Key key, @required this.profile})
+      : super(key: key);
 
   @override
   _UserProfileExtraMediaPageState createState() =>
@@ -38,14 +40,15 @@ class _UserProfileExtraMediaPageState extends State<UserProfileExtraMediaPage> {
   }
 
   bool _hasInfoLeft() =>
-      widget.user.interests.isNotEmpty || widget.user.personalInfo.isNotEmpty;
+      widget.profile.interests.isNotEmpty ||
+      widget.profile.personalInfo.isNotEmpty;
 
   void _nextPage() {
     Navigator.push(
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) =>
-            UserProfilePersonalInfoPage(user: widget.user),
+            UserProfilePersonalInfoPage(profile: widget.profile),
         transitionsBuilder: (context, animation1, animation2, child) {
           return SlideTransition(
             position:
@@ -72,8 +75,9 @@ class _UserProfileExtraMediaPageState extends State<UserProfileExtraMediaPage> {
               itemCount: 10,
               itemBuilder: (context, i) {
                 if (i == 9) return SizedBox(height: 200.0);
-                if (widget.user.extraMedia[i] == null) return SizedBox.shrink();
-                return MediaThumbnail(widget.user.extraMedia[i]);
+                if (widget.profile.extraMedia[i] == null)
+                  return SizedBox.shrink();
+                return MediaThumbnail(widget.profile.extraMedia[i]);
               },
             ),
             TileIconButton(
@@ -92,8 +96,8 @@ class _UserProfileExtraMediaPageState extends State<UserProfileExtraMediaPage> {
                 decoration: BoxDecoration(
                   gradient:
                       Provider.of<ThemeNotifier>(context).theme == AppTheme.dark
-                          ? Gradients.transparentToBlack
-                          : Gradients.transparentToGold,
+                          ? MyPalette.transparentToBlack
+                          : MyPalette.transparentToGold,
                 ),
               ),
             ),

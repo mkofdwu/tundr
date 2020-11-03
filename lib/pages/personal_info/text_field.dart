@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/personal_info_field.dart';
 import 'package:tundr/repositories/theme_notifier.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/app_theme.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
@@ -55,7 +55,7 @@ class _TextFieldPageState extends State<TextFieldPage> {
             child: Text(
               widget.field.prompt,
               style: TextStyle(
-                color: AppColors.white,
+                color: MyPalette.white,
                 fontSize: 40.0,
               ),
             ),
@@ -71,21 +71,21 @@ class _TextFieldPageState extends State<TextFieldPage> {
             child: TextField(
               autofocus: true,
               controller: _controller,
-              cursorColor: AppColors.white,
+              cursorColor: MyPalette.white,
               style: TextStyle(
-                color: AppColors.white,
+                color: MyPalette.white,
                 fontSize: 20.0,
               ),
               decoration: InputDecoration(
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                    color: AppColors.white,
+                    color: MyPalette.white,
                     width: 2.0,
                   ),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                    color: AppColors.white,
+                    color: MyPalette.white,
                     width: 5.0,
                   ),
                 ),
@@ -115,7 +115,7 @@ class _TextFieldPageState extends State<TextFieldPage> {
               child: Text(
                 widget.field.prompt,
                 style: TextStyle(
-                  color: AppColors.black,
+                  color: MyPalette.black,
                   fontSize: 40.0,
                 ),
               ),
@@ -127,21 +127,21 @@ class _TextFieldPageState extends State<TextFieldPage> {
               child: TextField(
                 autofocus: true,
                 controller: _controller,
-                cursorColor: AppColors.black,
+                cursorColor: MyPalette.black,
                 style: TextStyle(
-                  color: AppColors.black,
+                  color: MyPalette.black,
                   fontSize: 20.0,
                 ),
                 decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                      color: AppColors.black,
+                      color: MyPalette.black,
                       width: 2.0,
                     ),
                   ),
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                      color: AppColors.black,
+                      color: MyPalette.black,
                       width: 5.0,
                     ),
                   ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class SimpleRangeSlider extends StatefulWidget {
   final double min;
@@ -35,7 +35,7 @@ class _SimpleRangeSliderState extends State<SimpleRangeSlider> {
       min: widget.min,
       max: widget.max,
       values: _rangeValues,
-      activeColor: AppColors.gold,
+      activeColor: MyPalette.gold,
       inactiveColor: Theme.of(context).accentColor,
       divisions: (widget.max - widget.min).toInt(),
       labels: RangeLabels(

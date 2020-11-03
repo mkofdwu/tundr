@@ -4,7 +4,7 @@ import 'package:tundr/pages/profile_setup/extra_media.dart';
 import 'package:tundr/pages/profile_setup/interests.dart';
 import 'package:tundr/pages/profile_setup/personal_info.dart';
 import 'package:tundr/pages/profile_setup/phone_number.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/light_tile.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
@@ -64,7 +64,7 @@ class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
     return GestureDetector(
       child: SafeArea(
         child: Material(
-          color: AppColors.white,
+          color: MyPalette.white,
           child: Padding(
             padding: const EdgeInsets.all(30.0),
             child: Column(
@@ -73,7 +73,7 @@ class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
                 Text(
                   'Setup extra\ninfo?',
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: MyPalette.black,
                     fontSize: 40.0,
                     fontFamily: 'Helvetica Neue',
                     fontWeight: FontWeight.bold,
@@ -83,7 +83,7 @@ class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
                 Text(
                   'You can skip these steps, but they will probably\nincrease your chances of finding a match.',
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: MyPalette.black,
                     fontSize: 12.0,
                   ),
                 ),
@@ -92,28 +92,28 @@ class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
                   // FUTURE: change colour if setup done
                   child: Text(
                     'About me',
-                    style: TextStyle(color: AppColors.black, fontSize: 20.0),
+                    style: TextStyle(color: MyPalette.black, fontSize: 20.0),
                   ),
                   onTap: _setupAboutMe,
                 ),
                 LightTileButton(
                   child: Text(
                     'Extra photos & videos',
-                    style: TextStyle(color: AppColors.black, fontSize: 20.0),
+                    style: TextStyle(color: MyPalette.black, fontSize: 20.0),
                   ),
                   onTap: _setupExtraMedia,
                 ),
                 LightTileButton(
                   child: Text(
                     'Personal info',
-                    style: TextStyle(color: AppColors.black, fontSize: 20.0),
+                    style: TextStyle(color: MyPalette.black, fontSize: 20.0),
                   ),
                   onTap: _setupPersonalInfo,
                 ),
                 LightTileButton(
                   child: Text(
                     'Interests',
-                    style: TextStyle(color: AppColors.black, fontSize: 20.0),
+                    style: TextStyle(color: MyPalette.black, fontSize: 20.0),
                   ),
                   onTap: _setupInterests,
                 ),

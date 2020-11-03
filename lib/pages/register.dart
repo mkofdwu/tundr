@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/loading.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
+
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/pages/profile_setup/name.dart';
-import 'package:tundr/constants/shadows.dart';
+import 'package:tundr/services/users_service.dart';
+import 'package:tundr/widgets/buttons/dark_stadium.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/tile.dart';
 
@@ -37,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final password = _passwordController.text;
 
     final usernameAlreadyExists =
-        await DatabaseService.usernameAlreadyExists(username);
+        await UsersService.usernameAlreadyExists(username);
 
     setState(() {
       _usernameContainsWhitespace = username.contains(RegExp(r'\s'));
@@ -83,7 +84,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return _loading
         ? LoadingPage()
         : StackScrollPage(
-            color: AppColors.white,
+            color: MyPalette.white,
             builder: (context, width, height) => <Widget>[
               Positioned(
                 left: width * 43 / 375,
@@ -91,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 bottom: 0.0,
                 child: Container(
                   width: width * 71 / 375,
-                  color: AppColors.gold,
+                  color: MyPalette.gold,
                 ),
               ),
               Positioned(
@@ -100,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 bottom: 0.0,
                 child: Container(
                   width: width * 52 / 375,
-                  color: AppColors.gold,
+                  color: MyPalette.gold,
                 ),
               ),
               Positioned(
@@ -109,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 bottom: 0.0,
                 child: Container(
                   width: width * 11 / 375,
-                  color: AppColors.gold,
+                  color: MyPalette.gold,
                 ),
               ),
               Positioned(
@@ -118,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Text(
                   'Register',
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: MyPalette.black,
                     fontSize: 60.0,
                     fontFamily: 'Helvetica Neue',
                     fontWeight: FontWeight.bold,
@@ -131,7 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Text(
                   'Enter a username and password',
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: MyPalette.black,
                     fontSize: 16.0,
                   ),
                 ),
@@ -151,14 +152,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         ? Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: AppColors.red,
-                              boxShadow: [Shadows.primaryShadow],
+                              color: MyPalette.red,
+                              boxShadow: [MyPalette.primaryShadow],
                             ),
                             padding: EdgeInsets.all(10.0),
                             child: Text(
                               'Your username cannot contain any spaces',
                               style: TextStyle(
-                                color: AppColors.white,
+                                color: MyPalette.white,
                                 fontSize: 14.0,
                               ),
                             ),
@@ -168,14 +169,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         ? Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: AppColors.red,
-                              boxShadow: [Shadows.primaryShadow],
+                              color: MyPalette.red,
+                              boxShadow: [MyPalette.primaryShadow],
                             ),
                             padding: EdgeInsets.all(10.0),
                             child: Text(
                               'Your username must be at least 4 characters long',
                               style: TextStyle(
-                                color: AppColors.white,
+                                color: MyPalette.white,
                                 fontSize: 14.0,
                               ),
                             ),
@@ -185,14 +186,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         ? Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: AppColors.red,
-                              boxShadow: [Shadows.primaryShadow],
+                              color: MyPalette.red,
+                              boxShadow: [MyPalette.primaryShadow],
                             ),
                             padding: EdgeInsets.all(10.0),
                             child: Text(
                               'This username is already taken',
                               style: TextStyle(
-                                color: AppColors.white,
+                                color: MyPalette.white,
                                 fontSize: 14.0,
                               ),
                             ),
@@ -208,14 +209,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         ? Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: AppColors.red,
-                              boxShadow: [Shadows.primaryShadow],
+                              color: MyPalette.red,
+                              boxShadow: [MyPalette.primaryShadow],
                             ),
                             padding: EdgeInsets.all(10.0),
                             child: Text(
                               'Your password must be at least 6 characters long',
                               style: TextStyle(
-                                color: AppColors.white,
+                                color: MyPalette.white,
                                 fontSize: 14.0,
                               ),
                             ),
@@ -225,14 +226,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         ? Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: AppColors.red,
-                              boxShadow: [Shadows.primaryShadow],
+                              color: MyPalette.red,
+                              boxShadow: [MyPalette.primaryShadow],
                             ),
                             padding: EdgeInsets.all(10.0),
                             child: Text(
                               'The passwords do not match',
                               style: TextStyle(
-                                color: AppColors.white,
+                                color: MyPalette.white,
                                 fontSize: 14.0,
                               ),
                             ),
@@ -252,34 +253,23 @@ class _RegisterPageState extends State<RegisterPage> {
               Positioned(
                 right: width * 15 / 375,
                 bottom: height * 122 / 812,
-                child: GestureDetector(
-                  child: Container(
-                    width: 120, // width * 100 / 375,
-                    height: 60, // height * 60 / 812,
-                    decoration: BoxDecoration(
-                      color: AppColors.black,
-                      borderRadius: BorderRadius.circular(
-                          30), // BorderRadius.circular(height * 30 / 812),
-                      boxShadow: [Shadows.secondaryShadow],
-                    ),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'Setup',
-                            style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: AppColors.white,
-                          ),
-                        ],
+                child: DarkStadiumButton(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Setup',
+                        style: TextStyle(
+                          color: MyPalette.white,
+                          fontSize: 16.0,
+                        ),
                       ),
-                    ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: MyPalette.white,
+                        size: 20,
+                      ),
+                    ],
                   ),
                   onTap: _validateAndSetup,
                 ),

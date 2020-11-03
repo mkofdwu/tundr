@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/phone_verification.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
+
+import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
 class SetupPhoneNumberPage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
       );
       return;
     }
-    if (await DatabaseService.phoneNumberExists(_phoneNumberController.text)) {
+    if (await UsersService.phoneNumberExists(_phoneNumberController.text)) {
       await showDialog(
         context: context,
         child: AlertDialog(
@@ -120,17 +121,17 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                   children: <Widget>[
                     Container(
                       // FUTURE: select country code
-                      color: AppColors.white,
+                      color: MyPalette.white,
                       height: 60.0,
                       width: 90.0,
                       child: Row(
                         children: <Widget>[
                           SizedBox(width: 5.0),
-                          Icon(Icons.add, color: AppColors.black, size: 30.0),
+                          Icon(Icons.add, color: MyPalette.black, size: 30.0),
                           Text(
                             '65',
                             style: TextStyle(
-                              color: AppColors.black,
+                              color: MyPalette.black,
                               fontSize: 40.0,
                               fontFamily: 'Helvetica Neue',
                               fontWeight: FontWeight.bold,
@@ -144,7 +145,7 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                       width: width - 165.0,
                       child: TextField(
                         style: TextStyle(
-                          color: AppColors.white,
+                          color: MyPalette.white,
                           fontSize: 40.0,
                         ),
                         decoration: InputDecoration(
@@ -152,18 +153,18 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                           contentPadding: EdgeInsets.only(bottom: 5.0),
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                              color: AppColors.white,
+                              color: MyPalette.white,
                               width: 2.0,
                             ),
                           ),
                           focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                              color: AppColors.white,
+                              color: MyPalette.white,
                               width: 5.0,
                             ),
                           ),
                         ),
-                        cursorColor: AppColors.white,
+                        cursorColor: MyPalette.white,
                         maxLength: 8,
                         autofocus: true,
                         keyboardType: TextInputType.number,

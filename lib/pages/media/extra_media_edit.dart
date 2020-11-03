@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/services/media_picker_service.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
-import 'package:tundr/constants/gradients.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/pages/media/widgets/media_viewer.dart';
@@ -110,7 +109,7 @@ class _ExtraMediaEditPageState extends State<ExtraMediaEditPage> {
       child: GestureDetector(
         onTap: () => setState(() => _showOptions = false),
         child: Material(
-          color: AppColors.white,
+          color: MyPalette.white,
           child: Stack(
             children: <Widget>[
               Center(child: MediaViewer(media: _media)),
@@ -120,7 +119,7 @@ class _ExtraMediaEditPageState extends State<ExtraMediaEditPage> {
                   width: width,
                   height: 100.0,
                   decoration:
-                      BoxDecoration(gradient: Gradients.blackToTransparent),
+                      BoxDecoration(gradient: MyPalette.blackToTransparent),
                 ),
                 light: SizedBox.shrink(),
               ),
@@ -135,7 +134,7 @@ class _ExtraMediaEditPageState extends State<ExtraMediaEditPage> {
                   children: <Widget>[
                     TileIconButton(
                       icon: Icons.delete,
-                      iconBackgroundColor: AppColors.red,
+                      iconBackgroundColor: MyPalette.red,
                       onPressed: () {
                         widget.onRemove();
                         Navigator.pop(context);
@@ -178,8 +177,8 @@ class _ExtraMediaEditPageState extends State<ExtraMediaEditPage> {
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [
-                          AppColors.black,
-                          AppColors.transparentBlack,
+                          MyPalette.black,
+                          MyPalette.transparentBlack,
                         ],
                       ),
                     ),
@@ -237,7 +236,7 @@ class _ExtraMediaEditPageState extends State<ExtraMediaEditPage> {
 //       light: BoxDecoration(
 //         color: AppColors.red,
 //         borderRadius: BorderRadius.circular(20.0),
-//         boxShadow: [Shadows.secondaryShadow],
+//         boxShadow: [MyPalette.secondaryShadow],
 //       ),
 //     ),
 //     child: Center(

@@ -50,10 +50,10 @@
 //   Widget build(BuildContext context) {
 //     return StreamBuilder<QuerySnapshot>(
 //       stream: DatabaseService.actionsStream(
-//           Provider.of<CurrentUser>(context).user.uid),
+//           Provider.of<CurrentUser>(context).profile.uid),
 //       builder: (context, snapshot) {
 //         if (snapshot.hasData)
-//           _retrieveActions(snapshot.data.documents)
+//           _retrieveActions(snapshot.data.docs)
 //               .then((_) => setState(() {}));
 //         return widget.child;
 //       },

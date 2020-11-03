@@ -1,7 +1,7 @@
-import 'package:tundr/models/user.dart';
+import 'package:tundr/models/user_profile.dart';
 
 class Suggestion {
-  User user;
+  UserProfile user;
   bool liked;
 
   Suggestion({

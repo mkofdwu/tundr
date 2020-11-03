@@ -8,12 +8,11 @@ import 'package:tundr/repositories/current_user.dart';
 import 'package:tundr/pages/own_profile.dart';
 import 'package:tundr/pages/settings/settings.dart';
 
-import 'package:tundr/services/database_service.dart';
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
-import 'package:tundr/constants/gradients.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/buttons/simple_icon.dart';
@@ -34,7 +33,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((duration) =>
-        _nameController.text = Provider.of<CurrentUser>(context).user.name);
+        _nameController.text = Provider.of<CurrentUser>(context).profile.name);
   }
 
   @override
@@ -46,7 +45,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<CurrentUser>(context).user;
+    final profile = Provider.of<CurrentUser>(context).profile;
+    final privateInfo = Provider.of<CurrentUser>(context).privateInfo;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return SafeArea(
@@ -57,7 +57,7 @@ class _DashboardPageState extends State<DashboardPage> {
               children: <Widget>[
                 GestureDetector(
                   child: getNetworkImage(
-                    user.profileImageUrl,
+                    profile.profileImageUrl,
                     width: width,
                     height: height / 2,
                   ),
@@ -69,7 +69,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     width: width,
                     height: 100.0,
                     decoration: BoxDecoration(
-                      gradient: Gradients.blackToTransparent,
+                      gradient: MyPalette.blackToTransparent,
                     ),
                   ),
                   light: SizedBox.shrink(),
@@ -87,7 +87,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     //     EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                     padding: EdgeInsets.symmetric(horizontal: 20.0),
                     decoration: BoxDecoration(
-                      gradient: Gradients.transparentToBlack,
+                      gradient: MyPalette.transparentToBlack,
                     ),
                     child: Align(
                       alignment: Alignment.centerRight,
@@ -102,10 +102,10 @@ class _DashboardPageState extends State<DashboardPage> {
                                     ? EditableText(
                                         controller: _nameController,
                                         focusNode: _nameFocusNode,
-                                        cursorColor: AppColors.white,
-                                        backgroundCursorColor: AppColors.white,
+                                        cursorColor: MyPalette.white,
+                                        backgroundCursorColor: MyPalette.white,
                                         style: TextStyle(
-                                          color: AppColors.white,
+                                          color: MyPalette.white,
                                           fontSize: 30.0,
                                         ),
                                         onEditingComplete: _changeName,
@@ -116,9 +116,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                           text: TextSpan(
                                             children: <InlineSpan>[
                                               TextSpan(
-                                                text: user.name,
+                                                text: profile.name,
                                                 style: TextStyle(
-                                                  color: AppColors.white,
+                                                  color: MyPalette.white,
                                                   fontSize: 30.0,
                                                 ),
                                               ),
@@ -131,9 +131,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                       ),
                                 SizedBox(height: 5.0),
                                 Text(
-                                  'Born ${DateFormat.yMd().format(user.birthday)}',
+                                  'Born ${DateFormat.yMd().format(profile.birthday)}',
                                   style: TextStyle(
-                                    color: AppColors.white,
+                                    color: MyPalette.white,
                                     fontSize: 16.0,
                                   ),
                                 ),
@@ -142,7 +142,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                           SimpleIconButton(
                             icon: Icons.edit,
-                            color: AppColors.white,
+                            color: MyPalette.white,
                             onPressed: _editName, // BACKEND
                           ),
                         ],
@@ -153,12 +153,12 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
             Expanded(
-              child: user.popularityHistory.isEmpty
+              child: privateInfo.popularityHistory.isEmpty
                   ? Center(
                       child: Text(
                         'Your popularity history will be shown here',
                         style: TextStyle(
-                          color: AppColors.grey,
+                          color: MyPalette.grey,
                           fontSize: 16.0,
                         ),
                       ),
@@ -177,7 +177,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   LineChartBarData(
                                     colors: [Theme.of(context).accentColor],
                                     dotData: FlDotData(show: false),
-                                    spots: List<FlSpot>.from(user
+                                    spots: List<FlSpot>.from(privateInfo
                                         .popularityHistory.entries
                                         .map((entry) => FlSpot(
                                               entry.key.toDouble(),
@@ -195,13 +195,13 @@ class _DashboardPageState extends State<DashboardPage> {
                                 Text(
                                   'Popularity',
                                   style: TextStyle(
-                                    color: AppColors.gold,
+                                    color: MyPalette.gold,
                                     fontSize: 20.0,
                                   ),
                                 ),
                                 SizedBox(height: 10.0),
                                 Text(
-                                  user.popularityScore.toString(),
+                                  privateInfo.popularityHistory.last.toString(),
                                   style: TextStyle(
                                     color: Theme.of(context).accentColor,
                                   ),
@@ -243,9 +243,9 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _changeName() {
-    Provider.of<CurrentUser>(context).user.name = _nameController.text;
-    DatabaseService.setUserField(
-      Provider.of<CurrentUser>(context).user.uid,
+    Provider.of<CurrentUser>(context).profile.name = _nameController.text;
+    UsersService.setProfileField(
+      Provider.of<CurrentUser>(context).profile.uid,
       'name',
       _nameController.text,
     );
@@ -278,16 +278,16 @@ class _DashboardPageState extends State<DashboardPage> {
     );
     if (imageMedia == null) return;
     final newProfileImageUrl = await StorageService.uploadMedia(
-      uid: Provider.of<CurrentUser>(context).user.uid,
+      uid: Provider.of<CurrentUser>(context).profile.uid,
       media: imageMedia,
       prefix: 'profile_image',
     );
-    await DatabaseService.setUserField(
-      Provider.of<CurrentUser>(context).user.uid,
+    await UsersService.setProfileField(
+      Provider.of<CurrentUser>(context).profile.uid,
       'profileImageUrl',
       newProfileImageUrl,
     );
-    setState(() => Provider.of<CurrentUser>(context).user.profileImageUrl =
+    setState(() => Provider.of<CurrentUser>(context).profile.profileImageUrl =
         newProfileImageUrl);
   }
 

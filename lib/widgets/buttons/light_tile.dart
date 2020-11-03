@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/shadows.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class LightTileButton extends StatefulWidget {
   final Color color;
@@ -9,7 +8,7 @@ class LightTileButton extends StatefulWidget {
 
   LightTileButton({
     Key key,
-    this.color = AppColors.white,
+    this.color = MyPalette.white,
     @required this.child,
     @required this.onTap,
   }) : super(key: key);
@@ -30,7 +29,7 @@ class _LightTileButtonState extends State<LightTileButton> {
         padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
           color: widget.color,
-          boxShadow: _pressed ? null : [Shadows.primaryShadow],
+          boxShadow: _pressed ? null : [MyPalette.primaryShadow],
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: widget.child,

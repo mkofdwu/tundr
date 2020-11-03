@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/chat.dart';
+import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/repositories/current_user.dart';
-import 'package:tundr/models/user.dart';
+
 import 'package:tundr/pages/chat/chat.dart';
 import 'package:tundr/pages/user_profile/about_me.dart';
 import 'package:tundr/pages/user_profile/extra_media.dart';
 import 'package:tundr/pages/user_profile/personal_info.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
+
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/chat_type.dart';
-import 'package:tundr/constants/gradients.dart';
+import 'package:tundr/services/chats_service.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/buttons/dark_tile.dart';
@@ -23,20 +25,20 @@ class UserProfileMainPage extends StatefulWidget {
 }
 
 class _UserProfileMainPageState extends State<UserProfileMainPage> {
-  bool _hasInfoLeft(User user) =>
+  bool _hasInfoLeft(UserProfile user) =>
       user.aboutMe.isNotEmpty ||
       user.extraMedia.any((media) => media != null) ||
       user.interests.isNotEmpty ||
       user.personalInfo.isNotEmpty;
 
-  void _nextPage(User user) {
+  void _nextPage(UserProfile user) {
     Widget page;
     if (user.aboutMe.isNotEmpty) {
-      page = UserProfileAboutMePage(user: user);
+      page = UserProfileAboutMePage(profile: user);
     } else if (user.extraMedia.any((media) => media != null)) {
-      page = UserProfileExtraMediaPage(user: user);
+      page = UserProfileExtraMediaPage(profile: user);
     } else if (user.interests.isNotEmpty || user.personalInfo.isNotEmpty) {
-      page = UserProfilePersonalInfoPage(user: user);
+      page = UserProfilePersonalInfoPage(profile: user);
     } else {
       throw Exception('No pages left');
     }
@@ -59,8 +61,8 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    final my = Provider.of<CurrentUser>(context).user;
-    final User user = ModalRoute.of(context).settings.arguments;
+    final my = Provider.of<CurrentUser>(context).profile;
+    final profile = ModalRoute.of(context).settings.arguments;
     return GestureDetector(
       child: SafeArea(
         child: Material(
@@ -69,8 +71,8 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
               Container(
                 constraints: BoxConstraints.expand(),
                 child: Hero(
-                  tag: user.profileImageUrl,
-                  child: getNetworkImage(user.profileImageUrl),
+                  tag: profile.profileImageUrl,
+                  child: getNetworkImage(profile.profileImageUrl),
                 ),
               ),
               Align(
@@ -80,8 +82,8 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
                   decoration: BoxDecoration(
                     gradient: fromTheme(
                       context,
-                      dark: Gradients.blackToTransparent,
-                      light: Gradients.goldToTransparent,
+                      dark: MyPalette.blackToTransparent,
+                      light: MyPalette.goldToTransparent,
                     ),
                   ),
                 ),
@@ -93,8 +95,8 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
                   decoration: BoxDecoration(
                     gradient: fromTheme(
                       context,
-                      dark: Gradients.transparentToBlack,
-                      light: Gradients.transparentToGold,
+                      dark: MyPalette.transparentToBlack,
+                      light: MyPalette.transparentToGold,
                     ),
                   ),
                 ),
@@ -103,14 +105,14 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
                 icon: Icons.arrow_back,
                 onPressed: () => Navigator.pop(context),
               ),
-              if (user.uid != my.uid)
+              if (profile.uid != my.uid)
                 Align(
                   alignment: Alignment.topRight,
                   child: FutureBuilder(
                     future: Future.wait([
-                      DatabaseService.blocked(my.uid, user.uid),
-                      DatabaseService.blocked(user.uid, my.uid),
-                      DatabaseService.getChatFromUid(my.uid, user.uid),
+                      UsersService.blocked(my.uid, profile.uid),
+                      UsersService.blocked(profile.uid, my.uid),
+                      ChatsService.getChatFromUid(my.uid, profile.uid),
                     ]),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return SizedBox.shrink();
@@ -125,15 +127,15 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
                             'Unblock',
                             style: TextStyle(fontSize: 16.0),
                           ),
-                          color: AppColors.red,
+                          color: MyPalette.red,
                           onTap: () {
-                            DatabaseService.unblockUser(my.uid, user.uid);
+                            UsersService.unblockUser(my.uid, profile.uid);
                             setState(() {});
                           },
                         );
                       }
                       if (userBlockedMe ||
-                          (user.blockUnknownMessages &&
+                          (profile.blockUnknownMessages &&
                               chat.type == ChatType.nonExistent)) {
                         return SizedBox.shrink();
                       }
@@ -144,7 +146,7 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
                             context,
                             PageRouteBuilder(
                               pageBuilder: (context, animation1, animation2) =>
-                                  ChatPage(user: user, chat: chat),
+                                  ChatPage(otherUser: profile, chat: chat),
                               transitionsBuilder:
                                   (context, animation1, animation2, child) {
                                 return SlideTransition(
@@ -170,24 +172,24 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Hero(
-                        tag: user.username,
+                        tag: profile.username,
                         child: Material(
                           color: Colors.transparent,
                           child: Text(
-                            '${user.name}, ${user.ageInYears}',
+                            '${profile.name}, ${profile.ageInYears}',
                             style: TextStyle(fontSize: 40.0),
                           ),
                         ),
                       ),
                       SizedBox(height: 40.0),
-                      _hasInfoLeft(user)
+                      _hasInfoLeft(profile)
                           ? NextPageArrow(
                               dark: fromTheme(
                                 context,
                                 dark: true,
                                 light: false,
                               ),
-                              onNextPage: () => _nextPage(user),
+                              onNextPage: () => _nextPage(profile),
                             )
                           : SizedBox.shrink(),
                       SizedBox(height: 20.0),
@@ -199,9 +201,9 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
           ),
         ),
       ),
-      onVerticalDragUpdate: _hasInfoLeft(user)
+      onVerticalDragUpdate: _hasInfoLeft(profile)
           ? (DragUpdateDetails details) {
-              if (details.delta.dy < -1.0) _nextPage(user);
+              if (details.delta.dy < -1.0) _nextPage(profile);
             }
           : null,
     );

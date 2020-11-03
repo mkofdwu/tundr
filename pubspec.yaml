@@ -4,17 +4,17 @@ description: tundr clean up removing support for web. Now only supports the andr
 version: 0.1.11+14
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: '>=2.2.2 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
-  firebase_core: ^0.4.2
-  firebase_auth: ^0.15.2
-  firebase_storage: ^3.1.6
-  firebase_messaging: ^6.0.16
-  cloud_firestore: ^0.13.7
+  firebase_core: ^0.5.1
+  firebase_auth: ^0.18.2
+  firebase_storage: ^4.0.1
+  firebase_messaging: ^7.0.3
+  cloud_firestore: ^0.14.2
   provider: ^3.2.0
   image_picker: ^0.6.2
   image_cropper: ^1.1.2
@@ -29,6 +29,7 @@ dependencies:
   video_player: ^0.10.11+2
   photo_view: ^0.9.2
   http: ^0.12.0+4
+  cloud_functions: ^0.6.0+1
 
 dev_dependencies:
   flutter_driver:

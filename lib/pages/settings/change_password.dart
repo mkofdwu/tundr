@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/current_user.dart';
 import 'package:tundr/services/auth_service.dart';
-import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/shadows.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
@@ -36,8 +35,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       });
       if (_passwordLessThan6Chars || _passwordsDoNotMatch) return;
       final incorrect = !await AuthService.changePassword(
-        userUid: Provider.of<CurrentUser>(context).user.uid,
-        userUsername: Provider.of<CurrentUser>(context).user.username,
+        userUid: Provider.of<CurrentUser>(context).profile.uid,
+        userUsername: Provider.of<CurrentUser>(context).profile.username,
         oldPassword: _currentPasswordController.text,
         newPassword: _newPasswordController.text,
       );
@@ -89,8 +88,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 UnderlineTextField(
                   controller: _currentPasswordController,
                   color: _passwordLessThan6Chars || _incorrect
-                      ? AppColors.red
-                      : AppColors.white,
+                      ? MyPalette.red
+                      : MyPalette.white,
                   hintText: 'Current password',
                   obscureText: true,
                   autoFocus: true,
@@ -98,14 +97,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 SizedBox(height: 10.0),
                 UnderlineTextField(
                   controller: _newPasswordController,
-                  color: _passwordsDoNotMatch ? AppColors.red : AppColors.white,
+                  color: _passwordsDoNotMatch ? MyPalette.red : MyPalette.white,
                   hintText: 'New password',
                   obscureText: true,
                 ),
                 SizedBox(height: 10.0),
                 UnderlineTextField(
                   controller: _confirmNewPasswordController,
-                  color: _passwordsDoNotMatch ? AppColors.red : AppColors.white,
+                  color: _passwordsDoNotMatch ? MyPalette.red : MyPalette.white,
                   hintText: 'Confirm new password',
                   obscureText: true,
                   moveFocus: false,
@@ -118,12 +117,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     width: 50.0,
                     height: 50.0,
                     decoration: BoxDecoration(
-                      color: AppColors.gold,
+                      color: MyPalette.gold,
                       borderRadius: BorderRadius.circular(25.0),
-                      boxShadow: [Shadows.secondaryShadow],
+                      boxShadow: [MyPalette.secondaryShadow],
                     ),
                     child:
-                        Icon(Icons.arrow_forward_ios, color: AppColors.black),
+                        Icon(Icons.arrow_forward_ios, color: MyPalette.black),
                   ),
                 ),
               ],
@@ -131,7 +130,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 TileTextField(
                   controller: _currentPasswordController,
                   color:
-                      _passwordLessThan6Chars ? AppColors.red : AppColors.white,
+                      _passwordLessThan6Chars ? MyPalette.red : MyPalette.white,
                   hintText: 'Current password',
                   obscureText: true,
                   autoFocus: true,
@@ -139,14 +138,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 SizedBox(height: 10.0),
                 TileTextField(
                   controller: _newPasswordController,
-                  color: _passwordsDoNotMatch ? AppColors.red : AppColors.white,
+                  color: _passwordsDoNotMatch ? MyPalette.red : MyPalette.white,
                   hintText: 'New password',
                   obscureText: true,
                 ),
                 SizedBox(height: 10.0),
                 TileTextField(
                   controller: _confirmNewPasswordController,
-                  color: _passwordsDoNotMatch ? AppColors.red : AppColors.white,
+                  color: _passwordsDoNotMatch ? MyPalette.red : MyPalette.white,
                   hintText: 'Confirm new password',
                   obscureText: true,
                   moveFocus: false,
@@ -159,13 +158,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     width: 50.0,
                     height: 50.0,
                     decoration: BoxDecoration(
-                      color: AppColors.black,
+                      color: MyPalette.black,
                       borderRadius: BorderRadius.circular(25.0),
-                      boxShadow: [Shadows.secondaryShadow],
+                      boxShadow: [MyPalette.secondaryShadow],
                     ),
                     child: Icon(
                       Icons.arrow_forward_ios,
-                      color: AppColors.white,
+                      color: MyPalette.white,
                     ),
                   ),
                 ),

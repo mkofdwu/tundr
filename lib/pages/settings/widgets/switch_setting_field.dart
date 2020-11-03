@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/switches/tile.dart';
 
 class SwitchSettingField extends StatelessWidget {
@@ -28,7 +28,7 @@ class SwitchSettingField extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: AppColors.gold,
+                  color: MyPalette.gold,
                   fontSize: 20.0,
                 ),
               ),

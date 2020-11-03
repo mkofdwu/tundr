@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/current_user.dart';
 import 'package:tundr/repositories/theme_notifier.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
+
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/app_theme.dart';
+import 'package:tundr/services/users_service.dart';
 
 class SetupThemePage extends StatefulWidget {
   @override
@@ -14,8 +15,8 @@ class SetupThemePage extends StatefulWidget {
 class _SetupThemePageState extends State<SetupThemePage> {
   Future<void> _selectTheme(AppTheme theme) async {
     Provider.of<ThemeNotifier>(context).theme = theme;
-    await DatabaseService.setUserField(
-      Provider.of<CurrentUser>(context).user.uid,
+    await UsersService.setPrivateInfo(
+      Provider.of<CurrentUser>(context).profile.uid,
       'theme',
       AppTheme.values.indexOf(theme),
     );
@@ -26,7 +27,7 @@ class _SetupThemePageState extends State<SetupThemePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Material(
-        color: AppColors.white,
+        color: MyPalette.white,
         child: Padding(
           padding: const EdgeInsets.all(30.0),
           child: Column(
@@ -34,7 +35,7 @@ class _SetupThemePageState extends State<SetupThemePage> {
               Text(
                 'Select a theme',
                 style: TextStyle(
-                  color: AppColors.black,
+                  color: MyPalette.black,
                   fontSize: 30.0,
                   fontFamily: 'Helvetica Neue',
                   fontWeight: FontWeight.bold,
@@ -45,11 +46,11 @@ class _SetupThemePageState extends State<SetupThemePage> {
                 child: GestureDetector(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: MyPalette.white,
                       borderRadius: BorderRadius.circular(30.0),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.shadowGrey,
+                          color: MyPalette.shadowGrey,
                           offset: Offset(0.0, 3.0),
                           blurRadius: 6.0,
                         ),
@@ -59,7 +60,7 @@ class _SetupThemePageState extends State<SetupThemePage> {
                       child: Text(
                         'Light',
                         style: TextStyle(
-                          color: AppColors.black,
+                          color: MyPalette.black,
                           fontSize: 20.0,
                         ),
                       ),
@@ -73,11 +74,11 @@ class _SetupThemePageState extends State<SetupThemePage> {
                 child: GestureDetector(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.black,
+                      color: MyPalette.black,
                       borderRadius: BorderRadius.circular(30.0),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.shadowGrey,
+                          color: MyPalette.shadowGrey,
                           offset: Offset(0.0, 3.0),
                           blurRadius: 6.0,
                         ),
@@ -87,7 +88,7 @@ class _SetupThemePageState extends State<SetupThemePage> {
                       child: Text(
                         'Dark',
                         style: TextStyle(
-                          color: AppColors.white,
+                          color: MyPalette.white,
                           fontSize: 20.0,
                         ),
                       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/pages/interests/widgets/interests_browser.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 
@@ -23,13 +23,13 @@ class _SetupInterestsPageState extends State<SetupInterestsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Material(
-        color: AppColors.white,
+        color: MyPalette.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TileIconButton(
               icon: Icons.arrow_back,
-              iconColor: AppColors.black,
+              iconColor: MyPalette.black,
               onPressed: () => Navigator.pop(context),
             ),
             SizedBox(height: 30.0),
@@ -42,7 +42,7 @@ class _SetupInterestsPageState extends State<SetupInterestsPage> {
                     Text(
                       'Interests',
                       style: TextStyle(
-                        color: AppColors.black,
+                        color: MyPalette.black,
                         fontSize: 40.0,
                         fontFamily: 'Helvetica Neue',
                         fontWeight: FontWeight.bold,
@@ -52,7 +52,7 @@ class _SetupInterestsPageState extends State<SetupInterestsPage> {
                     Expanded(
                       child: Theme(
                         data: Theme.of(context)
-                            .copyWith(accentColor: AppColors.black),
+                            .copyWith(accentColor: MyPalette.black),
                         child: InterestsBrowser(
                           interests:
                               Provider.of<RegistrationInfo>(context).interests,

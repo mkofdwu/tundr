@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
+
+import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/profile_tile.dart';
 import 'package:tundr/repositories/current_user.dart';
@@ -60,8 +61,7 @@ class _SearchPageState extends State<SearchPage> {
       body: _usernameController.text.length < 4
           ? SizedBox.shrink()
           : FutureBuilder(
-              future:
-                  DatabaseService.searchForUsers(_usernameController.text, 10),
+              future: UsersService.searchForUsers(_usernameController.text, 10),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return SizedBox.shrink();
                 if (snapshot.data.isEmpty) {
@@ -69,13 +69,13 @@ class _SearchPageState extends State<SearchPage> {
                     child: Text(
                       'No users found :(',
                       style: TextStyle(
-                        color: AppColors.grey,
+                        color: MyPalette.grey,
                         fontSize: 16.0,
                       ),
                     ),
                   );
                 }
-                final uid = Provider.of<CurrentUser>(context).user.uid;
+                final uid = Provider.of<CurrentUser>(context).profile.uid;
                 return SingleChildScrollView(
                   child: Column(
                     children: List<Widget>.from(
@@ -87,7 +87,7 @@ class _SearchPageState extends State<SearchPage> {
                           child: SizedBox(
                             height: 200.0,
                             child: GestureDetector(
-                              child: ProfileTile(user: user),
+                              child: ProfileTile(profile: user),
                               onTap: () => _openUser(user),
                             ),
                           ),

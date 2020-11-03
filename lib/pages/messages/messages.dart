@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/repositories/current_user.dart';
-import 'package:tundr/services/database_service.dart';
+import 'package:tundr/services/chats_service.dart';
+import 'package:tundr/services/suggestions_service.dart';
+
 import 'package:tundr/widgets/loaders/loader.dart';
 
 import 'widgets/chat_category.dart';
@@ -21,7 +23,7 @@ class _MessagesPageState extends State<MessagesPage> {
   //   final LocalDatabaseService localDatabaseService =
   //       DatabaseService;
   //   return DatabaseService.saveNewMessages(
-  //     uid: Provider.of<CurrentUser>(context).user.uid,
+  //     uid: Provider.of<CurrentUser>(context).profile.uid,
   //     saveMessage: localDatabaseService.saveMessage,
   //     addChatIfDoesNotExistElseSetUpdated: (uid) async {
   //       if (await localDatabaseService.chatExists(uid)) {
@@ -35,9 +37,9 @@ class _MessagesPageState extends State<MessagesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<CurrentUser>(context).user;
+    final uid = Provider.of<CurrentUser>(context).profile.uid;
     return FutureBuilder<bool>(
-      future: DatabaseService.noChats(user.uid),
+      future: ChatsService.noChats(uid),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return Center(child: Loader());
         if (snapshot.data) {
@@ -45,7 +47,7 @@ class _MessagesPageState extends State<MessagesPage> {
             child: Text(
               'Matches and chats will appear here.',
               style: TextStyle(
-                color: AppColors.grey,
+                color: MyPalette.grey,
                 fontSize: 16.0,
               ),
             ),
@@ -53,7 +55,7 @@ class _MessagesPageState extends State<MessagesPage> {
         }
         return RefreshIndicator(
           color: Theme.of(context).accentColor,
-          backgroundColor: AppColors.gold,
+          backgroundColor: MyPalette.gold,
           onRefresh: () async => setState(() {}), // _loadMessages,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -66,7 +68,7 @@ class _MessagesPageState extends State<MessagesPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       FutureBuilder<List<String>>(
-                        future: DatabaseService.getMatches(user.uid),
+                        future: SuggestionsService.getMatches(uid),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) return SizedBox.shrink();
                           if (snapshot.data.isEmpty) return SizedBox.shrink();
@@ -80,8 +82,8 @@ class _MessagesPageState extends State<MessagesPage> {
                       ),
                       SizedBox(height: 20.0),
                       FutureBuilder<List<Chat>>(
-                        future: DatabaseService.getChatsOfType(
-                            user.uid, ChatType.normal),
+                        future:
+                            ChatsService.getChatsOfType(uid, ChatType.normal),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) return SizedBox.shrink();
                           if (snapshot.data.isEmpty) return SizedBox.shrink();
@@ -93,7 +95,7 @@ class _MessagesPageState extends State<MessagesPage> {
                       ),
                       SizedBox(height: 20.0),
                       FutureBuilder<List<Chat>>(
-                        future: DatabaseService.getUnknownChats(user.uid),
+                        future: ChatsService.getUnknownChats(uid),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) return SizedBox.shrink();
                           if (snapshot.data.isEmpty) return SizedBox.shrink();

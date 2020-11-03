@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class AddCustomInterestChip extends StatefulWidget {
   final Function(String) onAddCustomInterest;
@@ -18,23 +18,23 @@ class _AddCustomInterestChipState extends State<AddCustomInterestChip> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Chip(
-        backgroundColor: AppColors.white,
+        backgroundColor: MyPalette.white,
         elevation: 5.0,
         avatar: _inputting
             ? null
             : Icon(
                 Icons.add,
-                color: AppColors.gold,
+                color: MyPalette.gold,
               ),
         label: _inputting
             ? SizedBox(
                 width: 200.0,
                 height: 24.0,
                 child: TextField(
-                  cursorColor: AppColors.black,
+                  cursorColor: MyPalette.black,
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.gold),
+                      borderSide: BorderSide(color: MyPalette.gold),
                     ),
                   ),
                   autofocus: true,
@@ -47,7 +47,7 @@ class _AddCustomInterestChipState extends State<AddCustomInterestChip> {
             : Text(
                 'Add new',
                 style: TextStyle(
-                  color: AppColors.gold,
+                  color: MyPalette.gold,
                   fontSize: 16.0,
                 ),
               ),

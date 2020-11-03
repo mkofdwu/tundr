@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/personal_info_field.dart';
 import 'package:tundr/repositories/theme_notifier.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/radio_groups/tile.dart';
 import 'package:tundr/enums/app_theme.dart';
@@ -42,7 +42,7 @@ class _RadioGroupFieldPageState extends State<RadioGroupFieldPage> {
         return Future(() => false);
       },
       child: Scaffold(
-        backgroundColor: AppColors.black,
+        backgroundColor: MyPalette.black,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           leading: TileIconButton(
@@ -52,7 +52,7 @@ class _RadioGroupFieldPageState extends State<RadioGroupFieldPage> {
           title: Text(
             widget.field.name,
             style: TextStyle(
-              color: AppColors.white,
+              color: MyPalette.white,
               fontSize: 20.0,
             ),
           ),
@@ -78,7 +78,7 @@ class _RadioGroupFieldPageState extends State<RadioGroupFieldPage> {
         return Future(() => false);
       },
       child: Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: MyPalette.white,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0.0,
@@ -89,7 +89,7 @@ class _RadioGroupFieldPageState extends State<RadioGroupFieldPage> {
           title: Text(
             widget.field.name,
             style: TextStyle(
-              color: AppColors.black,
+              color: MyPalette.black,
               fontSize: 20.0,
             ),
           ),

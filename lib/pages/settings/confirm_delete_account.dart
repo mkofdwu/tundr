@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/current_user.dart';
 import 'package:tundr/services/auth_service.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
+
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/flat_tile.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
@@ -15,12 +15,11 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
 
   void _deleteAccount(BuildContext context) async {
     if (await AuthService.signIn(
-      username: Provider.of<CurrentUser>(context).user.username,
+      username: Provider.of<CurrentUser>(context).profile.username,
       password: _passwordController.text,
     )) {
-      await DatabaseService.deleteAccount(
-          Provider.of<CurrentUser>(context).user.uid);
-      await AuthService.deleteAccount();
+      await AuthService.deleteAccount(
+          Provider.of<CurrentUser>(context).profile.uid);
     } else {
       await showDialog(
         context: context,
@@ -72,7 +71,7 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
           bottom: 100.0,
           child: FlatTileButton(
             text: 'Delete account',
-            color: AppColors.red,
+            color: MyPalette.red,
             onTap: () => _deleteAccount(context),
           ),
         ),

@@ -3,9 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/pages/media/media_view.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/message_option.dart';
-import 'package:tundr/constants/shadows.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'referenced_message_tile.dart';
@@ -76,11 +75,11 @@ class OwnMessageTile extends StatelessWidget {
             constraints: BoxConstraints(maxWidth: 200.0),
             decoration: fromTheme(
               context,
-              dark: BoxDecoration(color: AppColors.white),
+              dark: BoxDecoration(color: MyPalette.white),
               light: BoxDecoration(
-                color: AppColors.white,
+                color: MyPalette.white,
                 borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [Shadows.primaryShadow],
+                boxShadow: [MyPalette.primaryShadow],
               ),
             ),
             child: Column(
@@ -101,7 +100,7 @@ class OwnMessageTile extends StatelessWidget {
                     child: GestureDetector(
                       child: Container(
                         decoration: BoxDecoration(
-                          boxShadow: [Shadows.secondaryShadow],
+                          boxShadow: [MyPalette.secondaryShadow],
                         ),
                         child: ClipRRect(
                           borderRadius: fromTheme(
@@ -120,7 +119,7 @@ class OwnMessageTile extends StatelessWidget {
                   child: Text(
                     message.text,
                     style: TextStyle(
-                      color: AppColors.black,
+                      color: MyPalette.black,
                       fontSize: 14.0,
                     ),
                   ),
@@ -135,7 +134,7 @@ class OwnMessageTile extends StatelessWidget {
               Text(
                 DateFormat.jm().format(message.sentTimestamp),
                 style: TextStyle(
-                  color: AppColors.grey,
+                  color: MyPalette.grey,
                   fontSize: 12.0,
                 ),
               ),
@@ -144,8 +143,8 @@ class OwnMessageTile extends StatelessWidget {
                 // DESIGN: find another icon
                 Icons.done,
                 color: message.readTimestamp == null
-                    ? AppColors.grey
-                    : AppColors.green,
+                    ? MyPalette.grey
+                    : MyPalette.green,
               ),
             ],
           ),

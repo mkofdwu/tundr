@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/filter.dart';
 import 'package:tundr/repositories/current_user.dart';
-import 'package:tundr/services/database_service.dart';
+import 'package:tundr/services/users_service.dart';
+
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/checkboxes/simple.dart';
 
@@ -56,9 +57,14 @@ class _CheckboxFilterPageState extends State<CheckboxFilterPage> {
                     } else {
                       widget.filter.options.remove(option);
                     }
-                    DatabaseService.setUserFilter(
-                      uid: Provider.of<CurrentUser>(context).user.uid,
-                      filter: widget.filter,
+                    final otherFilters = Provider.of<CurrentUser>(context)
+                        .algorithmData
+                        .otherFilters;
+                    otherFilters[widget.filter.field.name] = widget.filter;
+                    UsersService.setAlgorithmData(
+                      Provider.of<CurrentUser>(context).profile.uid,
+                      'otherFilters',
+                      otherFilters,
                     );
                   },
                 ),

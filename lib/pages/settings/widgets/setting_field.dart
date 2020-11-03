@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class SettingField extends StatelessWidget {
   final String title;
@@ -24,7 +24,7 @@ class SettingField extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                color: AppColors.gold,
+                color: MyPalette.gold,
                 fontSize: 20.0,
               ),
             ),
@@ -33,7 +33,7 @@ class SettingField extends StatelessWidget {
                 : GestureDetector(
                     child: Icon(
                       Icons.edit,
-                      color: AppColors.gold,
+                      color: MyPalette.gold,
                     ),
                     onTap: onEdit,
                   ),

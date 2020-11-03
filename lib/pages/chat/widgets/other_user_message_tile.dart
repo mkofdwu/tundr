@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/pages/media/media_view.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/message_option.dart';
-import 'package:tundr/constants/shadows.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'referenced_message_tile.dart';
@@ -72,11 +71,11 @@ class OtherUserMessageTile extends StatelessWidget {
           decoration: fromTheme(
             context,
             dark: BoxDecoration(
-              border: Border.all(color: AppColors.white, width: 1.0),
+              border: Border.all(color: MyPalette.white, width: 1.0),
             ),
             light: BoxDecoration(
               borderRadius: BorderRadius.circular(25.0),
-              boxShadow: [Shadows.primaryShadow],
+              boxShadow: [MyPalette.primaryShadow],
             ),
           ),
           child: ClipRRect(
@@ -113,7 +112,7 @@ class OtherUserMessageTile extends StatelessWidget {
                     : GestureDetector(
                         child: Container(
                           decoration: BoxDecoration(
-                            boxShadow: [Shadows.secondaryShadow],
+                            boxShadow: [MyPalette.secondaryShadow],
                           ),
                           child: ClipRRect(
                             borderRadius: fromTheme(
@@ -136,7 +135,7 @@ class OtherUserMessageTile extends StatelessWidget {
                 Text(
                   DateFormat.jm().format(message.sentTimestamp),
                   style: TextStyle(
-                    color: AppColors.grey,
+                    color: MyPalette.grey,
                     fontSize: 12.0,
                   ),
                 ),

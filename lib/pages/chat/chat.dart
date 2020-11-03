@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/gradients.dart';
-import 'package:tundr/constants/shadows.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/models/user.dart';
+import 'package:tundr/models/user_profile.dart';
+
 import 'package:tundr/repositories/current_user.dart';
-import 'package:tundr/services/database_service.dart';
+import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';
+import 'package:tundr/services/suggestions_service.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/buttons/simple_icon.dart';
@@ -33,12 +34,12 @@ import 'widgets/referenced_message_tile.dart';
 import 'widgets/unsent_message_tile.dart';
 
 class ChatPage extends StatefulWidget {
-  final User user;
+  final UserProfile otherUser;
   final Chat chat;
 
   ChatPage({
     Key key,
-    @required this.user,
+    @required this.otherUser,
     @required this.chat,
   }) : super(key: key);
 
@@ -63,22 +64,18 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
     _textController.addListener(() => setState(() {})); // FUTURE: optimize this
     SchedulerBinding.instance.addPostFrameCallback((duration) async {
-      final user = Provider.of<CurrentUser>(context).user;
-
+      final currentUser = Provider.of<CurrentUser>(context);
       if (widget.chat.type != ChatType.nonExistent &&
-          user.readReceipts &&
-          widget.user.readReceipts) {
+          await ChatsService.checkReadReceipts(widget.otherUser.uid)) {
         // does this take too much time?
         // FUTURE: TEST: send read receipts in real time
-        await DatabaseService.updateChatMessagesRead(
-            widget.chat.uid, widget.user.uid);
+        await ChatsService.updateChatMessagesRead(
+            widget.chat.uid, widget.otherUser.uid);
         if (mounted) {
-          await DatabaseService.setChatLastRead(user.uid, widget.chat.id);
+          await ChatsService.setChatLastRead(
+              currentUser.profile.uid, widget.chat.id);
         }
       }
-
-      // _updater = Timer.periodic(Duration(seconds: 1),
-      //     (timer) => setState(() {}));
     });
   }
 
@@ -149,14 +146,14 @@ class _ChatPageState extends State<ChatPage> {
 
   void _deleteMessage(String messageId) {
     // FUTURE: ask if delete for self or delete for everyone
-    DatabaseService.deleteMessage(
+    ChatsService.deleteMessage(
       chatId: widget.chat.id,
       messageId: messageId,
     );
   }
 
   void _sendMessage() async {
-    final uid = Provider.of<CurrentUser>(context).user.uid;
+    final uid = Provider.of<CurrentUser>(context).profile.uid;
     final text = _textController
         .text; // copy the value of the text to clear the textfield and thus prevent spamming empty messages
     final referencedMessageId = _referencedMessageId;
@@ -177,31 +174,22 @@ class _ChatPageState extends State<ChatPage> {
       ));
     });
 
+    final privateInfo = Provider.of<CurrentUser>(context).privateInfo;
     if (widget.chat.type == ChatType.nonExistent) {
       widget.chat.id =
-          await DatabaseService.startConversation(uid, widget.user.uid);
+          await ChatsService.startConversation(uid, widget.otherUser.uid);
     } else if (widget.chat.type == ChatType.newMatch) {
       widget.chat.id =
-          await DatabaseService.addNormalChat(uid, widget.user.uid);
-      await DatabaseService.removeMatch(uid, widget.user.uid);
+          await ChatsService.addNormalChat(uid, widget.otherUser.uid);
+      privateInfo.matches.remove(widget.otherUser.uid);
+      await UsersService.setPrivateInfo(uid, 'matches', privateInfo.matches);
     } else if (widget.chat.type == ChatType.unknown) {
+      privateInfo.unknownChats.removeWhere((chat) => chat.id == widget.chat.id);
       widget.chat.id =
-          await DatabaseService.addNormalChat(uid, widget.user.uid);
-      await DatabaseService.removeUnknownChat(uid, widget.chat.id);
+          await ChatsService.addNormalChat(uid, widget.otherUser.uid);
+      await UsersService.setPrivateInfo(
+          uid, 'unknownChats', privateInfo.unknownChats);
     }
-
-    // String mediaUrl = mediaFile == null
-    //     ? ''
-    //     : mediaFile.absolute.path.isEmpty
-    //         ? ''
-    //         : await StorageService.uploadMedia(
-    //             uid: uid,
-    //             media: Media(
-    //               type: mediaType,
-    //               url: mediaFile.absolute.path,
-    //               isLocalFile: true,
-    //             ),
-    //           );
 
     final mediaUrl = media == null
         ? ''
@@ -210,10 +198,10 @@ class _ChatPageState extends State<ChatPage> {
             media: media,
           );
 
-    await DatabaseService.sendMessage(
+    await ChatsService.sendMessage(
       chatId: widget.chat.id,
       fromUid: uid,
-      toUid: widget.user.uid,
+      toUid: widget.otherUser.uid,
       sentTimestamp: sentTimestamp,
       referencedMessageId: referencedMessageId,
       text: text,
@@ -229,15 +217,20 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  void _blockUser() {
-    DatabaseService.blockUser(
-        Provider.of<CurrentUser>(context).user.uid, widget.user.uid);
+  void _blockAndDeleteChat() {
+    final userBlocked = Provider.of<CurrentUser>(context).privateInfo.blocked;
+    userBlocked.add(widget.otherUser.uid);
+    UsersService.setPrivateInfo(
+      Provider.of<CurrentUser>(context).profile.uid,
+      'blocked',
+      userBlocked,
+    );
     _deleteChat();
   }
 
   void _deleteChat() {
-    DatabaseService.deleteChat(
-      Provider.of<CurrentUser>(context).user.uid,
+    ChatsService.deleteChat(
+      Provider.of<CurrentUser>(context).profile.uid,
       widget.chat.id,
     );
     Navigator.pop(context);
@@ -254,12 +247,12 @@ class _ChatPageState extends State<ChatPage> {
 
     if (imageMedia == null) return;
 
-    final uid = Provider.of<CurrentUser>(context).user.uid;
+    final uid = Provider.of<CurrentUser>(context).profile.uid;
     final wallpaperUrl = await StorageService.uploadMedia(
       uid: uid,
       media: imageMedia,
     );
-    await DatabaseService.setChatWallpaper(uid, widget.chat.id, wallpaperUrl);
+    await ChatsService.setChatWallpaper(uid, widget.chat.id, wallpaperUrl);
   }
 
   Widget _buildMediaTileDark() {
@@ -268,8 +261,8 @@ class _ChatPageState extends State<ChatPage> {
       height: 200.0,
       margin: const EdgeInsets.only(bottom: 20.0),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.white),
-        boxShadow: [Shadows.primaryShadow],
+        border: Border.all(color: MyPalette.white),
+        boxShadow: [MyPalette.primaryShadow],
       ),
       child: MediaThumbnail(_media),
     );
@@ -282,7 +275,7 @@ class _ChatPageState extends State<ChatPage> {
       margin: const EdgeInsets.only(bottom: 20.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
-        boxShadow: const [Shadows.primaryShadow],
+        boxShadow: const [MyPalette.primaryShadow],
       ), // FUTURE: DESIGN
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25.0),
@@ -303,7 +296,7 @@ class _ChatPageState extends State<ChatPage> {
                     child: ReferencedMessageTile(
                       chatId: widget.chat.id,
                       messageId: _referencedMessageId,
-                      otherUserName: widget.user.name,
+                      otherUserName: widget.otherUser.name,
                       borderRadius: 25.0,
                     ),
                   ),
@@ -325,7 +318,7 @@ class _ChatPageState extends State<ChatPage> {
                           Container(
                             width: 2.0,
                             height: 50.0,
-                            color: AppColors.white,
+                            color: MyPalette.white,
                           ),
                         ]
                       : <Widget>[]) +
@@ -335,8 +328,8 @@ class _ChatPageState extends State<ChatPage> {
                       child: PlainTextField(
                         controller: _textController,
                         hintText: 'Say something',
-                        hintTextColor: AppColors.gold,
-                        color: AppColors.white,
+                        hintTextColor: MyPalette.gold,
+                        color: MyPalette.white,
                       ),
                     ),
                     SizedBox(width: 10.0),
@@ -355,9 +348,9 @@ class _ChatPageState extends State<ChatPage> {
         padding: const EdgeInsets.all(10.0),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.gold,
+            color: MyPalette.gold,
             borderRadius: BorderRadius.circular(35.0),
-            boxShadow: [Shadows.primaryShadow],
+            boxShadow: [MyPalette.primaryShadow],
           ),
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -372,7 +365,7 @@ class _ChatPageState extends State<ChatPage> {
                         child: ReferencedMessageTile(
                           chatId: widget.chat.id,
                           messageId: _referencedMessageId,
-                          otherUserName: widget.user.name,
+                          otherUserName: widget.otherUser.name,
                           borderRadius: 25.0,
                         ),
                       ),
@@ -383,9 +376,9 @@ class _ChatPageState extends State<ChatPage> {
                       Container(
                         height: 50.0,
                         decoration: BoxDecoration(
-                          color: AppColors.white,
+                          color: MyPalette.white,
                           borderRadius: BorderRadius.circular(25.0),
-                          boxShadow: [Shadows.primaryShadow],
+                          boxShadow: [MyPalette.primaryShadow],
                         ),
                         padding: EdgeInsets.all(10.0),
                         child: Row(
@@ -410,8 +403,8 @@ class _ChatPageState extends State<ChatPage> {
                       child: PlainTextField(
                         controller: _textController,
                         hintText: 'Say something',
-                        hintTextColor: AppColors.white,
-                        color: AppColors.black,
+                        hintTextColor: MyPalette.white,
+                        color: MyPalette.black,
                       ),
                     ),
                     SizedBox(width: 10.0),
@@ -443,7 +436,7 @@ class _ChatPageState extends State<ChatPage> {
                   Container(
                     decoration: BoxDecoration(
                       gradient:
-                          fromTheme(context, dark: Gradients.greenToBlack),
+                          fromTheme(context, dark: MyPalette.greenToBlack),
                     ),
                   )
                 else
@@ -452,11 +445,11 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                 if (widget.chat.type != ChatType.nonExistent)
                   StreamBuilder<QuerySnapshot>(
-                    stream: DatabaseService.messagesStream(
+                    stream: ChatsService.messagesStream(
                         widget.chat.id, _pages * messagesPerPage),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return SizedBox.shrink();
-                      final messages = snapshot.data.documents
+                      final messages = snapshot.data.docs
                           .map((messageDoc) => Message.fromDoc(messageDoc))
                           .toList();
                       return NotificationListener(
@@ -481,7 +474,7 @@ class _ChatPageState extends State<ChatPage> {
                             if (i < _unsentMessages.length) {
                               return UnsentMessageTile(
                                 chatId: widget.chat.id,
-                                otherUserName: widget.user.name,
+                                otherUserName: widget.otherUser.name,
                                 message: _unsentMessages[
                                     _unsentMessages.length - i - 1],
                               );
@@ -489,7 +482,7 @@ class _ChatPageState extends State<ChatPage> {
                             final messageIndex = i - _unsentMessages.length;
                             final message = messages[messageIndex];
                             final fromMe = message.senderUid ==
-                                Provider.of<CurrentUser>(context).user.uid;
+                                Provider.of<CurrentUser>(context).profile.uid;
                             return Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 20.0,
@@ -502,7 +495,7 @@ class _ChatPageState extends State<ChatPage> {
                                 child: fromMe
                                     ? OwnMessageTile(
                                         chatId: widget.chat.id,
-                                        otherUserName: widget.user.name,
+                                        otherUserName: widget.otherUser.name,
                                         message: message,
                                         onViewReferencedMessage: () =>
                                             _viewReferencedMessage(
@@ -514,9 +507,9 @@ class _ChatPageState extends State<ChatPage> {
                                       )
                                     : OtherUserMessageTile(
                                         chatId: widget.chat.id,
-                                        otherUserName: widget.user.name,
+                                        otherUserName: widget.otherUser.name,
                                         profileImageUrl:
-                                            widget.user.profileImageUrl,
+                                            widget.otherUser.profileImageUrl,
                                         message: message,
                                         viewReferencedMessage: () =>
                                             _viewReferencedMessage(
@@ -538,8 +531,8 @@ class _ChatPageState extends State<ChatPage> {
                   decoration: BoxDecoration(
                     gradient: fromTheme(
                       context,
-                      dark: Gradients.blackToTransparent,
-                      light: Gradients.greyToTransparent,
+                      dark: MyPalette.blackToTransparent,
+                      light: MyPalette.greyToTransparent,
                     ),
                   ),
                 ),
@@ -555,13 +548,13 @@ class _ChatPageState extends State<ChatPage> {
                       Expanded(
                         child: GestureDetector(
                           child: Text(
-                            widget.user.name,
+                            widget.otherUser.name,
                             style: TextStyle(fontSize: 20.0),
                           ),
                           onTap: () async => Navigator.pushNamed(
                             context,
                             'userprofile',
-                            arguments: widget.user,
+                            arguments: widget.otherUser,
                           ),
                         ),
                       ),
@@ -581,8 +574,8 @@ class _ChatPageState extends State<ChatPage> {
                     decoration: BoxDecoration(
                       gradient: fromTheme(
                         context,
-                        dark: Gradients.transparentToBlack,
-                        light: Gradients.transparentToGrey,
+                        dark: MyPalette.transparentToBlack,
+                        light: MyPalette.transparentToGrey,
                       ),
                     ),
                   ),
@@ -602,18 +595,18 @@ class _ChatPageState extends State<ChatPage> {
                     child: PopupMenu(
                       children: <Widget>[
                         MenuOption(
-                          text: 'Block',
-                          onPressed: _blockUser,
+                          text: 'Wallpaper',
+                          onPressed: _changeWallpaper,
                         ),
                         MenuDivider(),
                         MenuOption(
-                          text: 'Delete',
+                          text: 'Delete chat',
                           onPressed: _deleteChat,
                         ),
                         MenuDivider(),
                         MenuOption(
-                          text: 'Wallpaper',
-                          onPressed: _changeWallpaper,
+                          text: 'Block and delete chat',
+                          onPressed: _blockAndDeleteChat,
                         ),
                       ],
                     ),

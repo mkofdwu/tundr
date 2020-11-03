@@ -3,15 +3,15 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tundr/models/chat.dart';
-import 'package:tundr/models/user.dart';
+import 'package:tundr/models/user_profile.dart';
+
 import 'package:tundr/pages/chat/chat.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/chat_type.dart';
-import 'package:tundr/constants/gradients.dart';
 
 class ItsAMatchPage extends StatelessWidget {
   // FUTURE: create enum `MatchAction` with undo, saySomething, continue, which is popped back to swipingpage which performs the action
-  final User user;
+  final UserProfile user;
 
   ItsAMatchPage({
     Key key,
@@ -37,7 +37,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
                 child: Container(
-                  color: AppColors.black.withOpacity(0.2),
+                  color: MyPalette.black.withOpacity(0.2),
                 ),
               ),
             ),
@@ -46,7 +46,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 height: height,
                 decoration: BoxDecoration(
-                  gradient: Gradients.transparentToBlack,
+                  gradient: MyPalette.transparentToBlack,
                 ),
               ),
             ),
@@ -56,7 +56,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 248 / 375,
                 height: height * 199 / 812,
-                color: AppColors.green,
+                color: MyPalette.green,
               ),
             ),
             Positioned(
@@ -65,7 +65,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 162 / 375,
                 height: height * 285 / 812,
-                color: AppColors.white,
+                color: MyPalette.white,
               ),
             ),
             Positioned(
@@ -74,7 +74,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Text(
                 'Congratulations',
                 style: TextStyle(
-                  color: AppColors.gold,
+                  color: MyPalette.gold,
                   fontSize: 40.0,
                 ),
               ),
@@ -86,11 +86,11 @@ class ItsAMatchPage extends StatelessWidget {
                 width: width * 195 / 375,
                 height: height * 195 / 812,
                 padding: EdgeInsets.all(20.0), // or 10
-                color: AppColors.grey,
+                color: MyPalette.grey,
                 child: Text(
                   '${user.name} liked you\ntoo!',
                   style: TextStyle(
-                    color: AppColors.white,
+                    color: MyPalette.white,
                     fontFamily: 'Helvetica Neue',
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,
@@ -104,7 +104,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 82 / 375,
                 height: height * 96 / 812,
-                color: AppColors.grey,
+                color: MyPalette.grey,
               ),
             ),
             Positioned(
@@ -114,7 +114,7 @@ class ItsAMatchPage extends StatelessWidget {
                 child: Container(
                   width: width * 224 / 375,
                   height: height * 43 / 812,
-                  color: AppColors.gold,
+                  color: MyPalette.gold,
                   child: Stack(
                     children: <Widget>[
                       Positioned(
@@ -123,7 +123,7 @@ class ItsAMatchPage extends StatelessWidget {
                         child: Text(
                           'Say something ...',
                           style: TextStyle(
-                            color: AppColors.white,
+                            color: MyPalette.white,
                             fontSize: 20.0,
                           ),
                         ),
@@ -138,7 +138,7 @@ class ItsAMatchPage extends StatelessWidget {
                     PageRouteBuilder(
                       pageBuilder: (context, animation1, animation2) =>
                           ChatPage(
-                        user: user,
+                        otherUser: user,
                         chat: Chat(
                           id: null,
                           uid: user.uid,
@@ -165,7 +165,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 250 / 375,
                 height: height * 27 / 812,
-                color: AppColors.green,
+                color: MyPalette.green,
               ),
             ),
             Positioned(
@@ -175,7 +175,7 @@ class ItsAMatchPage extends StatelessWidget {
                 child: Container(
                   width: width * 175 / 375,
                   height: height * 29 / 812,
-                  color: AppColors.white,
+                  color: MyPalette.white,
                   child: Stack(
                     children: <Widget>[
                       Positioned(
@@ -198,7 +198,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 159 / 375,
                 height: height * 6 / 812,
-                color: AppColors.white,
+                color: MyPalette.white,
               ),
             ),
             Positioned(
@@ -207,7 +207,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 43 / 375,
                 height: height * 30 / 812,
-                color: AppColors.white,
+                color: MyPalette.white,
               ),
             ),
             Positioned(
@@ -216,7 +216,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 120 / 375,
                 height: height * 12 / 812,
-                color: AppColors.green,
+                color: MyPalette.green,
               ),
             ),
             Positioned(
@@ -225,7 +225,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 145 / 375,
                 height: height * 4 / 812,
-                color: AppColors.gold,
+                color: MyPalette.gold,
               ),
             ),
             Positioned(
@@ -234,7 +234,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 32 / 375,
                 height: height * 4 / 812,
-                color: AppColors.white,
+                color: MyPalette.white,
               ),
             ),
             Positioned(
@@ -243,7 +243,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 101 / 375,
                 height: height * 15 / 812,
-                color: AppColors.white,
+                color: MyPalette.white,
               ),
             ),
             Positioned(
@@ -252,7 +252,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 33 / 375,
                 height: height * 30 / 812,
-                color: AppColors.white,
+                color: MyPalette.white,
               ),
             ),
             Positioned(
@@ -261,7 +261,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 40 / 375,
                 height: height * 5 / 812,
-                color: AppColors.green,
+                color: MyPalette.green,
               ),
             ),
             Positioned(
@@ -270,7 +270,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 32 / 375,
                 height: height * 5 / 812,
-                color: AppColors.gold,
+                color: MyPalette.gold,
               ),
             ),
             Positioned(
@@ -279,7 +279,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 64 / 375,
                 height: height * 8 / 812,
-                color: AppColors.white,
+                color: MyPalette.white,
               ),
             ),
             Positioned(
@@ -289,7 +289,7 @@ class ItsAMatchPage extends StatelessWidget {
                 child: Container(
                   width: width * 178 / 375,
                   height: height * 28 / 812,
-                  color: AppColors.white,
+                  color: MyPalette.white,
                   child: Stack(
                     children: <Widget>[
                       Positioned(
@@ -298,7 +298,7 @@ class ItsAMatchPage extends StatelessWidget {
                         child: Text(
                           'Continue',
                           style:
-                              TextStyle(color: AppColors.gold, fontSize: 18.0),
+                              TextStyle(color: MyPalette.gold, fontSize: 18.0),
                         ),
                       ),
                     ],
@@ -313,7 +313,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 156 / 375,
                 height: height * 5 / 812,
-                color: AppColors.white,
+                color: MyPalette.white,
               ),
             ),
             Positioned(
@@ -322,7 +322,7 @@ class ItsAMatchPage extends StatelessWidget {
               child: Container(
                 width: width * 90 / 375,
                 height: height * 11 / 812,
-                color: AppColors.gold,
+                color: MyPalette.gold,
               ),
             ),
           ],

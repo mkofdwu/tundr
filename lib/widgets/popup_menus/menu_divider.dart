@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class MenuDivider extends StatelessWidget {
   @override
@@ -7,7 +7,7 @@ class MenuDivider extends StatelessWidget {
     return Container(
       width: 70.0,
       height: 2.0,
-      color: AppColors.black,
+      color: MyPalette.black,
     );
   }
 }

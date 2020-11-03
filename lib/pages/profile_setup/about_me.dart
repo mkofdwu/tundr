@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/textfields/tile.dart';
@@ -23,11 +23,11 @@ class _SetupAboutMePageState extends State<SetupAboutMePage> {
   Widget build(BuildContext context) {
     _controller.text = Provider.of<RegistrationInfo>(context).aboutMe;
     return StackScrollPage(
-      color: AppColors.white,
+      color: MyPalette.white,
       builder: (context, width, height) => <Widget>[
         TileIconButton(
           icon: Icons.arrow_back,
-          iconColor: AppColors.black,
+          iconColor: MyPalette.black,
           onPressed: _return,
         ),
         Positioned(
@@ -39,7 +39,7 @@ class _SetupAboutMePageState extends State<SetupAboutMePage> {
               Text(
                 'About me',
                 style: TextStyle(
-                  color: AppColors.black,
+                  color: MyPalette.black,
                   // fontFamily: 'javanese text',
                   fontSize: 60.0,
                 ),
@@ -48,7 +48,7 @@ class _SetupAboutMePageState extends State<SetupAboutMePage> {
                 padding: EdgeInsets.only(left: 20.0, top: 10.0),
                 child: Text(
                   'Write a short, interesting description about yourself\n(not more than 200 characters)', // FUTURE: change this text
-                  style: TextStyle(color: AppColors.black, fontSize: 12.0),
+                  style: TextStyle(color: MyPalette.black, fontSize: 12.0),
                 ),
               ),
             ],

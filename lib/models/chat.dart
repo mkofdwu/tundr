@@ -17,13 +17,13 @@ class Chat {
   });
 
   factory Chat.fromDoc(DocumentSnapshot doc) {
-    assert(doc != null);
+    final data = doc.data();
     return Chat(
-      id: doc.documentID,
-      uid: doc.data['uid'],
-      wallpaperUrl: doc.data['wallpaperUrl'],
-      lastReadTimestamp: doc.data['lastReadTimestamp'],
-      type: doc.data['type'],
+      id: doc.id,
+      uid: data['uid'],
+      wallpaperUrl: data['wallpaperUrl'],
+      lastReadTimestamp: data['lastReadTimestamp'],
+      type: data['type'],
     );
   }
 }

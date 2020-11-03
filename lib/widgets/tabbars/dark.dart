@@ -1,7 +1,7 @@
 // FUTURE: implement tabcontroller
 
 import 'package:flutter/widgets.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 // FUTURE: remove this
 class TabBarDark extends StatefulWidget implements PreferredSizeWidget {
@@ -41,7 +41,7 @@ class _TabBarDarkState extends State<TabBarDark> {
                   SizedBox(height: 10.0),
                   Container(
                     height: 2.0,
-                    color: AppColors.gold,
+                    color: MyPalette.gold,
                   ),
                 ],
               ),

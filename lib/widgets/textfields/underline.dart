@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class UnderlineTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -14,7 +14,7 @@ class UnderlineTextField extends StatelessWidget {
   UnderlineTextField({
     Key key,
     @required this.controller,
-    this.color = AppColors.white,
+    this.color = MyPalette.white,
     this.hintText = '',
     this.obscureText = false,
     this.autoFocus = false,
@@ -38,7 +38,7 @@ class UnderlineTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(
-          color: AppColors.grey,
+          color: MyPalette.grey,
           fontSize: 20.0,
         ),
         enabledBorder: UnderlineInputBorder(

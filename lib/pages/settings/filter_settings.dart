@@ -7,11 +7,12 @@ import 'package:tundr/repositories/current_user.dart';
 import 'package:tundr/pages/filters/checkbox_filter.dart';
 import 'package:tundr/pages/filters/range_slider_filter.dart';
 import 'package:tundr/pages/filters/text_list_filter.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
+
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/filter_method.dart';
 import 'package:tundr/enums/personal_info_type.dart';
 import 'package:tundr/constants/personal_info_fields.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/loaders/loader.dart';
 
@@ -45,8 +46,9 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
         },
       ),
     );
-    await DatabaseService.setUserFilter(
-      uid: Provider.of<CurrentUser>(context).user.uid,
+    Provider.of<CurrentUser>(context).privateInfo.otherFilters
+    await UsersService.setUserFilter(
+      uid: Provider.of<CurrentUser>(context).profile.uid,
       filter: filter,
     );
     setState(() {});
@@ -65,8 +67,8 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
         title: Text('Filters'),
       ),
       body: FutureBuilder<DocumentSnapshot>(
-        future: DatabaseService.getUserFilters(
-            Provider.of<CurrentUser>(context).user.uid),
+        future: UsersService.getUserFilters(
+            Provider.of<CurrentUser>(context).profile.uid),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Center(child: Loader());
           final filters = snapshot.data.data;
@@ -136,7 +138,7 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
                         Text(
                           fieldName,
                           style: TextStyle(
-                            color: AppColors.white,
+                            color: MyPalette.white,
                             fontSize: 16.0,
                           ),
                         ),

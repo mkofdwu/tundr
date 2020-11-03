@@ -6,12 +6,13 @@ import 'package:provider/provider.dart';
 import 'package:tundr/repositories/current_user.dart';
 import 'package:tundr/models/suggestion_gone_through.dart';
 import 'package:tundr/pages/its_a_match.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
+
+import 'package:tundr/constants/my_palette.dart';
 
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/shadows.dart';
 import 'package:tundr/pages/swiping/widgets/suggestion_card.dart';
+import 'package:tundr/services/suggestions_service.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/theme_builder.dart'; // for icons, remove when alternative image has been found
 
 class SwipingPage extends StatefulWidget {
@@ -26,21 +27,21 @@ class _SwipingPageState extends State<SwipingPage> {
 
   @override
   void deactivate() {
-    DatabaseService.addUserSuggestionsGoneThrough(
-        Provider.of<CurrentUser>(context).user.uid, _goneThrough);
+    SuggestionsService.addUserSuggestionsGoneThrough(
+        Provider.of<CurrentUser>(context).profile.uid, _goneThrough);
     super.deactivate();
   }
 
   void _nope() async {
-    final suggestions = Provider.of<CurrentUser>(context).user.suggestions;
-    final user = Provider.of<CurrentUser>(context).user;
-    final otherUser = suggestions[_i].user;
+    final suggestions = Provider.of<CurrentUser>(context).otherUser.suggestions;
+    final user = Provider.of<CurrentUser>(context).profile;
+    final otherUser = suggestions[_i].otherUser;
 
     if (suggestions[_i].liked == null) {
       setState(() {
         _i++;
       });
-      await DatabaseService.sendSuggestion(
+      await SuggestionsService.sendSuggestion(
         fromUid: user.uid,
         toUid: otherUser.uid,
         liked: false,
@@ -52,7 +53,7 @@ class _SwipingPageState extends State<SwipingPage> {
     }
 
     setState(() => _canUndo = true);
-    await DatabaseService.deleteSuggestion(
+    await SuggestionsService.deleteSuggestion(
         uid: user.uid, otherUid: otherUser.uid);
     _goneThrough.add(SuggestionGoneThrough(
       uid: user.uid,
@@ -62,12 +63,12 @@ class _SwipingPageState extends State<SwipingPage> {
 
   void _undo() {
     final suggestionUserUid = Provider.of<CurrentUser>(context)
-        .user
+        .otherUser
         .generatedDailySuggestions[_i - 1]
-        .user
+        .otherUser
         .uid;
-    DatabaseService.undoSentSuggestion(
-      Provider.of<CurrentUser>(context).user.uid,
+    SuggestionsService.undoSentSuggestion(
+      Provider.of<CurrentUser>(context).profile.uid,
       suggestionUserUid,
     );
     setState(() {
@@ -77,12 +78,12 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   void _like() async {
-    final suggestions = Provider.of<CurrentUser>(context).user.suggestions;
-    final user = Provider.of<CurrentUser>(context).user;
-    final otherUser = suggestions[_i].user;
+    final suggestions = Provider.of<CurrentUser>(context).otherUser.suggestions;
+    final user = Provider.of<CurrentUser>(context).otherUser;
+    final otherUser = suggestions[_i].otherUser;
 
     setState(() => user.numRightSwiped += 1);
-    await DatabaseService.setUserField(
+    await UsersService.setPrivateInfo(
         user.uid, 'numRightSwiped', user.numRightSwiped);
 
     if (suggestions[_i].liked == true) {
@@ -96,7 +97,7 @@ class _SwipingPageState extends State<SwipingPage> {
       );
       if (!undo) {
         await DatabaseService.match(
-            Provider.of<CurrentUser>(context).user.uid, otherUser.uid);
+            Provider.of<CurrentUser>(context).profile.uid, otherUser.uid);
         setState(() {
           _i++;
           _canUndo = false;
@@ -147,7 +148,7 @@ class _SwipingPageState extends State<SwipingPage> {
                       child: Container(
                         width: 3.0,
                         height: 60.0,
-                        color: AppColors.gold,
+                        color: MyPalette.gold,
                       ),
                     ),
                     GestureDetector(
@@ -164,7 +165,7 @@ class _SwipingPageState extends State<SwipingPage> {
                       child: Container(
                         width: 3.0,
                         height: 60.0,
-                        color: AppColors.gold,
+                        color: MyPalette.gold,
                       ),
                     ),
                   ]
@@ -175,7 +176,7 @@ class _SwipingPageState extends State<SwipingPage> {
                       child: Container(
                         width: 3.0,
                         height: 60.0,
-                        color: AppColors.gold,
+                        color: MyPalette.gold,
                       ),
                     ),
                   ]) +
@@ -197,12 +198,12 @@ class _SwipingPageState extends State<SwipingPage> {
               height: 70.0,
               decoration: ShapeDecoration(
                 shape: CircleBorder(),
-                color: AppColors.gold,
-                shadows: [Shadows.primaryShadow],
+                color: MyPalette.gold,
+                shadows: [MyPalette.primaryShadow],
               ),
               child: Icon(
                 Icons.close,
-                color: AppColors.white,
+                color: MyPalette.white,
                 size: 30.0,
               ),
             ),
@@ -217,11 +218,11 @@ class _SwipingPageState extends State<SwipingPage> {
                       height: 40.0,
                       decoration: ShapeDecoration(
                         shape: CircleBorder(),
-                        color: AppColors.white,
-                        shadows: [Shadows.primaryShadow],
+                        color: MyPalette.white,
+                        shadows: [MyPalette.primaryShadow],
                       ),
                       child:
-                          Icon(Icons.undo, color: AppColors.black, size: 20.0),
+                          Icon(Icons.undo, color: MyPalette.black, size: 20.0),
                     ),
                     onTap: _undo,
                   ),
@@ -233,12 +234,12 @@ class _SwipingPageState extends State<SwipingPage> {
               height: 70.0,
               decoration: ShapeDecoration(
                 shape: CircleBorder(),
-                color: AppColors.gold,
-                shadows: [Shadows.primaryShadow],
+                color: MyPalette.gold,
+                shadows: [MyPalette.primaryShadow],
               ),
               child: Icon(
                 Icons.done,
-                color: AppColors.white,
+                color: MyPalette.white,
                 size: 30.0,
               ),
             ),
@@ -251,8 +252,8 @@ class _SwipingPageState extends State<SwipingPage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final suggestions = Provider.of<CurrentUser>(context).user.suggestions;
-    final user = _i < suggestions.length ? suggestions[_i].user : null;
+    final suggestions = Provider.of<CurrentUser>(context).otherUser.suggestions;
+    final user = _i < suggestions.length ? suggestions[_i].otherUser : null;
 
     return Column(
       children: <Widget>[
@@ -276,7 +277,7 @@ class _SwipingPageState extends State<SwipingPage> {
                   Text(
                     'Try editing your filters to see more people',
                     style: TextStyle(
-                      color: AppColors.grey,
+                      color: MyPalette.grey,
                       fontSize: 14.0,
                     ),
                   ),

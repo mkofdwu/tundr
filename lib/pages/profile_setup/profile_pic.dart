@@ -7,9 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/profile_setup/extra_info.dart';
 import 'package:tundr/services/media_picker_service.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
-import 'package:tundr/constants/shadows.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
 class SetupProfilePicPage extends StatefulWidget {
@@ -54,11 +53,11 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
             child: GestureDetector(
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppColors.white,
+                  color: MyPalette.white,
                   borderRadius: BorderRadius.circular(30.0),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.shadowGrey,
+                      color: MyPalette.shadowGrey,
                       offset: Offset(0.0, 3.0),
                       blurRadius: 6.0,
                     ),
@@ -70,14 +69,14 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
                     children: <Widget>[
                       Icon(
                         Icons.photo_camera,
-                        color: AppColors.gold,
+                        color: MyPalette.gold,
                         size: 100.0,
                       ),
                       SizedBox(height: 10.0),
                       Text(
                         'Camera',
                         style: TextStyle(
-                          color: AppColors.gold,
+                          color: MyPalette.gold,
                           fontSize: 20.0,
                         ),
                       )
@@ -93,11 +92,11 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
             child: GestureDetector(
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppColors.white,
+                  color: MyPalette.white,
                   borderRadius: BorderRadius.circular(30.0),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.shadowGrey,
+                      color: MyPalette.shadowGrey,
                       offset: Offset(0.0, 3.0),
                       blurRadius: 6.0,
                     ),
@@ -109,14 +108,14 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
                     children: <Widget>[
                       Icon(
                         Icons.photo_library,
-                        color: AppColors.gold,
+                        color: MyPalette.gold,
                         size: 100.0,
                       ),
                       SizedBox(height: 10.0),
                       Text(
                         'Gallery',
                         style: TextStyle(
-                          color: AppColors.gold,
+                          color: MyPalette.gold,
                           fontSize: 20.0,
                         ),
                       )
@@ -142,9 +141,9 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
             height: min(
                 constraints.maxWidth, MediaQuery.of(context).size.height - 350),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: MyPalette.white,
               borderRadius: BorderRadius.circular(30.0),
-              boxShadow: [Shadows.secondaryShadow],
+              boxShadow: [MyPalette.secondaryShadow],
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30.0),
@@ -156,7 +155,7 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
         Text(
           'Replace',
           style: TextStyle(
-            color: AppColors.black,
+            color: MyPalette.black,
             fontSize: 20.0,
           ),
         ),
@@ -168,11 +167,11 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
                 child: GestureDetector(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: MyPalette.white,
                       borderRadius: BorderRadius.circular(30.0),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.shadowGrey,
+                          color: MyPalette.shadowGrey,
                           offset: Offset(0.0, 3.0),
                           blurRadius: 6.0,
                         ),
@@ -184,14 +183,14 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
                         children: <Widget>[
                           Icon(
                             Icons.photo_camera,
-                            color: AppColors.gold,
+                            color: MyPalette.gold,
                             size: 30.0,
                           ),
                           SizedBox(width: 10.0),
                           Text(
                             'Camera',
                             style: TextStyle(
-                              color: AppColors.gold,
+                              color: MyPalette.gold,
                               fontSize: 14.0,
                             ),
                           )
@@ -207,11 +206,11 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
                 child: GestureDetector(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: MyPalette.white,
                       borderRadius: BorderRadius.circular(30.0),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.shadowGrey,
+                          color: MyPalette.shadowGrey,
                           offset: Offset(0.0, 3.0),
                           blurRadius: 6.0,
                         ),
@@ -224,14 +223,14 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
                           children: <Widget>[
                             Icon(
                               Icons.photo_library,
-                              color: AppColors.gold,
+                              color: MyPalette.gold,
                               size: 30.0,
                             ),
                             SizedBox(width: 10.0),
                             Text(
                               'Gallery',
                               style: TextStyle(
-                                color: AppColors.gold,
+                                color: MyPalette.gold,
                                 fontSize: 14.0,
                               ),
                             )
@@ -264,7 +263,7 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
     return GestureDetector(
       child: SafeArea(
         child: Material(
-          color: AppColors.white,
+          color: MyPalette.white,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: Column(
@@ -273,7 +272,7 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
                 Text(
                   'Profile pic',
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: MyPalette.black,
                     fontSize: 40.0,
                     fontFamily: 'Helvetica Neue',
                     fontWeight: FontWeight.bold,

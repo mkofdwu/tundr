@@ -1,7 +1,7 @@
 // couldn't think of a better name
 
 import 'package:flutter/widgets.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class SimpleTabBar extends StatefulWidget {
   final Color color;
@@ -46,7 +46,7 @@ class _SimpleTabBarState extends State<SimpleTabBar> {
                   Text(
                     name,
                     style: TextStyle(
-                      color: AppColors.gold,
+                      color: MyPalette.gold,
                       fontSize: 20.0,
                     ),
                   ),
@@ -54,7 +54,7 @@ class _SimpleTabBarState extends State<SimpleTabBar> {
                   Container(
                     width: 50.0,
                     height: 3.0,
-                    color: AppColors.gold,
+                    color: MyPalette.gold,
                   )
                 ],
               ),

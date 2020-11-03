@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/models/media.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/pages/media/widgets/media_viewer.dart';
 
@@ -24,8 +24,8 @@ class MediaViewPage extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: RadialGradient(
                   colors: [
-                    AppColors.black,
-                    AppColors.transparentBlack,
+                    MyPalette.black,
+                    MyPalette.transparentBlack,
                   ],
                 ),
               ),
@@ -33,7 +33,7 @@ class MediaViewPage extends StatelessWidget {
           ),
           TileIconButton(
             icon: Icons.arrow_back,
-            iconColor: AppColors.white,
+            iconColor: MyPalette.white,
             onPressed: () => Navigator.pop(context),
           ),
         ],

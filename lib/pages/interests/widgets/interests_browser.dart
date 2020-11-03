@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/constants/interests.dart';
 import 'package:tundr/widgets/loaders/loader.dart';
 import 'package:tundr/widgets/tabbars/simple.dart';
@@ -46,12 +46,12 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
             final bool selected = selectedInterests.contains(interest);
             return GestureDetector(
               child: Chip(
-                backgroundColor: selected ? AppColors.gold : AppColors.white,
+                backgroundColor: selected ? MyPalette.gold : MyPalette.white,
                 elevation: 5.0,
                 label: Text(
                   interest,
                   style: TextStyle(
-                    color: selected ? AppColors.white : AppColors.black,
+                    color: selected ? MyPalette.white : MyPalette.black,
                     fontSize: 14.0,
                   ),
                 ),
@@ -128,16 +128,16 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
                                   List<Widget>.from(
                                     widget.customInterests.map((interest) {
                                       return Chip(
-                                        backgroundColor: AppColors.gold,
+                                        backgroundColor: MyPalette.gold,
                                         elevation: 5.0,
                                         label: Text(
                                           interest,
                                           style: TextStyle(
-                                            color: AppColors.white,
+                                            color: MyPalette.white,
                                             fontSize: 14.0,
                                           ),
                                         ),
-                                        deleteIconColor: AppColors.white,
+                                        deleteIconColor: MyPalette.white,
                                         onDeleted: () => setState(() => widget
                                             .customInterests
                                             .remove(interest)),
@@ -180,7 +180,7 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
                               child: Text(
                                 'No interests found :(',
                                 style: TextStyle(
-                                  color: AppColors.grey,
+                                  color: MyPalette.grey,
                                   fontSize: 16.0,
                                 ),
                               ),

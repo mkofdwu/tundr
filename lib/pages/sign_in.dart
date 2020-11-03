@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/services/auth_service.dart';
-import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/shadows.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/tile.dart';
 
@@ -30,7 +29,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return StackScrollPage(
-      color: AppColors.white,
+      color: MyPalette.white,
       builder: (context, width, height) => <Widget>[
         Positioned(
           left: width * 43 / 375,
@@ -38,7 +37,7 @@ class _SignInPageState extends State<SignInPage> {
           bottom: 0.0,
           child: Container(
             width: width * 71 / 375,
-            color: AppColors.gold,
+            color: MyPalette.gold,
           ),
         ),
         Positioned(
@@ -47,7 +46,7 @@ class _SignInPageState extends State<SignInPage> {
           bottom: 0.0,
           child: Container(
             width: width * 52 / 375,
-            color: AppColors.gold,
+            color: MyPalette.gold,
           ),
         ),
         Positioned(
@@ -56,7 +55,7 @@ class _SignInPageState extends State<SignInPage> {
           bottom: 0.0,
           child: Container(
             width: width * 11 / 375,
-            color: AppColors.gold,
+            color: MyPalette.gold,
           ),
         ),
         Positioned(
@@ -65,7 +64,7 @@ class _SignInPageState extends State<SignInPage> {
           child: Text(
             'Sign in',
             style: TextStyle(
-              color: AppColors.black,
+              color: MyPalette.black,
               fontSize: 60.0,
               fontFamily: 'Helvetica Neue',
               fontWeight: FontWeight.bold,
@@ -80,11 +79,11 @@ class _SignInPageState extends State<SignInPage> {
               width: 200.0,
               height: 100.0,
               padding: EdgeInsets.all(20.0),
-              color: AppColors.red,
+              color: MyPalette.red,
               child: Text(
                 'Incorrect username or password',
                 style: TextStyle(
-                  color: AppColors.white,
+                  color: MyPalette.white,
                   fontSize: 16.0,
                 ),
               ),
@@ -120,14 +119,14 @@ class _SignInPageState extends State<SignInPage> {
               width: 60.0,
               height: 60.0,
               decoration: BoxDecoration(
-                color: AppColors.black,
+                color: MyPalette.black,
                 borderRadius: BorderRadius.circular(30.0),
-                boxShadow: [Shadows.secondaryShadow],
+                boxShadow: [MyPalette.secondaryShadow],
               ),
               child: Center(
                 child: Icon(
                   Icons.arrow_forward_ios,
-                  color: AppColors.white,
+                  color: MyPalette.white,
                 ),
               ),
             ),

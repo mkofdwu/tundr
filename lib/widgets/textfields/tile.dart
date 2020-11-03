@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/shadows.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class TileTextField extends StatelessWidget {
   final double width;
@@ -19,7 +18,7 @@ class TileTextField extends StatelessWidget {
     Key key,
     this.width = double.infinity,
     this.height = 40.0,
-    this.color = AppColors.white,
+    this.color = MyPalette.white,
     @required this.controller,
     this.hintText = '',
     this.obscureText = false,
@@ -42,7 +41,7 @@ class TileTextField extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color,
-        boxShadow: [Shadows.primaryShadow],
+        boxShadow: [MyPalette.primaryShadow],
       ),
       child: TextField(
         decoration: InputDecoration(
@@ -50,18 +49,18 @@ class TileTextField extends StatelessWidget {
           border: InputBorder.none,
           hintText: hintText,
           hintStyle: TextStyle(
-            color: AppColors.grey,
+            color: MyPalette.grey,
             fontSize: 20.0,
             fontFamily: 'Helvetica Neue',
           ),
           counterText: '',
         ),
         style: TextStyle(
-          color: AppColors.black,
+          color: MyPalette.black,
           fontSize: 20.0,
           fontFamily: 'Helvetica Neue',
         ),
-        cursorColor: AppColors.black,
+        cursorColor: MyPalette.black,
         controller: controller,
         autofocus: autoFocus,
         maxLines: maxLines,

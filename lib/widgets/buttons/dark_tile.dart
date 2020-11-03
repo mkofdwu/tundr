@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class DarkTileButton extends StatefulWidget {
   final double width;
@@ -13,7 +13,7 @@ class DarkTileButton extends StatefulWidget {
     this.width,
     this.height = 60.0,
     @required this.child,
-    this.color = AppColors.gold,
+    this.color = MyPalette.gold,
     @required this.onTap,
   }) : super(key: key);
 

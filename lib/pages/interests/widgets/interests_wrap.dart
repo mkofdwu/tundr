@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class InterestsWrap extends StatelessWidget {
   final List<String> interests;
@@ -14,12 +14,12 @@ class InterestsWrap extends StatelessWidget {
         interests.map(
           (interest) {
             return Chip(
-              backgroundColor: AppColors.gold,
+              backgroundColor: MyPalette.gold,
               elevation: 5.0,
               label: Text(
                 interest,
                 style: TextStyle(
-                  color: AppColors.white,
+                  color: MyPalette.white,
                   fontSize: 14.0,
                 ),
               ),

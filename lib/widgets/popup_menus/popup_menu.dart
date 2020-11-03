@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/shadows.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/utils/from_theme.dart';
 
 class PopupMenu extends StatelessWidget {
@@ -13,8 +12,8 @@ class PopupMenu extends StatelessWidget {
     return Container(
       // width: 150.0,
       decoration: BoxDecoration(
-        color: AppColors.white,
-        boxShadow: [Shadows.secondaryShadow],
+        color: MyPalette.white,
+        boxShadow: [MyPalette.secondaryShadow],
         borderRadius: fromTheme(
           context,
           dark: BorderRadius.zero,

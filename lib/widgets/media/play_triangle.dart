@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class TrianglePainter extends CustomPainter {
   final Color color;
@@ -29,7 +29,7 @@ class Triangle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: TrianglePainter(color: AppColors.white),
+      painter: TrianglePainter(color: MyPalette.white),
       child: Container(
         width: size,
         height: size,

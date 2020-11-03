@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/textfields/digit_controller.dart';
 
 class DigitEntry extends StatefulWidget {
@@ -62,24 +62,24 @@ class _DigitEntryState extends State<DigitEntry> {
         controller: _controller,
         style: _containsDigit
             ? TextStyle(
-                color: AppColors.gold,
+                color: MyPalette.gold,
                 fontSize: 30.0,
               )
             : TextStyle(
-                color: AppColors.grey,
+                color: MyPalette.grey,
                 fontSize: 24.0,
               ),
         decoration: InputDecoration(
           counterText: '',
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: AppColors.white,
+              color: MyPalette.white,
               width: 2.0,
             ),
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: AppColors.white,
+              color: MyPalette.white,
               width: 5.0,
             ),
           ),

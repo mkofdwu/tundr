@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/models/user.dart';
-import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/gradients.dart';
-import 'package:tundr/constants/shadows.dart';
+
+import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/verified_badge.dart';
 
 class ProfileTile extends StatelessWidget {
-  final User user;
+  final UserProfile profile;
   final double fontSize;
   final String description;
 
   ProfileTile({
     Key key,
-    @required this.user,
+    @required this.profile,
     this.fontSize = 30.0,
     this.description,
   }) : super(key: key);
@@ -37,13 +36,13 @@ class ProfileTile extends StatelessWidget {
                 decoration: fromTheme(
                   context,
                   dark: BoxDecoration(
-                    border: Border.all(color: AppColors.white, width: 2.0),
+                    border: Border.all(color: MyPalette.white, width: 2.0),
                   ),
-                  light: BoxDecoration(boxShadow: [Shadows.secondaryShadow]),
+                  light: BoxDecoration(boxShadow: [MyPalette.secondaryShadow]),
                 ),
                 child: Hero(
-                  tag: user.profileImageUrl,
-                  child: getNetworkImage(user.profileImageUrl),
+                  tag: profile.profileImageUrl,
+                  child: getNetworkImage(profile.profileImageUrl),
                 ),
               ),
               Positioned(
@@ -52,7 +51,7 @@ class ProfileTile extends StatelessWidget {
                   width: constraints.maxWidth,
                   height: constraints.maxHeight / 2,
                   decoration:
-                      BoxDecoration(gradient: Gradients.transparentToBlack),
+                      BoxDecoration(gradient: MyPalette.transparentToBlack),
                 ),
               ),
               Positioned(
@@ -62,7 +61,7 @@ class ProfileTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Hero(
-                      tag: user.username,
+                      tag: profile.username,
                       child: Material(
                         color: Colors.transparent,
                         child: ConstrainedBox(
@@ -72,13 +71,14 @@ class ProfileTile extends StatelessWidget {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: '${user.name}, ${user.ageInYears}',
+                                  text:
+                                      '${profile.name}, ${profile.ageInYears}',
                                   style: TextStyle(
-                                    color: AppColors.white,
+                                    color: MyPalette.white,
                                     fontSize: fontSize,
                                   ),
                                 ),
-                                if (user.verified)
+                                if (profile.verified)
                                   WidgetSpan(
                                     child: VerifiedBadge(),
                                   ),
@@ -93,7 +93,7 @@ class ProfileTile extends StatelessWidget {
                       Text(
                         description,
                         style: TextStyle(
-                          color: AppColors.white,
+                          color: MyPalette.white,
                           fontSize: fontSize / 2,
                         ),
                       ),

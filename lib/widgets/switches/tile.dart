@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/utils/from_theme.dart';
 
 class TileSwitch extends StatefulWidget {
@@ -32,7 +32,7 @@ class _TileSwitchState extends State<TileSwitch> {
         width: 60.0,
         height: 30.0,
         decoration: BoxDecoration(
-          color: _selected ? AppColors.gold : null,
+          color: _selected ? MyPalette.gold : null,
           border: _selected
               ? null
               : Border.all(color: Theme.of(context).accentColor),
@@ -50,7 +50,7 @@ class _TileSwitchState extends State<TileSwitch> {
             height: 20.0,
             decoration: BoxDecoration(
               color:
-                  _selected ? AppColors.white : Theme.of(context).accentColor,
+                  _selected ? MyPalette.white : Theme.of(context).accentColor,
               borderRadius: fromTheme(
                 context,
                 dark: null,

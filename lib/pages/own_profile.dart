@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/current_user.dart';
 import 'package:tundr/pages/interests/interests_edit.dart';
-import 'package:tundr/services/database_service.dart';
+
 import 'package:tundr/services/storage_service.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/pages/interests/widgets/interests_wrap.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/media/extra_media_grid.dart';
 import 'package:tundr/pages/personal_info/widgets/personal_info_list.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
@@ -23,21 +24,21 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
   void _previewProfile() => Navigator.pushNamed(
         context,
         'userprofile',
-        arguments: Provider.of<CurrentUser>(context).user,
+        arguments: Provider.of<CurrentUser>(context).profile,
       );
 
   void _updateAboutMe() {
-    Provider.of<CurrentUser>(context).user.aboutMe = _aboutMeController.text;
-    DatabaseService.setUserField(Provider.of<CurrentUser>(context).user.uid,
+    Provider.of<CurrentUser>(context).profile.aboutMe = _aboutMeController.text;
+    UsersService.setProfileField(Provider.of<CurrentUser>(context).profile.uid,
         'aboutMe', _aboutMeController.text);
   }
 
   void _updateMedia() {
-    DatabaseService.setUserField(
-      Provider.of<CurrentUser>(context).user.uid,
+    UsersService.setProfileField(
+      Provider.of<CurrentUser>(context).profile.uid,
       'extraMedia',
       List<Map<String, dynamic>>.from(Provider.of<CurrentUser>(context)
-          .user
+          .profile
           .extraMedia
           .map((media) => media == null
               ? null
@@ -69,7 +70,7 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                   'No interests yet.\nClick to add your interests.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: AppColors.grey,
+                    color: MyPalette.grey,
                     fontSize: 16.0,
                   ),
                 ),
@@ -82,9 +83,8 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    // FUTURE: refractor
-    final user = Provider.of<CurrentUser>(context).user;
-    _aboutMeController.text = user.aboutMe;
+    final profile = Provider.of<CurrentUser>(context).profile;
+    _aboutMeController.text = profile.aboutMe;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -118,7 +118,7 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                       Text(
                         'About me',
                         style: TextStyle(
-                          color: AppColors.gold,
+                          color: MyPalette.gold,
                           fontSize: 20.0,
                         ),
                       ),
@@ -126,7 +126,7 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                           ? GestureDetector(
                               child: Icon(
                                 Icons.done,
-                                color: AppColors.gold,
+                                color: MyPalette.gold,
                                 size: 20.0,
                               ),
                               onTap: () {
@@ -138,7 +138,7 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                           : GestureDetector(
                               child: Icon(
                                 Icons.edit,
-                                color: AppColors.gold,
+                                color: MyPalette.gold,
                                 size: 20.0,
                               ),
                               onTap: () => FocusScope.of(context)
@@ -164,7 +164,7 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                   Text(
                     'Photos and videos',
                     style: TextStyle(
-                      color: AppColors.gold,
+                      color: MyPalette.gold,
                       fontSize: 20.0,
                     ),
                   ),
@@ -172,25 +172,25 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                   LayoutBuilder(
                     builder: (context, constraints) => ExtraMediaGrid(
                       size: constraints.maxWidth,
-                      extraMedia: user.extraMedia,
+                      extraMedia: profile.extraMedia,
                       onChangeMedia: (i, media) async {
                         media.url = await StorageService.uploadMedia(
-                          uid: user.uid,
+                          uid: profile.uid,
                           media: media,
-                          oldUrl: user.extraMedia[i]?.url,
+                          oldUrl: profile.extraMedia[i]?.url,
                           prefix: 'extra_media',
                         );
                         media.isLocalFile = false;
                         if (mounted) {
                           setState(() => Provider.of<CurrentUser>(context)
-                              .user
+                              .profile
                               .extraMedia[i] = media);
                           _updateMedia();
                         }
                       },
                       onRemoveMedia: (i) {
-                        StorageService.deleteMedia(user.extraMedia[i].url);
-                        setState(() => user.extraMedia[i] = null);
+                        StorageService.deleteMedia(profile.extraMedia[i].url);
+                        setState(() => profile.extraMedia[i] = null);
                         _updateMedia();
                       },
                     ),
@@ -204,18 +204,19 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                   Text(
                     'Personal info',
                     style: TextStyle(
-                      color: AppColors.gold,
+                      color: MyPalette.gold,
                       fontSize: 20.0,
                     ),
                   ),
                   PersonalInfoList(
+                    personalInfo: profile.personalInfo,
                     onChanged: (name, value) {
-                      DatabaseService.setUserField(
-                        // CHANGED
-                        user.uid,
-                        name,
-                        value,
-                      );
+                      final updatedPersonalInfo = {
+                        ...profile.personalInfo,
+                        name: value,
+                      };
+                      UsersService.setProfileField(
+                          profile.uid, 'personalInfo', updatedPersonalInfo);
                       setState(() {});
                     },
                   ),
@@ -231,18 +232,18 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                       Text(
                         'Interests',
                         style: TextStyle(
-                          color: AppColors.gold,
+                          color: MyPalette.gold,
                           fontSize: 20.0,
                         ),
                       ),
                       GestureDetector(
                         child:
-                            Icon(Icons.edit, color: AppColors.gold, size: 20.0),
+                            Icon(Icons.edit, color: MyPalette.gold, size: 20.0),
                         onTap: _editInterests,
                       ),
                     ],
                   ),
-                  _buildInterests(user.interests + user.customInterests),
+                  _buildInterests(profile.interests + profile.customInterests),
                 ],
               ),
             ],

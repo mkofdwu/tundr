@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/profile_setup/gender.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/textfields/digit.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
@@ -76,7 +76,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
           child: AlertDialog(
             title: Text(
               'Invalid birthday',
-              style: TextStyle(color: AppColors.red),
+              style: TextStyle(color: MyPalette.red),
             ),
             content: Text('Are you sure you entered your birthday correctly?'),
             actions: <Widget>[
@@ -93,7 +93,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
           child: AlertDialog(
             title: Text(
               'Too old',
-              style: TextStyle(color: AppColors.red),
+              style: TextStyle(color: MyPalette.red),
             ),
             content: Text("You can't be above 50 years old"),
             actions: <Widget>[
@@ -138,8 +138,8 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppColors.gold,
-                  AppColors.black,
+                  MyPalette.gold,
+                  MyPalette.black,
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -152,7 +152,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
             child: Container(
               width: width * 153 / 375,
               height: height * 121 / 812,
-              color: AppColors.black,
+              color: MyPalette.black,
             ),
           ),
           Positioned(
@@ -161,7 +161,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
             child: Container(
               width: width * 173 / 375,
               height: height * 117 / 812,
-              color: AppColors.white,
+              color: MyPalette.white,
             ),
           ),
           Positioned(
@@ -170,7 +170,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
             child: Text(
               'Birthday',
               style: TextStyle(
-                color: AppColors.black,
+                color: MyPalette.black,
                 fontSize: 40.0,
                 fontFamily: 'Helvetica Neue',
                 fontWeight: FontWeight.bold,
@@ -206,7 +206,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
               child: Container(
                 width: 2,
                 height: height * 312 / 812,
-                color: AppColors.black,
+                color: MyPalette.black,
               ),
             ),
           ),
@@ -238,7 +238,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
               child: Container(
                 width: 2,
                 height: height * 312 / 812,
-                color: AppColors.black,
+                color: MyPalette.black,
               ),
             ),
           ),

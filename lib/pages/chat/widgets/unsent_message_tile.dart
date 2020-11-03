@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/shadows.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/widgets/loaders/loader.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
@@ -37,11 +36,11 @@ class UnsentMessageTile extends StatelessWidget {
               constraints: BoxConstraints(maxWidth: 200.0),
               decoration: fromTheme(
                 context,
-                dark: BoxDecoration(color: AppColors.white),
+                dark: BoxDecoration(color: MyPalette.white),
                 light: BoxDecoration(
-                  color: AppColors.white,
+                  color: MyPalette.white,
                   borderRadius: BorderRadius.circular(10.0),
-                  boxShadow: [Shadows.primaryShadow],
+                  boxShadow: [MyPalette.primaryShadow],
                 ),
               ),
               child: Column(
@@ -58,7 +57,7 @@ class UnsentMessageTile extends StatelessWidget {
                       padding: const EdgeInsets.all(10.0),
                       child: Container(
                         decoration: BoxDecoration(
-                          boxShadow: [Shadows.secondaryShadow],
+                          boxShadow: [MyPalette.secondaryShadow],
                         ),
                         child: ClipRRect(
                           borderRadius: fromTheme(
@@ -75,7 +74,7 @@ class UnsentMessageTile extends StatelessWidget {
                     child: Text(
                       message.text,
                       style: TextStyle(
-                        color: AppColors.black,
+                        color: MyPalette.black,
                         fontSize: 14.0,
                       ),
                     ),

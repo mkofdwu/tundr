@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/models/personal_info_field.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/personal_info_type.dart';
 import 'package:tundr/pages/personal_info/number_field.dart';
 import 'package:tundr/pages/personal_info/radio_group_field.dart';
@@ -83,8 +83,8 @@ class PersonalInfoFieldButton extends StatelessWidget {
                   size: 20.0,
                   color: fromTheme(
                     context,
-                    dark: AppColors.white,
-                    light: AppColors.black,
+                    dark: MyPalette.white,
+                    light: MyPalette.black,
                   ),
                 ),
               ],

@@ -1,9 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/app_theme.dart';
-import 'package:tundr/constants/shadows.dart';
 
 class TileRadioGroup extends StatefulWidget {
   final AppTheme theme;
@@ -43,12 +42,12 @@ class _TileRadioGroupState extends State<TileRadioGroup> {
               decoration: BoxDecoration(
                 border: Border.all(
                   width: 2.0,
-                  color: AppColors.gold,
+                  color: MyPalette.gold,
                 ),
               ),
               child: Container(
                 color: option == _selectedOption
-                    ? AppColors.gold
+                    ? MyPalette.gold
                     : Color(0x00000000),
                 child: Center(
                   child: LayoutBuilder(
@@ -56,8 +55,8 @@ class _TileRadioGroupState extends State<TileRadioGroup> {
                       option,
                       style: TextStyle(
                         color: option == _selectedOption
-                            ? AppColors.black
-                            : AppColors.gold,
+                            ? MyPalette.black
+                            : MyPalette.gold,
                         fontSize: min(constraints.maxHeight - 3, 40.0),
                       ),
                     ),
@@ -83,14 +82,14 @@ class _TileRadioGroupState extends State<TileRadioGroup> {
               padding: EdgeInsets.all(3.0),
               decoration: BoxDecoration(
                 color: option == _selectedOption
-                    ? AppColors.gold
-                    : AppColors.white,
+                    ? MyPalette.gold
+                    : MyPalette.white,
                 border: Border.all(
                   width: 2.0,
-                  color: AppColors.gold,
+                  color: MyPalette.gold,
                 ),
                 borderRadius: BorderRadius.circular(20.0),
-                boxShadow: [Shadows.secondaryShadow],
+                boxShadow: [MyPalette.secondaryShadow],
               ),
               child: Center(
                 child: LayoutBuilder(
@@ -98,8 +97,8 @@ class _TileRadioGroupState extends State<TileRadioGroup> {
                     option,
                     style: TextStyle(
                       color: option == _selectedOption
-                          ? AppColors.white
-                          : AppColors.gold,
+                          ? MyPalette.white
+                          : MyPalette.gold,
                       fontSize: min(constraints.maxHeight - 3, 40.0),
                     ),
                   ),
@@ -129,8 +128,7 @@ class _TileRadioGroupState extends State<TileRadioGroup> {
       default:
         throw Exception('Invalid theme: ${widget.theme}');
     }
-    final children =
-        List<Widget>.from(widget.options.map(tileRadioBuilder));
+    final children = List<Widget>.from(widget.options.map(tileRadioBuilder));
     return widget.forceColumn
         ? Column(children: children)
         : LayoutBuilder(

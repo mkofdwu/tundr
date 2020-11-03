@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/current_user.dart';
-import 'package:tundr/services/database_service.dart';
+import 'package:tundr/services/users_service.dart';
+
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'widgets/switch_setting_field.dart';
 
 class NotificationSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<CurrentUser>(context).user;
+    final uid = Provider.of<CurrentUser>(context).profile.uid;
+    final settings = Provider.of<CurrentUser>(context).privateInfo.settings;
     return Scaffold(
       // FUTURE: DESIGN: make this nicer
       appBar: AppBar(
@@ -30,12 +32,12 @@ class NotificationSettingsPage extends StatelessWidget {
             SwitchSettingField(
               title: 'New matches',
               description: "Be notified when you're matched with someone",
-              selected: user.newMatchNotification,
+              selected: settings.newMatchNotification,
               onChanged: (value) {
-                DatabaseService.setUserField(
-                  user.uid,
-                  'newMatchNotification',
-                  value,
+                UsersService.setPrivateInfo(
+                  uid,
+                  'settings',
+                  {...settings.toMap(), 'newMatchNotification': value},
                 );
               },
             ),
@@ -43,15 +45,17 @@ class NotificationSettingsPage extends StatelessWidget {
             SwitchSettingField(
               title: 'Messages',
               description: 'Be notified when someone sends you a message',
-              selected: user.messageNotification,
+              selected: settings.messageNotification,
               onChanged: (value) {
-                DatabaseService.setUserField(
-                  user.uid,
-                  'messageNotification',
-                  value,
+                UsersService.setPrivateInfo(
+                  uid,
+                  'settings',
+                  {...settings.toMap(), 'messageNotification': value},
                 );
-                Provider.of<CurrentUser>(context).user.newMatchNotification =
-                    value;
+                Provider.of<CurrentUser>(context)
+                    .privateInfo
+                    .settings
+                    .newMatchNotification = value;
               },
             ),
           ],

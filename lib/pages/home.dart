@@ -4,7 +4,7 @@ import 'package:tundr/pages/messages/messages.dart';
 import 'package:tundr/pages/most_popular.dart';
 import 'package:tundr/pages/search.dart';
 import 'package:tundr/pages/swiping/swiping.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage>
           child: Container(
             color: Colors.transparent,
             child: TabBar(
-              indicatorColor: AppColors.gold,
+              indicatorColor: MyPalette.gold,
               indicatorPadding: EdgeInsets.symmetric(horizontal: 10.0),
               controller: _tabController,
               tabs: <Widget>[
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage>
                   child: Icon(
                     Icons.person,
                     color: _tabController.index == 0
-                        ? AppColors.gold
+                        ? MyPalette.gold
                         : Theme.of(context).accentColor,
                   ),
                 ),
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage>
                   child: Icon(
                     Icons.people,
                     color: _tabController.index == 1
-                        ? AppColors.gold
+                        ? MyPalette.gold
                         : Theme.of(context).accentColor,
                   ),
                 ), // FUTURE: find flame icon
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage>
                     margin: const EdgeInsets.symmetric(vertical: 10.0),
                     decoration: ShapeDecoration(
                       color: _tabController.index == 2
-                          ? AppColors.gold
+                          ? MyPalette.gold
                           : Theme.of(context).accentColor,
                       shape: CircleBorder(),
                     ),
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage>
                   child: Icon(
                     Icons.search,
                     color: _tabController.index == 3
-                        ? AppColors.gold
+                        ? MyPalette.gold
                         : Theme.of(context).accentColor,
                   ),
                 ),
@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage>
                   child: Icon(
                     Icons.chat,
                     color: _tabController.index == 4
-                        ? AppColors.gold
+                        ? MyPalette.gold
                         : Theme.of(context).accentColor,
                   ),
                 ),

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/enums/gender.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/profile_setup/profile_pic.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/app_theme.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 import 'package:tundr/widgets/radio_groups/tile.dart';
@@ -49,7 +49,7 @@ class _SetupGenderPageState extends State<SetupGenderPage> {
     return GestureDetector(
       child: SafeArea(
         child: Material(
-          color: AppColors.black,
+          color: MyPalette.black,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
             child: Column(
@@ -59,7 +59,7 @@ class _SetupGenderPageState extends State<SetupGenderPage> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Gender',
-                    style: TextStyle(color: AppColors.white, fontSize: 40.0),
+                    style: TextStyle(color: MyPalette.white, fontSize: 40.0),
                   ),
                 ),
                 SizedBox(height: 20.0),

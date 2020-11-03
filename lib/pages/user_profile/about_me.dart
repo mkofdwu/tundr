@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/repositories/theme_notifier.dart';
-import 'package:tundr/models/user.dart';
+
 import 'package:tundr/pages/user_profile/extra_media.dart';
 import 'package:tundr/pages/user_profile/personal_info.dart';
 import 'package:tundr/enums/app_theme.dart';
@@ -9,21 +10,22 @@ import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
 class UserProfileAboutMePage extends StatelessWidget {
-  final User user;
+  final UserProfile profile;
 
-  UserProfileAboutMePage({Key key, @required this.user}) : super(key: key);
+  UserProfileAboutMePage({Key key, @required this.profile}) : super(key: key);
 
-  bool _hasInfoLeft(User user) =>
-      user.extraMedia.any((media) => media != null) ||
-      user.interests.isNotEmpty ||
-      user.personalInfo.isNotEmpty;
+  bool _hasInfoLeft(UserProfile profile) =>
+      profile.extraMedia.any((media) => media != null) ||
+      profile.interests.isNotEmpty ||
+      profile.personalInfo.isNotEmpty;
 
   void _nextPage(BuildContext context) {
     Widget page;
-    if (user.extraMedia.any((media) => media != null)) {
-      page = UserProfileExtraMediaPage(user: user);
-    } else if (user.interests.isNotEmpty || user.personalInfo.isNotEmpty) {
-      page = UserProfilePersonalInfoPage(user: user);
+    if (profile.extraMedia.any((media) => media != null)) {
+      page = UserProfileExtraMediaPage(profile: profile);
+    } else if (profile.interests.isNotEmpty ||
+        profile.personalInfo.isNotEmpty) {
+      page = UserProfilePersonalInfoPage(profile: profile);
     } else {
       throw Exception('No more pages left');
     }
@@ -67,12 +69,12 @@ class UserProfileAboutMePage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 30.0, right: 100.0),
                     child: Text(
-                      user.aboutMe,
+                      profile.aboutMe,
                       style: TextStyle(fontSize: 30.0),
                     ),
                   ),
                 ] +
-                (_hasInfoLeft(user)
+                (_hasInfoLeft(profile)
                     ? [
                         Spacer(),
                         Center(
@@ -89,7 +91,7 @@ class UserProfileAboutMePage extends StatelessWidget {
         ),
       ),
       onVerticalDragUpdate: (DragUpdateDetails details) {
-        if (details.delta.dy < -1.0 && _hasInfoLeft(user)) {
+        if (details.delta.dy < -1.0 && _hasInfoLeft(profile)) {
           _nextPage(context);
         } else if (details.delta.dy > 1.0) Navigator.pop(context);
       },

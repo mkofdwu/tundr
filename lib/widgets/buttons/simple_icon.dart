@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 
 class SimpleIconButton extends StatefulWidget {
   final IconData icon;
@@ -35,7 +35,7 @@ class _SimpleIconButtonState extends State<SimpleIconButton> {
                 widget.icon,
                 size: widget.size,
                 color: _pressed
-                    ? AppColors.gold
+                    ? MyPalette.gold
                     : widget.color ?? Theme.of(context).accentColor,
               ),
             ] +
@@ -47,7 +47,7 @@ class _SimpleIconButtonState extends State<SimpleIconButton> {
                       widget.label,
                       style: TextStyle(
                         color: _pressed
-                            ? AppColors.gold
+                            ? MyPalette.gold
                             : widget.color ?? Theme.of(context).accentColor,
                         fontSize: 16.0,
                       ),

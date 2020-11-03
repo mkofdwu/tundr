@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/personal_info_field.dart';
 import 'package:tundr/repositories/theme_notifier.dart';
-import 'package:tundr/constants/colors.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/app_theme.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 
@@ -47,7 +47,7 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
       },
       child: SafeArea(
         child: Material(
-          color: AppColors.black,
+          color: MyPalette.black,
           child: Stack(
             children: <Widget>[
               TileIconButton(
@@ -61,7 +61,7 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
                 child: Text(
                   widget.field.prompt,
                   style: TextStyle(
-                    color: AppColors.white,
+                    color: MyPalette.white,
                     fontSize: 40.0,
                   ),
                 ),
@@ -75,8 +75,8 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
                   max: widget.field.options.toDouble(),
                   divisions: widget.field.options - 1,
                   value: _value,
-                  activeColor: AppColors.gold,
-                  inactiveColor: AppColors.white,
+                  activeColor: MyPalette.gold,
+                  inactiveColor: MyPalette.white,
                   label: _value.toInt().toString(),
                   onChanged: (value) => setState(() => _value = value),
                 ),
@@ -98,7 +98,7 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
       },
       child: SafeArea(
         child: Material(
-          color: AppColors.white,
+          color: MyPalette.white,
           child: Stack(
             children: <Widget>[
               TileIconButton(
@@ -112,7 +112,7 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
                 child: Text(
                   widget.field.prompt,
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: MyPalette.black,
                     fontSize: 40.0,
                   ),
                 ),
@@ -126,8 +126,8 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
                   max: widget.field.options.toDouble(),
                   divisions: widget.field.options - 1,
                   value: _value,
-                  activeColor: AppColors.gold,
-                  inactiveColor: AppColors.black,
+                  activeColor: MyPalette.gold,
+                  inactiveColor: MyPalette.black,
                   label: _value.toInt().toString(),
                   onChanged: (value) => setState(() => _value = value),
                 ),

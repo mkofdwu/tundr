@@ -6,14 +6,17 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/message.dart';
+import 'package:tundr/models/user_profile.dart';
+import 'package:tundr/models/user_status.dart';
 import 'package:tundr/repositories/current_user.dart';
-import 'package:tundr/models/user.dart';
 import 'package:tundr/pages/chat/chat.dart';
-import 'package:tundr/services/database_service.dart';
-import 'package:tundr/constants/colors.dart';
-import 'package:tundr/constants/shadows.dart';
+
+import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/services/chats_service.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/format_date.dart';
 import 'package:tundr/utils/get_network_image.dart';
+import 'package:tundr/widgets/loaders/loader.dart';
 import 'package:tundr/widgets/theme_builder.dart';
 
 class ChatTile extends StatelessWidget {
@@ -25,12 +28,12 @@ class ChatTile extends StatelessWidget {
   }) : super(key: key);
 
   void _openChat(BuildContext context) async {
-    final user = await DatabaseService.getUser(chat.uid);
+    final user = await UsersService.getUserProfile(chat.uid);
     await Navigator.push(
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) => ChatPage(
-          user: user,
+          otherUser: user,
           chat: chat,
         ),
         transitionsBuilder: (context, animation1, animation2, child) {
@@ -43,13 +46,13 @@ class ChatTile extends StatelessWidget {
   Widget _buildDark(context) => GestureDetector(
         child: FutureBuilder(
           future: Future.wait([
-            DatabaseService.getUser(chat.uid),
-            DatabaseService.blocked(
-                chat.uid, Provider.of<CurrentUser>(context).user.uid),
+            UsersService.getUserProfile(chat.uid),
+            UsersService.blocked(
+                chat.uid, Provider.of<CurrentUser>(context).profile.uid),
           ]),
           builder: (context, snapshot) {
             if (!snapshot.hasData) return SizedBox.shrink();
-            final User user = snapshot.data[0];
+            final UserProfile user = snapshot.data[0];
             final bool blocked = snapshot.data[1];
             return Stack(
               children: <Widget>[
@@ -57,7 +60,7 @@ class ChatTile extends StatelessWidget {
                       width: 150.0,
                       height: 250.0,
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.white),
+                        border: Border.all(color: MyPalette.white),
                         image: DecorationImage(
                           image:
                               CachedNetworkImageProvider(user.profileImageUrl),
@@ -65,14 +68,14 @@ class ChatTile extends StatelessWidget {
                         ),
                       ),
                       child: Container(
-                        color: AppColors.black.withOpacity(0.7),
+                        color: MyPalette.black.withOpacity(0.7),
                       ),
                     ),
                   ] +
                   (blocked
                       ? <Widget>[
                           Container(
-                            color: AppColors.black.withOpacity(0.8),
+                            color: MyPalette.black.withOpacity(0.8),
                           ),
                           Positioned.fill(
                             top: 20.0,
@@ -80,7 +83,7 @@ class ChatTile extends StatelessWidget {
                               'Blocked',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: AppColors.white,
+                                color: MyPalette.white,
                                 fontSize: 24.0,
                               ),
                             ),
@@ -91,12 +94,12 @@ class ChatTile extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 Icon(Icons.delete,
-                                    color: AppColors.red, size: 30.0),
+                                    color: MyPalette.red, size: 30.0),
                                 SizedBox(height: 3.0),
                                 Text(
                                   'Delete',
                                   style: TextStyle(
-                                    color: AppColors.red,
+                                    color: MyPalette.red,
                                     fontSize: 16.0,
                                   ),
                                 ),
@@ -110,8 +113,7 @@ class ChatTile extends StatelessWidget {
                             top: 10.0,
                             right: 10.0,
                             child: StreamBuilder/*<QuerySnapshot>*/(
-                              stream:
-                                  DatabaseService.messagesStream(chat.id, 3),
+                              stream: ChatsService.messagesStream(chat.id, 3),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) return SizedBox.shrink();
                                 final List<Message> messages = snapshot
@@ -125,7 +127,7 @@ class ChatTile extends StatelessWidget {
                                       (message) {
                                         final fromMe = message.senderUid ==
                                             Provider.of<CurrentUser>(context)
-                                                .user
+                                                .profile
                                                 .uid;
                                         return Align(
                                           alignment: fromMe
@@ -140,7 +142,7 @@ class ChatTile extends StatelessWidget {
                                                   ? TextAlign.right
                                                   : TextAlign.left,
                                               style: TextStyle(
-                                                color: AppColors.white,
+                                                color: MyPalette.white,
                                                 fontSize: 14.0,
                                               ),
                                             ),
@@ -162,19 +164,29 @@ class ChatTile extends StatelessWidget {
                                 Text(
                                   user.name,
                                   style: TextStyle(
-                                    color: AppColors.white,
+                                    color: MyPalette.white,
                                     fontSize: 30.0,
                                   ),
                                 ),
                                 SizedBox(height: 3.0),
-                                Text(
-                                  user.online
-                                      ? 'online'
-                                      : formatDate(user.lastSeen),
-                                  style: TextStyle(
-                                    color: AppColors.white,
-                                    fontSize: 16.0,
-                                  ),
+                                StreamBuilder<UserStatus>(
+                                  stream: UsersService.getUserStatusStream(
+                                      user.uid),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return SizedBox.shrink();
+                                    }
+                                    final status = snapshot.data;
+                                    return Text(
+                                      status.online
+                                          ? 'online'
+                                          : formatDate(status.lastSeen),
+                                      style: TextStyle(
+                                        color: MyPalette.white,
+                                        fontSize: 16.0,
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -189,16 +201,16 @@ class ChatTile extends StatelessWidget {
   Widget _buildLight(context) => GestureDetector(
         child: FutureBuilder(
           future: Future.wait([
-            DatabaseService.getUser(chat.uid),
-            DatabaseService.blocked(
-                chat.uid, Provider.of<CurrentUser>(context).user.uid),
+            UsersService.getUserProfile(chat.uid),
+            UsersService.blocked(
+                chat.uid, Provider.of<CurrentUser>(context).profile.uid),
           ]),
           builder: (context, snapshot) {
             if (!snapshot.hasData) return SizedBox.shrink();
-            final User user = snapshot.data[0];
+            final UserProfile user = snapshot.data[0];
             final bool blocked = snapshot.data[1];
             return Container(
-              decoration: BoxDecoration(boxShadow: [Shadows.secondaryShadow]),
+              decoration: BoxDecoration(boxShadow: [MyPalette.secondaryShadow]),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
                 child: Stack(
@@ -206,7 +218,7 @@ class ChatTile extends StatelessWidget {
                         Container(
                           width: 150.0,
                           height: 250.0,
-                          color: AppColors.black,
+                          color: MyPalette.black,
                           child: user.profileImageUrl.isEmpty
                               ? null
                               : getNetworkImage(user.profileImageUrl),
@@ -220,8 +232,8 @@ class ChatTile extends StatelessWidget {
                             decoration: BoxDecoration(
                               gradient: RadialGradient(
                                 colors: [
-                                  AppColors.black,
-                                  AppColors.transparentBlack,
+                                  MyPalette.black,
+                                  MyPalette.transparentBlack,
                                 ],
                               ),
                             ),
@@ -236,8 +248,8 @@ class ChatTile extends StatelessWidget {
                             decoration: BoxDecoration(
                               gradient: RadialGradient(
                                 colors: [
-                                  AppColors.black,
-                                  AppColors.transparentBlack,
+                                  MyPalette.black,
+                                  MyPalette.transparentBlack,
                                 ],
                               ),
                             ),
@@ -247,7 +259,7 @@ class ChatTile extends StatelessWidget {
                       (blocked
                           ? <Widget>[
                               Container(
-                                color: AppColors.black.withOpacity(0.8),
+                                color: MyPalette.black.withOpacity(0.8),
                               ),
                               Positioned.fill(
                                 top: 20.0,
@@ -255,7 +267,7 @@ class ChatTile extends StatelessWidget {
                                   'Blocked',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: AppColors.white,
+                                    color: MyPalette.white,
                                     fontSize: 24.0,
                                   ),
                                 ),
@@ -266,12 +278,12 @@ class ChatTile extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
                                     Icon(Icons.delete,
-                                        color: AppColors.red, size: 30.0),
+                                        color: MyPalette.red, size: 30.0),
                                     SizedBox(height: 3.0),
                                     Text(
                                       'Delete',
                                       style: TextStyle(
-                                        color: AppColors.red,
+                                        color: MyPalette.red,
                                         fontSize: 16.0,
                                       ),
                                     ),
@@ -285,8 +297,8 @@ class ChatTile extends StatelessWidget {
                                 top: 10.0,
                                 right: 10.0,
                                 child: StreamBuilder/*<QuerySnapshot>*/(
-                                  stream: DatabaseService.messagesStream(
-                                      chat.uid, 3),
+                                  stream:
+                                      ChatsService.messagesStream(chat.uid, 3),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return SizedBox.shrink();
@@ -302,7 +314,7 @@ class ChatTile extends StatelessWidget {
                                         (message) {
                                           final fromMe = message.senderUid ==
                                               Provider.of<CurrentUser>(context)
-                                                  .user
+                                                  .profile
                                                   .uid;
                                           return Align(
                                             alignment: fromMe
@@ -314,7 +326,7 @@ class ChatTile extends StatelessWidget {
                                               child: Text(
                                                 message.text,
                                                 style: TextStyle(
-                                                  color: AppColors.white,
+                                                  color: MyPalette.white,
                                                   fontSize: 14.0,
                                                 ),
                                               ),
@@ -334,20 +346,30 @@ class ChatTile extends StatelessWidget {
                                     Text(
                                       user.name,
                                       style: TextStyle(
-                                        color: AppColors.white,
+                                        color: MyPalette.white,
                                         fontSize: 30.0,
                                       ),
                                     ),
                                     SizedBox(height: 3.0),
-                                    Text(
-                                      user.online
-                                          ? 'online'
-                                          : formatDate(user.lastSeen),
-                                      style: TextStyle(
-                                        color: AppColors.white,
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
+                                    StreamBuilder<UserStatus>(
+                                        stream:
+                                            UsersService.getUserStatusStream(
+                                                user.uid),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData) {
+                                            return SizedBox.shrink();
+                                          }
+                                          final status = snapshot.data;
+                                          return Text(
+                                            status.online
+                                                ? 'online'
+                                                : formatDate(status.lastSeen),
+                                            style: TextStyle(
+                                              color: MyPalette.white,
+                                              fontSize: 16.0,
+                                            ),
+                                          );
+                                        }),
                                   ],
                                 ),
                               ),
