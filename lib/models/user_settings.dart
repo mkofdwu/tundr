@@ -23,6 +23,16 @@ class UserSettings {
     );
   }
 
+  factory UserSettings.register() {
+    return UserSettings(
+      newMatchNotification: true,
+      messageNotification: true,
+      blockUnknownMessages: false,
+      readReceipts: true,
+      showInMostPopular: true,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'newMatchNotification': newMatchNotification,

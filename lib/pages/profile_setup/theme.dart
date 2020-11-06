@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/repositories/user.dart';
 import 'package:tundr/repositories/theme_notifier.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/app_theme.dart';
-import 'package:tundr/services/users_service.dart';
 
 class SetupThemePage extends StatefulWidget {
   @override
@@ -15,11 +14,8 @@ class SetupThemePage extends StatefulWidget {
 class _SetupThemePageState extends State<SetupThemePage> {
   Future<void> _selectTheme(AppTheme theme) async {
     Provider.of<ThemeNotifier>(context).theme = theme;
-    await UsersService.setPrivateInfo(
-      Provider.of<CurrentUser>(context).profile.uid,
-      'theme',
-      AppTheme.values.indexOf(theme),
-    );
+    await Provider.of<User>(context)
+        .updatePrivateInfo({'theme': AppTheme.values.indexOf(theme)});
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 

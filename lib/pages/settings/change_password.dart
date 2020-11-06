@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/utils/from_theme.dart';
@@ -35,8 +35,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       });
       if (_passwordLessThan6Chars || _passwordsDoNotMatch) return;
       final incorrect = !await AuthService.changePassword(
-        userUid: Provider.of<CurrentUser>(context).profile.uid,
-        userUsername: Provider.of<CurrentUser>(context).profile.username,
+        userUid: Provider.of<User>(context).profile.uid,
+        userUsername: Provider.of<User>(context).profile.username,
         oldPassword: _currentPasswordController.text,
         newPassword: _newPasswordController.text,
       );

@@ -32,7 +32,7 @@ class _MostPopularPageState extends State<MostPopularPage> {
   }
 
   void _loadPositionedProfileImages() async {
-    final sortedUsers = await UsersService.getMostPopular(20);
+    final sortedUsers = await UsersService.getMostPopular();
     if (sortedUsers.isEmpty) {
       setState(() => _positionedProfileImages = []);
       return;
@@ -52,8 +52,8 @@ class _MostPopularPageState extends State<MostPopularPage> {
     final tiles = <Rect>[];
     final random = Random();
     setState(() => _positionedProfileImages =
-            List<Positioned>.from(sortedUsers.map((user) {
-          final size = user.popularityScore /
+            List<Positioned>.from(sortedUsers.map((popUser) {
+          final size = popUser.popularityScore /
               highestScore *
               min(widget.width, widget.height) *
               tileSize;
@@ -101,15 +101,15 @@ class _MostPopularPageState extends State<MostPopularPage> {
                     light: BorderRadius.circular(20.0),
                   ),
                   child: Hero(
-                    tag: user.profileImageUrl,
-                    child: getNetworkImage(user.profileImageUrl),
+                    tag: popUser.profile.profileImageUrl,
+                    child: getNetworkImage(popUser.profile.profileImageUrl),
                   ),
                 ),
               ),
               onTap: () => Navigator.pushNamed(
                 context,
-                'userprofile',
-                arguments: user,
+                '/user_profile',
+                arguments: popUser,
               ),
             ),
           );

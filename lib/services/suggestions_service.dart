@@ -1,38 +1,28 @@
 // requests concerning generated suggestions, (which suggestions to list), etc
 
-import 'package:tundr/models/suggestion.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 class SuggestionsService {
-  static Future<void> sendSuggestion({
+  static Future<void> respondToSuggestion({
     String fromUid,
     String toUid,
     bool liked,
-    double similarityScore,
-  }) {
-    // add suggestion to list of user responded suggestions
-    return userSuggestionsRef
-        .doc(toUid)
-        .collection('suggestions')
-        .doc(fromUid)
-        .setData({
-      'liked': liked,
-      'similarityScore': similarityScore,
-    });
+  }) async {
+    await CloudFunctions.instance
+        .getHttpsCallable(functionName: 'respondToSuggestion')
+        .call({'otherUid': toUid, 'liked': liked});
   }
 
-  static Future<void> undoSentSuggestion(
-      String userId, String suggestionUserUid) {
-    return userSuggestionsRef
-        .doc(suggestionUserUid)
-        .collection('suggestions')
-        .doc(userId)
-        .delete();
+  static Future<void> undoSuggestionResponse(
+      String userId, String suggestionUserUid) async {
+    await CloudFunctions.instance
+        .getHttpsCallable(functionName: 'undoSuggestionResponse')
+        .call({'otherUid': suggestionUserUid});
   }
 
-  static Future<void> match(String uid, String otherUid) {
-    return Future.wait([
-      userMatchesRef.doc(uid).collection('matches').doc(otherUid).setData({}),
-      userMatchesRef.doc(otherUid).collection('matches').doc(uid).setData({}),
-    ]);
+  static Future<void> match(String otherUid) async {
+    await CloudFunctions.instance
+        .getHttpsCallable(functionName: 'match')
+        .call({'otherUid': otherUid});
   }
 }

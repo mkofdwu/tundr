@@ -40,16 +40,17 @@ export const getMostPopular = functions.https.onCall(async (data, context) => {
       .limit(N_MOST_POPULAR)
       .get()
   ).docs;
-  const userProfiles = [];
+  const popularUsers = [];
   for (const privateInfoDoc of userPrivateInfoDocs) {
     const uid = privateInfoDoc.id;
-    userProfiles.push(
-      (
+    popularUsers.push({
+      profile: (
         await admin.firestore().collection('user_profiles').doc(uid).get()
-      ).data()
-    );
+      ).data(),
+      popularityScore: privateInfoDoc.data().popularityScore,
+    });
   }
-  return userProfiles;
+  return popularUsers;
 });
 
 export const startConversation = functions.https.onCall(
@@ -58,6 +59,8 @@ export const startConversation = functions.https.onCall(
     // add to unknown chats for other user (if allowed)
     const uid = context.auth?.uid;
     if (uid == null) return;
+    // TODO: check if allowed to start conversation, respond with error if not allowed
+
     // create chat with participants & messages (add the first message)
     const chatDoc = await admin
       .firestore()

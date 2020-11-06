@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/models/chat.dart';
+import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/pages/chat/chat.dart';
 
 import 'package:tundr/constants/my_palette.dart';
@@ -36,8 +37,8 @@ class MatchTile extends StatelessWidget {
   }
 
   Widget _buildDark(BuildContext context) => GestureDetector(
-        child: FutureBuilder(
-          future: UsersService.getUserField(uid, 'profileImageUrl'),
+        child: FutureBuilder<UserProfile>(
+          future: UsersService.getUserProfile(uid),
           builder: (context, snapshot) {
             return Container(
               width: 100.0,
@@ -45,7 +46,7 @@ class MatchTile extends StatelessWidget {
               decoration: BoxDecoration(
                 border: Border.all(color: MyPalette.white, width: 1.0),
               ),
-              child: snapshot.hasData ? getNetworkImage(snapshot.data) : null,
+              child: snapshot.hasData ? getNetworkImage(snapshot.data.profileImageUrl) : null,
             );
           },
         ),
@@ -53,8 +54,8 @@ class MatchTile extends StatelessWidget {
       );
 
   Widget _buildLight(BuildContext context) => GestureDetector(
-        child: FutureBuilder(
-          future: UsersService.getUserField(uid, 'profileImageUrl'),
+        child: FutureBuilder<UserProfile>(
+          future: UsersService.getUserProfile(uid),
           builder: (context, snapshot) {
             return Container(
               width: 100.0,
@@ -66,7 +67,7 @@ class MatchTile extends StatelessWidget {
               child: snapshot.hasData
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(20.0),
-                      child: getNetworkImage(snapshot.data),
+                      child: getNetworkImage(snapshot.data.profileImageUrl),
                     )
                   : null,
             );

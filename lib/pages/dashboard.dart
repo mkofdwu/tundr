@@ -4,7 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/repositories/user.dart';
 import 'package:tundr/pages/own_profile.dart';
 import 'package:tundr/pages/settings/settings.dart';
 
@@ -12,7 +12,6 @@ import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
-import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/buttons/simple_icon.dart';
@@ -33,7 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((duration) =>
-        _nameController.text = Provider.of<CurrentUser>(context).profile.name);
+        _nameController.text = Provider.of<User>(context).profile.name);
   }
 
   @override
@@ -45,8 +44,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final profile = Provider.of<CurrentUser>(context).profile;
-    final privateInfo = Provider.of<CurrentUser>(context).privateInfo;
+    final profile = Provider.of<User>(context).profile;
+    final privateInfo = Provider.of<User>(context).privateInfo;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return SafeArea(
@@ -201,7 +200,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                                 SizedBox(height: 10.0),
                                 Text(
-                                  privateInfo.popularityHistory.last.toString(),
+                                  privateInfo.popularityScore.toString(),
                                   style: TextStyle(
                                     color: Theme.of(context).accentColor,
                                   ),
@@ -243,12 +242,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _changeName() {
-    Provider.of<CurrentUser>(context).profile.name = _nameController.text;
-    UsersService.setProfileField(
-      Provider.of<CurrentUser>(context).profile.uid,
-      'name',
-      _nameController.text,
-    );
+    Provider.of<User>(context).updateProfile({'name': _nameController.text});
     setState(() => _editingName = false);
   }
 
@@ -278,17 +272,12 @@ class _DashboardPageState extends State<DashboardPage> {
     );
     if (imageMedia == null) return;
     final newProfileImageUrl = await StorageService.uploadMedia(
-      uid: Provider.of<CurrentUser>(context).profile.uid,
+      uid: Provider.of<User>(context).profile.uid,
       media: imageMedia,
       prefix: 'profile_image',
     );
-    await UsersService.setProfileField(
-      Provider.of<CurrentUser>(context).profile.uid,
-      'profileImageUrl',
-      newProfileImageUrl,
-    );
-    setState(() => Provider.of<CurrentUser>(context).profile.profileImageUrl =
-        newProfileImageUrl);
+    await Provider.of<User>(context)
+        .updateProfile({'profileImageUrl': newProfileImageUrl});
   }
 
   void _openSettings() => Navigator.push(

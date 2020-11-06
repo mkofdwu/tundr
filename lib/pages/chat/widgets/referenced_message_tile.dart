@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/repositories/user.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/utils/from_theme.dart';
@@ -89,7 +89,7 @@ class ReferencedMessageTile extends StatelessWidget {
                 Text(
                   snapshot.hasData
                       ? (snapshot.data.senderUid ==
-                              Provider.of<CurrentUser>(context).profile.uid
+                              Provider.of<User>(context).profile.uid
                           ? '- You'
                           : '- $otherUserName')
                       : '- ?',

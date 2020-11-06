@@ -1,10 +1,9 @@
-// TODO: change everything according to the new suggestions system
-// (suggestions stored in CurrentUser.user.generatedDailySuggestions and .respondedSuggestions)
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/current_user.dart';
-import 'package:tundr/models/suggestion_gone_through.dart';
+import 'package:tundr/models/user_private_info.dart';
+import 'package:tundr/models/user_profile.dart';
+import 'package:tundr/repositories/user.dart';
 import 'package:tundr/pages/its_a_match.dart';
 
 import 'package:tundr/constants/my_palette.dart';
@@ -15,33 +14,70 @@ import 'package:tundr/services/suggestions_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/theme_builder.dart'; // for icons, remove when alternative image has been found
 
+class SuggestionWithProfile {
+  final UserProfile profile;
+  final bool wasLiked;
+
+  const SuggestionWithProfile({this.profile, this.wasLiked});
+}
+
 class SwipingPage extends StatefulWidget {
   @override
   _SwipingPageState createState() => _SwipingPageState();
 }
 
 class _SwipingPageState extends State<SwipingPage> {
-  final List<SuggestionGoneThrough> _goneThrough = [];
+  final List<SuggestionWithProfile> _suggestionWithProfiles = [];
+  final Map<String, dynamic> _goneThrough = {};
   int _i = 0;
   bool _canUndo = false;
 
   @override
+  void initState() async {
+    super.initState();
+    final privateInfo = Provider.of<User>(context).privateInfo;
+    final suggestions = privateInfo.respondedSuggestions;
+    suggestions.addAll(privateInfo.dailyGeneratedSuggestions
+        .map((uid) => MapEntry(uid, null)) as Map<String, bool>);
+    for (final uid in suggestions.keys) {
+      _suggestionWithProfiles.add(SuggestionWithProfile(
+        profile: await UsersService.getUserProfile(uid),
+        wasLiked: suggestions[uid],
+      ));
+    }
+    ;
+  }
+
+  @override
   void deactivate() {
-    SuggestionsService.addUserSuggestionsGoneThrough(
-        Provider.of<CurrentUser>(context).profile.uid, _goneThrough);
+    final privateInfo = Provider.of<User>(context).privateInfo;
+
+    privateInfo.suggestionsGoneThrough.addAll(_goneThrough);
+    final goneThroughUids = _goneThrough.keys;
+    privateInfo.dailyGeneratedSuggestions
+        .removeWhere((checkUid) => goneThroughUids.contains(checkUid));
+    privateInfo.respondedSuggestions.removeWhere(
+        (checkUid, _wasLiked) => goneThroughUids.contains(checkUid));
+
+    Provider.of<User>(context)
+        .writeField('suggestionsGoneThrough', UserPrivateInfo);
+    Provider.of<User>(context)
+        .writeField('suggestionsGoneThrough', UserPrivateInfo);
+    Provider.of<User>(context)
+        .writeField('suggestionsGoneThrough', UserPrivateInfo);
+
     super.deactivate();
   }
 
   void _nope() async {
-    final suggestions = Provider.of<CurrentUser>(context).otherUser.suggestions;
-    final user = Provider.of<CurrentUser>(context).profile;
-    final otherUser = suggestions[_i].otherUser;
+    final user = Provider.of<User>(context).profile;
+    final otherUser = _suggestionWithProfiles[_i].profile;
 
-    if (suggestions[_i].liked == null) {
+    if (_suggestionWithProfiles[_i].wasLiked == null) {
       setState(() {
         _i++;
       });
-      await SuggestionsService.sendSuggestion(
+      await SuggestionsService.respondToSuggestion(
         fromUid: user.uid,
         toUid: otherUser.uid,
         liked: false,
@@ -53,23 +89,13 @@ class _SwipingPageState extends State<SwipingPage> {
     }
 
     setState(() => _canUndo = true);
-    await SuggestionsService.deleteSuggestion(
-        uid: user.uid, otherUid: otherUser.uid);
-    _goneThrough.add(SuggestionGoneThrough(
-      uid: user.uid,
-      liked: false,
-    ));
+    _goneThrough[user.uid] = false;
   }
 
   void _undo() {
-    final suggestionUserUid = Provider.of<CurrentUser>(context)
-        .otherUser
-        .generatedDailySuggestions[_i - 1]
-        .otherUser
-        .uid;
-    SuggestionsService.undoSentSuggestion(
-      Provider.of<CurrentUser>(context).profile.uid,
-      suggestionUserUid,
+    SuggestionsService.undoSuggestionResponse(
+      Provider.of<User>(context).profile.uid,
+      _suggestionWithProfiles[_i - 1].profile.uid,
     );
     setState(() {
       _i--;
@@ -78,39 +104,35 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   void _like() async {
-    final suggestions = Provider.of<CurrentUser>(context).otherUser.suggestions;
-    final user = Provider.of<CurrentUser>(context).otherUser;
-    final otherUser = suggestions[_i].otherUser;
+    final user = Provider.of<User>(context).profile;
+    final otherProfile = _suggestionWithProfiles[_i].profile;
+    await Provider.of<User>(context)
+        .updatePrivateInfo({'numRightSwiped': FieldValue.increment(1)});
 
-    setState(() => user.numRightSwiped += 1);
-    await UsersService.setPrivateInfo(
-        user.uid, 'numRightSwiped', user.numRightSwiped);
-
-    if (suggestions[_i].liked == true) {
+    if (_suggestionWithProfiles[_i].wasLiked == true) {
       final undo = await Navigator.push(
         context,
         PageRouteBuilder(
           // page transition
           pageBuilder: (context, animation1, animation2) =>
-              ItsAMatchPage(user: otherUser),
+              ItsAMatchPage(user: otherProfile),
         ),
       );
       if (!undo) {
-        await DatabaseService.match(
-            Provider.of<CurrentUser>(context).profile.uid, otherUser.uid);
+        await SuggestionsService.match(otherProfile.uid);
         setState(() {
           _i++;
           _canUndo = false;
         });
       }
-    } else if (suggestions[_i].liked == null) {
+    } else if (_suggestionWithProfiles[_i].wasLiked == null) {
       setState(() {
         _i++;
         _canUndo = true;
       });
-      await DatabaseService.sendSuggestion(
+      await SuggestionsService.respondToSuggestion(
         fromUid: user.uid,
-        toUid: otherUser.uid,
+        toUid: otherProfile.uid,
         liked: true,
       );
     } else {
@@ -120,12 +142,7 @@ class _SwipingPageState extends State<SwipingPage> {
       });
     }
 
-    await DatabaseService.deleteSuggestion(
-        uid: user.uid, otherUid: otherUser.uid);
-    _goneThrough.add(SuggestionGoneThrough(
-      uid: user.uid,
-      liked: true,
-    ));
+    _goneThrough[user.uid] = true;
   }
 
   Widget _buildDarkOptions() => Row(
@@ -252,13 +269,15 @@ class _SwipingPageState extends State<SwipingPage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final suggestions = Provider.of<CurrentUser>(context).otherUser.suggestions;
-    final user = _i < suggestions.length ? suggestions[_i].otherUser : null;
+    final otherProfile = _i < _suggestionWithProfiles.length
+        ? _suggestionWithProfiles[_i].profile
+        : null;
 
     return Column(
       children: <Widget>[
-        if (_i == suggestions.length ||
-            user.numRightSwiped >= 10) // should be just == 10
+        if (_i == _suggestionWithProfiles.length ||
+            Provider.of<User>(context).privateInfo.numRightSwiped >=
+                10) // should be just == 10
           SizedBox(
             width: width - 80.0,
             height: height - 200.0,
@@ -291,7 +310,7 @@ class _SwipingPageState extends State<SwipingPage> {
             child: SuggestionCard(
               width: width - 80.0,
               height: height - 250.0,
-              user: user,
+              user: otherProfile,
               onLike: _like,
               onNope: _nope,
             ),

@@ -1,29 +1,27 @@
-import 'package:tundr/models/user_profile.dart';
-
 class Suggestion {
-  UserProfile user;
-  bool liked;
+  String uid;
+  bool wasLiked;
 
   Suggestion({
-    this.user,
-    this.liked,
+    this.uid,
+    this.wasLiked,
   });
 
   Map<String, dynamic> toMap() {
     return {
       // 'uid': user.uid,
-      'liked': liked,
+      'wasLiked': wasLiked,
     };
   }
 
   @override
-  String toString() => 'Sugestion: ${user.name}';
+  String toString() => 'Suggestion: ${uid}';
 
   @override
   bool operator ==(other) {
-    return other is Suggestion && user.uid == other.user.uid;
+    return other is Suggestion && uid == other.uid;
   }
 
   @override
-  int get hashCode => user.uid.hashCode;
+  int get hashCode => uid.hashCode;
 }

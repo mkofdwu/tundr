@@ -43,8 +43,9 @@ class Message {
   Map<String, dynamic> toMap() {
     return {
       'uid': senderUid,
-      'readTimestamp': readTimestamp?.millisecondsSinceEpoch,
-      'sentTimestamp': sentTimestamp.millisecondsSinceEpoch,
+      'readTimestamp':
+          readTimestamp == null ? null : Timestamp.fromDate(readTimestamp),
+      'sentTimestamp': Timestamp.fromDate(sentTimestamp),
       'referencedMessageId': referencedMessageId,
       'text': text,
       'mediaType':

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
-import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/repositories/user.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/users_service.dart';
@@ -18,7 +19,7 @@ class BlockedUsersPage extends StatefulWidget {
 class _BlockedUsersPageState extends State<BlockedUsersPage> {
   @override
   Widget build(BuildContext context) {
-    final blocked = Provider.of<CurrentUser>(context).privateInfo.blocked;
+    final blocked = Provider.of<User>(context).privateInfo.blocked;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -89,15 +90,12 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                           color: MyPalette.red,
                           padding: 10.0,
                           onTap: () {
-                            final blocked = Provider.of<CurrentUser>(context)
+                            Provider.of<User>(context)
                                 .privateInfo
-                                .blocked;
-                            blocked.remove(user.uid);
-                            UsersService.setPrivateInfo(
-                              Provider.of<CurrentUser>(context).profile.uid,
-                              'blocked',
-                              blocked,
-                            );
+                                .blocked
+                                .remove(user.uid);
+                            Provider.of<User>(context)
+                                .writeField('blocked', UserPrivateInfo);
                             setState(() {});
                           },
                         ),

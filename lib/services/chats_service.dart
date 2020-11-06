@@ -5,7 +5,6 @@ import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/models/user_private_info.dart';
 
 class ChatsService {
   static DocumentReference _userChatRef(String uid, String chatId) {

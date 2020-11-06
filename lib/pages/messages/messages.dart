@@ -3,9 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/models/chat.dart';
-import 'package:tundr/repositories/current_user.dart';
-import 'package:tundr/services/chats_service.dart';
-import 'package:tundr/services/suggestions_service.dart';
+import 'package:tundr/repositories/user.dart';
 
 import 'package:tundr/widgets/loaders/loader.dart';
 
@@ -23,7 +21,7 @@ class _MessagesPageState extends State<MessagesPage> {
   //   final LocalDatabaseService localDatabaseService =
   //       DatabaseService;
   //   return DatabaseService.saveNewMessages(
-  //     uid: Provider.of<CurrentUser>(context).profile.uid,
+  //     uid: Provider.of<User>(context).profile.uid,
   //     saveMessage: localDatabaseService.saveMessage,
   //     addChatIfDoesNotExistElseSetUpdated: (uid) async {
   //       if (await localDatabaseService.chatExists(uid)) {
@@ -37,12 +35,11 @@ class _MessagesPageState extends State<MessagesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final uid = Provider.of<CurrentUser>(context).profile.uid;
-    return FutureBuilder<bool>(
-      future: ChatsService.noChats(uid),
+    return StreamBuilder<List<Chat>>(
+      stream: Provider.of<User>(context).chatsStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return Center(child: Loader());
-        if (snapshot.data) {
+        if (snapshot.data.isEmpty) {
           return Center(
             child: Text(
               'Matches and chats will appear here.',
@@ -53,10 +50,14 @@ class _MessagesPageState extends State<MessagesPage> {
             ),
           );
         }
+        final normalChats =
+            snapshot.data.where((chat) => chat.type == ChatType.normal);
+        final unknownChats =
+            snapshot.data.where((chat) => chat.type == ChatType.unknown);
         return RefreshIndicator(
           color: Theme.of(context).accentColor,
           backgroundColor: MyPalette.gold,
-          onRefresh: () async => setState(() {}), // _loadMessages,
+          onRefresh: () async => setState(() {}),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: SingleChildScrollView(
@@ -67,43 +68,22 @@ class _MessagesPageState extends State<MessagesPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      FutureBuilder<List<String>>(
-                        future: SuggestionsService.getMatches(uid),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) return SizedBox.shrink();
-                          if (snapshot.data.isEmpty) return SizedBox.shrink();
-                          return ChatsGroup(
-                            title: 'New Matches',
-                            child: MatchList(
-                              matches: snapshot.data,
-                            ),
-                          );
-                        },
+                      ChatsGroup(
+                        title: 'New Matches',
+                        child: MatchList(
+                          matches:
+                              Provider.of<User>(context).privateInfo.matches,
+                        ),
                       ),
                       SizedBox(height: 20.0),
-                      FutureBuilder<List<Chat>>(
-                        future:
-                            ChatsService.getChatsOfType(uid, ChatType.normal),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) return SizedBox.shrink();
-                          if (snapshot.data.isEmpty) return SizedBox.shrink();
-                          return ChatsGroup(
-                            title: 'Messages',
-                            child: ChatList(chats: snapshot.data),
-                          );
-                        },
+                      ChatsGroup(
+                        title: 'Messages',
+                        child: ChatList(chats: normalChats),
                       ),
                       SizedBox(height: 20.0),
-                      FutureBuilder<List<Chat>>(
-                        future: ChatsService.getUnknownChats(uid),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) return SizedBox.shrink();
-                          if (snapshot.data.isEmpty) return SizedBox.shrink();
-                          return ChatsGroup(
-                            title: 'Unknown messages',
-                            child: ChatList(chats: snapshot.data),
-                          );
-                        },
+                      ChatsGroup(
+                        title: 'Unknown messages',
+                        child: ChatList(chats: unknownChats),
                       ),
                     ],
                   ),

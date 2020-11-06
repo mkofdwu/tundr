@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/current_user.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/repositories/theme_notifier.dart';
 import 'package:tundr/pages/loading.dart';
@@ -14,6 +12,7 @@ import 'package:tundr/pages/user_profile/main.dart';
 import 'package:tundr/pages/welcome.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/app_theme.dart';
+import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/handlers/app_state_handler.dart';
 import 'package:tundr/widgets/handlers/notification_handler.dart';
@@ -23,8 +22,7 @@ void main() {
     () async {
       runApp(MultiProvider(
         providers: [
-          ChangeNotifierProvider<CurrentUser>(
-              create: (context) => CurrentUser()),
+          ChangeNotifierProvider<User>(create: (context) => User()),
           ChangeNotifierProvider<ThemeNotifier>(
               create: (context) => ThemeNotifier()),
           ChangeNotifierProvider<RegistrationInfo>(
@@ -59,8 +57,8 @@ class TundrApp extends StatefulWidget {
 class _TundrAppState extends State<TundrApp> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User>(
-      stream: FirebaseAuth.instance.authStateChanges(),
+    return StreamBuilder<auth.User>(
+      stream: auth.FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         Widget home;
 
@@ -69,18 +67,17 @@ class _TundrAppState extends State<TundrApp> {
         } else if (snapshot.data?.uid == null) {
           home = WelcomePage();
         } else {
-          home = FutureBuilder<CurrentUser>(
-            future: UsersService.getCurrentUser(snapshot.data.uid),
+          home = FutureBuilder<User>(
+            future: UsersService.getUserRepo(snapshot.data.uid),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return LoadingPage();
               }
 
               final currentUser = snapshot.data;
-              Provider.of<CurrentUser>(context).profile = currentUser.profile;
-              Provider.of<CurrentUser>(context).privateInfo =
-                  currentUser.privateInfo;
-              Provider.of<CurrentUser>(context).algorithmData =
+              Provider.of<User>(context).profile = currentUser.profile;
+              Provider.of<User>(context).privateInfo = currentUser.privateInfo;
+              Provider.of<User>(context).algorithmData =
                   currentUser.algorithmData;
 
               if (currentUser.privateInfo.theme == null) {
@@ -90,12 +87,10 @@ class _TundrAppState extends State<TundrApp> {
                     currentUser.privateInfo.theme;
                 return AppStateHandler(
                   onExit: () {
-                    UsersService.setOnline(
-                        Provider.of<CurrentUser>(context).profile.uid, false);
+                    Provider.of<User>(context).updateOnline(false);
                   },
                   onStart: () {
-                    UsersService.setOnline(
-                        Provider.of<CurrentUser>(context).profile.uid, true);
+                    Provider.of<User>(context).updateOnline(true);
                   },
                   child: NotificationHandler(
                     child: HomePage(),
@@ -114,8 +109,7 @@ class _TundrAppState extends State<TundrApp> {
               debugShowCheckedModeBanner: false,
               home: home,
               routes: {
-                // TODO: test if this is still necessary, or if it is possible to just set an id variable directly on the page
-                'userprofile': (context) => UserProfileMainPage(),
+                '/user_profile': (context) => UserProfileMainPage(),
               },
             );
           },
@@ -162,7 +156,9 @@ class _TundrAppState extends State<TundrApp> {
         ),
       ),
       fontFamily: '.AppleSystemUIFont',
-      cursorColor: accentColor,
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: accentColor,
+      ),
     );
   }
 }

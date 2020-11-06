@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/current_user.dart';
-import 'package:tundr/pages/interests/interests_edit.dart';
-
-import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
+import 'package:tundr/models/user_profile.dart';
+import 'package:tundr/pages/interests/interests_edit.dart';
 import 'package:tundr/pages/interests/widgets/interests_wrap.dart';
-import 'package:tundr/services/users_service.dart';
-import 'package:tundr/widgets/media/extra_media_grid.dart';
 import 'package:tundr/pages/personal_info/widgets/personal_info_list.dart';
+import 'package:tundr/repositories/user.dart';
+import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
+import 'package:tundr/widgets/media/extra_media_grid.dart';
 
 class OwnProfileEditPage extends StatefulWidget {
   @override
@@ -23,21 +22,18 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
 
   void _previewProfile() => Navigator.pushNamed(
         context,
-        'userprofile',
-        arguments: Provider.of<CurrentUser>(context).profile,
+        '/user_profile',
+        arguments: Provider.of<User>(context).profile,
       );
 
   void _updateAboutMe() {
-    Provider.of<CurrentUser>(context).profile.aboutMe = _aboutMeController.text;
-    UsersService.setProfileField(Provider.of<CurrentUser>(context).profile.uid,
-        'aboutMe', _aboutMeController.text);
+    Provider.of<User>(context)
+        .updateProfile({'aboutMe': _aboutMeController.text});
   }
 
   void _updateMedia() {
-    UsersService.setProfileField(
-      Provider.of<CurrentUser>(context).profile.uid,
-      'extraMedia',
-      List<Map<String, dynamic>>.from(Provider.of<CurrentUser>(context)
+    Provider.of<User>(context).updateProfile({
+      'extraMedia': Provider.of<User>(context)
           .profile
           .extraMedia
           .map((media) => media == null
@@ -45,8 +41,8 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
               : {
                   'type': MediaType.values.indexOf(media.type),
                   'url': media.url,
-                })),
-    );
+                })
+    });
   }
 
   void _editInterests() => Navigator.push(
@@ -83,7 +79,7 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    final profile = Provider.of<CurrentUser>(context).profile;
+    final profile = Provider.of<User>(context).profile;
     _aboutMeController.text = profile.aboutMe;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -182,7 +178,7 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                         );
                         media.isLocalFile = false;
                         if (mounted) {
-                          setState(() => Provider.of<CurrentUser>(context)
+                          setState(() => Provider.of<User>(context)
                               .profile
                               .extraMedia[i] = media);
                           _updateMedia();
@@ -211,12 +207,10 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                   PersonalInfoList(
                     personalInfo: profile.personalInfo,
                     onChanged: (name, value) {
-                      final updatedPersonalInfo = {
-                        ...profile.personalInfo,
-                        name: value,
-                      };
-                      UsersService.setProfileField(
-                          profile.uid, 'personalInfo', updatedPersonalInfo);
+                      Provider.of<User>(context).profile.personalInfo[name] =
+                          value;
+                      Provider.of<User>(context)
+                          .writeField('personalInfo', UserProfile);
                       setState(() {});
                     },
                   ),

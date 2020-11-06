@@ -8,7 +8,7 @@ import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/models/user_status.dart';
-import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/repositories/user.dart';
 import 'package:tundr/pages/chat/chat.dart';
 
 import 'package:tundr/constants/my_palette.dart';
@@ -16,7 +16,6 @@ import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/format_date.dart';
 import 'package:tundr/utils/get_network_image.dart';
-import 'package:tundr/widgets/loaders/loader.dart';
 import 'package:tundr/widgets/theme_builder.dart';
 
 class ChatTile extends StatelessWidget {
@@ -47,8 +46,7 @@ class ChatTile extends StatelessWidget {
         child: FutureBuilder(
           future: Future.wait([
             UsersService.getUserProfile(chat.uid),
-            UsersService.blocked(
-                chat.uid, Provider.of<CurrentUser>(context).profile.uid),
+            UsersService.isBlockedBy(chat.uid),
           ]),
           builder: (context, snapshot) {
             if (!snapshot.hasData) return SizedBox.shrink();
@@ -126,7 +124,7 @@ class ChatTile extends StatelessWidget {
                                     messages.reversed.map(
                                       (message) {
                                         final fromMe = message.senderUid ==
-                                            Provider.of<CurrentUser>(context)
+                                            Provider.of<User>(context)
                                                 .profile
                                                 .uid;
                                         return Align(
@@ -202,8 +200,7 @@ class ChatTile extends StatelessWidget {
         child: FutureBuilder(
           future: Future.wait([
             UsersService.getUserProfile(chat.uid),
-            UsersService.blocked(
-                chat.uid, Provider.of<CurrentUser>(context).profile.uid),
+            UsersService.isBlockedBy(chat.uid),
           ]),
           builder: (context, snapshot) {
             if (!snapshot.hasData) return SizedBox.shrink();
@@ -313,7 +310,7 @@ class ChatTile extends StatelessWidget {
                                           messages.reversed.map(
                                         (message) {
                                           final fromMe = message.senderUid ==
-                                              Provider.of<CurrentUser>(context)
+                                              Provider.of<User>(context)
                                                   .profile
                                                   .uid;
                                           return Align(

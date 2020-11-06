@@ -1,9 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/personal_info_field.dart';
-import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/models/user_private_info.dart';
+import 'package:tundr/repositories/user.dart';
 import 'package:tundr/repositories/theme_notifier.dart';
 import 'package:tundr/pages/about.dart';
 import 'package:tundr/pages/personal_info/text_field.dart';
@@ -17,7 +18,6 @@ import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/app_theme.dart';
 import 'package:tundr/enums/gender.dart';
 import 'package:tundr/services/notifications_service.dart';
-import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/buttons/light_tile.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/checkboxes/simple.dart';
@@ -46,7 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
-    await UsersService.setProfileField(uid, 'username', newUsername);
+    await Provider.of<User>(context).updateProfile({'username': newUsername});
   }
 
   void _changePassword() => Navigator.push(
@@ -95,13 +95,11 @@ class _SettingsPageState extends State<SettingsPage> {
     if (signOut) {
       // unsubscribe from notifications for this user
       await NotificationsService.removeToken(
-        Provider.of<CurrentUser>(context).profile.uid,
-        Provider.of<CurrentUser>(context).fcmToken,
+        Provider.of<User>(context).profile.uid,
+        Provider.of<User>(context).fcmToken,
       );
       await FirebaseMessaging().deleteInstanceID();
-
-      await FirebaseAuth.instance.signOut();
-
+      await auth.FirebaseAuth.instance.signOut();
       // Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
@@ -113,10 +111,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final profile = Provider.of<CurrentUser>(context).profile;
-    final privateInfo = Provider.of<CurrentUser>(context).privateInfo;
+    final profile = Provider.of<User>(context).profile;
+    final privateInfo = Provider.of<User>(context).privateInfo;
     final settings = privateInfo.settings;
-    final algorithmData = Provider.of<CurrentUser>(context).algorithmData;
+    final algorithmData = Provider.of<User>(context).algorithmData;
     final uid = profile.uid;
     return Scaffold(
       appBar: AppBar(
@@ -170,8 +168,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: RoundRadioGroup(
                   options: ['Male', 'Female'],
                   selected: Gender.values.indexOf(profile.gender),
-                  onChanged: (option) =>
-                      UsersService.setProfileField(uid, 'gender', option),
+                  onChanged: (option) => Provider.of<User>(context)
+                      .updateProfile({'gender': option}),
                 ),
               ),
               SizedBox(height: 20.0),
@@ -182,14 +180,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     SimpleCheckbox(
                       text: 'Boys',
                       value: algorithmData.showMeBoys,
-                      onChanged: (bool value) => UsersService.setAlgorithmData(
-                          uid, 'showMeBoys', value),
+                      onChanged: (bool value) => Provider.of<User>(context)
+                          .updateAlgorithmData({'showMeBoys': value}),
                     ),
                     SimpleCheckbox(
                       text: 'Girls',
                       value: algorithmData.showMeGirls,
-                      onChanged: (bool value) => UsersService.setAlgorithmData(
-                          uid, 'showMeGirls', value),
+                      onChanged: (bool value) => Provider.of<User>(context)
+                          .updateAlgorithmData({'showMeGirls': value}),
                     ),
                   ],
                 ),
@@ -205,10 +203,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     algorithmData.ageRangeMax.toDouble(),
                   ),
                   onChanged: (newRangeValues) {
-                    UsersService.setAlgorithmData(
-                        uid, 'ageRangeMin', newRangeValues.start.toInt());
-                    UsersService.setAlgorithmData(
-                        uid, 'ageRangeMax', newRangeValues.end.toInt());
+                    Provider.of<User>(context).updateAlgorithmData({
+                      'ageRangeMin': newRangeValues.start.toInt(),
+                      'ageRangeMax': newRangeValues.end.toInt(),
+                    });
                   },
                 ),
               ),
@@ -228,8 +226,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 description:
                     "While sleeping, you won't appear in other users' card stacks or get new suggestions",
                 selected: algorithmData.asleep,
-                onChanged: (value) =>
-                    UsersService.setAlgorithmData(uid, 'asleep', value),
+                onChanged: (value) => Provider.of<User>(context)
+                    .updateAlgorithmData({'asleep': value}),
               ),
               SizedBox(height: 20.0),
               SwitchSettingField(
@@ -238,15 +236,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     'Turning this on allows you to be shown on the most popular board',
                 selected: settings.showInMostPopular,
                 onChanged: (value) {
-                  UsersService.setPrivateInfo(
-                    uid,
-                    'settings',
-                    {...settings.toMap(), 'showInMostPopular': value},
-                  );
-                  Provider.of<CurrentUser>(context)
-                      .privateInfo
-                      .settings
-                      .showInMostPopular = value;
+                  settings.showInMostPopular = value;
+                  Provider.of<User>(context)
+                      .writeField('settings', UserPrivateInfo);
                 },
               ),
               SizedBox(height: 20.0),
@@ -256,12 +248,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     'Prevent users you were not matched with from sending you messages',
                 selected: settings.blockUnknownMessages,
                 onChanged: (value) {
-                  UsersService.setPrivateInfo(
-                      uid, 'blockUnknownMessages', value);
-                  Provider.of<CurrentUser>(context)
-                      .privateInfo
-                      .settings
-                      .blockUnknownMessages = value;
+                  settings.blockUnknownMessages = value;
+                  Provider.of<User>(context)
+                      .writeField('settings', UserPrivateInfo);
                 },
               ),
               SizedBox(height: 20.0),
@@ -279,7 +268,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   onChanged: (option) {
                     Provider.of<ThemeNotifier>(context).theme =
                         AppTheme.values[option];
-                    UsersService.setPrivateInfo(uid, 'theme', option);
+                    Provider.of<User>(context)
+                        .updatePrivateInfo({'theme': option});
                   },
                 ),
               ),
@@ -290,15 +280,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     "If turned off, you won't send or receive read receipts",
                 selected: settings.readReceipts,
                 onChanged: (value) {
-                  UsersService.setPrivateInfo(
-                    uid,
-                    'settings',
-                    {...settings.toMap(), 'readReceipts': value},
-                  );
-                  Provider.of<CurrentUser>(context)
-                      .privateInfo
-                      .settings
-                      .readReceipts = value;
+                  settings.readReceipts = value;
+                  Provider.of<User>(context)
+                      .writeField('settings', UserPrivateInfo);
                 },
               ),
               SizedBox(height: 20.0),

@@ -1,8 +1,6 @@
 import 'package:tundr/constants/firebase_ref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:tundr/enums/media_type.dart';
-import 'package:tundr/models/media.dart';
 import 'package:tundr/models/user_algorithm_data.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';

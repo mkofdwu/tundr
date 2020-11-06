@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/auth_service.dart';
 
 import 'package:tundr/constants/my_palette.dart';
@@ -15,11 +15,10 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
 
   void _deleteAccount(BuildContext context) async {
     if (await AuthService.signIn(
-      username: Provider.of<CurrentUser>(context).profile.username,
+      username: Provider.of<User>(context).profile.username,
       password: _passwordController.text,
     )) {
-      await AuthService.deleteAccount(
-          Provider.of<CurrentUser>(context).profile.uid);
+      await AuthService.deleteAccount(Provider.of<User>(context).profile.uid);
     } else {
       await showDialog(
         context: context,

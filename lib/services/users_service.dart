@@ -1,12 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:tundr/constants/deleted_user.dart';
 import 'package:tundr/constants/firebase_ref.dart';
+import 'package:tundr/models/popular_user.dart';
 import 'package:tundr/models/user_algorithm_data.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/models/user_status.dart';
-import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/repositories/user.dart';
 
 class UsersService {
   static Future<UserProfile> getUserProfile(
@@ -22,7 +22,7 @@ class UsersService {
   static Future<UserPrivateInfo> getUserPrivateInfo(String uid) async {
     // only used for current user
     final privateInfoDoc = await usersPrivateInfoRef.doc(uid).get();
-    return UserPrivateInfo.fromDoc(privateInfoDoc);
+    return UserPrivateInfo.fromMap(privateInfoDoc.data());
   }
 
   static Future<UserAlgorithmData> getUserAlgorithmData(String uid) async {
@@ -31,8 +31,8 @@ class UsersService {
     return UserAlgorithmData.fromMap(algorithmDataDoc.data());
   }
 
-  static Future<CurrentUser> getCurrentUser(String uid) async {
-    return CurrentUser(
+  static Future<User> getUserRepo(String uid) async {
+    return User(
       profile: await getUserProfile(uid),
       privateInfo: await getUserPrivateInfo(uid),
       algorithmData: await getUserAlgorithmData(uid),
@@ -46,24 +46,24 @@ class UsersService {
         .map((userStatusDoc) => UserStatus.fromMap(userStatusDoc.data()));
   }
 
-  static Future<void> setProfileField(String uid, String field, dynamic value) {
-    return userProfilesRef.doc(uid).update({field: value});
-  }
+  // static Future<void> setProfileField(String uid, String field, dynamic value) {
+  //   return userProfilesRef.doc(uid).update({field: value});
+  // }
 
-  static Future<void> setPrivateInfo(String uid, String field, dynamic value) {
-    return usersPrivateInfoRef.doc(uid).update({field: value});
-  }
+  // static Future<void> setPrivateInfo(String uid, String field, dynamic value) {
+  //   return usersPrivateInfoRef.doc(uid).update({field: value});
+  // }
 
-  static Future<void> setAlgorithmData(
-      String uid, String field, dynamic value) {
-    return usersAlgorithmDataRef.doc(uid).update({field: value});
-  }
+  // static Future<void> setAlgorithmData(
+  //     String uid, String field, dynamic value) {
+  //   return usersAlgorithmDataRef.doc(uid).update({field: value});
+  // }
 
-  static Future<void> setOnline(String uid, bool online) {
-    return userStatusesRef
-        .doc(uid)
-        .update({'online': true, 'lastSeen': online ? null : Timestamp.now()});
-  }
+  // static Future<void> setOnline(String uid, bool online) {
+  //   return userStatusesRef
+  //       .doc(uid)
+  //       .update({'online': true, 'lastSeen': online ? null : Timestamp.now()});
+  // }
 
   static Future<bool> usernameAlreadyExists(String username) async {
     return (await userProfilesRef
@@ -116,6 +116,23 @@ class UsersService {
     final callable =
         CloudFunctions.instance.getHttpsCallable(functionName: 'isBlockedBy');
     final result = await callable.call({'otherUid': otherUid});
+    return result.data;
+  }
+
+  static Future<List<PopularUser>> getMostPopular() async {
+    final result = await CloudFunctions.instance
+        .getHttpsCallable(functionName: 'getMostPopular')
+        .call();
+    return result.data.map((popUser) => PopularUser(
+          profile: popUser.profile,
+          popularityScore: popUser.popularityScore,
+        ));
+  }
+
+  static Future<bool> allowedToTalkTo(String otherUid) async {
+    final result = await CloudFunctions.instance
+        .getHttpsCallable(functionName: 'allowedToTalkTo')
+        .call({'otherUid': otherUid});
     return result.data;
   }
 

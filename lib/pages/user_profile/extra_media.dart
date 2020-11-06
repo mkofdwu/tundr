@@ -75,8 +75,9 @@ class _UserProfileExtraMediaPageState extends State<UserProfileExtraMediaPage> {
               itemCount: 10,
               itemBuilder: (context, i) {
                 if (i == 9) return SizedBox(height: 200.0);
-                if (widget.profile.extraMedia[i] == null)
+                if (widget.profile.extraMedia[i] == null) {
                   return SizedBox.shrink();
+                }
                 return MediaThumbnail(widget.profile.extraMedia[i]);
               },
             ),
@@ -84,7 +85,7 @@ class _UserProfileExtraMediaPageState extends State<UserProfileExtraMediaPage> {
               icon: Icons.close,
               onPressed: () {
                 Navigator.popUntil(
-                    context, (route) => route.settings.name == 'userprofile');
+                    context, (route) => route.settings.name == '/user_profile');
                 Navigator.pop(context);
               },
             ),

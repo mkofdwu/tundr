@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/current_user.dart';
+import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/notifications_service.dart';
 
 class NotificationHandler extends StatefulWidget {
@@ -36,7 +36,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
         //     break;
         //   case 'newMessage':
         //     final String currentUid =
-        //         Provider.of<CurrentUser>(context).profile.uid;
+        //         Provider.of<User>(context).profile.uid;
         //     final LocalDatabaseService localDatabaseService =
         //         DatabaseService;
 
@@ -77,7 +77,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
     //     _openItsAMatch(message['data']['uid']);
     //     break;
     //   case 'newMessage':
-    //     final String currentUid = Provider.of<CurrentUser>(context).profile.uid;
+    //     final String currentUid = Provider.of<User>(context).profile.uid;
     //     final LocalDatabaseService localDatabaseService =
     //         DatabaseService;
 
@@ -111,8 +111,8 @@ class _NotificationHandlerState extends State<NotificationHandler> {
   void _saveDeviceToken() async {
     final token = await _fcm.getToken();
     if (token != null) {
-      Provider.of<CurrentUser>(context).fcmToken = token;
-      final uid = FirebaseAuth.instance.currentUser.uid;
+      Provider.of<User>(context).fcmToken = token;
+      final uid = auth.FirebaseAuth.instance.currentUser.uid;
       await NotificationsService.saveToken(uid, token);
     }
   }

@@ -57,7 +57,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
           // TODO: TEST if this still works
           info.uid = result.user.uid;
           await AuthService.createAccount(info);
-          await result.user.updatePhoneNumberCredential(credential);
+          await result.user.updatePhoneNumber(credential);
         }
 
         // AuthResult result = await FirebaseAuth.instance.signInWithCredential(
@@ -109,7 +109,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
 
   void _verifyCode() {
     if (!_verificationCode.contains(null)) {
-      final credential = PhoneAuthProvider.getCredential(
+      final credential = PhoneAuthProvider.credential(
         verificationId: _verificationId,
         smsCode: _verificationCode.join(),
       );
@@ -126,9 +126,9 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
       verificationCompleted: (AuthCredential credential) {
         _createAccount(credential);
       },
-      verificationFailed: (AuthException exception) =>
+      verificationFailed: (FirebaseAuthException exception) =>
           print('verification failed: ' + exception.message),
-      codeSent: (String verificationId, [int]) {
+      codeSent: (String verificationId, int forceResendingToken) {
         setState(() => _verificationId = verificationId);
       },
       codeAutoRetrievalTimeout: (String verificationId) {

@@ -1,5 +1,6 @@
 import 'package:tundr/constants/personal_info_fields.dart';
 import 'package:tundr/enums/filter_method.dart';
+import 'package:tundr/enums/gender.dart';
 import 'package:tundr/models/filter.dart';
 import 'package:tundr/models/personal_info_field.dart';
 import 'package:tundr/repositories/registration_info.dart';
@@ -42,15 +43,29 @@ class UserAlgorithmData {
     );
   }
 
-  factory UserAlgorithmData.register(RegistrationInfo info {
+  factory UserAlgorithmData.register(RegistrationInfo info) {
+    final age = DateTime.now().difference(info.birthday).inDays ~/ 365;
     return UserAlgorithmData(
-      // TODO
+      asleep: false,
+      showMeBoys: info.gender == Gender.female,
+      showMeGirls: info.gender == Gender.male,
+      ageRangeMin: age - 1,
+      ageRangeMax: age + 1,
+      otherFilters: {},
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      // TODO
+      'asleep': asleep,
+      'showMeBoys': showMeBoys,
+      'showMeGirls': showMeGirls,
+      'ageRangeMin': ageRangeMin,
+      'ageRangeMax': ageRangeMax,
+      'otherFilters': otherFilters.map((name, value) {
+        return MapEntry(
+            name, {'method': value.method, 'options': value.options});
+      })
     };
   }
 }

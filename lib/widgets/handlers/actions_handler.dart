@@ -1,7 +1,7 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:flutter/widgets.dart';
 // import 'package:provider/provider.dart';
-// import 'package:tundr/repositories/current_user.dart';
+// import 'package:tundr/repositories/user.dart';
 // import 'package:tundr/services/databaseservice.dart';
 // import 'package:tundr/enums/actiontype.dart';
 // import 'package:tundr/models/action.dart' as appAction;
@@ -23,7 +23,7 @@
 //       final appAction.Action action = appAction.Action.fromDoc(doc);
 //       switch (action.type) {
 //         case ActionType.notifyReadMessage:
-//           Provider.of<CurrentUser>(context)
+//           Provider.of<User>(context)
 //               .localDatabaseService
 //               .updateOtherUserLastReadChat(
 //                 action.senderUid,
@@ -35,7 +35,7 @@
 //               .payload); // FUTURE: or change it to null, and display tile saying 'this message was deleted'?
 //           break;
 //         case ActionType.newMatch:
-//           Provider.of<CurrentUser>(context)
+//           Provider.of<User>(context)
 //               .localDatabaseService
 //               .saveMatch(action.senderUid);
 //           break;
@@ -50,7 +50,7 @@
 //   Widget build(BuildContext context) {
 //     return StreamBuilder<QuerySnapshot>(
 //       stream: DatabaseService.actionsStream(
-//           Provider.of<CurrentUser>(context).profile.uid),
+//           Provider.of<User>(context).profile.uid),
 //       builder: (context, snapshot) {
 //         if (snapshot.hasData)
 //           _retrieveActions(snapshot.data.docs)

@@ -68,7 +68,7 @@ class _UserProfilePersonalInfoPageState
                   onPressed: () {
                     Navigator.popUntil(
                       context,
-                      (route) => route.settings.name == 'userprofile',
+                      (route) => route.settings.name == '/user_profile',
                     );
                     Navigator.pop(context);
                   },
