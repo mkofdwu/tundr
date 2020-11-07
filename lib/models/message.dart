@@ -6,8 +6,8 @@ import 'media.dart';
 class Message {
   String id;
   String senderUid;
-  DateTime sentTimestamp;
-  DateTime readTimestamp;
+  DateTime sentOn;
+  DateTime readOn;
   String referencedMessageId;
   String text;
   Media media;
@@ -15,8 +15,8 @@ class Message {
   Message({
     this.id,
     this.senderUid,
-    this.sentTimestamp,
-    this.readTimestamp,
+    this.sentOn,
+    this.readOn,
     this.referencedMessageId,
     this.text,
     this.media,
@@ -27,8 +27,8 @@ class Message {
     return Message(
       id: doc.id,
       senderUid: data['senderUid'],
-      sentTimestamp: data['sentTimestamp'].toDate(),
-      readTimestamp: data['readTimestamp'].toDate(),
+      sentOn: data['sentOn'].toDate(),
+      readOn: data['readOn'].toDate(),
       referencedMessageId: data['referencedMessageId'],
       text: data['text'],
       media: data['mediaType'] == null
@@ -42,10 +42,9 @@ class Message {
 
   Map<String, dynamic> toMap() {
     return {
-      'uid': senderUid,
-      'readTimestamp':
-          readTimestamp == null ? null : Timestamp.fromDate(readTimestamp),
-      'sentTimestamp': Timestamp.fromDate(sentTimestamp),
+      'senderUid': senderUid,
+      'readOn': readOn == null ? null : Timestamp.fromDate(readOn),
+      'sentOn': Timestamp.fromDate(sentOn),
       'referencedMessageId': referencedMessageId,
       'text': text,
       'mediaType':

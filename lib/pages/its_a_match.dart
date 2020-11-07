@@ -143,7 +143,7 @@ class ItsAMatchPage extends StatelessWidget {
                           id: null,
                           uid: user.uid,
                           wallpaperUrl: '',
-                          lastReadTimestamp: null,
+                          lastRead: null,
                           type: ChatType.newMatch,
                         ),
                       ),

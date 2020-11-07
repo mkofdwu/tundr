@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/repositories/user.dart';
 
 import 'package:tundr/widgets/buttons/tile_icon.dart';
@@ -33,13 +34,13 @@ class InterestsEditPage extends StatelessWidget {
                   interests: Provider.of<User>(context).profile.interests,
                   customInterests:
                       Provider.of<User>(context).profile.customInterests,
-                  onInterestsChanged: (newInterests) {
+                  onInterestsChanged: () {
                     Provider.of<User>(context)
-                        .updateProfile({'interests': newInterests});
+                        .writeField('interests', UserProfile);
                   },
-                  onCustomInterestsChanged: (newCustomInterests) {
+                  onCustomInterestsChanged: () {
                     Provider.of<User>(context)
-                        .updateProfile({'customInterests': newCustomInterests});
+                        .writeField('customInterests', UserProfile);
                   },
                 ),
               ),

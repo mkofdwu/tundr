@@ -5,14 +5,14 @@ class Chat {
   String id;
   String uid;
   String wallpaperUrl;
-  DateTime lastReadTimestamp;
+  DateTime lastRead;
   ChatType type;
 
   Chat({
     this.id,
     this.uid,
     this.wallpaperUrl,
-    this.lastReadTimestamp,
+    this.lastRead,
     this.type,
   });
 
@@ -22,7 +22,7 @@ class Chat {
       id: doc.id,
       uid: data['uid'],
       wallpaperUrl: data['wallpaperUrl'],
-      lastReadTimestamp: data['lastReadTimestamp'],
+      lastRead: data['lastRead'],
       type: data['type'],
     );
   }

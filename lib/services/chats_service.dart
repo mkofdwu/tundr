@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:tundr/constants/firebase_ref.dart';
 import 'package:tundr/enums/chat_type.dart';
-import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/message.dart';
 
@@ -21,26 +20,11 @@ class ChatsService {
         .snapshots();
   }
 
-  static Future<String> sendMessage({
-    String chatId,
-    String fromUid,
-    String toUid,
-    DateTime sentTimestamp,
-    String referencedMessageId = '',
-    String text,
-    MediaType mediaType,
-    String mediaUrl,
-  }) async {
-    return (await chatsRef.doc(chatId).collection('messages').add({
-      'senderUid': fromUid,
-      'sentTimestamp': Timestamp.fromDate(sentTimestamp),
-      'readTimestamp': null,
-      'referencedMessageId': referencedMessageId,
-      'text': text,
-      'mediaType':
-          mediaType == null ? null : MediaType.values.indexOf(mediaType),
-      'mediaUrl': mediaUrl,
-    }))
+  static Future<String> sendMessage(String chatId, Message message) async {
+    return (await chatsRef
+            .doc(chatId)
+            .collection('messages')
+            .add(message.toMap()))
         .id;
   }
 
@@ -89,7 +73,7 @@ class ChatsService {
         id: '',
         uid: otherUid,
         wallpaperUrl: '',
-        lastReadTimestamp: null,
+        lastRead: null,
         type: ChatType.nonExistent,
       );
     }
@@ -97,7 +81,7 @@ class ChatsService {
   }
 
   static Future<int> updateChatDetails(
-      {String uid, String chatId, Map<String, dynamic> details}) {
+      String uid, String chatId, Map<String, dynamic> details) {
     return _userChatRef(uid, chatId).update(details);
   }
 

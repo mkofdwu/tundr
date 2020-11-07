@@ -132,7 +132,7 @@ class OwnMessageTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                DateFormat.jm().format(message.sentTimestamp),
+                DateFormat.jm().format(message.sentOn),
                 style: TextStyle(
                   color: MyPalette.grey,
                   fontSize: 12.0,
@@ -142,9 +142,8 @@ class OwnMessageTile extends StatelessWidget {
               Icon(
                 // DESIGN: find another icon
                 Icons.done,
-                color: message.readTimestamp == null
-                    ? MyPalette.grey
-                    : MyPalette.green,
+                color:
+                    message.readOn == null ? MyPalette.grey : MyPalette.green,
               ),
             ],
           ),

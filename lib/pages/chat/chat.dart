@@ -71,8 +71,11 @@ class _ChatPageState extends State<ChatPage> {
         await ChatsService.updateChatMessagesRead(
             widget.chat.uid, widget.otherUser.uid);
         if (mounted) {
-          await ChatsService.setChatLastRead(
-              currentUser.profile.uid, widget.chat.id);
+          await ChatsService.updateChatDetails(
+            currentUser.profile.uid,
+            widget.chat.id,
+            {'lastRead': Timestamp.now()},
+          );
         }
       }
     });
@@ -153,55 +156,42 @@ class _ChatPageState extends State<ChatPage> {
 
   void _sendMessage() async {
     final uid = Provider.of<User>(context).profile.uid;
-    final text = _textController
-        .text; // copy the value of the text to clear the textfield and thus prevent spamming empty messages
-    final referencedMessageId = _referencedMessageId;
-    final media = _media;
-
     final unsentMessageIndex = _unsentMessages.length;
-    final sentTimestamp = DateTime.now();
+    final sentOn = DateTime.now();
+
+    _media.url = _media == null
+        ? ''
+        : await StorageService.uploadMedia(uid: uid, media: _media);
+
+    final message = Message(
+      senderUid: uid,
+      sentOn: sentOn,
+      readOn: null,
+      referencedMessageId: _referencedMessageId,
+      text: _textController.text,
+      media: _media,
+    );
 
     setState(() {
       _textController.text = '';
       _referencedMessageId = null;
       _media = null;
-      _unsentMessages.add(Message(
-        sentTimestamp: sentTimestamp,
-        referencedMessageId: referencedMessageId,
-        text: text,
-        media: media,
-      ));
+      _unsentMessages.add(message);
     });
 
     final privateInfo = Provider.of<User>(context).privateInfo;
     if (widget.chat.type == ChatType.nonExistent) {
-      widget.chat.id =
-          await ChatsService.startConversation(uid, widget.otherUser.uid);
+      widget.chat.id = await ChatsService.startConversation(
+          uid, widget.otherUser.uid, message);
     } else if (widget.chat.type == ChatType.newMatch) {
-      ChatsService.updateChat(widget.chat.id, {'type': 1});
+      await ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 1});
       privateInfo.matches.remove(widget.otherUser.uid);
       await Provider.of<User>(context).writeField('matches', UserPrivateInfo);
     } else if (widget.chat.type == ChatType.unknown) {
-      ChatsService.updateChat(widget.chat.id, {'type': 1});
+      await ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 1});
     }
 
-    final mediaUrl = media == null
-        ? ''
-        : await StorageService.uploadMedia(
-            uid: uid,
-            media: media,
-          );
-
-    await ChatsService.sendMessage(
-      chatId: widget.chat.id,
-      fromUid: uid,
-      toUid: widget.otherUser.uid,
-      sentTimestamp: sentTimestamp,
-      referencedMessageId: referencedMessageId,
-      text: text,
-      mediaType: media.type,
-      mediaUrl: mediaUrl,
-    );
+    await ChatsService.sendMessage(widget.chat.id, message);
 
     if (mounted) {
       setState(() {
@@ -241,7 +231,11 @@ class _ChatPageState extends State<ChatPage> {
       uid: uid,
       media: imageMedia,
     );
-    await ChatsService.setChatWallpaper(uid, widget.chat.id, wallpaperUrl);
+    await ChatsService.updateChatDetails(
+      uid,
+      widget.chat.id,
+      {'wallpaperUrl': wallpaperUrl},
+    );
   }
 
   Widget _buildMediaTileDark() {

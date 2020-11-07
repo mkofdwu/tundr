@@ -76,9 +76,9 @@ const chats = Collection({
     participants: ['userId'],
     messages: [
       {
-        uid: 'userId', // sender
-        readTimestamp: Timestamp,
-        sentTimestamp: Timestamp,
+        senderUid: 'userId',
+        readOn: Timestamp,
+        sentOn: Timestamp,
         referencedMessageId: 'messageId',
         text: String,
         mediaType: Integer,

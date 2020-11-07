@@ -133,7 +133,7 @@ class OtherUserMessageTile extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  DateFormat.jm().format(message.sentTimestamp),
+                  DateFormat.jm().format(message.sentOn),
                   style: TextStyle(
                     color: MyPalette.grey,
                     fontSize: 12.0,

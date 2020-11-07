@@ -135,6 +135,4 @@ class UsersService {
         .call({'otherUid': otherUid});
     return result.data;
   }
-
-  // TODO: watch user's unknown messages and check if user is blocked
 }

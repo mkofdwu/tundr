@@ -25,7 +25,7 @@ class MatchTile extends StatelessWidget {
             id: null,
             uid: uid,
             wallpaperUrl: '',
-            lastReadTimestamp: null,
+            lastRead: null,
             type: ChatType.newMatch,
           ),
         ),
@@ -46,7 +46,9 @@ class MatchTile extends StatelessWidget {
               decoration: BoxDecoration(
                 border: Border.all(color: MyPalette.white, width: 1.0),
               ),
-              child: snapshot.hasData ? getNetworkImage(snapshot.data.profileImageUrl) : null,
+              child: snapshot.hasData
+                  ? getNetworkImage(snapshot.data.profileImageUrl)
+                  : null,
             );
           },
         ),

@@ -59,6 +59,8 @@ class _SetupInterestsPageState extends State<SetupInterestsPage> {
                           customInterests:
                               Provider.of<RegistrationInfo>(context)
                                   .customInterests,
+                          onInterestsChanged: () {},
+                          onCustomInterestsChanged: () {},
                         ),
                       ),
                     ),
