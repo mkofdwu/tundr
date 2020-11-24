@@ -15,9 +15,10 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
 
   void _deleteAccount(BuildContext context) async {
     if (await AuthService.signIn(
-      username: Provider.of<User>(context).profile.username,
-      password: _passwordController.text,
-    )) {
+          username: Provider.of<User>(context).profile.username,
+          password: _passwordController.text,
+        ) ==
+        null) {
       await AuthService.deleteAccount(Provider.of<User>(context).profile.uid);
     } else {
       await showDialog(
@@ -58,17 +59,18 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
           right: 40.0,
           width: width * 170 / 375,
           child: TileTextField(
+            key: ValueKey('confirmPasswordField'),
             controller: _passwordController,
             obscureText: true,
             autoFocus: true,
             moveFocus: false,
-            onEditingComplete: () => _deleteAccount(context),
           ),
         ),
         Positioned(
           right: 20.0,
           bottom: 100.0,
           child: FlatTileButton(
+            key: ValueKey('confirmDeleteAccountBtn'),
             text: 'Delete account',
             color: MyPalette.red,
             onTap: () => _deleteAccount(context),

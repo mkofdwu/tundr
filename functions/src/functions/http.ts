@@ -3,6 +3,18 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
+export const phoneNumberExists = functions.https.onCall(
+  async (data, _context) => {
+    const privateInfoDocs = await admin
+      .firestore()
+      .collection('users_private_info')
+      .where('phoneNumber', '==', data.phoneNumber)
+      .limit(1)
+      .get();
+    return privateInfoDocs.docs.length > 0;
+  }
+);
+
 export const checkReadReceipts = functions.https.onCall(
   async (data, context) => {
     // returns whether read receipts will be enabled for the chat between the two users
@@ -30,28 +42,30 @@ export const checkReadReceipts = functions.https.onCall(
 
 const N_MOST_POPULAR = 10;
 
-export const getMostPopular = functions.https.onCall(async (data, context) => {
-  const userPrivateInfoDocs = (
-    await admin
-      .firestore()
-      .collection('users_private_info')
-      .where('settings.showInMostPopular', '==', true)
-      .orderBy('popularityScore', 'desc')
-      .limit(N_MOST_POPULAR)
-      .get()
-  ).docs;
-  const popularUsers = [];
-  for (const privateInfoDoc of userPrivateInfoDocs) {
-    const uid = privateInfoDoc.id;
-    popularUsers.push({
-      profile: (
-        await admin.firestore().collection('user_profiles').doc(uid).get()
-      ).data(),
-      popularityScore: privateInfoDoc.data().popularityScore,
-    });
+export const getMostPopular = functions.https.onCall(
+  async (_data, _context) => {
+    const userPrivateInfoDocs = (
+      await admin
+        .firestore()
+        .collection('users_private_info')
+        .where('settings.showInMostPopular', '==', true)
+        .orderBy('popularityScore', 'desc')
+        .limit(N_MOST_POPULAR)
+        .get()
+    ).docs;
+    const popularUsers = [];
+    for (const privateInfoDoc of userPrivateInfoDocs) {
+      const uid = privateInfoDoc.id;
+      popularUsers.push({
+        profile: (
+          await admin.firestore().collection('user_profiles').doc(uid).get()
+        ).data(),
+        popularityScore: privateInfoDoc.data().popularityScore,
+      });
+    }
+    return popularUsers;
   }
-  return popularUsers;
-});
+);
 
 const _canTalkTo = async (
   data: any,

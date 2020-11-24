@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/pages/register.dart';
-import 'package:tundr/pages/sign_in.dart';
+import 'package:tundr/pages/login.dart';
 import 'package:tundr/constants/my_palette.dart';
 
 class WelcomePage extends StatelessWidget {
   void _signInPage(BuildContext context) => Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => SignInPage(),
+          pageBuilder: (context, animation1, animation2) => LoginPage(),
           transitionsBuilder: (context, animation1, animation2, child) {
             return FadeTransition(
                 opacity: animation1, child: child); // FUTURE: animations
@@ -123,6 +123,7 @@ class WelcomePage extends StatelessWidget {
                   top: height * 523 / 812,
                   right: 0.0,
                   child: GestureDetector(
+                    key: ValueKey('loginBtn'),
                     child: Container(
                       width: width * 184 / 375,
                       height: height * 63 / 812,
@@ -134,7 +135,7 @@ class WelcomePage extends StatelessWidget {
                           bottom: 10.0,
                         ),
                         child: Text(
-                          'Sign in',
+                          'Login',
                           style: TextStyle(
                             color: MyPalette.white,
                             fontSize: 20.0,
@@ -158,6 +159,7 @@ class WelcomePage extends StatelessWidget {
                   top: height * 630 / 812,
                   right: 0.0,
                   child: GestureDetector(
+                    key: ValueKey('registerBtn'),
                     child: Container(
                       width: width * 132 / 375,
                       height: height * 38 / 812,

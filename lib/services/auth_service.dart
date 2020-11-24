@@ -1,6 +1,5 @@
 import 'package:tundr/constants/firebase_ref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:tundr/models/user_algorithm_data.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
@@ -8,19 +7,19 @@ import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/services/storage_service.dart';
 
 class AuthService {
-  static Future<bool> signIn({
+  static Stream<User> currentUserStream() =>
+      FirebaseAuth.instance.authStateChanges();
+
+  static Future<String> signIn({
     String username,
     String password,
   }) async {
     try {
-      print(
-          'signing in with email: $username@example.com and password: $password');
-      final result = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: '$username@example.com', password: password);
-
-      return result.user != null;
+      return null;
     } catch (e) {
-      return false;
+      return e.message;
     }
   }
 
@@ -54,12 +53,14 @@ class AuthService {
         return true;
       }
       return false;
-    } on PlatformException {
+    } catch (e) {
       return false;
     }
   }
 
-  static Future<void> createAccount(RegistrationInfo info) async {
+  // phone registration
+
+  static Future<void> _uploadLocalPhotos(RegistrationInfo info) async {
     final profileImageUrl = await StorageService.uploadMedia(
       uid: info.uid,
       media: info.profilePic,
@@ -79,17 +80,75 @@ class AuthService {
 
     info.profilePic.url = profileImageUrl;
     info.profilePic.isLocalFile = false;
+  }
 
-    await userProfilesRef.doc(info.uid).set(UserProfile.register(info).toMap());
-    await usersPrivateInfoRef
-        .doc(info.uid)
-        .set(UserPrivateInfo.register(info).toMap());
-    await usersAlgorithmDataRef
-        .doc(info.uid)
-        .set(UserAlgorithmData.register(info).toMap());
-    await userStatusesRef.doc(info.uid).set({
-      'online': true,
-      'lastSeen': null,
-    });
+  static Future<bool> _createAccount({
+    RegistrationInfo info,
+    AuthCredential phoneCredential,
+  }) async {
+    try {
+      final result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: '${info.username.trim()}@example.com',
+          password: info.password);
+      if (result.user == null) {
+        return false;
+      } else {
+        // TODO: TEST if this still works
+        info.uid = result.user.uid;
+        await result.user.updatePhoneNumber(phoneCredential);
+        await _uploadLocalPhotos(info);
+        await userProfilesRef
+            .doc(info.uid)
+            .set(UserProfile.register(info).toMap());
+        await usersPrivateInfoRef
+            .doc(info.uid)
+            .set(UserPrivateInfo.register(info).toMap());
+        await usersAlgorithmDataRef
+            .doc(info.uid)
+            .set(UserAlgorithmData.register(info).toMap());
+        await userStatusesRef.doc(info.uid).set({
+          'online': true,
+          'lastSeen': null,
+        });
+        return true;
+      }
+    } catch (exception) {
+      await FirebaseAuth.instance.signOut(); // FUTURE: temporary fix
+      return false;
+    }
+  }
+
+  static Future<bool> verifyCodeAndCreateAccount(RegistrationInfo info,
+      List<int> verificationCode, String verificationId) async {
+    if (!verificationCode.contains(null)) {
+      final credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: verificationCode.join(),
+      );
+      if (credential != null) {
+        return await _createAccount(info: info, phoneCredential: credential);
+      }
+    }
+    return false;
+  }
+
+  static void sendSMS(
+      RegistrationInfo info, Function(String) verificationIdCallback) {
+    FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: info.phoneNumber,
+      timeout: const Duration(seconds: 120),
+      verificationCompleted: (AuthCredential credential) {
+        _createAccount(info: info, phoneCredential: credential);
+      },
+      verificationFailed: (FirebaseAuthException exception) {
+        print('verification failed: ' + exception.message);
+      },
+      codeSent: (String verificationId, int forceResendingToken) {
+        verificationIdCallback(verificationId);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        verificationIdCallback(verificationId);
+      },
+    );
   }
 }

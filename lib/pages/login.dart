@@ -4,25 +4,36 @@ import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/tile.dart';
 
-class SignInPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _SignInPageState createState() => _SignInPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _incorrect = false;
 
-  void _signIn() async {
-    final success = await AuthService.signIn(
+  Future<void> _signIn() async {
+    final error = await AuthService.signIn(
       username: _usernameController.text,
       password: _passwordController.text,
     );
-    if (success) {
+    if (error == null) {
       Navigator.pop(context);
     } else {
-      setState(() => _incorrect = true);
+      await showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Error'),
+          content: Text(error),
+          actions: [
+            FlatButton(
+              child: Text('Close'),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      );
     }
   }
 
@@ -62,7 +73,7 @@ class _SignInPageState extends State<SignInPage> {
           left: width * 67 / 375,
           top: height * 91 / 812,
           child: Text(
-            'Sign in',
+            'Login',
             style: TextStyle(
               color: MyPalette.black,
               fontSize: 60.0,
@@ -71,24 +82,24 @@ class _SignInPageState extends State<SignInPage> {
             ),
           ),
         ),
-        if (_incorrect)
-          Positioned(
-            left: width * 70 / 375,
-            top: height * 210 / 812,
-            child: Container(
-              width: 200.0,
-              height: 100.0,
-              padding: EdgeInsets.all(20.0),
-              color: MyPalette.red,
-              child: Text(
-                'Incorrect username or password',
-                style: TextStyle(
-                  color: MyPalette.white,
-                  fontSize: 16.0,
-                ),
-              ),
-            ),
-          ),
+        // if (_error != null)
+        //   Positioned(
+        //     left: width * 70 / 375,
+        //     top: height * 210 / 812,
+        //     child: Container(
+        //       width: 200.0,
+        //       height: 100.0,
+        //       padding: EdgeInsets.all(20.0),
+        //       color: MyPalette.red,
+        //       child: Text(
+        //         _error,
+        //         style: TextStyle(
+        //           color: MyPalette.white,
+        //           fontSize: 16.0,
+        //         ),
+        //       ),
+        //     ),
+        //   ),
         Positioned(
           left: width / 10,
           top: height * 360 / 812,
@@ -96,12 +107,14 @@ class _SignInPageState extends State<SignInPage> {
           child: Column(
             children: <Widget>[
               TileTextField(
+                key: ValueKey('usernameField'),
                 hintText: 'Username',
                 controller: _usernameController,
                 autoFocus: true,
               ),
               SizedBox(height: 20.0),
               TileTextField(
+                key: ValueKey('passwordField'),
                 hintText: 'Password',
                 controller: _passwordController,
                 obscureText: true,
@@ -115,6 +128,7 @@ class _SignInPageState extends State<SignInPage> {
           right: width * 15 / 375,
           bottom: height * 122 / 812,
           child: GestureDetector(
+            key: ValueKey('loginSubmitBtn'),
             child: Container(
               width: 60.0,
               height: 60.0,

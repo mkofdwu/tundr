@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
@@ -13,40 +12,32 @@ import 'package:tundr/pages/welcome.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/app_theme.dart';
 import 'package:tundr/repositories/user.dart';
+import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/handlers/app_state_handler.dart';
 import 'package:tundr/widgets/handlers/notification_handler.dart';
 
 void main() {
-  runZonedGuarded<Future<void>>(
-    () async {
-      runApp(MultiProvider(
-        providers: [
-          ChangeNotifierProvider<User>(create: (context) => User()),
-          ChangeNotifierProvider<ThemeNotifier>(
-              create: (context) => ThemeNotifier()),
-          ChangeNotifierProvider<RegistrationInfo>(
-              create: (context) => RegistrationInfo()),
-        ],
-        child: TundrApp(),
-      ));
-    },
-    (error, stackTrace) {
-      runApp(
-        MaterialApp(
-          title: 'error',
-          home: Material(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(error),
-              ),
-            ),
-          ),
-        ),
-      );
-    },
-  );
+  // runZonedGuarded<Future<void>>(
+  //   () async {
+  runApp(TundrApp());
+  // },
+  // (error, stackTrace) {
+  //   runApp(
+  //     MaterialApp(
+  //       title: 'error',
+  //       home: Material(
+  //         child: Center(
+  //           child: Padding(
+  //             padding: const EdgeInsets.all(20.0),
+  //             child: Text(error),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // },
+  // );
 }
 
 class TundrApp extends StatefulWidget {
@@ -57,64 +48,82 @@ class TundrApp extends StatefulWidget {
 class _TundrAppState extends State<TundrApp> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<auth.User>(
-      stream: auth.FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        Widget home;
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          home = LoadingPage();
-        } else if (snapshot.data?.uid == null) {
-          home = WelcomePage();
-        } else {
-          home = FutureBuilder<User>(
-            future: UsersService.getUserRepo(snapshot.data.uid),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<User>(create: (context) => User()),
+        ChangeNotifierProvider<ThemeNotifier>(
+            create: (context) => ThemeNotifier()),
+        ChangeNotifierProvider<RegistrationInfo>(
+            create: (context) => RegistrationInfo()),
+      ],
+      child: FutureBuilder(
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return StreamBuilder<auth.User>(
+            stream: AuthService.currentUserStream(),
             builder: (context, snapshot) {
+              Widget home;
+
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return LoadingPage();
-              }
-
-              final currentUser = snapshot.data;
-              Provider.of<User>(context).profile = currentUser.profile;
-              Provider.of<User>(context).privateInfo = currentUser.privateInfo;
-              Provider.of<User>(context).algorithmData =
-                  currentUser.algorithmData;
-
-              if (currentUser.privateInfo.theme == null) {
-                return SetupThemePage();
+                home = LoadingPage();
+              } else if (snapshot.data?.uid == null) {
+                home = WelcomePage();
               } else {
-                Provider.of<ThemeNotifier>(context).theme =
-                    currentUser.privateInfo.theme;
-                return AppStateHandler(
-                  onExit: () {
-                    Provider.of<User>(context).updateOnline(false);
+                home = FutureBuilder<User>(
+                  future: UsersService.getUserRepo(snapshot.data.uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return LoadingPage();
+                    }
+
+                    final currentUser = snapshot.data;
+                    Provider.of<User>(context).profile = currentUser.profile;
+                    Provider.of<User>(context).privateInfo =
+                        currentUser.privateInfo;
+                    Provider.of<User>(context).algorithmData =
+                        currentUser.algorithmData;
+
+                    if (currentUser.privateInfo.theme == null) {
+                      return SetupThemePage();
+                    } else {
+                      Provider.of<ThemeNotifier>(context).theme =
+                          currentUser.privateInfo.theme;
+                      return AppStateHandler(
+                        onExit: () {
+                          Provider.of<User>(context).updateOnline(false);
+                        },
+                        onStart: () {
+                          Provider.of<User>(context).updateOnline(true);
+                        },
+                        child: NotificationHandler(
+                          child: HomePage(),
+                        ),
+                      );
+                    }
                   },
-                  onStart: () {
-                    Provider.of<User>(context).updateOnline(true);
-                  },
-                  child: NotificationHandler(
-                    child: HomePage(),
-                  ),
                 );
               }
+
+              return Consumer<ThemeNotifier>(
+                builder: (context, themeNotifier, child) {
+                  return MaterialApp(
+                    title: 'tundr',
+                    theme: _getThemeData(themeNotifier.theme),
+                    debugShowCheckedModeBanner: false,
+                    home: home,
+                    routes: {
+                      '/user_profile': (context) => UserProfileMainPage(),
+                    },
+                  );
+                },
+              );
             },
           );
-        }
-
-        return Consumer<ThemeNotifier>(
-          builder: (context, themeNotifier, child) {
-            return MaterialApp(
-              title: 'tundr',
-              theme: _getThemeData(themeNotifier.theme),
-              debugShowCheckedModeBanner: false,
-              home: home,
-              routes: {
-                '/user_profile': (context) => UserProfileMainPage(),
-              },
-            );
-          },
-        );
-      },
+        },
+      ),
     );
   }
 
@@ -138,6 +147,9 @@ class _TundrAppState extends State<TundrApp> {
       canvasColor: primaryColor,
       primaryColor: primaryColor,
       dialogBackgroundColor: dialogBackgroundColor,
+      dialogTheme: DialogTheme(
+        contentTextStyle: TextStyle(color: accentColor),
+      ),
       accentColor: accentColor,
       textTheme: TextTheme(
         headline3: TextStyle(

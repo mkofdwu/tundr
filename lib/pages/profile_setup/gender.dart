@@ -54,15 +54,22 @@ class _SetupGenderPageState extends State<SetupGenderPage> {
             padding: EdgeInsets.symmetric(horizontal: 30.0),
             child: Column(
               children: <Widget>[
-                SizedBox(height: 20.0),
+                SizedBox(height: 30.0),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Gender',
-                    style: TextStyle(color: MyPalette.white, fontSize: 40.0),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Gender',
+                      style: TextStyle(
+                        color: MyPalette.white,
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
-                SizedBox(height: 20.0),
+                SizedBox(height: 30.0),
                 Expanded(
                   child: TileRadioGroup(
                     theme: AppTheme.dark,

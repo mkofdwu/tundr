@@ -4,8 +4,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/pages/profile_setup/interests.dart';
 import 'package:tundr/repositories/registration_info.dart';
-import 'package:tundr/pages/profile_setup/extra_info.dart';
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
@@ -33,11 +33,11 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
     Navigator.push(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) => SetupExtraInfoPage(),
+        pageBuilder: (context, animation1, animation2) => SetupInterestsPage(),
         transitionsBuilder: (context, animation1, animation2, child) {
           return SlideTransition(
             position: Tween<Offset>(
-              begin: Offset(0.0, 0.1),
+              begin: Offset(0.0, 1.0),
               end: Offset(0.0, 0.0),
             ).animate(animation1),
             child: child,
@@ -290,13 +290,11 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
           ),
         ),
       ),
-      onVerticalDragUpdate: profilePic == null
-          ? null
-          : (DragUpdateDetails details) {
-              if (details.delta.dy < -1.0) {
-                _nextPage();
-              } else if (details.delta.dy > 1.0) Navigator.pop(context);
-            },
+      onVerticalDragUpdate: (DragUpdateDetails details) {
+        if (details.delta.dy < -1.0 && profilePic != null) {
+          _nextPage();
+        } else if (details.delta.dy > 1.0) Navigator.pop(context);
+      },
     );
   }
 }

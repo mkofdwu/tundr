@@ -55,57 +55,30 @@ class _HomePageState extends State<HomePage>
               indicatorColor: MyPalette.gold,
               indicatorPadding: EdgeInsets.symmetric(horizontal: 10.0),
               controller: _tabController,
-              tabs: <Widget>[
-                Tab(
-                  child: Icon(
-                    Icons.person,
-                    color: _tabController.index == 0
-                        ? MyPalette.gold
-                        : Theme.of(context).accentColor,
-                  ),
-                ),
-                Tab(
-                  child: Icon(
-                    Icons.people,
-                    color: _tabController.index == 1
-                        ? MyPalette.gold
-                        : Theme.of(context).accentColor,
-                  ),
-                ), // FUTURE: find flame icon
-                Tab(
-                  // child: Icon(
-                  //   Icons.offline_bolt,
-                  //   color: _tabController.index == 2
-                  //       ? AppColors.gold
-                  //       : Theme.of(context).accentColor,
-                  // ),
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10.0),
-                    decoration: ShapeDecoration(
-                      color: _tabController.index == 2
-                          ? MyPalette.gold
-                          : Theme.of(context).accentColor,
-                      shape: CircleBorder(),
+              tabs: <IconData>[
+                Icons.person,
+                Icons.people,
+                Icons.contacts,
+                Icons.search,
+                Icons.chat
+              ]
+                  .asMap()
+                  .map(
+                    (i, iconData) => MapEntry(
+                      i,
+                      Tab(
+                        key: ValueKey('tab' + i.toString()),
+                        child: Icon(
+                          iconData,
+                          color: _tabController.index == i
+                              ? MyPalette.gold
+                              : Theme.of(context).accentColor,
+                        ),
+                      ),
                     ),
-                  ),
-                ), // FUTURE: lightning icon
-                Tab(
-                  child: Icon(
-                    Icons.search,
-                    color: _tabController.index == 3
-                        ? MyPalette.gold
-                        : Theme.of(context).accentColor,
-                  ),
-                ),
-                Tab(
-                  child: Icon(
-                    Icons.chat,
-                    color: _tabController.index == 4
-                        ? MyPalette.gold
-                        : Theme.of(context).accentColor,
-                  ),
-                ),
-              ],
+                  )
+                  .values
+                  .toList(),
             ),
           ),
         ),

@@ -8,6 +8,14 @@ import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/models/user_status.dart';
 import 'package:tundr/repositories/user.dart';
 
+Future<dynamic> callHttpsFunction(String functionName,
+    [dynamic parameters]) async {
+  final result = await CloudFunctions.instance
+      .getHttpsCallable(functionName: functionName)
+      .call(parameters);
+  return result.data;
+}
+
 class UsersService {
   static Future<UserProfile> getUserProfile(
     String uid, {
@@ -22,12 +30,16 @@ class UsersService {
   static Future<UserPrivateInfo> getUserPrivateInfo(String uid) async {
     // only used for current user
     final privateInfoDoc = await usersPrivateInfoRef.doc(uid).get();
+    if (!privateInfoDoc.exists) throw 'User private info does not exist';
     return UserPrivateInfo.fromMap(privateInfoDoc.data());
   }
 
   static Future<UserAlgorithmData> getUserAlgorithmData(String uid) async {
     // only fetch data from current user
     final algorithmDataDoc = await usersAlgorithmDataRef.doc(uid).get();
+    if (!algorithmDataDoc.exists) {
+      throw 'Algorithm data document does not exist';
+    }
     return UserAlgorithmData.fromMap(algorithmDataDoc.data());
   }
 
@@ -74,14 +86,8 @@ class UsersService {
         .isNotEmpty;
   }
 
-  static Future<bool> phoneNumberExists(String phoneNumber) async {
-    return (await usersPrivateInfoRef
-            .where('phoneNumber', isEqualTo: phoneNumber)
-            .limit(1)
-            .get())
-        .docs
-        .isNotEmpty;
-  }
+  static Future<bool> phoneNumberExists(String phoneNumber) =>
+      callHttpsFunction('phoneNumberExists', {'phoneNumber': phoneNumber});
 
   static Future<List<UserProfile>> searchForUsers(
       String partialUsername, int n) async {
@@ -112,27 +118,17 @@ class UsersService {
     return users;
   }
 
-  static Future<bool> isBlockedBy(String otherUid) async {
-    final callable =
-        CloudFunctions.instance.getHttpsCallable(functionName: 'isBlockedBy');
-    final result = await callable.call({'otherUid': otherUid});
-    return result.data;
-  }
+  static Future<bool> isBlockedBy(String otherUid) =>
+      callHttpsFunction('isBlockedBy', {'otherUid': otherUid});
 
   static Future<List<PopularUser>> getMostPopular() async {
-    final result = await CloudFunctions.instance
-        .getHttpsCallable(functionName: 'getMostPopular')
-        .call();
-    return result.data.map((popUser) => PopularUser(
+    final mostPopularUsers = await callHttpsFunction('getMostPopular');
+    return mostPopularUsers.map((popUser) => PopularUser(
           profile: popUser.profile,
           popularityScore: popUser.popularityScore,
         ));
   }
 
-  static Future<bool> allowedToTalkTo(String otherUid) async {
-    final result = await CloudFunctions.instance
-        .getHttpsCallable(functionName: 'allowedToTalkTo')
-        .call({'otherUid': otherUid});
-    return result.data;
-  }
+  static Future<bool> allowedToTalkTo(String otherUid) =>
+      callHttpsFunction('allowedToTalkTo', {'otherUid': otherUid});
 }

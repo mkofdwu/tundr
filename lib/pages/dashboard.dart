@@ -218,11 +218,13 @@ class _DashboardPageState extends State<DashboardPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   SimpleIconButton(
+                    key: ValueKey('settingsBtn'),
                     icon: Icons.settings,
                     label: 'Settings',
                     onPressed: _openSettings,
                   ),
                   SimpleIconButton(
+                    key: ValueKey('myProfileBtn'),
                     icon: Icons.person,
                     label: 'Profile',
                     onPressed: _openOwnProfileEdit,

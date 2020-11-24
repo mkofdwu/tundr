@@ -63,7 +63,6 @@ class _UserProfilePersonalInfoPageState
             child: Column(
               children: <Widget>[
                 TileIconButton(
-                  // FUTURE: design inspiration from centered close button to provide a nicer design
                   icon: Icons.close,
                   onPressed: () {
                     Navigator.popUntil(

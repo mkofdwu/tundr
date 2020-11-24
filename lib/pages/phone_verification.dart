@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
 
@@ -19,80 +17,34 @@ class PhoneVerificationPage extends StatefulWidget {
 class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   final List<int> _verificationCode = List<int>.filled(6, null);
   String _verificationId;
-  bool _creatingAccount =
-      false; // whether the account is currently being created
+  bool _creatingAccount = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _sendSMS());
+    WidgetsBinding.instance
+        .addPostFrameCallback((timeStamp) => AuthService.sendSMS(
+              Provider.of<RegistrationInfo>(context),
+              (verificationId) =>
+                  setState(() => _verificationId = verificationId),
+            ));
   }
 
-  void _createAccount(AuthCredential credential) async {
+  void _onSubmit() async {
     if (!_creatingAccount) {
       setState(() => _creatingAccount = true);
-      try {
-        final info = Provider.of<RegistrationInfo>(context);
-        final result = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: '${info.username.trim()}@example.com',
-                password: info.password);
-        if (result.user == null) {
-          setState(() => _creatingAccount = false);
-          await showDialog(
-            context: context,
-            child: AlertDialog(
-              title: Text('User could not be created: result.user is null'),
-              titleTextStyle: TextStyle(color: MyPalette.red),
-              actions: <Widget>[
-                FlatTileButton(
-                  text: 'Ok',
-                  color: MyPalette.gold,
-                  onTap: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-          );
-        } else {
-          // TODO: TEST if this still works
-          info.uid = result.user.uid;
-          await AuthService.createAccount(info);
-          await result.user.updatePhoneNumber(credential);
-        }
+      final success = await AuthService.verifyCodeAndCreateAccount(
+        Provider.of<RegistrationInfo>(context),
+        _verificationCode,
+        _verificationId,
+      );
 
-        // AuthResult result = await FirebaseAuth.instance.signInWithCredential(
-        //     credential); // after signing in streambuilder rebuilds
-        // if (result.user == null) {
-        //   setState(() => _creatingAccount = false);
-        // } else {
-        //
-        //   info.uid = result.user.uid;
-        //   await DatabaseService.createAccount(info);
-
-        //   // FirebaseAuth.instance.currentUser();
-
-        //   // AuthService.createAccount(result.user, info);
-        //   // result.user.updateEmail('${info.username}@example.com');
-        //   // result.user.updatePassword(info.password);
-        //   result.user.updatePhoneNumberCredential(credential);
-        //   (await FirebaseAuth.instance.currentUser())
-        //       .updateEmail('${info.username}@example.com');
-        //   (await FirebaseAuth.instance.currentUser())
-        //       .updatePassword(info.password)
-        //       .then((_) => FirebaseAuth.instance.signInWithEmailAndPassword(
-        //             email: '${info.username}@example.com',
-        //             password: info.password,
-        //           ));
-        // }
-      } on PlatformException catch (exception) {
-        await FirebaseAuth.instance.signOut(); // FUTURE: temporary fix
-        setState(() {
-          _creatingAccount = false;
-        });
+      if (!success) {
+        setState(() => _creatingAccount = false);
         await showDialog(
           context: context,
           child: AlertDialog(
-            title: Text(exception.message),
+            title: Text('User could not be created: result.user is null'),
             titleTextStyle: TextStyle(color: MyPalette.red),
             actions: <Widget>[
               FlatTileButton(
@@ -105,36 +57,6 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
         );
       }
     }
-  }
-
-  void _verifyCode() {
-    if (!_verificationCode.contains(null)) {
-      final credential = PhoneAuthProvider.credential(
-        verificationId: _verificationId,
-        smsCode: _verificationCode.join(),
-      );
-      if (credential != null) {
-        _createAccount(credential);
-      }
-    }
-  }
-
-  Future<void> _sendSMS() {
-    return FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: Provider.of<RegistrationInfo>(context).phoneNumber,
-      timeout: const Duration(seconds: 120),
-      verificationCompleted: (AuthCredential credential) {
-        _createAccount(credential);
-      },
-      verificationFailed: (FirebaseAuthException exception) =>
-          print('verification failed: ' + exception.message),
-      codeSent: (String verificationId, int forceResendingToken) {
-        setState(() => _verificationId = verificationId);
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        setState(() => _verificationId = verificationId);
-      },
-    );
   }
 
   @override
@@ -199,7 +121,13 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                           style:
                               TextStyle(color: MyPalette.gold, fontSize: 14.0),
                         ),
-                        onTap: _sendSMS,
+                        onTap: () {
+                          AuthService.sendSMS(
+                            Provider.of<RegistrationInfo>(context),
+                            (verificationId) => setState(
+                                () => _verificationId = verificationId),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -241,7 +169,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                     moveFocus: false,
                     onChanged: (digit) {
                       setState(() => _verificationCode[5] = digit);
-                      _verifyCode();
+                      _onSubmit();
                     },
                   ),
                 ],
@@ -250,7 +178,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
             Positioned(
               left: width * 179 / 375,
               bottom: 20.0,
-              child: NextPageArrow(onNextPage: _verifyCode),
+              child: NextPageArrow(onNextPage: _onSubmit),
             ),
           ],
         ),

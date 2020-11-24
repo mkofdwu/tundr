@@ -75,17 +75,19 @@ class _SettingsPageState extends State<SettingsPage> {
             builder: (context) => AboutPage()), // DESIGN: transitions
       );
 
-  void _confirmSignOut() async {
+  void _confirmLogout() async {
     final signOut = await showDialog(
       context: context,
       child: AlertDialog(
-        title: Text('Are you sure you would like to sign out?'),
+        title: Text('Are you sure you would like to logout?'),
         actions: <Widget>[
           FlatButton(
+            key: ValueKey('okBtn'),
             child: Text('OK'),
             onPressed: () => Navigator.pop(context, true),
           ),
           FlatButton(
+            key: ValueKey('cancelBtn'),
             child: Text('CANCEL'),
             onPressed: () => Navigator.pop(context, false),
           ),
@@ -335,13 +337,14 @@ class _SettingsPageState extends State<SettingsPage> {
               SizedBox(height: 20.0),
               GestureDetector(
                 // FUTURE: replace with flatdarktilebutton
+                key: ValueKey('logoutBtn'),
                 child: Padding(
                   padding: EdgeInsets.all(20.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        'Sign out',
+                        'Logout',
                         style: TextStyle(
                           color: MyPalette.red,
                           fontSize: 20.0,
@@ -351,9 +354,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     ],
                   ),
                 ),
-                onTap: _confirmSignOut,
+                onTap: _confirmLogout,
               ),
               GestureDetector(
+                key: ValueKey('deleteAccountBtn'),
                 child: Padding(
                   padding: EdgeInsets.all(20.0),
                   child: Row(

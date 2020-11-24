@@ -23,7 +23,8 @@ class StorageService {
     String prefix = '',
   }) async {
     // FIXME: FUTURE: IMPROVE AND CLEAN UP
-    // assert(media.isLocalFile == null ? media.isInBytes : media.isLocalFile);
+    // assert(media.url == null ? media.isInBytes : media.isLocalFile);
+    assert(uid != null);
 
     String id;
     String storagePath;

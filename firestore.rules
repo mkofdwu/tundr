@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+    	allow read;
+    	allow write: if request.auth.uid == uid;
+    }
+    match /users/{uid}/tokens/{token} {
+      allow read, write: if request.auth.uid == uid;
+    }
+    match /userpersonalinfo/{uid} {
+    	allow read;
+      allow write: if request.auth.uid == uid;
+    }
+    match /userfilters/{uid} {
+    	allow read;
+      allow write: if request.auth.uid == uid;
+    }
+    match /userpreferences/{uid} {
+      allow read;
+      allow write: if request.auth.uid == uid;
+    }
+    match /usersuggestions/{uid}/suggestions/{suggestionUid} {
+    	allow read, write: if request.auth.uid == uid || request.auth.uid == suggestionUid;
+    }
+    match /usersuggestionsgonethrough/{uid} {
+    	allow read, write: if request.auth.uid == uid;
+    }
+    match /usermessages/{uid}/messages/{messageId} {
+      allow read, update, delete: if request.auth.uid == uid;
+      allow create;
+    }
+    match /useractions/{uid}/actions/{actionId} {
+    	allow read, update, delete: if request.auth.uid == uid;
+      allow create;
+    }
+    match /userblocked/{uid}/blocked/{blockedUid} {
+    	allow read: if request.auth.uid == blockedUid;
+      allow read, write: if request.auth.uid == uid;
+    }
+    match /userliked/{uid}/liked/{likedUid} {
+      allow create, update: if request.auth.uid == uid;
+    }
+    match /userchats/{uid}/chats/{chatId} {
+    	allow read, write: if request.auth.uid == uid;
+    }
+    match /chatmessages/{chatId}/messages/{messageId} {
+    	allow read, write; // FIXME
+    }
+    match /usermatches/{uid}/matches/{matchUid} {
+    	allow read, write: if request.auth.uid == uid;
+    }
+    match /userunknownchats/{uid}/unknownchats/{chatId} {
+    	allow read, write: if request.auth.uid == uid;
+    }
+  }
+}
