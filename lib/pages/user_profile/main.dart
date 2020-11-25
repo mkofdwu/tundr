@@ -15,6 +15,7 @@ import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/buttons/dark_tile.dart';
+import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 
@@ -63,157 +64,148 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
     final my = Provider.of<User>(context).profile;
     final otherProfile =
         ModalRoute.of(context).settings.arguments as UserProfile;
-    return GestureDetector(
-      child: SafeArea(
-        child: Material(
-          child: Stack(
-            children: <Widget>[
-              Container(
-                constraints: BoxConstraints.expand(),
-                child: Hero(
-                  tag: otherProfile.profileImageUrl,
-                  child: getNetworkImage(otherProfile.profileImageUrl),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  height: 200.0,
-                  decoration: BoxDecoration(
-                    gradient: fromTheme(
-                      context,
-                      dark: MyPalette.blackToTransparent,
-                      light: MyPalette.goldToTransparent,
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: 200.0,
-                  decoration: BoxDecoration(
-                    gradient: fromTheme(
-                      context,
-                      dark: MyPalette.transparentToBlack,
-                      light: MyPalette.transparentToGold,
-                    ),
-                  ),
-                ),
-              ),
-              TileIconButton(
-                icon: Icons.arrow_back,
-                onPressed: () => Navigator.pop(context),
-              ),
-              if (otherProfile.uid != my.uid)
-                Align(
-                  alignment: Alignment.topRight,
-                  child: FutureBuilder(
-                    future: Future.wait([
-                      UsersService.allowedToTalkTo(otherProfile.uid),
-                      ChatsService.getChatFromUid(my.uid, otherProfile.uid),
-                    ]),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) return SizedBox.shrink();
-
-                      final iBlockedUser = Provider.of<User>(context)
-                          .privateInfo
-                          .blocked
-                          .contains(otherProfile.uid);
-                      final allowedToTalk = snapshot.data[0];
-                      final chat = snapshot.data[1];
-
-                      if (iBlockedUser) {
-                        return DarkTileButton(
-                          child: Text(
-                            'Unblock',
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                          color: MyPalette.red,
-                          onTap: () async {
-                            Provider.of<User>(context)
-                                .privateInfo
-                                .blocked
-                                .remove(otherProfile.uid);
-                            await Provider.of<User>(context)
-                                .writeField('blocked', UserPrivateInfo);
-                            setState(() {});
-                          },
-                        );
-                      }
-                      if (allowedToTalk) {
-                        return TileIconButton(
-                          icon: Icons.chat_bubble_outline,
-                          onPressed: () {
-                            return Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation1, animation2) =>
-                                        ChatPage(
-                                            otherUser: otherProfile,
-                                            chat: chat),
-                                transitionsBuilder:
-                                    (context, animation1, animation2, child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: Offset(0.0, 1.0),
-                                      end: Offset(0.0, 0.0),
-                                    ).animate(animation1),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        );
-                      }
-                      return SizedBox.shrink();
-                    },
-                  ),
-                ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Hero(
-                        tag: otherProfile.username,
-                        child: Material(
-                          color: Colors.transparent,
-                          child: Text(
-                            '${otherProfile.name}, ${otherProfile.ageInYears}',
-                            style: TextStyle(fontSize: 40.0),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 40.0),
-                      _hasInfoLeft(otherProfile)
-                          ? NextPageArrow(
-                              dark: fromTheme(
-                                context,
-                                dark: true,
-                                light: false,
-                              ),
-                              onNextPage: () => _nextPage(otherProfile),
-                            )
-                          : SizedBox.shrink(),
-                      SizedBox(height: 20.0),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+    return ScrollDownPage(
+      builder: (context, width, height) => Stack(
+        children: <Widget>[
+          Container(
+            constraints: BoxConstraints.expand(),
+            child: Hero(
+              tag: otherProfile.profileImageUrl,
+              child: getNetworkImage(otherProfile.profileImageUrl),
+            ),
           ),
-        ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              height: 200.0,
+              decoration: BoxDecoration(
+                gradient: fromTheme(
+                  context,
+                  dark: MyPalette.blackToTransparent,
+                  light: MyPalette.goldToTransparent,
+                ),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 200.0,
+              decoration: BoxDecoration(
+                gradient: fromTheme(
+                  context,
+                  dark: MyPalette.transparentToBlack,
+                  light: MyPalette.transparentToGold,
+                ),
+              ),
+            ),
+          ),
+          TileIconButton(
+            icon: Icons.arrow_back,
+            onPressed: () => Navigator.pop(context),
+          ),
+          if (otherProfile.uid != my.uid)
+            Align(
+              alignment: Alignment.topRight,
+              child: FutureBuilder(
+                future: Future.wait([
+                  UsersService.allowedToTalkTo(otherProfile.uid),
+                  ChatsService.getChatFromUid(my.uid, otherProfile.uid),
+                ]),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return SizedBox.shrink();
+
+                  final iBlockedUser = Provider.of<User>(context)
+                      .privateInfo
+                      .blocked
+                      .contains(otherProfile.uid);
+                  final allowedToTalk = snapshot.data[0];
+                  final chat = snapshot.data[1];
+
+                  if (iBlockedUser) {
+                    return DarkTileButton(
+                      child: Text(
+                        'Unblock',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      color: MyPalette.red,
+                      onTap: () async {
+                        Provider.of<User>(context)
+                            .privateInfo
+                            .blocked
+                            .remove(otherProfile.uid);
+                        await Provider.of<User>(context)
+                            .writeField('blocked', UserPrivateInfo);
+                        setState(() {});
+                      },
+                    );
+                  }
+                  if (allowedToTalk) {
+                    return TileIconButton(
+                      icon: Icons.chat_bubble_outline,
+                      onPressed: () {
+                        return Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                ChatPage(otherUser: otherProfile, chat: chat),
+                            transitionsBuilder:
+                                (context, animation1, animation2, child) {
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: Offset(0.0, 1.0),
+                                  end: Offset(0.0, 0.0),
+                                ).animate(animation1),
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return SizedBox.shrink();
+                },
+              ),
+            ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Hero(
+                    tag: otherProfile.username,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Text(
+                        '${otherProfile.name}, ${otherProfile.ageInYears}',
+                        style: TextStyle(fontSize: 40.0),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 40.0),
+                  _hasInfoLeft(otherProfile)
+                      ? NextPageArrow(
+                          dark: fromTheme(
+                            context,
+                            dark: true,
+                            light: false,
+                          ),
+                          onNextPage: () => _nextPage(otherProfile),
+                        )
+                      : SizedBox.shrink(),
+                  SizedBox(height: 20.0),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
-      onVerticalDragUpdate: _hasInfoLeft(otherProfile)
-          ? (DragUpdateDetails details) {
-              if (details.delta.dy < -1.0) _nextPage(otherProfile);
-            }
-          : null,
+      canScrollUp: false,
+      canScrollDown: _hasInfoLeft(otherProfile),
+      onScrollDown: () => _nextPage(otherProfile),
     );
   }
 }

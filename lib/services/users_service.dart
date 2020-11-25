@@ -8,12 +8,12 @@ import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/models/user_status.dart';
 import 'package:tundr/repositories/user.dart';
 
-Future<dynamic> callHttpsFunction(String functionName,
+Future<T> callHttpsFunction<T>(String functionName,
     [dynamic parameters]) async {
   final result = await CloudFunctions.instance
       .getHttpsCallable(functionName: functionName)
       .call(parameters);
-  return result.data;
+  return result.data as T;
 }
 
 class UsersService {
@@ -87,7 +87,8 @@ class UsersService {
   }
 
   static Future<bool> phoneNumberExists(String phoneNumber) =>
-      callHttpsFunction('phoneNumberExists', {'phoneNumber': phoneNumber});
+      callHttpsFunction<bool>(
+          'phoneNumberExists', {'phoneNumber': phoneNumber});
 
   static Future<List<UserProfile>> searchForUsers(
       String partialUsername, int n) async {

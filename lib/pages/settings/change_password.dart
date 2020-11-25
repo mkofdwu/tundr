@@ -92,7 +92,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       : MyPalette.white,
                   hintText: 'Current password',
                   obscureText: true,
-                  autoFocus: true,
                 ),
                 SizedBox(height: 10.0),
                 UnderlineTextField(

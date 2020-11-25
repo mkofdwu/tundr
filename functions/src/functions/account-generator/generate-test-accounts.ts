@@ -1,11 +1,11 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
-import { randomBytes } from "crypto";
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+import { randomBytes } from 'crypto';
 
-import { db } from "../../constants";
+import { db } from '../../constants';
 
 export default functions.firestore
-  .document("haoenutaoheusahoesuhoaeu/haoseunoaeua/aoeuatohuao/aoethutnsahous")
+  .document('haoenutaoheusahoesuhoaeu/haoseunoaeua/aoeuatohuao/aoethutnsahous')
   .onCreate(async (snapshot, context) => {
     /*
      * provide these fields in snapshot.data:
@@ -33,11 +33,11 @@ export default functions.firestore
     let birthdayYearMax: number = data.birthdayYearMax;
 
     for (let _: number = 0; _ < num; ++_) {
-      let username: string = randomBytes(10).toString("hex");
+      let username: string = randomBytes(10).toString('hex');
 
       let userProperties: admin.auth.CreateRequest = {
         email: `${username}@example.com`,
-        password: "123456",
+        password: '123456',
       };
       let user: admin.auth.UserRecord = await admin
         .auth()
@@ -50,17 +50,17 @@ export default functions.firestore
       let birthdayMonth: number = 1 + Math.floor(Math.random() * 12);
       let birthday: Date = new Date(birthdayYear, birthdayMonth, 1);
 
-      db.collection("users")
+      db.collection('users')
         .doc(user.uid)
         .set({
-          phoneNumber: "",
+          phoneNumber: '',
           username: username,
           name:
-            `Fake ${gender == 0 ? "Man" : "Woman"} ` +
+            `Fake ${gender == 0 ? 'Man' : 'Woman'} ` +
             `${username.substring(0, 5)}`,
           gender: gender,
-          profileImageUrl: "", // TODO:
-          aboutMe: "",
+          profileImageUrl: '', // TODO:
+          aboutMe: '',
           birthday: admin.firestore.Timestamp.fromDate(birthday),
           interests: [],
           extraMedia: Array(9).fill(null),

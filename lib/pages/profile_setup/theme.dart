@@ -44,13 +44,7 @@ class _SetupThemePageState extends State<SetupThemePage> {
                     decoration: BoxDecoration(
                       color: MyPalette.white,
                       borderRadius: BorderRadius.circular(30.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: MyPalette.shadowGrey,
-                          offset: Offset(0.0, 3.0),
-                          blurRadius: 6.0,
-                        ),
-                      ],
+                      boxShadow: [MyPalette.primaryShadow],
                     ),
                     child: Center(
                       child: Text(
@@ -72,13 +66,7 @@ class _SetupThemePageState extends State<SetupThemePage> {
                     decoration: BoxDecoration(
                       color: MyPalette.black,
                       borderRadius: BorderRadius.circular(30.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: MyPalette.shadowGrey,
-                          offset: Offset(0.0, 3.0),
-                          blurRadius: 6.0,
-                        ),
-                      ],
+                      boxShadow: [MyPalette.primaryShadow],
                     ),
                     child: Center(
                       child: Text(

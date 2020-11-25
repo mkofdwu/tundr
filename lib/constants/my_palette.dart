@@ -8,7 +8,7 @@ class MyPalette {
   static const Color green = Color(0xFF014421);
   static const Color gold = Color(0xFFAC9227);
   static const Color red = Color(0xFFAC2727);
-  static const Color shadowGrey = Color(0x29000000);
+  static const Color _shadowGrey = Color.fromRGBO(0, 0, 0, 0.25);
   static const Color darkGrey = Color(0xFF222222);
   static const Color transparentBlack = Color(0x00000000);
   static const Color transparentGold = Color(0x00AC9227);
@@ -16,14 +16,14 @@ class MyPalette {
 
   // shadows
   static const BoxShadow primaryShadow = BoxShadow(
-    color: MyPalette.shadowGrey,
-    offset: Offset(0.0, 3.0),
-    blurRadius: 6.0,
+    color: MyPalette._shadowGrey,
+    offset: Offset(0.0, 6.0),
+    blurRadius: 10.0,
   );
   static const BoxShadow secondaryShadow = BoxShadow(
-    color: MyPalette.shadowGrey,
-    offset: Offset(0, 5.0),
-    blurRadius: 10.0,
+    color: MyPalette._shadowGrey,
+    offset: Offset(0, 10.0),
+    blurRadius: 20.0,
   );
 
   // gradients

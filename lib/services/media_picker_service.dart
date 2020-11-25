@@ -20,12 +20,17 @@ class MediaPickerService {
     try {
       switch (type) {
         case MediaType.image:
-          final imageFile =
-              await ImagePicker().getImage(source: source);
-          mediaFile = await ImageCropper.cropImage(sourcePath: imageFile.path);
+          final imageFile = await ImagePicker().getImage(source: source);
+          if (imageFile == null) return null;
+          final croppedImage =
+              await ImageCropper.cropImage(sourcePath: imageFile.path);
+          if (croppedImage == null) return null;
+          mediaFile = croppedImage;
           break;
         case MediaType.video:
-          mediaFile = File((await ImagePicker().getVideo(source: source)).path);
+          final videoFile = await ImagePicker().getVideo(source: source);
+          if (videoFile == null) return null;
+          mediaFile = File(videoFile.path);
           break;
         default:
           throw Exception('Invalid media type: $type');

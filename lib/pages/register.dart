@@ -36,6 +36,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     final username = _usernameController.text;
     final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
 
     final usernameAlreadyExists =
         await UsersService.usernameAlreadyExists(username);
@@ -45,9 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _usernameLessThan4Chars = username.length < 4;
       _usernameAlreadyExists = usernameAlreadyExists;
       _passwordLessThan6Chars = password.length < 6;
-      _passwordsDoNotMatch = password != _confirmPasswordController.text;
-
-      _confirmPasswordController.text = ''; //
+      _passwordsDoNotMatch = password != confirmPassword;
     });
 
     if (!_usernameContainsWhitespace &&
@@ -57,6 +56,7 @@ class _RegisterPageState extends State<RegisterPage> {
         !_passwordsDoNotMatch) {
       Provider.of<RegistrationInfo>(context).username = username;
       Provider.of<RegistrationInfo>(context).password = password;
+      Provider.of<RegistrationInfo>(context).confirmPassword = confirmPassword;
       await Navigator.push(
         context,
         PageRouteBuilder(
@@ -81,200 +81,210 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     _usernameController.text = Provider.of<RegistrationInfo>(context).username;
     _passwordController.text = Provider.of<RegistrationInfo>(context).password;
+    _confirmPasswordController.text =
+        Provider.of<RegistrationInfo>(context).confirmPassword;
     return _loading
         ? LoadingPage()
-        : StackScrollPage(
+        : Material(
             color: MyPalette.white,
-            builder: (context, width, height) => <Widget>[
-              Positioned(
-                left: width * 43 / 375,
-                top: 0.0,
-                bottom: 0.0,
-                child: Container(
-                  width: width * 71 / 375,
-                  color: MyPalette.gold,
-                ),
-              ),
-              Positioned(
-                left: width * 144 / 375,
-                top: 0.0,
-                bottom: 0.0,
-                child: Container(
-                  width: width * 52 / 375,
-                  color: MyPalette.gold,
-                ),
-              ),
-              Positioned(
-                left: width * 204 / 375,
-                top: 0.0,
-                bottom: 0.0,
-                child: Container(
-                  width: width * 11 / 375,
-                  color: MyPalette.gold,
-                ),
-              ),
-              Positioned(
-                left: width * 67 / 375,
-                top: height * 91 / 812,
-                child: Text(
-                  'Register',
-                  style: TextStyle(
-                    color: MyPalette.black,
-                    fontSize: 60.0,
-                    fontFamily: 'Helvetica Neue',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Positioned(
-                left: width * 89 / 375,
-                top: height * 180 / 812,
-                child: Text(
-                  'Enter a username and password',
-                  style: TextStyle(
-                    color: MyPalette.black,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-              Positioned(
-                left: width / 10,
-                top: height * 360 / 812,
-                width: 300, // width - 75,
-                child: Column(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final width = constraints.maxWidth;
+                return Stack(
                   children: <Widget>[
-                    TileTextField(
-                      hintText: 'Username',
-                      controller: _usernameController,
-                      autoFocus: true,
+                    Positioned(
+                      left: width * 33 / 375,
+                      top: 0.0,
+                      bottom: 0.0,
+                      child: Container(
+                        width: width * 78 / 375,
+                        color: MyPalette.gold,
+                      ),
                     ),
-                    _usernameContainsWhitespace
-                        ? Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: MyPalette.red,
-                              boxShadow: [MyPalette.primaryShadow],
-                            ),
-                            padding: EdgeInsets.all(10.0),
-                            child: Text(
-                              'Your username cannot contain any spaces',
-                              style: TextStyle(
-                                color: MyPalette.white,
-                                fontSize: 14.0,
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                    _usernameLessThan4Chars
-                        ? Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: MyPalette.red,
-                              boxShadow: [MyPalette.primaryShadow],
-                            ),
-                            padding: EdgeInsets.all(10.0),
-                            child: Text(
-                              'Your username must be at least 4 characters long',
-                              style: TextStyle(
-                                color: MyPalette.white,
-                                fontSize: 14.0,
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                    _usernameAlreadyExists
-                        ? Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: MyPalette.red,
-                              boxShadow: [MyPalette.primaryShadow],
-                            ),
-                            padding: EdgeInsets.all(10.0),
-                            child: Text(
-                              'This username is already taken',
-                              style: TextStyle(
-                                color: MyPalette.white,
-                                fontSize: 14.0,
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                    SizedBox(height: 20.0),
-                    TileTextField(
-                      hintText: 'Password',
-                      controller: _passwordController,
-                      obscureText: true,
+                    Positioned(
+                      left: width * 134 / 375,
+                      top: 0.0,
+                      bottom: 0.0,
+                      child: Container(
+                        width: width * 52 / 375,
+                        color: MyPalette.gold,
+                      ),
                     ),
-                    _passwordLessThan6Chars
-                        ? Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: MyPalette.red,
-                              boxShadow: [MyPalette.primaryShadow],
+                    Positioned(
+                      left: width * 194 / 375,
+                      top: 0.0,
+                      bottom: 0.0,
+                      child: Container(
+                        width: width * 11 / 375,
+                        color: MyPalette.gold,
+                      ),
+                    ),
+                    Positioned(
+                      left: 50,
+                      top: 100,
+                      width: width - 100,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Register',
+                            style: TextStyle(
+                              color: MyPalette.black,
+                              fontSize: 60.0,
+                              fontFamily: 'Helvetica Neue',
+                              fontWeight: FontWeight.bold,
                             ),
-                            padding: EdgeInsets.all(10.0),
-                            child: Text(
-                              'Your password must be at least 6 characters long',
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Enter a username and password',
+                            style: TextStyle(
+                              color: MyPalette.black,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          SizedBox(height: 100),
+                          TileTextField(
+                            hintText: 'Username',
+                            controller: _usernameController,
+                          ),
+                          _usernameContainsWhitespace
+                              ? Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: MyPalette.red,
+                                    boxShadow: [MyPalette.primaryShadow],
+                                  ),
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Text(
+                                    'Your username cannot contain any spaces',
+                                    style: TextStyle(
+                                      color: MyPalette.white,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                          _usernameLessThan4Chars
+                              ? Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: MyPalette.red,
+                                    boxShadow: [MyPalette.primaryShadow],
+                                  ),
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Text(
+                                    'Your username must be at least 4 characters long',
+                                    style: TextStyle(
+                                      color: MyPalette.white,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                          _usernameAlreadyExists
+                              ? Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: MyPalette.red,
+                                    boxShadow: [MyPalette.primaryShadow],
+                                  ),
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Text(
+                                    'This username is already taken',
+                                    style: TextStyle(
+                                      color: MyPalette.white,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                          SizedBox(height: 20.0),
+                          TileTextField(
+                            hintText: 'Password',
+                            controller: _passwordController,
+                            obscureText: true,
+                          ),
+                          _passwordLessThan6Chars
+                              ? Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: MyPalette.red,
+                                    boxShadow: [MyPalette.primaryShadow],
+                                  ),
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Text(
+                                    'Your password must be at least 6 characters long',
+                                    style: TextStyle(
+                                      color: MyPalette.white,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                          SizedBox(height: 20.0),
+                          TileTextField(
+                            hintText: 'Confirm password',
+                            controller: _confirmPasswordController,
+                            obscureText: true,
+                            moveFocus: false,
+                            onEditingComplete: _validateAndSetup,
+                          ),
+                          _passwordsDoNotMatch
+                              ? Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: MyPalette.red,
+                                    boxShadow: [MyPalette.primaryShadow],
+                                  ),
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Text(
+                                    'The passwords do not match',
+                                    style: TextStyle(
+                                      color: MyPalette.white,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                          // SizedBox(height: 80.0),
+                          // Row(
+                          //   mainAxisSize: MainAxisSize.min,
+                          //   children: [
+
+                          //   ],
+                          // ),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      right: 50,
+                      bottom: 100,
+                      child: DarkStadiumButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'Setup',
                               style: TextStyle(
                                 color: MyPalette.white,
-                                fontSize: 14.0,
+                                fontSize: 16.0,
                               ),
                             ),
-                          )
-                        : SizedBox.shrink(),
-                    _passwordsDoNotMatch
-                        ? Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: MyPalette.red,
-                              boxShadow: [MyPalette.primaryShadow],
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              color: MyPalette.white,
+                              size: 20,
                             ),
-                            padding: EdgeInsets.all(10.0),
-                            child: Text(
-                              'The passwords do not match',
-                              style: TextStyle(
-                                color: MyPalette.white,
-                                fontSize: 14.0,
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                    SizedBox(height: 20.0),
-                    TileTextField(
-                      hintText: 'Confirm password',
-                      controller: _confirmPasswordController,
-                      obscureText: true,
-                      moveFocus: false,
-                      onEditingComplete: _validateAndSetup,
+                          ],
+                        ),
+                        onTap: _validateAndSetup,
+                      ),
                     ),
                   ],
-                ),
-              ),
-              Positioned(
-                right: width * 15 / 375,
-                bottom: height * 122 / 812,
-                child: DarkStadiumButton(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Setup',
-                        style: TextStyle(
-                          color: MyPalette.white,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: MyPalette.white,
-                        size: 20,
-                      ),
-                    ],
-                  ),
-                  onTap: _validateAndSetup,
-                ),
-              ),
-            ],
+                );
+              },
+            ),
           );
   }
 }

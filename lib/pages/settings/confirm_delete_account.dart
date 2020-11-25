@@ -62,7 +62,6 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
             key: ValueKey('confirmPasswordField'),
             controller: _passwordController,
             obscureText: true,
-            autoFocus: true,
             moveFocus: false,
           ),
         ),

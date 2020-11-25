@@ -126,7 +126,7 @@ class AuthService {
         smsCode: verificationCode.join(),
       );
       if (credential != null) {
-        return await _createAccount(info: info, phoneCredential: credential);
+        return _createAccount(info: info, phoneCredential: credential);
       }
     }
     return false;

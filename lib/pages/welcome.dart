@@ -3,7 +3,15 @@ import 'package:tundr/pages/register.dart';
 import 'package:tundr/pages/login.dart';
 import 'package:tundr/constants/my_palette.dart';
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
+  @override
+  _WelcomePageState createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+  bool _loginBtnPressed = false;
+  bool _registerBtnPressed = false;
+
   void _signInPage(BuildContext context) => Navigator.push(
         context,
         PageRouteBuilder(
@@ -26,39 +34,40 @@ class WelcomePage extends StatelessWidget {
         ),
       );
 
-  List<Widget> _titleWidgets() => <Widget>[
+  List<Widget> _buildTitle() => <Widget>[
         Positioned(
-          left: 0.0,
-          top: 63.0,
+          left: 0,
+          top: 63,
           child: Container(
-            width: 223.0,
-            height: 204.0,
+            width: 223,
+            height: 204,
             color: MyPalette.black,
           ),
         ),
         Positioned(
-          left: 29.0,
-          top: 35.0,
+          left: 29,
+          top: 35,
           child: Container(
-            width: 254.0,
-            height: 142.0,
+            width: 254,
+            height: 142,
             color: MyPalette.gold,
           ),
         ),
         Positioned(
-          left: 25.0,
-          top: 30.0,
-          width: 230.0,
+          left: 25,
+          top: 30,
+          width: 230,
           child: Image.asset('assets/images/logo-light.png'),
         ),
         Positioned(
-          left: 191.0,
-          top: 134.0,
+          left: 191,
+          top: 140,
           child: Text(
             'By Jia Jie',
             style: TextStyle(
+              fontFamily: 'Helvetica Neue',
               color: MyPalette.black,
-              fontSize: 20.0,
+              fontSize: 20,
             ),
           ),
         ),
@@ -72,11 +81,11 @@ class WelcomePage extends StatelessWidget {
       child: Material(
         color: MyPalette.white,
         child: Stack(
-          children: _titleWidgets() +
+          children: _buildTitle() +
               <Widget>[
                 Positioned(
                   top: height * 0.441,
-                  right: 0.0,
+                  right: 0,
                   child: Container(
                     width: width * 0.464,
                     height: height * 0.052,
@@ -85,7 +94,7 @@ class WelcomePage extends StatelessWidget {
                 ),
                 Positioned(
                   top: height * 420 / 812,
-                  right: 0.0,
+                  right: 0,
                   child: Container(
                     width: width * 111 / 375,
                     height: height * 18 / 812,
@@ -94,7 +103,7 @@ class WelcomePage extends StatelessWidget {
                 ),
                 Positioned(
                   top: height * 446 / 812,
-                  right: 0.0,
+                  right: 0,
                   child: Container(
                     width: width * 263 / 375,
                     height: height * 20 / 812,
@@ -103,7 +112,7 @@ class WelcomePage extends StatelessWidget {
                 ),
                 Positioned(
                   top: height * 470 / 812,
-                  right: 0.0,
+                  right: 0,
                   child: Container(
                     width: width * 136 / 375,
                     height: height * 6 / 812,
@@ -112,7 +121,7 @@ class WelcomePage extends StatelessWidget {
                 ),
                 Positioned(
                   top: height * 489 / 812,
-                  right: 0.0,
+                  right: 0,
                   child: Container(
                     width: width * 184 / 375,
                     height: height * 7 / 812,
@@ -121,34 +130,39 @@ class WelcomePage extends StatelessWidget {
                 ),
                 Positioned(
                   top: height * 523 / 812,
-                  right: 0.0,
+                  right: 0,
                   child: GestureDetector(
                     key: ValueKey('loginBtn'),
                     child: Container(
-                      width: width * 184 / 375,
+                      width: _loginBtnPressed
+                          ? width * 190 / 375
+                          : width * 184 / 375,
                       height: height * 63 / 812,
                       color: MyPalette.black,
                       alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          right: 21.0,
-                          bottom: 10.0,
-                        ),
-                        child: Text(
-                          'Login',
-                          style: TextStyle(
-                            color: MyPalette.white,
-                            fontSize: 20.0,
-                          ),
+                      padding: const EdgeInsets.only(
+                        right: 21,
+                        bottom: 10,
+                      ),
+                      child: Text(
+                        'Login',
+                        style: TextStyle(
+                          color: MyPalette.white,
+                          fontSize: 22,
                         ),
                       ),
                     ),
-                    onTap: () => _signInPage(context),
+                    onTapDown: (_details) =>
+                        setState(() => _loginBtnPressed = true),
+                    onTapUp: (_details) {
+                      setState(() => _loginBtnPressed = false);
+                      _signInPage(context);
+                    },
                   ),
                 ),
                 Positioned(
                   top: height * 589 / 812,
-                  right: 0.0,
+                  right: 0,
                   child: Container(
                     width: width * 56 / 375,
                     height: height * 23 / 812,
@@ -157,36 +171,34 @@ class WelcomePage extends StatelessWidget {
                 ),
                 Positioned(
                   top: height * 630 / 812,
-                  right: 0.0,
+                  right: 0,
                   child: GestureDetector(
                     key: ValueKey('registerBtn'),
                     child: Container(
                       width: width * 132 / 375,
                       height: height * 38 / 812,
                       color: MyPalette.gold,
-                      child: Stack(
-                        // is there a better way?
-                        children: <Widget>[
-                          Positioned(
-                            right: 2.0,
-                            bottom: 10.0,
-                            child: Text(
-                              'Register',
-                              style: TextStyle(
-                                color: MyPalette.white,
-                                fontSize: 14.0,
-                              ),
-                            ),
-                          ),
-                        ],
+                      padding: const EdgeInsets.only(bottom: 5, right: 10),
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                        'Register',
+                        style: TextStyle(
+                          color: MyPalette.white,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
-                    onTap: () => _registerPage(context),
+                    onTapDown: (_details) =>
+                        setState(() => _registerBtnPressed = true),
+                    onTapUp: (_details) {
+                      setState(() => _registerBtnPressed = false);
+                      _registerPage(context);
+                    },
                   ),
                 ),
                 Positioned(
                   top: height * 677 / 812,
-                  right: 0.0,
+                  right: 0,
                   child: Container(
                     width: width * 81 / 375,
                     height: height * 16 / 812,
@@ -195,7 +207,7 @@ class WelcomePage extends StatelessWidget {
                 ),
                 Positioned(
                   top: height * 698 / 812,
-                  right: 0.0,
+                  right: 0,
                   child: Container(
                     width: width * 103 / 375,
                     height: height * 6 / 812,

@@ -7,6 +7,7 @@ import 'package:tundr/pages/user_profile/extra_media.dart';
 import 'package:tundr/pages/user_profile/personal_info.dart';
 import 'package:tundr/enums/app_theme.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
+import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
 class UserProfileAboutMePage extends StatelessWidget {
@@ -48,53 +49,45 @@ class UserProfileAboutMePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: SafeArea(
-        child: Material(
-          color: Theme.of(context).primaryColor,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-                  TileIconButton(
-                    icon: Icons.close,
-                    onPressed: () {
-                      Navigator.popUntil(
-                        context,
-                        (route) => route.settings.name == '/user_profile',
-                      );
-                      Navigator.pop(context);
-                    },
-                  ),
-                  SizedBox(height: 30.0),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30.0, right: 100.0),
-                    child: Text(
-                      profile.aboutMe,
-                      style: TextStyle(fontSize: 30.0),
+    return ScrollDownPage(
+      color: Theme.of(context).primaryColor,
+      builder: (context, width, height) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+              TileIconButton(
+                icon: Icons.close,
+                onPressed: () {
+                  Navigator.popUntil(
+                    context,
+                    (route) => route.settings.name == '/user_profile',
+                  );
+                  Navigator.pop(context);
+                },
+              ),
+              SizedBox(height: 30.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 30.0, right: 100.0),
+                child: Text(
+                  profile.aboutMe,
+                  style: TextStyle(fontSize: 30.0),
+                ),
+              ),
+            ] +
+            (_hasInfoLeft(profile)
+                ? [
+                    Spacer(),
+                    Center(
+                      child: NextPageArrow(
+                        dark: Provider.of<ThemeNotifier>(context).theme ==
+                            AppTheme.dark,
+                        onNextPage: () => _nextPage(context),
+                      ),
                     ),
-                  ),
-                ] +
-                (_hasInfoLeft(profile)
-                    ? [
-                        Spacer(),
-                        Center(
-                          child: NextPageArrow(
-                            dark: Provider.of<ThemeNotifier>(context).theme ==
-                                AppTheme.dark,
-                            onNextPage: () => _nextPage(context),
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                      ]
-                    : []),
-          ),
-        ),
+                    SizedBox(height: 20.0),
+                  ]
+                : []),
       ),
-      onVerticalDragUpdate: (DragUpdateDetails details) {
-        if (details.delta.dy < -1.0 && _hasInfoLeft(profile)) {
-          _nextPage(context);
-        } else if (details.delta.dy > 1.0) Navigator.pop(context);
-      },
+      onScrollDown: () => _nextPage(context),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:tundr/models/media.dart';
 class RegistrationInfo extends ChangeNotifier {
   String username = '';
   String password = '';
+  String confirmPassword = '';
   String name = '';
   DateTime birthday;
   Gender gender;

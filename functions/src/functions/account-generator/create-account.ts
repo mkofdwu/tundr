@@ -1,11 +1,11 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
-import { randomBytes } from "crypto";
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+import { randomBytes } from 'crypto';
 
-import { db } from "../../constants";
+import { db } from '../../constants';
 
 export default functions.firestore
-  .document("/newusers/{uid}")
+  .document('/newusers/{uid}')
   .onCreate(async (snapshot, context) => {
     // temporary solution
     /* fields
@@ -17,20 +17,20 @@ export default functions.firestore
     const uid: string = context.params.uid;
     const data = snapshot.data();
     if (data == undefined) {
-      console.log("no data in document");
+      console.log('no data in document');
       return;
     }
     console.log(data.birthday);
     console.log(data.birthday.toDate());
-    db.collection("users")
+    db.collection('users')
       .doc(uid)
       .set({
-        phoneNumber: "",
-        username: data.username ?? randomBytes(10).toString("hex"),
-        name: data.name ?? "Unknown",
+        phoneNumber: '',
+        username: data.username ?? randomBytes(10).toString('hex'),
+        name: data.name ?? 'Unknown',
         gender: data.gender,
-        profileImageUrl: "",
-        aboutMe: "",
+        profileImageUrl: '',
+        aboutMe: '',
         birthday: data.birthday,
         interests: [],
         extraMedia: Array(9).fill(null),
@@ -55,7 +55,7 @@ export default functions.firestore
         theme: 0,
         numRightSwiped: 0,
       });
-    db.collection("usersuggestionsgonethrough")
+    db.collection('usersuggestionsgonethrough')
       .doc(uid)
       .set({ suggestionsGoneThrough: [] });
   });

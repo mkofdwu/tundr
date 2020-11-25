@@ -40,7 +40,7 @@ class _SetupNamePageState extends State<SetupNamePage> {
   Widget build(BuildContext context) {
     _nameController.text = Provider.of<RegistrationInfo>(context).name;
     return ScrollDownPage(
-      onNextPage: _nextPage,
+      onScrollDown: _nextPage,
       builder: (context, width, height) {
         return Stack(
           children: <Widget>[
@@ -57,12 +57,11 @@ class _SetupNamePageState extends State<SetupNamePage> {
             ),
             Positioned(
               left: width * 90 / 375,
-              top: height * 448 / 812,
+              top: height * 400 / 812,
               width: width * 195 / 375,
               child: TileTextField(
                 hintText: 'Name',
                 controller: _nameController,
-                autoFocus: true,
                 moveFocus: false,
                 onEditingComplete: _nextPage,
               ),

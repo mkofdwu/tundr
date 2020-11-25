@@ -70,7 +70,7 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
             setState(() => _selectedCategory = tab);
           },
         ),
-        SizedBox(height: 20.0),
+        SizedBox(height: 14.0),
         if (_selectedCategory == null)
           SizedBox.shrink()
         else if (_selectedCategory == 'Custom')
@@ -195,7 +195,7 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _buildSearchTextField(),
-          SizedBox(height: 30.0),
+          SizedBox(height: 20.0),
           if (_searchController.text.length < 3)
             ...(_buildBody())
           else

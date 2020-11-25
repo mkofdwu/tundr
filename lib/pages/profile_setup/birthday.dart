@@ -130,7 +130,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
   @override
   Widget build(BuildContext context) {
     return ScrollDownPage(
-      onNextPage: _nextPage,
+      onScrollDown: _nextPage,
       builder: (context, width, height) => Stack(
         children: <Widget>[
           Container(
@@ -185,7 +185,6 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
                 DigitEntry(
                   hintChar: 'D',
                   validDigits: [0, 1, 2, 3],
-                  autoFocus: true,
                   controller: _day1Controller,
                   onChanged: (digit) => setState(() => _day1 = digit),
                 ),

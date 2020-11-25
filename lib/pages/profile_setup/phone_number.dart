@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
-import 'package:tundr/pages/phone_verification.dart';
+import 'package:tundr/pages/profile_setup/phone_verification.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/users_service.dart';
+import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
 class SetupPhoneNumberPage extends StatefulWidget {
@@ -75,121 +76,107 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
     _phoneNumberController.text = Provider.of<RegistrationInfo>(context)
         .phoneNumber
         .substring(3); // FUTURE: change this when more country codes are added
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-
-    return GestureDetector(
-      child: SafeArea(
-        child: Material(
-          child: Stack(
-            children: <Widget>[
-              ConstrainedBox(
-                constraints: BoxConstraints.expand(),
-                child: Image.asset(
-                  'assets/images/setup-phone-number-background.png',
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Positioned(
-                left: width * 47 / 375,
-                top: height * 180 / 812,
-                child: Text(
-                  'Phone number',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 40.0,
-                    fontFamily: 'Helvetica Neue',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Positioned(
-                left: width * 93 / 375,
-                top: height * 230 / 812,
-                child: Text(
-                  'A verification code will be sent\nto you via SMS.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-              Positioned(
-                left: width * 31 / 375,
-                top: height * 339 / 812,
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      // FUTURE: select country code
-                      color: MyPalette.white,
-                      height: 60.0,
-                      width: 90.0,
-                      child: Row(
-                        children: <Widget>[
-                          SizedBox(width: 5.0),
-                          Icon(Icons.add, color: MyPalette.black, size: 30.0),
-                          Text(
-                            '65',
-                            style: TextStyle(
-                              color: MyPalette.black,
-                              fontSize: 40.0,
-                              fontFamily: 'Helvetica Neue',
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 10.0),
-                    SizedBox(
-                      width: width - 165.0,
-                      child: TextField(
-                        style: TextStyle(
-                          color: MyPalette.white,
-                          fontSize: 40.0,
-                        ),
-                        decoration: InputDecoration(
-                          counterText: '',
-                          contentPadding: EdgeInsets.only(bottom: 5.0),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: MyPalette.white,
-                              width: 2.0,
-                            ),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: MyPalette.white,
-                              width: 5.0,
-                            ),
-                          ),
-                        ),
-                        cursorColor: MyPalette.white,
-                        maxLength: 8,
-                        autofocus: true,
-                        keyboardType: TextInputType.number,
-                        controller: _phoneNumberController,
-                        onEditingComplete: _nextPage,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                // ANIMATION: idle animation bob up and down
-                left: width * 179 / 375,
-                bottom: 20.0,
-                child: NextPageArrow(onNextPage: _nextPage),
-              ),
-            ],
+    return ScrollDownPage(
+      builder: (context, width, height) => Stack(
+        children: <Widget>[
+          ConstrainedBox(
+            constraints: BoxConstraints.expand(),
+            child: Image.asset(
+              'assets/images/setup-phone-number-background.png',
+              fit: BoxFit.fill,
+            ),
           ),
-        ),
+          Positioned(
+            left: width * 47 / 375,
+            top: height * 180 / 812,
+            child: Text(
+              'Phone number',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 40.0,
+                fontFamily: 'Helvetica Neue',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Positioned(
+            left: width * 93 / 375,
+            top: height * 240 / 812,
+            child: Text(
+              'A verification code will be sent\nto you via SMS.',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+          Positioned(
+            left: 30,
+            top: height * 339 / 812,
+            width: width - 60,
+            child: Row(
+              children: <Widget>[
+                Container(
+                  color: MyPalette.white,
+                  height: 60.0,
+                  width: 90.0,
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox(width: 5.0),
+                      Icon(Icons.add, color: MyPalette.black, size: 30.0),
+                      Text(
+                        '65',
+                        style: TextStyle(
+                          color: MyPalette.black,
+                          fontSize: 40.0,
+                          fontFamily: 'Helvetica Neue',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 10.0),
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(
+                      color: MyPalette.white,
+                      fontSize: 40.0,
+                    ),
+                    decoration: InputDecoration(
+                      counterText: '',
+                      contentPadding: EdgeInsets.only(bottom: 5.0),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: MyPalette.white,
+                          width: 2.0,
+                        ),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: MyPalette.white,
+                          width: 5.0,
+                        ),
+                      ),
+                    ),
+                    cursorColor: MyPalette.white,
+                    maxLength: 8,
+                    keyboardType: TextInputType.number,
+                    controller: _phoneNumberController,
+                    onEditingComplete: _nextPage,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            left: width * 179 / 375,
+            bottom: 20.0,
+            child: NextPageArrow(onNextPage: _nextPage),
+          ),
+        ],
       ),
-      onVerticalDragUpdate: (DragUpdateDetails details) {
-        if (details.delta.dy < -1.0) {
-          _nextPage();
-        } else if (details.delta.dy > 1.0) Navigator.pop(context);
-      },
+      onScrollDown: _nextPage,
     );
   }
 }
