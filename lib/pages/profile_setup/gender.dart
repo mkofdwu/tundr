@@ -81,7 +81,7 @@ class _SetupGenderPageState extends State<SetupGenderPage> {
               ),
             ),
             SizedBox(height: 20.0),
-            NextPageArrow(onNextPage: _nextPage),
+            ScrollDownArrow(onNextPage: _nextPage),
             SizedBox(height: 20.0),
           ],
         ),

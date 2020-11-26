@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:tundr/constants/firebase_ref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tundr/models/user_algorithm_data.dart';
@@ -67,6 +68,9 @@ class AuthService {
       prefix: 'profile_image',
     );
 
+    info.profilePic.url = profileImageUrl;
+    info.profilePic.isLocalFile = false;
+
     for (final media in info.extraMedia) {
       if (media != null) {
         media.url = await StorageService.uploadMedia(
@@ -77,9 +81,6 @@ class AuthService {
         media.isLocalFile = false;
       }
     }
-
-    info.profilePic.url = profileImageUrl;
-    info.profilePic.isLocalFile = false;
   }
 
   static Future<bool> _createAccount({
@@ -93,10 +94,12 @@ class AuthService {
       if (result.user == null) {
         return false;
       } else {
-        // TODO: TEST if this still works
         info.uid = result.user.uid;
-        await result.user.updatePhoneNumber(phoneCredential);
         await _uploadLocalPhotos(info);
+        print(info);
+        print(UserProfile.register(info).toMap());
+        print(UserPrivateInfo.register(info).toMap());
+        print(UserAlgorithmData.register(info).toMap());
         await userProfilesRef
             .doc(info.uid)
             .set(UserProfile.register(info).toMap());
@@ -110,9 +113,11 @@ class AuthService {
           'online': true,
           'lastSeen': null,
         });
+        await result.user.updatePhoneNumber(phoneCredential);
         return true;
       }
-    } catch (exception) {
+    } on PlatformException catch (exception) {
+      print(exception.message);
       await FirebaseAuth.instance.signOut(); // FUTURE: temporary fix
       return false;
     }

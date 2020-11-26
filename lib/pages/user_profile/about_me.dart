@@ -77,7 +77,7 @@ class UserProfileAboutMePage extends StatelessWidget {
                 ? [
                     Spacer(),
                     Center(
-                      child: NextPageArrow(
+                      child: ScrollDownArrow(
                         dark: Provider.of<ThemeNotifier>(context).theme ==
                             AppTheme.dark,
                         onNextPage: () => _nextPage(context),

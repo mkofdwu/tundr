@@ -60,16 +60,17 @@ class _SetupNamePageState extends State<SetupNamePage> {
               top: height * 400 / 812,
               width: width * 195 / 375,
               child: TileTextField(
+                key: ValueKey('nameInput'),
                 hintText: 'Name',
                 controller: _nameController,
                 moveFocus: false,
-                onEditingComplete: _nextPage,
+                onEditingComplete: () => FocusScope.of(context).unfocus(),
               ),
             ),
             Positioned(
               left: width * 179 / 375,
               bottom: 20.0,
-              child: NextPageArrow(onNextPage: _nextPage),
+              child: ScrollDownArrow(onNextPage: _nextPage),
             ),
           ],
         );

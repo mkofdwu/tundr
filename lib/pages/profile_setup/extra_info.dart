@@ -119,7 +119,7 @@ class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
             Spacer(),
             Align(
               alignment: Alignment.center,
-              child: NextPageArrow(
+              child: ScrollDownArrow(
                 dark: false,
                 onNextPage: _nextPage,
               ),

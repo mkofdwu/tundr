@@ -11,33 +11,31 @@ class MediaViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Stack(
-        children: <Widget>[
-          Center(child: MediaViewer(media: media)),
-          Positioned(
-            left: -150.0,
-            top: -150.0,
-            child: Container(
-              width: 300.0,
-              height: 300.0,
-              decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  colors: [
-                    MyPalette.black,
-                    MyPalette.transparentBlack,
-                  ],
-                ),
+    return Stack(
+      children: <Widget>[
+        Center(child: MediaViewer(media: media)),
+        Positioned(
+          left: -150.0,
+          top: -150.0,
+          child: Container(
+            width: 300.0,
+            height: 300.0,
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                colors: [
+                  MyPalette.black,
+                  MyPalette.transparentBlack,
+                ],
               ),
             ),
           ),
-          TileIconButton(
-            icon: Icons.arrow_back,
-            iconColor: MyPalette.white,
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      ),
+        ),
+        TileIconButton(
+          icon: Icons.arrow_back,
+          iconColor: MyPalette.white,
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
     );
   }
 }

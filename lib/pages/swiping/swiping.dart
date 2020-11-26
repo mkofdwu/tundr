@@ -33,8 +33,12 @@ class _SwipingPageState extends State<SwipingPage> {
   bool _canUndo = false;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
+    _loadSuggestionProfiles();
+  }
+
+  Future<void> _loadSuggestionProfiles() async {
     final privateInfo = Provider.of<User>(context).privateInfo;
     final suggestions = privateInfo.respondedSuggestions;
     suggestions.addAll(privateInfo.dailyGeneratedSuggestions
@@ -45,7 +49,6 @@ class _SwipingPageState extends State<SwipingPage> {
         wasLiked: suggestions[uid],
       ));
     }
-    ;
   }
 
   @override

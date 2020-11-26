@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _passwordController,
                       obscureText: true,
                       moveFocus: false,
-                      onEditingComplete: _signIn,
+                      onEditingComplete: () => FocusScope.of(context).unfocus(),
                     ),
                   ],
                 ),

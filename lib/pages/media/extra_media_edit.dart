@@ -105,153 +105,89 @@ class _ExtraMediaEditPageState extends State<ExtraMediaEditPage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () => setState(() => _showOptions = false),
-        child: Material(
-          color: MyPalette.white,
-          child: Stack(
-            children: <Widget>[
-              Center(child: MediaViewer(media: _media)),
-              fromTheme(
-                context,
-                dark: Container(
-                  width: width,
-                  height: 100.0,
-                  decoration:
-                      BoxDecoration(gradient: MyPalette.blackToTransparent),
-                ),
-                light: SizedBox.shrink(),
+    return GestureDetector(
+      onTap: () => setState(() => _showOptions = false),
+      child: Material(
+        color: MyPalette.white,
+        child: Stack(
+          children: <Widget>[
+            Center(child: MediaViewer(media: _media)),
+            fromTheme(
+              context,
+              dark: Container(
+                width: width,
+                height: 100.0,
+                decoration:
+                    BoxDecoration(gradient: MyPalette.blackToTransparent),
               ),
-              TileIconButton(
-                icon: Icons.arrow_back,
-                onPressed: () => Navigator.pop(context),
+              light: SizedBox.shrink(),
+            ),
+            TileIconButton(
+              icon: Icons.arrow_back,
+              onPressed: () => Navigator.pop(context),
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TileIconButton(
+                    icon: Icons.delete,
+                    iconBackgroundColor: MyPalette.red,
+                    onPressed: () {
+                      widget.onRemove();
+                      Navigator.pop(context);
+                    },
+                  ),
+                  TileIconButton(
+                    icon: Icons.more_vert,
+                    onPressed: () => setState(() => _showOptions = true),
+                  ),
+                ],
               ),
-              Align(
-                alignment: Alignment.topRight,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+            ),
+            if (_showOptions)
+              Positioned(
+                top: 10.0,
+                right: 10.0,
+                child: PopupMenu(
                   children: <Widget>[
-                    TileIconButton(
-                      icon: Icons.delete,
-                      iconBackgroundColor: MyPalette.red,
-                      onPressed: () {
-                        widget.onRemove();
-                        Navigator.pop(context);
-                      },
+                    MenuOption(
+                      text: 'Replace with image',
+                      onPressed: _replaceWithImage,
                     ),
-                    TileIconButton(
-                      icon: Icons.more_vert,
-                      onPressed: () => setState(() => _showOptions = true),
+                    MenuDivider(),
+                    MenuOption(
+                      text: 'Replace with video',
+                      onPressed: _replaceWithVideo,
                     ),
                   ],
                 ),
               ),
-              if (_showOptions)
-                Positioned(
-                  top: 10.0,
-                  right: 10.0,
-                  child: PopupMenu(
-                    children: <Widget>[
-                      MenuOption(
-                        text: 'Replace with image',
-                        onPressed: _replaceWithImage,
-                      ),
-                      MenuDivider(),
-                      MenuOption(
-                        text: 'Replace with video',
-                        onPressed: _replaceWithVideo,
-                      ),
-                    ],
-                  ),
-                ),
-              fromTheme(
-                context,
-                dark: Positioned(
-                  bottom: 0.0,
-                  child: Container(
-                    width: width,
-                    height: 100.0,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          MyPalette.black,
-                          MyPalette.transparentBlack,
-                        ],
-                      ),
+            fromTheme(
+              context,
+              dark: Positioned(
+                bottom: 0.0,
+                child: Container(
+                  width: width,
+                  height: 100.0,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        MyPalette.black,
+                        MyPalette.transparentBlack,
+                      ],
                     ),
                   ),
                 ),
-                light: SizedBox.shrink(),
               ),
-            ],
-          ),
+              light: SizedBox.shrink(),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
-// Align(
-//   alignment: Alignment.centerLeft,
-//   child: Padding(
-//     padding: const EdgeInsets.only(
-//       left: 20.0,
-//       top: 10.0,
-//     ),
-//     child: Text(
-//       'Replace',
-//       style: TextStyle(fontSize: 30.0),
-//     ),
-//   ),
-// ),
-// SizedBox(height: 10.0),
-// Expanded(
-//   child: Row(
-//     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//     children: <Widget>[
-//       SimpleIconButton(
-//         icon: Icons.photo_camera,
-//         size: 50.0,
-//         onPressed: _replaceWithImage,
-//       ),
-//       SimpleIconButton(
-//         icon: Icons.videocam,
-//         size: 50.0,
-//         onPressed: _replaceWithVideo,
-//       ),
-//     ],
-//   ),
-// ),
-// SizedBox(height: 10.0),
-// GestureDetector(
-//   child: Container(
-//     width: width - 20.0,
-//     height: 60.0,
-//     decoration: fromTheme(
-//       context,
-//       dark: BoxDecoration(color: AppColors.red),
-//       light: BoxDecoration(
-//         color: AppColors.red,
-//         borderRadius: BorderRadius.circular(20.0),
-//         boxShadow: [MyPalette.secondaryShadow],
-//       ),
-//     ),
-//     child: Center(
-//       child: Text(
-//         'Remove',
-//         style: TextStyle(
-//           color: AppColors.white,
-//           fontSize: 20.0,
-//         ),
-//       ),
-//     ),
-//   ),
-//   onTap: () {
-//     // ANIMATION
-//     widget.onRemove();
-//   },
-// ),
-// SizedBox(height: 10.0),

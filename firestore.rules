@@ -8,6 +8,12 @@ service cloud.firestore {
     match /users_private_info/{uid} {
     	allow read, write: if request.auth.uid == uid;
     }
+    match /users_private_info/{uid}/tokens/{token} {
+      allow read, write: if request.auth.uid == uid;
+    }
+    match /users_private_info/{uid}/chats/{chatId} {
+      allow read, write: if request.auth.uid == uid;
+    }
     match /users_algorithm_data/{uid} {
     	allow read, write: if request.auth.uid == uid;
     }

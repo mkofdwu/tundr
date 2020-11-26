@@ -6,7 +6,7 @@ import 'registration.dart';
 import 'swiping_page.dart';
 
 void main() {
-  group('Login', loginTests);
+  // group('Login', loginTests);
   group('Registration', registrationTests);
-  group('Swiping page', swipingPageTests);
+  // group('Swiping page', swipingPageTests);
 }

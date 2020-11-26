@@ -41,10 +41,12 @@ class UserProfile {
       birthday: map['birthday'].toDate(),
       aboutMe: map['aboutMe'],
       profileImageUrl: map['profileImageUrl'],
-      extraMedia: map['extraMedia'].map((m) => Media.fromMap(m)),
+      extraMedia: map['extraMedia']
+          .map<Media>((m) => m == null ? null : Media.fromMap(m))
+          .toList(),
       personalInfo: map['personalInfo'],
-      interests: map['interests'],
-      customInterests: map['customInterests'],
+      interests: List<String>.from(map['interests']),
+      customInterests: List<String>.from(map['customInterests']),
       verified: map['verified'],
     );
   }
@@ -80,7 +82,7 @@ class UserProfile {
       'birthday': Timestamp.fromDate(birthday),
       'aboutMe': aboutMe,
       'profileImageUrl': profileImageUrl,
-      'extraMedia': extraMedia.map((m) => m.toMap()),
+      'extraMedia': extraMedia.map((m) => m?.toMap()).toList(),
       'personalInfo': personalInfo,
       'interests': interests,
       'customInterests': customInterests,

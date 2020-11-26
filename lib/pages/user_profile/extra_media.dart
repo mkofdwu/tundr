@@ -64,53 +64,51 @@ class _UserProfileExtraMediaPageState extends State<UserProfileExtraMediaPage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: Material(
-        child: Stack(
-          children: <Widget>[
-            ListView.builder(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 1.0), // to scroll up and down
-              controller: _scrollController,
-              itemCount: 10,
-              itemBuilder: (context, i) {
-                if (i == 9) return SizedBox(height: 200.0);
-                if (widget.profile.extraMedia[i] == null) {
-                  return SizedBox.shrink();
-                }
-                return MediaThumbnail(widget.profile.extraMedia[i]);
-              },
-            ),
-            TileIconButton(
-              icon: Icons.close,
-              onPressed: () {
-                Navigator.popUntil(
-                    context, (route) => route.settings.name == '/user_profile');
-                Navigator.pop(context);
-              },
-            ),
-            Positioned(
-              bottom: 0.0,
-              child: Container(
-                width: width,
-                height: 150.0,
-                decoration: BoxDecoration(
-                  gradient:
-                      Provider.of<ThemeNotifier>(context).theme == AppTheme.dark
-                          ? MyPalette.transparentToBlack
-                          : MyPalette.transparentToGold,
-                ),
+    return Material(
+      child: Stack(
+        children: <Widget>[
+          ListView.builder(
+            padding: const EdgeInsets.symmetric(
+                vertical: 1.0), // to scroll up and down
+            controller: _scrollController,
+            itemCount: 10,
+            itemBuilder: (context, i) {
+              if (i == 9) return SizedBox(height: 200.0);
+              if (widget.profile.extraMedia[i] == null) {
+                return SizedBox.shrink();
+              }
+              return MediaThumbnail(widget.profile.extraMedia[i]);
+            },
+          ),
+          TileIconButton(
+            icon: Icons.close,
+            onPressed: () {
+              Navigator.popUntil(
+                  context, (route) => route.settings.name == '/user_profile');
+              Navigator.pop(context);
+            },
+          ),
+          Positioned(
+            bottom: 0.0,
+            child: Container(
+              width: width,
+              height: 150.0,
+              decoration: BoxDecoration(
+                gradient:
+                    Provider.of<ThemeNotifier>(context).theme == AppTheme.dark
+                        ? MyPalette.transparentToBlack
+                        : MyPalette.transparentToGold,
               ),
             ),
-            _hasInfoLeft()
-                ? Positioned(
-                    left: width * 179 / 375,
-                    bottom: 20.0,
-                    child: NextPageArrow(onNextPage: _nextPage),
-                  )
-                : SizedBox.shrink(),
-          ],
-        ),
+          ),
+          _hasInfoLeft()
+              ? Positioned(
+                  left: width * 179 / 375,
+                  bottom: 20.0,
+                  child: ScrollDownArrow(onNextPage: _nextPage),
+                )
+              : SizedBox.shrink(),
+        ],
       ),
     );
   }

@@ -4,7 +4,8 @@ import 'package:tundr/repositories/registration_info.dart';
 
 class UserPrivateInfo {
   String phoneNumber;
-  Map<int, double> popularityHistory;
+  List<String>
+      popularityHistory; // list of (timestamp, score) pairs formatted as 'timestamp:score'
   double popularityScore;
   UserSettings settings;
   List<String> dailyGeneratedSuggestions;
@@ -32,23 +33,25 @@ class UserPrivateInfo {
   factory UserPrivateInfo.fromMap(Map<String, dynamic> map) {
     return UserPrivateInfo(
       phoneNumber: map['phoneNumber'],
-      popularityHistory: map['popularityHistory'],
+      popularityHistory: List<String>.from(map['popularityHistory']),
       popularityScore: map['popularityScore'],
       settings: UserSettings.fromMap(map['settings']),
-      dailyGeneratedSuggestions: map['dailyGeneratedSuggestions'],
-      respondedSuggestions: map['respondedSuggestions'],
-      suggestionsGoneThrough: map['suggestionsGoneThrough'],
+      dailyGeneratedSuggestions:
+          List<String>.from(map['dailyGeneratedSuggestions']),
+      respondedSuggestions: Map<String, bool>.from(map['respondedSuggestions']),
+      suggestionsGoneThrough:
+          Map<String, bool>.from(map['suggestionsGoneThrough']),
       theme: AppTheme.values.elementAt(map['theme']),
       numRightSwiped: map['numRightSwiped'],
-      blocked: map['blocked'],
-      matches: map['matches'],
+      blocked: List<String>.from(map['blocked']),
+      matches: List<String>.from(map['matches']),
     );
   }
 
   factory UserPrivateInfo.register(RegistrationInfo info) {
     return UserPrivateInfo(
       phoneNumber: info.phoneNumber,
-      popularityHistory: {DateTime.now().millisecondsSinceEpoch: 100},
+      popularityHistory: ['${DateTime.now().millisecondsSinceEpoch}:100'],
       popularityScore: 100,
       settings: UserSettings.register(),
       dailyGeneratedSuggestions: [],

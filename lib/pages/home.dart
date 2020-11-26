@@ -44,59 +44,57 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          // FUTURE: new tab bar
-          preferredSize: Size.fromHeight(50.0),
-          child: Container(
-            color: Colors.transparent,
-            child: TabBar(
-              indicatorColor: MyPalette.gold,
-              indicatorPadding: EdgeInsets.symmetric(horizontal: 10.0),
-              controller: _tabController,
-              tabs: <IconData>[
-                Icons.person,
-                Icons.people,
-                Icons.contacts,
-                Icons.search,
-                Icons.chat
-              ]
-                  .asMap()
-                  .map(
-                    (i, iconData) => MapEntry(
-                      i,
-                      Tab(
-                        key: ValueKey('tab' + i.toString()),
-                        child: Icon(
-                          iconData,
-                          color: _tabController.index == i
-                              ? MyPalette.gold
-                              : Theme.of(context).accentColor,
-                        ),
+    return Scaffold(
+      appBar: PreferredSize(
+        // FUTURE: new tab bar
+        preferredSize: Size.fromHeight(80),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: TabBar(
+            indicatorColor: MyPalette.gold,
+            indicatorPadding: EdgeInsets.symmetric(horizontal: 10.0),
+            controller: _tabController,
+            tabs: <IconData>[
+              Icons.person,
+              Icons.people,
+              Icons.contacts,
+              Icons.search,
+              Icons.chat
+            ]
+                .asMap()
+                .map(
+                  (i, iconData) => MapEntry(
+                    i,
+                    Tab(
+                      key: ValueKey('tab' + i.toString()),
+                      child: Icon(
+                        iconData,
+                        color: _tabController.index == i
+                            ? MyPalette.gold
+                            : Theme.of(context).accentColor,
                       ),
                     ),
-                  )
-                  .values
-                  .toList(),
-            ),
+                  ),
+                )
+                .values
+                .toList(),
           ),
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: <Widget>[
-            SizedBox.shrink(),
-            LayoutBuilder(
-              builder: (context, constraints) => MostPopularPage(
-                height: constraints.maxHeight * 2,
-                width: constraints.maxWidth,
-              ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          SizedBox.shrink(),
+          LayoutBuilder(
+            builder: (context, constraints) => MostPopularPage(
+              height: constraints.maxHeight * 2,
+              width: constraints.maxWidth,
             ),
-            SwipingPage(),
-            SizedBox.shrink(),
-            MessagesPage(),
-          ],
-        ),
+          ),
+          SwipingPage(),
+          SizedBox.shrink(),
+          MessagesPage(),
+        ],
       ),
     );
   }

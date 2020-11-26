@@ -48,192 +48,194 @@ class _DashboardPageState extends State<DashboardPage> {
     final privateInfo = Provider.of<User>(context).privateInfo;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return SafeArea(
-      child: Material(
-        child: Column(
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                GestureDetector(
-                  child: getNetworkImage(
-                    profile.profileImageUrl,
-                    width: width,
-                    height: height / 2,
+    return Material(
+      child: Column(
+        children: <Widget>[
+          Stack(
+            children: <Widget>[
+              GestureDetector(
+                child: getNetworkImage(
+                  profile.profileImageUrl,
+                  width: width,
+                  height: height / 2,
+                ),
+                onTap: _changeProfilePic,
+              ),
+              fromTheme(
+                context,
+                dark: Container(
+                  width: width,
+                  height: 100.0,
+                  decoration: BoxDecoration(
+                    gradient: MyPalette.blackToTransparent,
                   ),
-                  onTap: _changeProfilePic,
                 ),
-                fromTheme(
-                  context,
-                  dark: Container(
-                    width: width,
-                    height: 100.0,
-                    decoration: BoxDecoration(
-                      gradient: MyPalette.blackToTransparent,
-                    ),
+                light: SizedBox.shrink(),
+              ),
+              TileIconButton(
+                icon: Icons.arrow_back,
+                onPressed: () => Navigator.pop(context),
+              ),
+              Positioned(
+                bottom: 0.0,
+                child: Container(
+                  width: width,
+                  height: 100.0,
+                  // padding:
+                  //     EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  decoration: BoxDecoration(
+                    gradient: MyPalette.transparentToBlack,
                   ),
-                  light: SizedBox.shrink(),
-                ),
-                TileIconButton(
-                  icon: Icons.arrow_back,
-                  onPressed: () => Navigator.pop(context),
-                ),
-                Positioned(
-                  bottom: 0.0,
-                  child: Container(
-                    width: width,
-                    height: 100.0,
-                    // padding:
-                    //     EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    decoration: BoxDecoration(
-                      gradient: MyPalette.transparentToBlack,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                _editingName
-                                    ? EditableText(
-                                        controller: _nameController,
-                                        focusNode: _nameFocusNode,
-                                        cursorColor: MyPalette.white,
-                                        backgroundCursorColor: MyPalette.white,
-                                        style: TextStyle(
-                                          color: MyPalette.white,
-                                          fontSize: 30.0,
-                                        ),
-                                        onEditingComplete: _changeName,
-                                      )
-                                    : GestureDetector(
-                                        onTap: _editName,
-                                        child: RichText(
-                                          text: TextSpan(
-                                            children: <InlineSpan>[
-                                              TextSpan(
-                                                text: profile.name,
-                                                style: TextStyle(
-                                                  color: MyPalette.white,
-                                                  fontSize: 30.0,
-                                                ),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              _editingName
+                                  ? EditableText(
+                                      controller: _nameController,
+                                      focusNode: _nameFocusNode,
+                                      cursorColor: MyPalette.white,
+                                      backgroundCursorColor: MyPalette.white,
+                                      style: TextStyle(
+                                        color: MyPalette.white,
+                                        fontSize: 30.0,
+                                      ),
+                                      onEditingComplete: _changeName,
+                                    )
+                                  : GestureDetector(
+                                      onTap: _editName,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          children: <InlineSpan>[
+                                            TextSpan(
+                                              text: profile.name,
+                                              style: TextStyle(
+                                                color: MyPalette.white,
+                                                fontSize: 30.0,
                                               ),
-                                              WidgetSpan(
-                                                child: VerifiedBadge(),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                            WidgetSpan(
+                                              child: VerifiedBadge(),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                SizedBox(height: 5.0),
-                                Text(
-                                  'Born ${DateFormat.yMd().format(profile.birthday)}',
-                                  style: TextStyle(
-                                    color: MyPalette.white,
-                                    fontSize: 16.0,
-                                  ),
+                                    ),
+                              SizedBox(height: 5.0),
+                              Text(
+                                'Born ${DateFormat.yMd().format(profile.birthday)}',
+                                style: TextStyle(
+                                  color: MyPalette.white,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SimpleIconButton(
+                          icon: Icons.edit,
+                          color: MyPalette.white,
+                          onPressed: _editName, // BACKEND
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Expanded(
+            child: privateInfo.popularityHistory.isEmpty
+                ? Center(
+                    child: Text(
+                      'Your popularity history will be shown here',
+                      style: TextStyle(
+                        color: MyPalette.grey,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  )
+                : Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Stack(
+                      children: <Widget>[
+                        Center(
+                          child: LineChart(
+                            LineChartData(
+                              gridData: FlGridData(show: false),
+                              borderData: FlBorderData(show: false),
+                              titlesData: FlTitlesData(show: false),
+                              lineBarsData: [
+                                LineChartBarData(
+                                  colors: [Theme.of(context).accentColor],
+                                  dotData: FlDotData(show: false),
+                                  spots: List<FlSpot>.from(privateInfo
+                                      .popularityHistory
+                                      .map((entryString) {
+                                    // each entry string is formatted as: `timestamp:score`
+                                    final entry = entryString.split(':');
+                                    return FlSpot(
+                                      double.parse(entry[0]),
+                                      double.parse(entry[1]),
+                                    );
+                                  })),
                                 ),
                               ],
                             ),
                           ),
-                          SimpleIconButton(
-                            icon: Icons.edit,
-                            color: MyPalette.white,
-                            onPressed: _editName, // BACKEND
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Popularity',
+                                style: TextStyle(
+                                  color: MyPalette.gold,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Text(
+                                privateInfo.popularityScore.toString(),
+                                style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                SimpleIconButton(
+                  key: ValueKey('settingsBtn'),
+                  icon: Icons.settings,
+                  label: 'Settings',
+                  onPressed: _openSettings,
+                ),
+                SimpleIconButton(
+                  key: ValueKey('myProfileBtn'),
+                  icon: Icons.person,
+                  label: 'Profile',
+                  onPressed: _openOwnProfileEdit,
                 ),
               ],
             ),
-            Expanded(
-              child: privateInfo.popularityHistory.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Your popularity history will be shown here',
-                        style: TextStyle(
-                          color: MyPalette.grey,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    )
-                  : Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Stack(
-                        children: <Widget>[
-                          Center(
-                            child: LineChart(
-                              LineChartData(
-                                gridData: FlGridData(show: false),
-                                borderData: FlBorderData(show: false),
-                                titlesData: FlTitlesData(show: false),
-                                lineBarsData: [
-                                  LineChartBarData(
-                                    colors: [Theme.of(context).accentColor],
-                                    dotData: FlDotData(show: false),
-                                    spots: List<FlSpot>.from(privateInfo
-                                        .popularityHistory.entries
-                                        .map((entry) => FlSpot(
-                                              entry.key.toDouble(),
-                                              entry.value.toDouble(),
-                                            ))),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Column(
-                              children: <Widget>[
-                                Text(
-                                  'Popularity',
-                                  style: TextStyle(
-                                    color: MyPalette.gold,
-                                    fontSize: 20.0,
-                                  ),
-                                ),
-                                SizedBox(height: 10.0),
-                                Text(
-                                  privateInfo.popularityScore.toString(),
-                                  style: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  SimpleIconButton(
-                    key: ValueKey('settingsBtn'),
-                    icon: Icons.settings,
-                    label: 'Settings',
-                    onPressed: _openSettings,
-                  ),
-                  SimpleIconButton(
-                    key: ValueKey('myProfileBtn'),
-                    icon: Icons.person,
-                    label: 'Profile',
-                    onPressed: _openOwnProfileEdit,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

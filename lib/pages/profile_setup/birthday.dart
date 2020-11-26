@@ -279,7 +279,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
           Positioned(
             left: width * 179 / 375,
             bottom: 20.0,
-            child: NextPageArrow(onNextPage: _nextPage),
+            child: ScrollDownArrow(onNextPage: _nextPage),
           ),
         ],
       ),

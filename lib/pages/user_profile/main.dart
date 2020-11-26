@@ -187,7 +187,7 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
                   ),
                   SizedBox(height: 40.0),
                   _hasInfoLeft(otherProfile)
-                      ? NextPageArrow(
+                      ? ScrollDownArrow(
                           dark: fromTheme(
                             context,
                             dark: true,

@@ -1,20 +1,20 @@
 import 'package:flutter/widgets.dart';
 
-class NextPageArrow extends StatefulWidget {
+class ScrollDownArrow extends StatefulWidget {
   final bool dark;
   final Function onNextPage;
 
-  NextPageArrow({
+  ScrollDownArrow({
     Key key,
     this.dark = true,
     @required this.onNextPage,
   }) : super(key: key);
 
   @override
-  _NextPageArrowState createState() => _NextPageArrowState();
+  _ScrollDownArrowState createState() => _ScrollDownArrowState();
 }
 
-class _NextPageArrowState extends State<NextPageArrow>
+class _ScrollDownArrowState extends State<ScrollDownArrow>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
 

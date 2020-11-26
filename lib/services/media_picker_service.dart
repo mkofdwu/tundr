@@ -35,7 +35,8 @@ class MediaPickerService {
         default:
           throw Exception('Invalid media type: $type');
       }
-    } on PlatformException {
+    } on PlatformException catch (error) {
+      print(error.message);
       await showDialog(
         context: context,
         child: AlertDialog(

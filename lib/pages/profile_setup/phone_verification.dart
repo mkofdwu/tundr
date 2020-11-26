@@ -8,7 +8,6 @@ import 'package:tundr/widgets/buttons/flat_tile.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/textfields/digit.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
-import 'package:tundr/widgets/pages/page.dart' as page;
 
 class PhoneVerificationPage extends StatefulWidget {
   @override
@@ -18,7 +17,6 @@ class PhoneVerificationPage extends StatefulWidget {
 class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   final List<int> _verificationCode = List<int>.filled(6, null);
   String _verificationId;
-  bool _creatingAccount = false;
 
   @override
   void initState() {
@@ -32,20 +30,22 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   }
 
   void _onSubmit() async {
-    if (!_creatingAccount) {
-      setState(() => _creatingAccount = true);
+    if (!Provider.of<RegistrationInfo>(context).isCreatingAccount) {
+      Provider.of<RegistrationInfo>(context).isCreatingAccount = true;
       final success = await AuthService.verifyCodeAndCreateAccount(
         Provider.of<RegistrationInfo>(context),
         _verificationCode,
         _verificationId,
       );
 
-      if (!success) {
-        setState(() => _creatingAccount = false);
+      if (success) {
+        Navigator.popUntil(context, (route) => route.isFirst);
+      } else {
+        Provider.of<RegistrationInfo>(context).isCreatingAccount = false;
         await showDialog(
           context: context,
           child: AlertDialog(
-            title: Text('User could not be created: result.user is null'),
+            title: Text('User could not be created'),
             titleTextStyle: TextStyle(color: MyPalette.red),
             actions: <Widget>[
               FlatTileButton(
@@ -162,7 +162,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                         moveFocus: false,
                         onChanged: (digit) {
                           setState(() => _verificationCode[5] = digit);
-                          _onSubmit();
+                          FocusScope.of(context).unfocus();
                         },
                       ),
                     ],
@@ -174,7 +174,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
           Positioned(
             left: width * 179 / 375,
             bottom: 20.0,
-            child: NextPageArrow(onNextPage: _onSubmit),
+            child: ScrollDownArrow(onNextPage: _onSubmit),
           ),
         ],
       ),

@@ -39,7 +39,9 @@ class UserAlgorithmData {
       showMeGirls: map['showMeGirls'],
       ageRangeMin: map['ageRangeMin'],
       ageRangeMax: map['ageRangeMax'],
-      otherFilters: otherFilters,
+      otherFilters: Map<String, Filter>.from(otherFilters.map(
+          (name, filterMap) =>
+              MapEntry(name, Filter.fromMap(name, filterMap)))),
     );
   }
 

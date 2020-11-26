@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/pages/loading.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/profile_setup/phone_verification.dart';
 
@@ -14,10 +15,12 @@ class SetupPhoneNumberPage extends StatefulWidget {
 }
 
 class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
-  final TextEditingController _phoneNumberController = TextEditingController();
+  bool _loading = false;
 
   void _nextPage() async {
-    if (_phoneNumberController.text.length != 8) {
+    setState(() => _loading = true);
+    final phoneNumber = Provider.of<RegistrationInfo>(context).phoneNumber;
+    if (phoneNumber.length != 11) {
       await showDialog(
         context: context,
         child: AlertDialog(
@@ -30,9 +33,11 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
           ],
         ),
       );
+      setState(() => _loading = false);
       return;
     }
-    if (await UsersService.phoneNumberExists(_phoneNumberController.text)) {
+
+    if (await UsersService.phoneNumberExists(phoneNumber)) {
       await showDialog(
         context: context,
         child: AlertDialog(
@@ -47,11 +52,10 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
           ],
         ),
       );
+      setState(() => _loading = false);
       return;
     }
 
-    Provider.of<RegistrationInfo>(context).phoneNumber =
-        '+65' + _phoneNumberController.text;
     await Navigator.push(
       context,
       PageRouteBuilder(
@@ -69,114 +73,120 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
         },
       ),
     );
+    setState(() => _loading = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    _phoneNumberController.text = Provider.of<RegistrationInfo>(context)
-        .phoneNumber
-        .substring(3); // FUTURE: change this when more country codes are added
-    return ScrollDownPage(
-      builder: (context, width, height) => Stack(
-        children: <Widget>[
-          ConstrainedBox(
-            constraints: BoxConstraints.expand(),
-            child: Image.asset(
-              'assets/images/setup-phone-number-background.png',
-              fit: BoxFit.fill,
-            ),
-          ),
-          Positioned(
-            left: width * 47 / 375,
-            top: height * 180 / 812,
-            child: Text(
-              'Phone number',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 40.0,
-                fontFamily: 'Helvetica Neue',
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Positioned(
-            left: width * 93 / 375,
-            top: height * 240 / 812,
-            child: Text(
-              'A verification code will be sent\nto you via SMS.',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.0,
-              ),
-            ),
-          ),
-          Positioned(
-            left: 30,
-            top: height * 339 / 812,
-            width: width - 60,
-            child: Row(
+    return _loading
+        ? LoadingPage()
+        : ScrollDownPage(
+            builder: (context, width, height) => Stack(
               children: <Widget>[
-                Container(
-                  color: MyPalette.white,
-                  height: 60.0,
-                  width: 90.0,
+                ConstrainedBox(
+                  constraints: BoxConstraints.expand(),
+                  child: Image.asset(
+                    'assets/images/setup-phone-number-background.png',
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                Positioned(
+                  left: width * 47 / 375,
+                  top: height * 180 / 812,
+                  child: Text(
+                    'Phone number',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 40.0,
+                      fontFamily: 'Helvetica Neue',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: width * 93 / 375,
+                  top: height * 240 / 812,
+                  child: Text(
+                    'A verification code will be sent\nto you via SMS.',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 30,
+                  top: height * 339 / 812,
+                  width: width - 60,
                   child: Row(
                     children: <Widget>[
-                      SizedBox(width: 5.0),
-                      Icon(Icons.add, color: MyPalette.black, size: 30.0),
-                      Text(
-                        '65',
-                        style: TextStyle(
-                          color: MyPalette.black,
-                          fontSize: 40.0,
-                          fontFamily: 'Helvetica Neue',
-                          fontWeight: FontWeight.bold,
+                      Container(
+                        color: MyPalette.white,
+                        height: 60.0,
+                        width: 90.0,
+                        child: Row(
+                          children: <Widget>[
+                            SizedBox(width: 5.0),
+                            Icon(Icons.add, color: MyPalette.black, size: 30.0),
+                            Text(
+                              '65',
+                              style: TextStyle(
+                                color: MyPalette.black,
+                                fontSize: 40.0,
+                                fontFamily: 'Helvetica Neue',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 10.0),
+                      Expanded(
+                        child: TextField(
+                          style: TextStyle(
+                            color: MyPalette.white,
+                            fontSize: 40.0,
+                          ),
+                          decoration: InputDecoration(
+                            counterText: '',
+                            contentPadding: EdgeInsets.only(bottom: 5.0),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: MyPalette.white,
+                                width: 2.0,
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: MyPalette.white,
+                                width: 5.0,
+                              ),
+                            ),
+                          ),
+                          cursorColor: MyPalette.white,
+                          maxLength: 8,
+                          keyboardType: TextInputType.number,
+                          controller: TextEditingController()
+                            ..text = Provider.of<RegistrationInfo>(context)
+                                .phoneNumber
+                                .substring(3),
+                          onChanged: (value) {
+                            Provider.of<RegistrationInfo>(context).phoneNumber =
+                                '+65' + value;
+                          },
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(width: 10.0),
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(
-                      color: MyPalette.white,
-                      fontSize: 40.0,
-                    ),
-                    decoration: InputDecoration(
-                      counterText: '',
-                      contentPadding: EdgeInsets.only(bottom: 5.0),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: MyPalette.white,
-                          width: 2.0,
-                        ),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: MyPalette.white,
-                          width: 5.0,
-                        ),
-                      ),
-                    ),
-                    cursorColor: MyPalette.white,
-                    maxLength: 8,
-                    keyboardType: TextInputType.number,
-                    controller: _phoneNumberController,
-                    onEditingComplete: _nextPage,
-                  ),
+                Positioned(
+                  left: width * 179 / 375,
+                  bottom: 20.0,
+                  child: ScrollDownArrow(onNextPage: _nextPage),
                 ),
               ],
             ),
-          ),
-          Positioned(
-            left: width * 179 / 375,
-            bottom: 20.0,
-            child: NextPageArrow(onNextPage: _nextPage),
-          ),
-        ],
-      ),
-      onScrollDown: _nextPage,
-    );
+            onScrollDown: _nextPage,
+          );
   }
 }

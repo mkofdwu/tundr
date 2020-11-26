@@ -20,10 +20,13 @@ class RegistrationInfo extends ChangeNotifier {
   String uid;
   AppTheme theme;
 
+  bool isCreatingAccount = false;
+
   @override
   String toString() => 'RegistrationInfo('
-      'uid: $uid, '
       'username: $username, '
+      'password: $password, '
+      'confirmPassword: $confirmPassword, '
       'name: $name, '
       'birthday: $birthday, '
       'gender: $gender, '
@@ -34,6 +37,8 @@ class RegistrationInfo extends ChangeNotifier {
       'interests: $interests, '
       'customInterests: $customInterests, '
       'phoneNumber: $phoneNumber, '
+      'uid: $uid, '
       'theme: $theme, '
+      'isCreatingAccount: $isCreatingAccount, '
       ')';
 }

@@ -227,7 +227,7 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
           ],
         ),
         Spacer(),
-        NextPageArrow(
+        ScrollDownArrow(
           dark: false,
           onNextPage: _nextPage,
         ),

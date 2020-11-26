@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/pages/creating_account.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/repositories/theme_notifier.dart';
 import 'package:tundr/pages/loading.dart';
@@ -71,6 +72,9 @@ class _TundrAppState extends State<TundrApp> {
                 home = LoadingPage();
               } else if (snapshot.data?.uid == null) {
                 home = WelcomePage();
+              } else if (Provider.of<RegistrationInfo>(context)
+                  .isCreatingAccount) {
+                home = CreatingAccountPage();
               } else {
                 home = FutureBuilder<User>(
                   future: UsersService.getUserRepo(snapshot.data.uid),

@@ -45,44 +45,42 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
         _return();
         return Future(() => false);
       },
-      child: SafeArea(
-        child: Material(
-          color: MyPalette.black,
-          child: Stack(
-            children: <Widget>[
-              TileIconButton(
-                icon: Icons.arrow_back,
-                onPressed: _return,
-              ),
-              Positioned(
-                left: width * 37 / 375,
-                top: height * 100 / 812,
-                width: width * 200 / 375,
-                child: Text(
-                  widget.field.prompt,
-                  style: TextStyle(
-                    color: MyPalette.white,
-                    fontSize: 40.0,
-                  ),
+      child: Material(
+        color: MyPalette.black,
+        child: Stack(
+          children: <Widget>[
+            TileIconButton(
+              icon: Icons.arrow_back,
+              onPressed: _return,
+            ),
+            Positioned(
+              left: width * 37 / 375,
+              top: height * 100 / 812,
+              width: width * 200 / 375,
+              child: Text(
+                widget.field.prompt,
+                style: TextStyle(
+                  color: MyPalette.white,
+                  fontSize: 40.0,
                 ),
               ),
-              Positioned(
-                left: width * 150 / 375,
-                top: height * 500 / 812,
-                width: width * 200 / 375,
-                child: Slider(
-                  min: 1.0,
-                  max: widget.field.options.toDouble(),
-                  divisions: widget.field.options - 1,
-                  value: _value,
-                  activeColor: MyPalette.gold,
-                  inactiveColor: MyPalette.white,
-                  label: _value.toInt().toString(),
-                  onChanged: (value) => setState(() => _value = value),
-                ),
+            ),
+            Positioned(
+              left: width * 150 / 375,
+              top: height * 500 / 812,
+              width: width * 200 / 375,
+              child: Slider(
+                min: 1.0,
+                max: widget.field.options.toDouble(),
+                divisions: widget.field.options - 1,
+                value: _value,
+                activeColor: MyPalette.gold,
+                inactiveColor: MyPalette.white,
+                label: _value.toInt().toString(),
+                onChanged: (value) => setState(() => _value = value),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -96,44 +94,42 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
         _return();
         return Future(() => false);
       },
-      child: SafeArea(
-        child: Material(
-          color: MyPalette.white,
-          child: Stack(
-            children: <Widget>[
-              TileIconButton(
-                icon: Icons.arrow_back,
-                onPressed: _return,
-              ),
-              Positioned(
-                left: width * 37 / 375,
-                top: height * 100 / 812,
-                width: width * 200 / 375,
-                child: Text(
-                  widget.field.prompt,
-                  style: TextStyle(
-                    color: MyPalette.black,
-                    fontSize: 40.0,
-                  ),
+      child: Material(
+        color: MyPalette.white,
+        child: Stack(
+          children: <Widget>[
+            TileIconButton(
+              icon: Icons.arrow_back,
+              onPressed: _return,
+            ),
+            Positioned(
+              left: width * 37 / 375,
+              top: height * 100 / 812,
+              width: width * 200 / 375,
+              child: Text(
+                widget.field.prompt,
+                style: TextStyle(
+                  color: MyPalette.black,
+                  fontSize: 40.0,
                 ),
               ),
-              Positioned(
-                left: width * 150 / 375,
-                top: height * 500 / 812,
-                width: width * 200 / 375,
-                child: Slider(
-                  min: 1.0,
-                  max: widget.field.options.toDouble(),
-                  divisions: widget.field.options - 1,
-                  value: _value,
-                  activeColor: MyPalette.gold,
-                  inactiveColor: MyPalette.black,
-                  label: _value.toInt().toString(),
-                  onChanged: (value) => setState(() => _value = value),
-                ),
+            ),
+            Positioned(
+              left: width * 150 / 375,
+              top: height * 500 / 812,
+              width: width * 200 / 375,
+              child: Slider(
+                min: 1.0,
+                max: widget.field.options.toDouble(),
+                divisions: widget.field.options - 1,
+                value: _value,
+                activeColor: MyPalette.gold,
+                inactiveColor: MyPalette.black,
+                label: _value.toInt().toString(),
+                onChanged: (value) => setState(() => _value = value),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -21,68 +21,66 @@ class _SetupThemePageState extends State<SetupThemePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Material(
-        color: MyPalette.white,
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            children: <Widget>[
-              Text(
-                'Select a theme',
-                style: TextStyle(
-                  color: MyPalette.black,
-                  fontSize: 30.0,
-                  fontFamily: 'Helvetica Neue',
-                  fontWeight: FontWeight.bold,
-                ),
+    return Material(
+      color: MyPalette.white,
+      child: Padding(
+        padding: const EdgeInsets.all(30.0),
+        child: Column(
+          children: <Widget>[
+            Text(
+              'Select a theme',
+              style: TextStyle(
+                color: MyPalette.black,
+                fontSize: 30.0,
+                fontFamily: 'Helvetica Neue',
+                fontWeight: FontWeight.bold,
               ),
-              SizedBox(height: 30.0),
-              Expanded(
-                child: GestureDetector(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: MyPalette.white,
-                      borderRadius: BorderRadius.circular(30.0),
-                      boxShadow: [MyPalette.primaryShadow],
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Light',
-                        style: TextStyle(
-                          color: MyPalette.black,
-                          fontSize: 20.0,
-                        ),
+            ),
+            SizedBox(height: 30.0),
+            Expanded(
+              child: GestureDetector(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: MyPalette.white,
+                    borderRadius: BorderRadius.circular(30.0),
+                    boxShadow: [MyPalette.primaryShadow],
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Light',
+                      style: TextStyle(
+                        color: MyPalette.black,
+                        fontSize: 20.0,
                       ),
                     ),
                   ),
-                  onTap: () => _selectTheme(AppTheme.light),
                 ),
+                onTap: () => _selectTheme(AppTheme.light),
               ),
-              SizedBox(height: 30.0),
-              Expanded(
-                child: GestureDetector(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: MyPalette.black,
-                      borderRadius: BorderRadius.circular(30.0),
-                      boxShadow: [MyPalette.primaryShadow],
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Dark',
-                        style: TextStyle(
-                          color: MyPalette.white,
-                          fontSize: 20.0,
-                        ),
+            ),
+            SizedBox(height: 30.0),
+            Expanded(
+              child: GestureDetector(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: MyPalette.black,
+                    borderRadius: BorderRadius.circular(30.0),
+                    boxShadow: [MyPalette.primaryShadow],
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Dark',
+                      style: TextStyle(
+                        color: MyPalette.white,
+                        fontSize: 20.0,
                       ),
                     ),
                   ),
-                  onTap: () => _selectTheme(AppTheme.dark),
                 ),
+                onTap: () => _selectTheme(AppTheme.dark),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -49,7 +49,7 @@ class _SetupInterestsPageState extends State<SetupInterestsPage> {
             ),
             SizedBox(height: 20),
             Center(
-              child: NextPageArrow(
+              child: ScrollDownArrow(
                 onNextPage: _nextPage,
               ),
             ),

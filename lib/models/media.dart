@@ -24,5 +24,6 @@ class Media {
   }
 
   @override
-  String toString() => 'media, name / url: $url';
+  String toString() =>
+      'Media(type: $type, url: $url, isLocalFile: $isLocalFile)';
 }

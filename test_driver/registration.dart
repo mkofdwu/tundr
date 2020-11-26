@@ -37,27 +37,57 @@ void registrationTests() {
 
   test('Registration flow works correctly', () async {
     await registerWith(driver, NEW_USERNAME, NEW_PASSWORD);
+
     await driver.waitFor(find.byType('SetupNamePage'));
+    await driver.tap(find.byValueKey('nameInput'));
+    await driver.enterText(NEW_USERNAME);
+    await driver.tap(find.byType('ScrollDownArrow'));
+
+    await driver.waitFor(find.byType('SetupBirthdayPage'));
+    await driver.tap(find.byType('DigitEntry'));
+    await driver.enterText('2');
+    await driver.enterText('0');
+    await driver.enterText('1');
+    await driver.enterText('0');
+    await driver.enterText('2');
+    await driver.enterText('0');
+    await driver.enterText('0');
+    await driver.enterText('5');
+    await driver.scroll(
+        find.byType('SetupBirthdayPage'), 0, -3.0, Duration(seconds: 1));
+
+    await driver.waitFor(find.byType('SetupGenderPage'));
+    await driver.tap(find.text('Male'));
+    await driver.tap(find.byType('ScrollDownArrow'));
+
+    await driver.waitFor(find.byType('SetupProfilePicPage'));
+    await driver.tap(find.text('Camera'));
+
+    // await driver.waitFor(find.byType('SetupInterestsPage'));
+
+    // await driver.waitFor(find.byType('SetupPhoneNumberPage'));
+
+    // await driver.waitFor(find.byType('PhoneVerificationPage'));
     // TODO
   });
 
-  test('Shows error with existing username', () async {
-    await registerWith(driver, 'username1', 'password');
-    await driver.waitFor(find.byType('AlertDialog')); // is this sufficient?
-  });
+  // test('Shows error with existing username', () async {
+  //   await registerWith(driver, 'username1', 'password');
+  //   await driver.waitFor(find.byType('AlertDialog')); // is this sufficient?
+  // });
 
-  test('Delete account', () async {
-    await loginWith(driver, username: NEW_USERNAME, password: NEW_PASSWORD);
-    await driver.tap(find.byValueKey('tab0'));
-    await driver.waitFor(find.byType('DashboardPage'));
-    await driver.tap(find.byValueKey('settingsBtn'));
-    await driver.waitFor(find.byType('SettingsPage'));
-    await driver.tap(find.byValueKey('deleteAccountBtn'));
-    await driver.waitFor(find.byType('ConfirmDeleteAccountPage'));
-    await driver.tap(find.byValueKey('confirmPasswordField'));
-    await driver.enterText(NEW_PASSWORD);
-    await driver.tap(find.byValueKey('confirmDeleteAccountBtn'));
-    await driver.waitFor(find.byType('WelcomePage'));
-    // TODO: alert showing account has been deleted
-  });
+  // test('Delete account', () async {
+  //   await loginWith(driver, username: NEW_USERNAME, password: NEW_PASSWORD);
+  //   await driver.tap(find.byValueKey('tab0'));
+  //   await driver.waitFor(find.byType('DashboardPage'));
+  //   await driver.tap(find.byValueKey('settingsBtn'));
+  //   await driver.waitFor(find.byType('SettingsPage'));
+  //   await driver.tap(find.byValueKey('deleteAccountBtn'));
+  //   await driver.waitFor(find.byType('ConfirmDeleteAccountPage'));
+  //   await driver.tap(find.byValueKey('confirmPasswordField'));
+  //   await driver.enterText(NEW_PASSWORD);
+  //   await driver.tap(find.byValueKey('confirmDeleteAccountBtn'));
+  //   await driver.waitFor(find.byType('WelcomePage'));
+  //   // TODO: alert showing account has been deleted
+  // });
 }

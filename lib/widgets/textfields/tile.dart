@@ -34,18 +34,14 @@ class TileTextField extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      padding: EdgeInsets.only(
-        left: 20,
-        top: 10.0,
-        bottom: 10.0,
-      ),
       decoration: BoxDecoration(
         color: color,
         boxShadow: [MyPalette.primaryShadow],
       ),
       child: TextField(
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(bottom: 10.0),
+          contentPadding:
+              EdgeInsets.only(left: 16, top: 10, bottom: 10, right: 16),
           border: InputBorder.none,
           hintText: hintText,
           hintStyle: TextStyle(
@@ -53,7 +49,6 @@ class TileTextField extends StatelessWidget {
             fontSize: 20.0,
             fontFamily: 'Helvetica Neue',
           ),
-          counterText: '',
         ),
         style: TextStyle(
           color: MyPalette.black,

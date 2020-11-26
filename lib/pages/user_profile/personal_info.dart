@@ -47,104 +47,100 @@ class _UserProfilePersonalInfoPageState
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Material(
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          padding: const EdgeInsets.only(
-            left: 30.0,
-            top: 1.0,
-            right: 30.0,
+    return Material(
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        padding: const EdgeInsets.only(
+          left: 30.0,
+          top: 1.0,
+          right: 30.0,
+        ),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
           ),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
-            ),
-            child: Column(
-              children: <Widget>[
-                TileIconButton(
-                  icon: Icons.close,
-                  onPressed: () {
-                    Navigator.popUntil(
-                      context,
-                      (route) => route.settings.name == '/user_profile',
-                    );
-                    Navigator.pop(context);
-                  },
-                ),
-                SizedBox(height: 30.0),
-                Column(
-                  children: List<Widget>.from(
-                      widget.profile.personalInfo.keys.map((name) {
-                    final dynamic value = widget.profile.personalInfo[name];
-                    assert(value != null);
-                    if ((value is String || value is List) && value.isEmpty) {
-                      return SizedBox.shrink();
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            name,
+          child: Column(
+            children: <Widget>[
+              TileIconButton(
+                icon: Icons.close,
+                onPressed: () {
+                  Navigator.popUntil(
+                    context,
+                    (route) => route.settings.name == '/user_profile',
+                  );
+                  Navigator.pop(context);
+                },
+              ),
+              SizedBox(height: 30.0),
+              Column(
+                children: List<Widget>.from(
+                    widget.profile.personalInfo.keys.map((name) {
+                  final dynamic value = widget.profile.personalInfo[name];
+                  assert(value != null);
+                  if ((value is String || value is List) && value.isEmpty) {
+                    return SizedBox.shrink();
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          name,
+                          style: TextStyle(
+                            color: Theme.of(context).accentColor,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: 100.0),
+                          child: Text(
+                            value is List ? value.join(', ') : value.toString(),
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Theme.of(context).accentColor,
                               fontSize: 20.0,
                             ),
                           ),
-                          ConstrainedBox(
-                            constraints: BoxConstraints(maxWidth: 100.0),
-                            child: Text(
-                              value is List
-                                  ? value.join(', ')
-                                  : value.toString(),
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontSize: 20.0,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  })),
-                ),
-                SizedBox(height: 30.0),
-                Container(
-                  width: 100.0,
-                  height: 5.0,
-                  color: Theme.of(context).accentColor,
-                ),
-                SizedBox(height: 30.0),
-                widget.profile.interests.isEmpty
-                    ? Text(
-                        'No interests',
-                        style: TextStyle(
-                          color: MyPalette.grey,
-                          fontSize: 16.0,
                         ),
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Interests',
-                              style: TextStyle(
-                                color: MyPalette.gold,
-                                fontSize: 20.0,
-                              ),
+                      ],
+                    ),
+                  );
+                })),
+              ),
+              SizedBox(height: 30.0),
+              Container(
+                width: 100.0,
+                height: 5.0,
+                color: Theme.of(context).accentColor,
+              ),
+              SizedBox(height: 30.0),
+              widget.profile.interests.isEmpty
+                  ? Text(
+                      'No interests',
+                      style: TextStyle(
+                        color: MyPalette.grey,
+                        fontSize: 16.0,
+                      ),
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Interests',
+                            style: TextStyle(
+                              color: MyPalette.gold,
+                              fontSize: 20.0,
                             ),
                           ),
-                          SizedBox(height: 10.0),
-                          InterestsWrap(interests: widget.profile.interests),
-                        ],
-                      ),
-              ],
-            ),
+                        ),
+                        SizedBox(height: 10.0),
+                        InterestsWrap(interests: widget.profile.interests),
+                      ],
+                    ),
+            ],
           ),
         ),
       ),
