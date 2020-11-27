@@ -14,7 +14,7 @@ class UnderlineTextField extends StatelessWidget {
   UnderlineTextField({
     Key key,
     @required this.controller,
-    this.color = MyPalette.white,
+    this.color,
     this.hintText = '',
     this.obscureText = false,
     this.autoFocus = false,
@@ -29,10 +29,10 @@ class UnderlineTextField extends StatelessWidget {
       autofocus: autoFocus,
       controller: controller,
       obscureText: obscureText,
-      cursorColor: color, // AppColors.white
+      cursorColor: color,
       keyboardType: keyboardType,
       style: TextStyle(
-        color: color, // AppColors.white
+        color: color,
         fontSize: 20.0,
       ),
       decoration: InputDecoration(
@@ -43,13 +43,13 @@ class UnderlineTextField extends StatelessWidget {
         ),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: color,
+            color: color ?? Theme.of(context).accentColor,
             width: 2.0,
           ),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: color,
+            color: color ?? Theme.of(context).accentColor,
             width: 5.0,
           ),
         ),

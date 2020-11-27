@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -12,10 +11,9 @@ import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
-import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
+import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/simple_icon.dart';
-import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/verified_badge.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -31,7 +29,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((duration) =>
+    WidgetsBinding.instance.addPostFrameCallback((duration) =>
         _nameController.text = Provider.of<User>(context).profile.name);
   }
 
@@ -61,21 +59,14 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 onTap: _changeProfilePic,
               ),
-              fromTheme(
-                context,
-                dark: Container(
-                  width: width,
-                  height: 100.0,
-                  decoration: BoxDecoration(
-                    gradient: MyPalette.blackToTransparent,
-                  ),
+              Container(
+                width: width,
+                height: 100.0,
+                decoration: BoxDecoration(
+                  gradient: MyPalette.blackToTransparent,
                 ),
-                light: SizedBox.shrink(),
               ),
-              TileIconButton(
-                icon: Icons.arrow_back,
-                onPressed: () => Navigator.pop(context),
-              ),
+              MyBackButton(iconColor: MyPalette.white),
               Positioned(
                 bottom: 0.0,
                 child: Container(
@@ -121,7 +112,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                               ),
                                             ),
                                             WidgetSpan(
-                                              child: VerifiedBadge(),
+                                              child: VerifiedBadge(
+                                                color: MyPalette.white,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -223,12 +216,14 @@ class _DashboardPageState extends State<DashboardPage> {
                 SimpleIconButton(
                   key: ValueKey('settingsBtn'),
                   icon: Icons.settings,
+                  size: 34,
                   label: 'Settings',
                   onPressed: _openSettings,
                 ),
                 SimpleIconButton(
                   key: ValueKey('myProfileBtn'),
                   icon: Icons.person,
+                  size: 34,
                   label: 'Profile',
                   onPressed: _openOwnProfileEdit,
                 ),

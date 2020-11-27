@@ -62,7 +62,7 @@ class _RoundRadioGroupState extends State<RoundRadioGroup> {
                 SizedBox(width: 10.0),
                 Text(
                   option,
-                  style: TextStyle(fontSize: 16.0),
+                  style: TextStyle(fontSize: 18.0),
                 ),
               ],
             ),

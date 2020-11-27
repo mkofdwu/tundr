@@ -44,11 +44,10 @@ class _SearchPageState extends State<SearchPage> {
           cursorColor: Theme.of(context).accentColor,
           style: Theme.of(context).textTheme.headline6,
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
             border: InputBorder.none,
             hintText: 'Search',
             hintStyle: TextStyle(
-              fontSize: 20.0,
+              fontSize: 18.0,
               color: Theme.of(context).accentColor,
             ),
             suffixIcon: Icon(

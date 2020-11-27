@@ -35,7 +35,7 @@ void main() {
 
     final registrationInfo = RegistrationInfo();
     await AuthService.verifyCodeAndCreateAccount(
-        registrationInfo, [1, 2, 3, 4, 5, 6], 'vid');
+        registrationInfo, [1, 2, 3, 4, 5, 6]);
   });
 
   test('create account fails with invalid credentials', () async {

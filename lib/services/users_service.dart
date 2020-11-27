@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:tundr/constants/deleted_user.dart';
 import 'package:tundr/constants/firebase_ref.dart';
@@ -124,10 +125,19 @@ class UsersService {
 
   static Future<List<PopularUser>> getMostPopular() async {
     final mostPopularUsers = await callHttpsFunction('getMostPopular');
-    return mostPopularUsers.map((popUser) => PopularUser(
-          profile: popUser.profile,
-          popularityScore: popUser.popularityScore,
-        ));
+    print(mostPopularUsers);
+    return mostPopularUsers.map<PopularUser>((popUser) {
+      final unserializedBirthday = popUser['profile']['birthday'];
+      popUser['profile']['birthday'] = Timestamp(
+        unserializedBirthday['_seconds'],
+        unserializedBirthday['_nanoseconds'],
+      );
+      return PopularUser(
+        profile:
+            UserProfile.fromMap(Map<String, dynamic>.from(popUser['profile'])),
+        popularityScore: popUser['popularityScore'],
+      );
+    }).toList();
   }
 
   static Future<bool> allowedToTalkTo(String otherUid) =>

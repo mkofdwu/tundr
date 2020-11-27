@@ -15,7 +15,7 @@ class TileIconButton extends StatefulWidget {
     this.width = 50.0,
     this.height = 50.0,
     @required this.icon,
-    this.iconSize = 30.0,
+    this.iconSize = 24.0,
     this.iconColor,
     this.iconBackgroundColor,
     @required this.onPressed,

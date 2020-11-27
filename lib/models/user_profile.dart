@@ -44,7 +44,7 @@ class UserProfile {
       extraMedia: map['extraMedia']
           .map<Media>((m) => m == null ? null : Media.fromMap(m))
           .toList(),
-      personalInfo: map['personalInfo'],
+      personalInfo: Map<String, dynamic>.from(map['personalInfo']),
       interests: List<String>.from(map['interests']),
       customInterests: List<String>.from(map['customInterests']),
       verified: map['verified'],

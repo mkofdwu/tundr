@@ -5,6 +5,7 @@ import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/profile_setup/phone_verification.dart';
 
 import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
@@ -46,7 +47,7 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
               'This phone number already has an account associated with it'),
           actions: <Widget>[
             FlatButton(
-              child: Text('Retry'),
+              child: Text('Close'),
               onPressed: () => Navigator.pop(context),
             ),
           ],
@@ -56,6 +57,7 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
       return;
     }
 
+    await AuthService.sendSMS(Provider.of<RegistrationInfo>(context));
     await Navigator.push(
       context,
       PageRouteBuilder(

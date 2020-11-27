@@ -4,14 +4,12 @@ import 'package:tundr/utils/from_theme.dart';
 class FlatTileButton extends StatefulWidget {
   final String text;
   final Color color;
-  final double padding;
   final Function onTap;
 
   FlatTileButton({
     Key key,
     @required this.text,
     @required this.color,
-    this.padding = 20.0,
     @required this.onTap,
   }) : super(key: key);
 
@@ -28,14 +26,14 @@ class _FlatTileButtonState extends State<FlatTileButton> {
       child: Container(
         decoration: BoxDecoration(
           color: _pressed ? widget.color : null,
-          borderRadius: fromTheme(context, light: BorderRadius.circular(10.0)),
+          borderRadius: fromTheme(context, light: BorderRadius.circular(8)),
         ),
-        padding: EdgeInsets.all(widget.padding),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Text(
           widget.text,
           style: TextStyle(
             color: _pressed ? Theme.of(context).primaryColor : widget.color,
-            fontSize: 20.0,
+            fontSize: 18,
           ),
         ),
       ),

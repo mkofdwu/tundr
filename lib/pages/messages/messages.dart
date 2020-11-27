@@ -38,14 +38,16 @@ class _MessagesPageState extends State<MessagesPage> {
     return StreamBuilder<List<Chat>>(
       stream: Provider.of<User>(context).chatsStream(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return Center(child: Loader());
-        if (snapshot.data.isEmpty) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: Loader());
+        }
+        if (!snapshot.hasData || snapshot.data.isEmpty) {
           return Center(
             child: Text(
               'Matches and chats will appear here.',
               style: TextStyle(
                 color: MyPalette.grey,
-                fontSize: 16.0,
+                fontSize: 18.0,
               ),
             ),
           );

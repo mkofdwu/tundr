@@ -61,7 +61,7 @@ class _TundrAppState extends State<TundrApp> {
         future: Firebase.initializeApp(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return LoadingPage();
           }
           return StreamBuilder<auth.User>(
             stream: AuthService.currentUserStream(),
@@ -162,6 +162,7 @@ class _TundrAppState extends State<TundrApp> {
           fontFamily: 'Helvetica Neue',
           fontWeight: FontWeight.bold,
         ),
+        headline5: TextStyle(color: accentColor),
         headline6: TextStyle(
           color: accentColor,
           fontSize: 20.0,
@@ -170,11 +171,16 @@ class _TundrAppState extends State<TundrApp> {
           color: accentColor,
           fontSize: 14.0,
         ),
+        bodyText1: TextStyle(color: accentColor),
+        subtitle1: TextStyle(color: accentColor),
+        subtitle2: TextStyle(color: accentColor),
+        caption: TextStyle(color: accentColor.withOpacity(0.7)),
       ),
       fontFamily: '.AppleSystemUIFont',
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: accentColor,
       ),
+      cardColor: primaryColor,
     );
   }
 }

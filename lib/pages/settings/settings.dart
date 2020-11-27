@@ -69,11 +69,13 @@ class _SettingsPageState extends State<SettingsPage> {
         MaterialPageRoute(builder: (context) => NotificationSettingsPage()),
       );
 
-  void _openAbout() => Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AboutPage()), // DESIGN: transitions
-      );
+  void _openAbout() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => AboutPage()), // DESIGN: transitions
+    );
+  }
 
   void _confirmLogout() async {
     final signOut = await showDialog(
@@ -129,11 +131,11 @@ class _SettingsPageState extends State<SettingsPage> {
           style: Theme.of(context).textTheme.headline6,
         ),
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -143,28 +145,28 @@ class _SettingsPageState extends State<SettingsPage> {
                   profile.username,
                   style: TextStyle(
                     color: Theme.of(context).accentColor,
-                    fontSize: 14.0,
+                    fontSize: 14,
                   ),
                 ),
                 onEdit: () => _changeUsername(uid, profile.username),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SeparatePageSettingField(
                 title: 'Change password',
                 onNextPage: _changePassword,
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SettingField(
                 title: 'Phone number',
                 child: Text(
                   privateInfo.phoneNumber,
                   style: TextStyle(
                     color: Theme.of(context).accentColor,
-                    fontSize: 14.0,
+                    fontSize: 14,
                   ),
                 ),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SettingField(
                 title: 'Gender',
                 child: RoundRadioGroup(
@@ -174,7 +176,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       .updateProfile({'gender': option}),
                 ),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SettingField(
                 title: 'Show me',
                 child: Column(
@@ -194,12 +196,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   ],
                 ),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SettingField(
                 title: 'Age range',
                 child: SimpleRangeSlider(
-                  min: 13.0,
-                  max: 50.0,
+                  min: 13,
+                  max: 50,
                   defaultRange: RangeValues(
                     algorithmData.ageRangeMin.toDouble(),
                     algorithmData.ageRangeMax.toDouble(),
@@ -212,17 +214,17 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                 ),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SeparatePageSettingField(
                 title: 'Filters',
                 onNextPage: _openFilterSettings,
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SeparatePageSettingField(
                 title: 'Blocked users',
                 onNextPage: _openBlockedUsers,
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SwitchSettingField(
                 title: 'Sleep',
                 description:
@@ -231,7 +233,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 onChanged: (value) => Provider.of<User>(context)
                     .updateAlgorithmData({'asleep': value}),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SwitchSettingField(
                 title: 'Show in most popular',
                 description:
@@ -243,7 +245,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       .writeField('settings', UserPrivateInfo);
                 },
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SwitchSettingField(
                 title: 'Block unknown messages',
                 description:
@@ -255,12 +257,12 @@ class _SettingsPageState extends State<SettingsPage> {
                       .writeField('settings', UserPrivateInfo);
                 },
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SeparatePageSettingField(
                 title: 'Notifications',
                 onNextPage: _openNotificationSettings,
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SettingField(
                 title: 'Theme',
                 child: RoundRadioGroup(
@@ -270,12 +272,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   onChanged: (option) {
                     Provider.of<ThemeNotifier>(context).theme =
                         AppTheme.values[option];
+                    setState(() {});
+                    Provider.of<ThemeNotifier>(context).notifyListeners_();
                     Provider.of<User>(context)
                         .updatePrivateInfo({'theme': option});
                   },
                 ),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               SwitchSettingField(
                 title: 'Read receipts',
                 description:
@@ -287,14 +291,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       .writeField('settings', UserPrivateInfo);
                 },
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               Provider.of<ThemeNotifier>(context).theme == AppTheme.dark
                   ? GestureDetector(
                       // FUTURE: make this work for other themes, refractor to darktilebutton
                       child: Container(
                         width: double.infinity,
-                        height: 100.0,
-                        padding: EdgeInsets.all(30.0),
+                        height: 70,
+                        padding: EdgeInsets.all(20),
                         color: MyPalette.gold,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -303,11 +307,11 @@ class _SettingsPageState extends State<SettingsPage> {
                               'About tundr',
                               style: TextStyle(
                                 color: MyPalette.black,
-                                fontSize: 30.0,
+                                fontSize: 24,
                               ),
                             ),
                             Icon(Icons.arrow_forward_ios,
-                                color: MyPalette.black, size: 30.0),
+                                color: MyPalette.black, size: 24),
                           ],
                         ),
                       ),
@@ -322,24 +326,24 @@ class _SettingsPageState extends State<SettingsPage> {
                             'About tundr',
                             style: TextStyle(
                               color: MyPalette.white,
-                              fontSize: 30.0,
+                              fontSize: 24,
                             ),
                           ),
                           Icon(
                             Icons.arrow_forward_ios,
                             color: MyPalette.white,
-                            size: 30.0,
+                            size: 24,
                           ),
                         ],
                       ),
                       onTap: _openAbout,
                     ),
-              SizedBox(height: 20.0),
-              GestureDetector(
+              SizedBox(height: 20),
+              FlatButton(
                 // FUTURE: replace with flatdarktilebutton
                 key: ValueKey('logoutBtn'),
                 child: Padding(
-                  padding: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.symmetric(vertical: 14),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -347,19 +351,19 @@ class _SettingsPageState extends State<SettingsPage> {
                         'Logout',
                         style: TextStyle(
                           color: MyPalette.red,
-                          fontSize: 20.0,
+                          fontSize: 20,
                         ),
                       ),
                       Icon(Icons.power_settings_new, color: MyPalette.red),
                     ],
                   ),
                 ),
-                onTap: _confirmLogout,
+                onPressed: _confirmLogout,
               ),
-              GestureDetector(
+              FlatButton(
                 key: ValueKey('deleteAccountBtn'),
                 child: Padding(
-                  padding: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.symmetric(vertical: 14),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -367,15 +371,16 @@ class _SettingsPageState extends State<SettingsPage> {
                         'Delete account',
                         style: TextStyle(
                           color: MyPalette.red,
-                          fontSize: 20.0,
+                          fontSize: 20,
                         ),
                       ),
                       Icon(Icons.delete, color: MyPalette.red),
                     ],
                   ),
                 ),
-                onTap: _confirmDeleteAccount,
+                onPressed: _confirmDeleteAccount,
               ),
+              SizedBox(height: 20),
             ],
           ),
         ),

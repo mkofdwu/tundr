@@ -88,7 +88,6 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                         FlatTileButton(
                           text: 'Unblock',
                           color: MyPalette.red,
-                          padding: 10.0,
                           onTap: () {
                             Provider.of<User>(context)
                                 .privateInfo

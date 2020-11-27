@@ -4,10 +4,10 @@ import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/auth_service.dart';
 
 import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/flat_tile.dart';
-import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
-import 'package:tundr/widgets/textfields/tile.dart';
+import 'package:tundr/widgets/textfields/underline.dart';
 
 class ConfirmDeleteAccountPage extends StatelessWidget {
   // FUTURE: fix this design
@@ -41,10 +41,7 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return StackScrollPage(
       builder: (context, width, height) => <Widget>[
-        TileIconButton(
-          icon: Icons.arrow_back,
-          onPressed: () => Navigator.pop(context),
-        ),
+        MyBackButton(),
         Positioned(
           left: width * 37 / 375,
           top: height * 100 / 812,
@@ -58,21 +55,23 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
           top: height * 500 / 812,
           right: 40.0,
           width: width * 170 / 375,
-          child: TileTextField(
-            key: ValueKey('confirmPasswordField'),
-            controller: _passwordController,
-            obscureText: true,
-            moveFocus: false,
-          ),
-        ),
-        Positioned(
-          right: 20.0,
-          bottom: 100.0,
-          child: FlatTileButton(
-            key: ValueKey('confirmDeleteAccountBtn'),
-            text: 'Delete account',
-            color: MyPalette.red,
-            onTap: () => _deleteAccount(context),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              UnderlineTextField(
+                key: ValueKey('confirmPasswordField'),
+                controller: _passwordController,
+                obscureText: true,
+                moveFocus: false,
+              ),
+              SizedBox(height: 20),
+              FlatTileButton(
+                key: ValueKey('confirmDeleteAccountBtn'),
+                text: 'Delete account',
+                color: MyPalette.red,
+                onTap: () => _deleteAccount(context),
+              ),
+            ],
           ),
         ),
       ],

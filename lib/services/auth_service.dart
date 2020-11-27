@@ -44,7 +44,6 @@ class AuthService {
     String newPassword,
   }) async {
     try {
-      // TODO: is this correct?
       final res = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: '$userUsername@example.com',
         password: oldPassword,
@@ -123,11 +122,11 @@ class AuthService {
     }
   }
 
-  static Future<bool> verifyCodeAndCreateAccount(RegistrationInfo info,
-      List<int> verificationCode, String verificationId) async {
+  static Future<bool> verifyCodeAndCreateAccount(
+      RegistrationInfo info, List<int> verificationCode) async {
     if (!verificationCode.contains(null)) {
       final credential = PhoneAuthProvider.credential(
-        verificationId: verificationId,
+        verificationId: info.smsVerificationId,
         smsCode: verificationCode.join(),
       );
       if (credential != null) {
@@ -137,8 +136,7 @@ class AuthService {
     return false;
   }
 
-  static void sendSMS(
-      RegistrationInfo info, Function(String) verificationIdCallback) {
+  static void sendSMS(RegistrationInfo info) {
     FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: info.phoneNumber,
       timeout: const Duration(seconds: 120),
@@ -149,10 +147,10 @@ class AuthService {
         print('verification failed: ' + exception.message);
       },
       codeSent: (String verificationId, int forceResendingToken) {
-        verificationIdCallback(verificationId);
+        info.smsVerificationId = verificationId;
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        verificationIdCallback(verificationId);
+        info.smsVerificationId = verificationId;
       },
     );
   }

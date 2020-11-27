@@ -20,13 +20,12 @@ class _HomePageState extends State<HomePage>
     super.initState();
     _tabController = TabController(length: 5, initialIndex: 2, vsync: this);
     _tabController.addListener(() {
-      setState(() {});
       if (_tabController.indexIsChanging) return;
       if (_tabController.index == 0) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => DashboardPage()),
-        ); //.then((_) => _tabController.animateTo(_tabController.previousIndex));
+        ).then((_) => _tabController.animateTo(_tabController.previousIndex));
       } else if (_tabController.index == 3) {
         Navigator.push(
           context,
@@ -46,14 +45,15 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        // FUTURE: new tab bar
         preferredSize: Size.fromHeight(80),
         child: Padding(
           padding: const EdgeInsets.only(top: 30),
           child: TabBar(
-            indicatorColor: MyPalette.gold,
-            indicatorPadding: EdgeInsets.symmetric(horizontal: 10.0),
             controller: _tabController,
+            indicatorWeight: 3,
+            indicatorColor: MyPalette.gold,
+            labelColor: MyPalette.gold,
+            unselectedLabelColor: Theme.of(context).accentColor,
             tabs: <IconData>[
               Icons.person,
               Icons.people,
@@ -66,13 +66,8 @@ class _HomePageState extends State<HomePage>
                   (i, iconData) => MapEntry(
                     i,
                     Tab(
-                      key: ValueKey('tab' + i.toString()),
-                      child: Icon(
-                        iconData,
-                        color: _tabController.index == i
-                            ? MyPalette.gold
-                            : Theme.of(context).accentColor,
-                      ),
+                      // key: ValueKey('tab' + i.toString()),
+                      child: Icon(iconData),
                     ),
                   ),
                 )
@@ -91,7 +86,10 @@ class _HomePageState extends State<HomePage>
               width: constraints.maxWidth,
             ),
           ),
-          SwipingPage(),
+          Container(
+            color: Colors.yellow,
+          ),
+          // SwipingPage(),
           SizedBox.shrink(),
           MessagesPage(),
         ],

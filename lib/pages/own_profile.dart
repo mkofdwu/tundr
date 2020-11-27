@@ -240,6 +240,7 @@ class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
                   _buildInterests(profile.interests + profile.customInterests),
                 ],
               ),
+              SizedBox(height: 30),
             ],
           ),
         ),

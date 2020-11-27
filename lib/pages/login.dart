@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/tile.dart';
 
 class LoginPage extends StatefulWidget {

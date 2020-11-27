@@ -20,6 +20,7 @@ class RegistrationInfo extends ChangeNotifier {
   String uid;
   AppTheme theme;
 
+  String smsVerificationId;
   bool isCreatingAccount = false;
 
   @override
@@ -39,6 +40,7 @@ class RegistrationInfo extends ChangeNotifier {
       'phoneNumber: $phoneNumber, '
       'uid: $uid, '
       'theme: $theme, '
+      'smsVerificationId: $smsVerificationId, '
       'isCreatingAccount: $isCreatingAccount, '
       ')';
 }
