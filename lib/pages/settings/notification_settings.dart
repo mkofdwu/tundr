@@ -14,6 +14,7 @@ class NotificationSettingsPage extends StatelessWidget {
       // FUTURE: DESIGN: make this nicer
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: TileIconButton(
           icon: Icons.arrow_back,
           onPressed: () => Navigator.pop(context),

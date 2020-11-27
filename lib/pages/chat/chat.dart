@@ -204,11 +204,7 @@ class _ChatPageState extends State<ChatPage> {
   void _blockAndDeleteChat() async {
     Provider.of<User>(context).privateInfo.blocked.add(widget.otherUser.uid);
     await Provider.of<User>(context).writeField('blocked', UserPrivateInfo);
-    _deleteChat();
-  }
-
-  void _deleteChat() {
-    ChatsService.deleteChat(
+    await ChatsService.deleteChat(
       Provider.of<User>(context).profile.uid,
       widget.chat.id,
     );
@@ -575,11 +571,6 @@ class _ChatPageState extends State<ChatPage> {
                       MenuOption(
                         text: 'Wallpaper',
                         onPressed: _changeWallpaper,
-                      ),
-                      MenuDivider(),
-                      MenuOption(
-                        text: 'Delete chat',
-                        onPressed: _deleteChat,
                       ),
                       MenuDivider(),
                       MenuOption(

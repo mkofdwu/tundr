@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/tile.dart';
 
 class LoginPage extends StatefulWidget {
@@ -38,109 +39,102 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return StackScrollPage(
       color: MyPalette.white,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final width = constraints.maxWidth;
-          return Stack(
+      builder: (context, width, height) => <Widget>[
+        Positioned(
+          left: width * 33 / 375,
+          top: 0.0,
+          bottom: 0.0,
+          child: Container(
+            width: width * 78 / 375,
+            color: MyPalette.gold,
+          ),
+        ),
+        Positioned(
+          left: width * 134 / 375,
+          top: 0.0,
+          bottom: 0.0,
+          child: Container(
+            width: width * 52 / 375,
+            color: MyPalette.gold,
+          ),
+        ),
+        Positioned(
+          left: width * 194 / 375,
+          top: 0.0,
+          bottom: 0.0,
+          child: Container(
+            width: width * 11 / 375,
+            color: MyPalette.gold,
+          ),
+        ),
+        Positioned(
+          left: 50,
+          top: 100,
+          width: width - 100,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Positioned(
-                left: width * 33 / 375,
-                top: 0.0,
-                bottom: 0.0,
-                child: Container(
-                  width: width * 78 / 375,
-                  color: MyPalette.gold,
+              Text(
+                'Login',
+                style: TextStyle(
+                  color: MyPalette.black,
+                  fontSize: 60.0,
+                  fontFamily: 'Helvetica Neue',
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Positioned(
-                left: width * 134 / 375,
-                top: 0.0,
-                bottom: 0.0,
-                child: Container(
-                  width: width * 52 / 375,
-                  color: MyPalette.gold,
+              SizedBox(height: 10),
+              Text(
+                'Enter a username and password',
+                style: TextStyle(
+                  color: MyPalette.black,
+                  fontSize: 16.0,
                 ),
               ),
-              Positioned(
-                left: width * 194 / 375,
-                top: 0.0,
-                bottom: 0.0,
-                child: Container(
-                  width: width * 11 / 375,
-                  color: MyPalette.gold,
-                ),
+              SizedBox(height: 100),
+              TileTextField(
+                key: ValueKey('usernameField'),
+                hintText: 'Username',
+                controller: _usernameController,
               ),
-              Positioned(
-                left: 50,
-                top: 100,
-                width: width - 100,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Login',
-                      style: TextStyle(
-                        color: MyPalette.black,
-                        fontSize: 60.0,
-                        fontFamily: 'Helvetica Neue',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Enter a username and password',
-                      style: TextStyle(
-                        color: MyPalette.black,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    SizedBox(height: 100),
-                    TileTextField(
-                      key: ValueKey('usernameField'),
-                      hintText: 'Username',
-                      controller: _usernameController,
-                    ),
-                    SizedBox(height: 20.0),
-                    TileTextField(
-                      key: ValueKey('passwordField'),
-                      hintText: 'Password',
-                      controller: _passwordController,
-                      obscureText: true,
-                      moveFocus: false,
-                      onEditingComplete: () => FocusScope.of(context).unfocus(),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                right: 50,
-                bottom: 100,
-                child: GestureDetector(
-                  key: ValueKey('loginSubmitBtn'),
-                  child: Container(
-                    width: 60.0,
-                    height: 60.0,
-                    decoration: BoxDecoration(
-                      color: MyPalette.black,
-                      borderRadius: BorderRadius.circular(30.0),
-                      boxShadow: [MyPalette.secondaryShadow],
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.arrow_forward_ios,
-                        color: MyPalette.white,
-                      ),
-                    ),
-                  ),
-                  onTap: _signIn,
-                ),
+              SizedBox(height: 20.0),
+              TileTextField(
+                key: ValueKey('passwordField'),
+                hintText: 'Password',
+                controller: _passwordController,
+                obscureText: true,
+                moveFocus: false,
+                onEditingComplete: () => FocusScope.of(context).unfocus(),
               ),
             ],
-          );
-        },
-      ),
+          ),
+        ),
+        Positioned(
+          right: 50,
+          bottom: 100,
+          child: GestureDetector(
+            key: ValueKey('loginSubmitBtn'),
+            child: Container(
+              width: 60.0,
+              height: 60.0,
+              decoration: BoxDecoration(
+                color: MyPalette.black,
+                borderRadius: BorderRadius.circular(30.0),
+                boxShadow: [MyPalette.secondaryShadow],
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: MyPalette.white,
+                ),
+              ),
+            ),
+            onTap: _signIn,
+          ),
+        ),
+      ],
     );
   }
 }

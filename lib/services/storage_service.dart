@@ -59,9 +59,9 @@ class StorageService {
           throw Exception('Invalid media type: ${media.type}');
       }
 
-      final uploadTask = storageRef.child(storagePath).putFile(compressedFile);
-      final storageTaskSnapshot = await uploadTask.onComplete;
-      return (await storageTaskSnapshot.ref.getDownloadURL()) as String;
+      final storageTaskSnapshot =
+          await storageRef.child(storagePath).putFile(compressedFile);
+      return await storageTaskSnapshot.ref.getDownloadURL();
     } else {
       final httpClient = Client();
       final data = (await httpClient.get(media.url)).bodyBytes; // TODO: FIXME:
@@ -72,12 +72,12 @@ class StorageService {
         throw FileTooLargeError();
       }
 
-      final uploadTask = storageRef.child(storagePath).putData(data);
-      final storageTaskSnapshot = await uploadTask.onComplete;
-      return (await storageTaskSnapshot.ref.getDownloadURL()) as String;
+      final storageTaskSnapshot =
+          await storageRef.child(storagePath).putData(data);
+      return await storageTaskSnapshot.ref.getDownloadURL();
     }
   }
 
   static Future<void> deleteMedia(String url) async =>
-      (await FirebaseStorage.instance.getReferenceFromUrl(url)).delete();
+      (await FirebaseStorage.instance.refFromURL(url)).delete();
 }

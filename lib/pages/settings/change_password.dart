@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/underline.dart';
@@ -61,10 +62,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget build(BuildContext context) {
     return StackScrollPage(
       builder: (context, width, height) => <Widget>[
-        TileIconButton(
-          icon: Icons.arrow_back,
-          onPressed: () => Navigator.pop(context, null),
-        ),
+        MyBackButton(),
         Positioned(
           left: width * 37 / 375,
           top: height * 100 / 812,
