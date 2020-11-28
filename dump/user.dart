@@ -81,7 +81,7 @@
 //       phoneNumber: doc.data['phoneNumber'],
 //       username: doc.data['username'],
 //       name: doc.data['name'],
-//       gender: Gender.values.elementAt(doc.data['gender']),
+//       gender: Gender.values[doc.data['gender']],
 //       profileImageUrl: doc.data['profileImageUrl'],
 //       aboutMe: doc.data['aboutMe'],
 //       birthday: doc.data['birthday'].toDate(),
@@ -117,7 +117,7 @@
 //       theme: doc.data.containsKey('theme') // BACKWARDS COMPATIBILITY
 //           ? doc.data['theme'] == null
 //               ? null
-//               : ThemeMode.values.elementAt(doc.data['theme'])
+//               : ThemeMode.values[doc.data['theme']]
 //           : null,
 //       numRightSwiped:
 //           doc.data.containsKey('numRightSwiped') // BACKWARDS COMPATIBILITY

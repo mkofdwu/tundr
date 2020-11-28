@@ -19,13 +19,16 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   final List<int> _verificationCode = List<int>.filled(6, null);
 
   void _onSubmit() async {
-    if (!Provider.of<RegistrationInfo>(context).isCreatingAccount) {
-      Provider.of<RegistrationInfo>(context).isCreatingAccount = true;
+    if (!Provider.of<RegistrationInfo>(context, listen: false)
+        .isCreatingAccount) {
+      Provider.of<RegistrationInfo>(context, listen: false).isCreatingAccount =
+          true;
       final success = await AuthService.verifyCodeAndCreateAccount(
-        Provider.of<RegistrationInfo>(context),
+        Provider.of<RegistrationInfo>(context, listen: false),
         _verificationCode,
       );
-      Provider.of<RegistrationInfo>(context).isCreatingAccount = false;
+      Provider.of<RegistrationInfo>(context, listen: false).isCreatingAccount =
+          false;
       if (success) {
         Navigator.popUntil(context, (route) => route.isFirst);
         // TODO: rebuild first route
@@ -50,7 +53,8 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Provider.of<RegistrationInfo>(context).isCreatingAccount
+    return Provider.of<RegistrationInfo>(context, listen: false)
+            .isCreatingAccount
         ? LoadingPage()
         : ScrollDownPage(
             builder: (context, width, height) => Stack(
@@ -113,7 +117,8 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                                   color: MyPalette.gold, fontSize: 14.0),
                             ),
                             onTap: () => AuthService.sendSMS(
-                                Provider.of<RegistrationInfo>(context)),
+                                Provider.of<RegistrationInfo>(context,
+                                    listen: false)),
                           ),
                         ],
                       ),

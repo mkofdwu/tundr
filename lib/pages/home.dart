@@ -1,3 +1,4 @@
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:tundr/pages/dashboard.dart';
 import 'package:tundr/pages/messages/messages.dart';
@@ -33,6 +34,11 @@ class _HomePageState extends State<HomePage>
         ).then((_) => _tabController.animateTo(_tabController.previousIndex));
       }
     });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await FeatureDiscovery.clearPreferences(
+          context, <String>['most_popular_tab']); // TODO REMOVE THIS
+      FeatureDiscovery.discoverFeatures(context, <String>['most_popular_tab']);
+    });
   }
 
   @override
@@ -54,25 +60,37 @@ class _HomePageState extends State<HomePage>
             indicatorColor: MyPalette.gold,
             labelColor: MyPalette.gold,
             unselectedLabelColor: Theme.of(context).colorScheme.onPrimary,
-            tabs: <IconData>[
-              Icons.person,
-              Icons.people,
-              Icons.contacts,
-              Icons.search,
-              Icons.chat
-            ]
-                .asMap()
-                .map(
-                  (i, iconData) => MapEntry(
-                    i,
-                    Tab(
-                      key: ValueKey('tab' + i.toString()),
-                      child: Icon(iconData),
-                    ),
-                  ),
-                )
-                .values
-                .toList(),
+            tabs: <Tab>[
+              Tab(
+                key: ValueKey('dashboardTab'),
+                child: Icon(Icons.person),
+              ),
+              Tab(
+                key: ValueKey('mostPopularTab'),
+                child: DescribedFeatureOverlay(
+                  featureId: 'most_popular_tab',
+                  tapTarget: const Icon(Icons.people),
+                  title: Text('Most popular people'),
+                  description: Text(
+                      'Here you can find a list of the most popular users on the app (based on swipes), with their popularity scores indicated by size.'),
+                  targetColor: MyPalette.white.withOpacity(0.8),
+                  backgroundColor: Theme.of(context).accentColor,
+                  child: const Icon(Icons.people),
+                ),
+              ),
+              Tab(
+                key: ValueKey('swipingTab'),
+                child: Icon(Icons.contacts),
+              ),
+              Tab(
+                key: ValueKey('searchTab'),
+                child: Icon(Icons.search),
+              ),
+              Tab(
+                key: ValueKey('chatTab'),
+                child: Icon(Icons.chat),
+              ),
+            ],
           ),
         ),
       ),

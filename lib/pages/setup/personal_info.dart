@@ -14,7 +14,8 @@ class SetupPersonalInfoPage extends StatefulWidget {
 class _SetupPersonalInfoPageState extends State<SetupPersonalInfoPage> {
   @override
   Widget build(BuildContext context) {
-    final personalInfo = Provider.of<RegistrationInfo>(context).personalInfo;
+    final personalInfo =
+        Provider.of<RegistrationInfo>(context, listen: false).personalInfo;
     Provider.of<ThemeManager>(context).theme = ThemeMode.dark;
     return Material(
       child: Column(

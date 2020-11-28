@@ -37,7 +37,7 @@ class UserProfile {
       uid: map['uid'],
       username: map['username'],
       name: map['name'],
-      gender: Gender.values.elementAt(map['gender']),
+      gender: Gender.values[map['gender']],
       birthday: map['birthday'].toDate(),
       aboutMe: map['aboutMe'],
       profileImageUrl: map['profileImageUrl'],

@@ -14,6 +14,7 @@ import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
+import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/dark_tile.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
@@ -61,7 +62,7 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    final my = Provider.of<User>(context).profile;
+    final my = Provider.of<User>(context, listen: false).profile;
     final otherProfile =
         ModalRoute.of(context).settings.arguments as UserProfile;
     return ScrollDownPage(
@@ -100,10 +101,7 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
               ),
             ),
           ),
-          TileIconButton(
-            icon: Icons.arrow_back,
-            onPressed: () => Navigator.pop(context),
-          ),
+          MyBackButton(),
           if (otherProfile.uid != my.uid)
             Align(
               alignment: Alignment.topRight,
@@ -115,7 +113,7 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return SizedBox.shrink();
 
-                  final iBlockedUser = Provider.of<User>(context)
+                  final iBlockedUser = Provider.of<User>(context, listen: false)
                       .privateInfo
                       .blocked
                       .contains(otherProfile.uid);
@@ -130,11 +128,11 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
                       ),
                       color: MyPalette.red,
                       onTap: () async {
-                        Provider.of<User>(context)
+                        Provider.of<User>(context, listen: false)
                             .privateInfo
                             .blocked
                             .remove(otherProfile.uid);
-                        await Provider.of<User>(context)
+                        await Provider.of<User>(context, listen: false)
                             .writeField('blocked', UserPrivateInfo);
                         setState(() {});
                       },

@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/pages/profile_setup/interests.dart';
+import 'package:tundr/pages/setup/interests.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/constants/my_palette.dart';
@@ -26,7 +26,8 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
     );
     if (profilePic != null) {
       setState(() {
-        Provider.of<RegistrationInfo>(context).profilePic = profilePic;
+        Provider.of<RegistrationInfo>(context, listen: false).profilePic =
+            profilePic;
       });
     }
   }
@@ -121,7 +122,8 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
 
   Widget _buildImageAndReplacementOptions() {
     // FUTURE: improve this
-    final profilePic = Provider.of<RegistrationInfo>(context).profilePic;
+    final profilePic =
+        Provider.of<RegistrationInfo>(context, listen: false).profilePic;
     return Column(
       children: <Widget>[
         LayoutBuilder(
@@ -237,7 +239,8 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
 
   @override
   Widget build(BuildContext context) {
-    final profilePic = Provider.of<RegistrationInfo>(context).profilePic;
+    final profilePic =
+        Provider.of<RegistrationInfo>(context, listen: false).profilePic;
     return ScrollDownPage(
       color: MyPalette.white,
       builder: (context, width, height) => Padding(

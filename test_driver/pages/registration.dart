@@ -78,7 +78,7 @@ void registrationTests() {
   // });
 
   test('Delete account', () async {
-    await driver.tap(find.byValueKey('tab0'));
+    await driver.tap(find.byValueKey('dashboardTab'));
     await driver.tap(find.byValueKey('settingsBtn'));
     await driver.tap(find.byValueKey('deleteAccountBtn'));
     await driver.tap(find.byValueKey('confirmPasswordField'));

@@ -30,22 +30,28 @@ class _SimpleCheckboxState extends State<SimpleCheckbox> {
     return Row(
       children: <Widget>[
         Theme(
-          data: ThemeData(unselectedWidgetColor: Theme.of(context).accentColor),
-          child: Checkbox(
-            checkColor: Theme.of(context).primaryColor,
-            activeColor: Theme.of(context).accentColor,
-            value: _selected,
-            onChanged: (value) {
-              setState(() => _selected = value);
-              widget.onChanged(value);
-            },
+          data: ThemeData(
+            unselectedWidgetColor: Theme.of(context).colorScheme.onPrimary,
+          ),
+          child: SizedBox(
+            width: 24,
+            height: 24,
+            child: Checkbox(
+              checkColor: Theme.of(context).primaryColor,
+              activeColor: Theme.of(context).colorScheme.onPrimary,
+              value: _selected,
+              onChanged: (value) {
+                setState(() => _selected = value);
+                widget.onChanged(value);
+              },
+            ),
           ),
         ),
-        SizedBox(width: 10.0),
+        SizedBox(width: 10),
         Text(
           widget.text,
           style: TextStyle(
-            fontSize: 16.0,
+            fontSize: 18.0,
           ),
         ),
       ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/pages/loading.dart';
 import 'package:tundr/repositories/registration_info.dart';
-import 'package:tundr/pages/profile_setup/phone_verification.dart';
+import 'package:tundr/pages/setup/phone_verification.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/auth_service.dart';
@@ -20,7 +20,8 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
 
   void _nextPage() async {
     setState(() => _loading = true);
-    final phoneNumber = Provider.of<RegistrationInfo>(context).phoneNumber;
+    final phoneNumber =
+        Provider.of<RegistrationInfo>(context, listen: false).phoneNumber;
     if (phoneNumber.length != 11) {
       await showDialog(
         context: context,
@@ -57,7 +58,8 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
       return;
     }
 
-    await AuthService.sendSMS(Provider.of<RegistrationInfo>(context));
+    await AuthService.sendSMS(
+        Provider.of<RegistrationInfo>(context, listen: false));
     await Navigator.push(
       context,
       PageRouteBuilder(
@@ -169,12 +171,14 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                           maxLength: 8,
                           keyboardType: TextInputType.number,
                           controller: TextEditingController()
-                            ..text = Provider.of<RegistrationInfo>(context)
+                            ..text = Provider.of<RegistrationInfo>(context,
+                                    listen: false)
                                 .phoneNumber
                                 .substring(3),
                           onChanged: (value) {
-                            Provider.of<RegistrationInfo>(context).phoneNumber =
-                                '+65' + value;
+                            Provider.of<RegistrationInfo>(context,
+                                    listen: false)
+                                .phoneNumber = '+65' + value;
                           },
                         ),
                       ),

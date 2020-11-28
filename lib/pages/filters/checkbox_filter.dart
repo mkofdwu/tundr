@@ -55,9 +55,10 @@ class _CheckboxFilterPageState extends State<CheckboxFilterPage> {
                     } else {
                       widget.filter.options.remove(option);
                     }
-                    Provider.of<User>(context).updateAlgorithmData({
+                    Provider.of<User>(context, listen: false)
+                        .updateAlgorithmData({
                       'otherFilters': {
-                        ...Provider.of<User>(context)
+                        ...Provider.of<User>(context, listen: false)
                             .algorithmData
                             .otherFilters,
                         widget.filter.field.name: widget.filter,

@@ -45,7 +45,8 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
-    await Provider.of<User>(context).updateProfile({'username': newUsername});
+    await Provider.of<User>(context, listen: false)
+        .updateProfile({'username': newUsername});
   }
 
   void _changePassword() => Navigator.push(
@@ -96,8 +97,8 @@ class _SettingsPageState extends State<SettingsPage> {
     if (signOut) {
       // unsubscribe from notifications for this user
       await NotificationsService.removeToken(
-        Provider.of<User>(context).profile.uid,
-        Provider.of<User>(context).fcmToken,
+        Provider.of<User>(context, listen: false).profile.uid,
+        Provider.of<User>(context, listen: false).fcmToken,
       );
       await FirebaseMessaging().deleteInstanceID();
       await auth.FirebaseAuth.instance.signOut();
@@ -112,10 +113,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final profile = Provider.of<User>(context).profile;
-    final privateInfo = Provider.of<User>(context).privateInfo;
+    final profile = Provider.of<User>(context, listen: false).profile;
+    final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     final settings = privateInfo.settings;
-    final algorithmData = Provider.of<User>(context).algorithmData;
+    final algorithmData =
+        Provider.of<User>(context, listen: false).algorithmData;
     final uid = profile.uid;
     return Scaffold(
       appBar: AppBar(
@@ -136,6 +138,7 @@ class _SettingsPageState extends State<SettingsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              SizedBox(height: 20),
               SettingField(
                 title: 'Username',
                 child: Text(
@@ -167,8 +170,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: RoundRadioGroup(
                   options: ['Male', 'Female'],
                   selected: Gender.values.indexOf(profile.gender),
-                  onChanged: (option) => Provider.of<User>(context)
-                      .updateProfile({'gender': option}),
+                  onChanged: (option) =>
+                      Provider.of<User>(context, listen: false)
+                          .updateProfile({'gender': option}),
                 ),
               ),
               SizedBox(height: 20),
@@ -179,14 +183,17 @@ class _SettingsPageState extends State<SettingsPage> {
                     SimpleCheckbox(
                       text: 'Boys',
                       value: algorithmData.showMeBoys,
-                      onChanged: (bool value) => Provider.of<User>(context)
-                          .updateAlgorithmData({'showMeBoys': value}),
+                      onChanged: (bool value) =>
+                          Provider.of<User>(context, listen: false)
+                              .updateAlgorithmData({'showMeBoys': value}),
                     ),
+                    SizedBox(height: 10),
                     SimpleCheckbox(
                       text: 'Girls',
                       value: algorithmData.showMeGirls,
-                      onChanged: (bool value) => Provider.of<User>(context)
-                          .updateAlgorithmData({'showMeGirls': value}),
+                      onChanged: (bool value) =>
+                          Provider.of<User>(context, listen: false)
+                              .updateAlgorithmData({'showMeGirls': value}),
                     ),
                   ],
                 ),
@@ -202,7 +209,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     algorithmData.ageRangeMax.toDouble(),
                   ),
                   onChanged: (newRangeValues) {
-                    Provider.of<User>(context).updateAlgorithmData({
+                    Provider.of<User>(context, listen: false)
+                        .updateAlgorithmData({
                       'ageRangeMin': newRangeValues.start.toInt(),
                       'ageRangeMax': newRangeValues.end.toInt(),
                     });
@@ -225,7 +233,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 description:
                     "While sleeping, you won't appear in other users' card stacks or get new suggestions",
                 selected: algorithmData.asleep,
-                onChanged: (value) => Provider.of<User>(context)
+                onChanged: (value) => Provider.of<User>(context, listen: false)
                     .updateAlgorithmData({'asleep': value}),
               ),
               SizedBox(height: 20),
@@ -236,7 +244,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 selected: settings.showInMostPopular,
                 onChanged: (value) {
                   settings.showInMostPopular = value;
-                  Provider.of<User>(context)
+                  Provider.of<User>(context, listen: false)
                       .writeField('settings', UserPrivateInfo);
                 },
               ),
@@ -248,7 +256,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 selected: settings.blockUnknownMessages,
                 onChanged: (value) {
                   settings.blockUnknownMessages = value;
-                  Provider.of<User>(context)
+                  Provider.of<User>(context, listen: false)
                       .writeField('settings', UserPrivateInfo);
                 },
               ),
@@ -283,7 +291,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 selected: settings.readReceipts,
                 onChanged: (value) {
                   settings.readReceipts = value;
-                  Provider.of<User>(context)
+                  Provider.of<User>(context, listen: false)
                       .writeField('settings', UserPrivateInfo);
                 },
               ),

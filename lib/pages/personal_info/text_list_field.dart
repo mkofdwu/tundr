@@ -35,9 +35,11 @@ class _TextListFieldPageState extends State<TextListFieldPage> {
   @override
   Widget build(BuildContext context) => StackScrollPage(
         builder: (context, width, height) => <Widget>[
-          TileIconButton(
-            icon: Icons.arrow_back,
-            onPressed: _return,
+          SafeArea(
+            child: TileIconButton(
+              icon: Icons.arrow_back,
+              onPressed: _return,
+            ),
           ),
           Positioned(
             left: width * 48 / 375,

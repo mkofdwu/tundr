@@ -23,17 +23,17 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   void _previewProfile() => Navigator.pushNamed(
         context,
         '/user_profile',
-        arguments: Provider.of<User>(context).profile,
+        arguments: Provider.of<User>(context, listen: false).profile,
       );
 
   void _updateAboutMe() {
-    Provider.of<User>(context)
+    Provider.of<User>(context, listen: false)
         .updateProfile({'aboutMe': _aboutMeController.text});
   }
 
   void _updateMedia() {
-    Provider.of<User>(context).updateProfile({
-      'extraMedia': Provider.of<User>(context)
+    Provider.of<User>(context, listen: false).updateProfile({
+      'extraMedia': Provider.of<User>(context, listen: false)
           .profile
           .extraMedia
           .map((media) => media == null
@@ -79,7 +79,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    final profile = Provider.of<User>(context).profile;
+    final profile = Provider.of<User>(context, listen: false).profile;
     _aboutMeController.text = profile.aboutMe;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -120,6 +120,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                       ),
                       _aboutMeFocusNode.hasFocus
                           ? GestureDetector(
+                              key: ValueKey('updateAboutMeBtn'),
                               child: Icon(
                                 Icons.done,
                                 color: MyPalette.gold,
@@ -132,6 +133,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               },
                             )
                           : GestureDetector(
+                              key: ValueKey('editAboutMeBtn'),
                               child: Icon(
                                 Icons.edit,
                                 color: MyPalette.gold,
@@ -144,12 +146,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   ),
                   SizedBox(height: 10.0),
                   TextField(
+                    key: ValueKey('aboutMeField'),
                     maxLines: null,
                     decoration: null,
                     keyboardType: TextInputType.multiline,
                     controller: _aboutMeController,
                     focusNode: _aboutMeFocusNode,
-                    style: TextStyle(color: Theme.of(context).accentColor),
                   ),
                 ],
               ),
@@ -178,9 +180,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                         );
                         media.isLocalFile = false;
                         if (mounted) {
-                          setState(() => Provider.of<User>(context)
-                              .profile
-                              .extraMedia[i] = media);
+                          setState(() =>
+                              Provider.of<User>(context, listen: false)
+                                  .profile
+                                  .extraMedia[i] = media);
                           _updateMedia();
                         }
                       },
@@ -207,9 +210,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   PersonalInfoList(
                     personalInfo: profile.personalInfo,
                     onChanged: (name, value) {
-                      Provider.of<User>(context).profile.personalInfo[name] =
-                          value;
-                      Provider.of<User>(context)
+                      Provider.of<User>(context, listen: false)
+                          .profile
+                          .personalInfo[name] = value;
+                      Provider.of<User>(context, listen: false)
                           .writeField('personalInfo', UserProfile);
                       setState(() {});
                     },

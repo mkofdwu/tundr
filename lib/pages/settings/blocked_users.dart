@@ -19,7 +19,8 @@ class BlockedUsersPage extends StatefulWidget {
 class _BlockedUsersPageState extends State<BlockedUsersPage> {
   @override
   Widget build(BuildContext context) {
-    final blocked = Provider.of<User>(context).privateInfo.blocked;
+    final blocked =
+        Provider.of<User>(context, listen: false).privateInfo.blocked;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -89,11 +90,11 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                           text: 'Unblock',
                           color: MyPalette.red,
                           onTap: () {
-                            Provider.of<User>(context)
+                            Provider.of<User>(context, listen: false)
                                 .privateInfo
                                 .blocked
                                 .remove(user.uid);
-                            Provider.of<User>(context)
+                            Provider.of<User>(context, listen: false)
                                 .writeField('blocked', UserPrivateInfo);
                             setState(() {});
                           },

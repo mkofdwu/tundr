@@ -4,7 +4,7 @@ import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/loading.dart';
 
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/pages/profile_setup/name.dart';
+import 'package:tundr/pages/setup/name.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/buttons/dark_stadium.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
@@ -54,9 +54,10 @@ class _RegisterPageState extends State<RegisterPage> {
         !_usernameAlreadyExists &&
         !_passwordLessThan6Chars &&
         !_passwordsDoNotMatch) {
-      Provider.of<RegistrationInfo>(context).username = username;
-      Provider.of<RegistrationInfo>(context).password = password;
-      Provider.of<RegistrationInfo>(context).confirmPassword = confirmPassword;
+      Provider.of<RegistrationInfo>(context, listen: false).username = username;
+      Provider.of<RegistrationInfo>(context, listen: false).password = password;
+      Provider.of<RegistrationInfo>(context, listen: false).confirmPassword =
+          confirmPassword;
       await Navigator.push(
         context,
         PageRouteBuilder(
@@ -79,10 +80,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    _usernameController.text = Provider.of<RegistrationInfo>(context).username;
-    _passwordController.text = Provider.of<RegistrationInfo>(context).password;
+    _usernameController.text =
+        Provider.of<RegistrationInfo>(context, listen: false).username;
+    _passwordController.text =
+        Provider.of<RegistrationInfo>(context, listen: false).password;
     _confirmPasswordController.text =
-        Provider.of<RegistrationInfo>(context).confirmPassword;
+        Provider.of<RegistrationInfo>(context, listen: false).confirmPassword;
     return _loading
         ? LoadingPage()
         : StackScrollPage(

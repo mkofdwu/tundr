@@ -21,7 +21,7 @@ class _MessagesPageState extends State<MessagesPage> {
   //   final LocalDatabaseService localDatabaseService =
   //       DatabaseService;
   //   return DatabaseService.saveNewMessages(
-  //     uid: Provider.of<User>(context).profile.uid,
+  //     uid: Provider.of<User>(context, listen: false).profile.uid,
   //     saveMessage: localDatabaseService.saveMessage,
   //     addChatIfDoesNotExistElseSetUpdated: (uid) async {
   //       if (await localDatabaseService.chatExists(uid)) {
@@ -36,7 +36,7 @@ class _MessagesPageState extends State<MessagesPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Chat>>(
-      stream: Provider.of<User>(context).chatsStream(),
+      stream: Provider.of<User>(context, listen: false).chatsStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: Loader());
@@ -72,8 +72,9 @@ class _MessagesPageState extends State<MessagesPage> {
                       ChatsGroup(
                         title: 'New Matches',
                         child: MatchList(
-                          matches:
-                              Provider.of<User>(context).privateInfo.matches,
+                          matches: Provider.of<User>(context, listen: false)
+                              .privateInfo
+                              .matches,
                         ),
                       ),
                       SizedBox(height: 20.0),

@@ -15,7 +15,7 @@ Future<void> loginWith(
 }
 
 Future<void> logoutWith(driver) async {
-  await driver.tap(find.byValueKey('tab0'));
+  await driver.tap(find.byValueKey('dashboardTab'));
   await driver.tap(find.text('Settings'));
   await driver.scrollIntoView(find.text('Logout'));
   await driver.tap(find.text('Logout'));

@@ -12,7 +12,7 @@ class PersonalInfoField {
     return PersonalInfoField(
       name: name,
       prompt: map['prompt'],
-      type: PersonalInfoType.values.elementAt(map['type']),
+      type: PersonalInfoType.values[map['type']],
       options: map['options'],
     );
   }

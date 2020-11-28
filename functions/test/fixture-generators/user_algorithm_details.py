@@ -1,13 +1,16 @@
 import random
 
 NUM_USERS = 10
-userAlgorithmDetails = []
+user_algorithm_details = []
+
+# all of them have similar birthdays
 
 for i in range(NUM_USERS):
-    userAlgorithmDetails.append({
-        'uid': i.toString(),
+    has_filters = bool(random.getrandbits(1))
+    user_algorithm_details.append({
+        'uid': str(i),
         'gender': random.randint(0, 1),
-        'birthday': ,
+        # 'birthday': ,
         'showMeBoys': bool(random.getrandbits(1)),
         'showMeGirls': bool(random.getrandbits(1)),
         # TODO
@@ -18,4 +21,4 @@ for i in range(NUM_USERS):
         'interests': [],
     })
 
-print(userAlgorithmDetails)
+print(user_algorithm_details)

@@ -9,7 +9,6 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Material(
-      color: Theme.of(context).primaryColor,
       child: Stack(
         children: <Widget>[
           MyBackButton(),

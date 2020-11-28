@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/models/filter.dart';
 import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/pages/filters/widgets/filter_method_selector.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
@@ -24,10 +25,7 @@ class _TextListFilterPageState extends State<TextListFilterPage> {
   Widget build(BuildContext context) {
     return StackScrollPage(
       builder: (context, width, height) => <Widget>[
-        TileIconButton(
-          icon: Icons.arrow_back,
-          onPressed: () => Navigator.pop(context),
-        ),
+        MyBackButton(),
         Positioned(
           left: width * 48 / 375,
           top: height * 90 / 812,

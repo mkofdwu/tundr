@@ -155,7 +155,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _sendMessage() async {
-    final uid = Provider.of<User>(context).profile.uid;
+    final uid = Provider.of<User>(context, listen: false).profile.uid;
     final unsentMessageIndex = _unsentMessages.length;
     final sentOn = DateTime.now();
 
@@ -179,14 +179,15 @@ class _ChatPageState extends State<ChatPage> {
       _unsentMessages.add(message);
     });
 
-    final privateInfo = Provider.of<User>(context).privateInfo;
+    final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     if (widget.chat.type == ChatType.nonExistent) {
       widget.chat.id = await ChatsService.startConversation(
           uid, widget.otherUser.uid, message);
     } else if (widget.chat.type == ChatType.newMatch) {
       await ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 1});
       privateInfo.matches.remove(widget.otherUser.uid);
-      await Provider.of<User>(context).writeField('matches', UserPrivateInfo);
+      await Provider.of<User>(context, listen: false)
+          .writeField('matches', UserPrivateInfo);
     } else if (widget.chat.type == ChatType.unknown) {
       await ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 1});
     }
@@ -202,10 +203,14 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _blockAndDeleteChat() async {
-    Provider.of<User>(context).privateInfo.blocked.add(widget.otherUser.uid);
-    await Provider.of<User>(context).writeField('blocked', UserPrivateInfo);
+    Provider.of<User>(context, listen: false)
+        .privateInfo
+        .blocked
+        .add(widget.otherUser.uid);
+    await Provider.of<User>(context, listen: false)
+        .writeField('blocked', UserPrivateInfo);
     await ChatsService.deleteChat(
-      Provider.of<User>(context).profile.uid,
+      Provider.of<User>(context, listen: false).profile.uid,
       widget.chat.id,
     );
     Navigator.pop(context);
@@ -222,7 +227,7 @@ class _ChatPageState extends State<ChatPage> {
 
     if (imageMedia == null) return;
 
-    final uid = Provider.of<User>(context).profile.uid;
+    final uid = Provider.of<User>(context, listen: false).profile.uid;
     final wallpaperUrl = await StorageService.uploadMedia(
       uid: uid,
       media: imageMedia,
@@ -459,7 +464,9 @@ class _ChatPageState extends State<ChatPage> {
                           final messageIndex = i - _unsentMessages.length;
                           final message = messages[messageIndex];
                           final fromMe = message.senderUid ==
-                              Provider.of<User>(context).profile.uid;
+                              Provider.of<User>(context, listen: false)
+                                  .profile
+                                  .uid;
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 20.0,

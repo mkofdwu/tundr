@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/user_private_info.dart';
@@ -54,18 +55,18 @@ class _SwipingPageState extends State<SwipingPage> {
   @override
   void deactivate() {
     // TODO FIXME: this may be causing problems
-    Provider.of<User>(context)
+    Provider.of<User>(context, listen: false)
         .writeField('suggestionsGoneThrough', UserPrivateInfo);
-    Provider.of<User>(context)
+    Provider.of<User>(context, listen: false)
         .writeField('dailyGeneratedSuggestions', UserPrivateInfo);
-    Provider.of<User>(context)
+    Provider.of<User>(context, listen: false)
         .writeField('respondedSuggestions', UserPrivateInfo);
 
     super.deactivate();
   }
 
   void _nope() async {
-    final profile = Provider.of<User>(context).profile;
+    final profile = Provider.of<User>(context, listen: false).profile;
     final suggestionWithProfile = _suggestionWithProfiles[_i];
     final otherUid = suggestionWithProfile.profile.uid;
 
@@ -85,7 +86,7 @@ class _SwipingPageState extends State<SwipingPage> {
     }
 
     setState(() => _canUndo = true);
-    final privateInfo = Provider.of<User>(context).privateInfo;
+    final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     privateInfo.suggestionsGoneThrough[otherUid] = false;
     if (suggestionWithProfile.wasLiked == null) {
       // hasn't received a response yet
@@ -97,7 +98,7 @@ class _SwipingPageState extends State<SwipingPage> {
 
   void _undo() {
     SuggestionsService.undoSuggestionResponse(
-      Provider.of<User>(context).profile.uid,
+      Provider.of<User>(context, listen: false).profile.uid,
       _suggestionWithProfiles[_i - 1].profile.uid,
     );
     setState(() {
@@ -107,7 +108,7 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   void _like() async {
-    final user = Provider.of<User>(context).profile;
+    final user = Provider.of<User>(context, listen: false).profile;
     final suggestionWithProfile = _suggestionWithProfiles[_i];
     final otherUid = suggestionWithProfile.profile.uid;
 
@@ -144,7 +145,7 @@ class _SwipingPageState extends State<SwipingPage> {
       });
     }
 
-    final privateInfo = Provider.of<User>(context).privateInfo;
+    final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     privateInfo.numRightSwiped++;
     privateInfo.suggestionsGoneThrough[otherUid] = false;
     if (suggestionWithProfile.wasLiked == null) {
@@ -154,7 +155,7 @@ class _SwipingPageState extends State<SwipingPage> {
       privateInfo.respondedSuggestions.remove(otherUid);
     }
 
-    await Provider.of<User>(context)
+    await Provider.of<User>(context, listen: false)
         .updatePrivateInfo({'numRightSwiped': FieldValue.increment(1)});
   }
 
@@ -286,7 +287,10 @@ class _SwipingPageState extends State<SwipingPage> {
     return Column(
       children: <Widget>[
         if (_i == _suggestionWithProfiles.length ||
-            Provider.of<User>(context).privateInfo.numRightSwiped >= 10)
+            Provider.of<User>(context, listen: false)
+                    .privateInfo
+                    .numRightSwiped >=
+                10)
           SizedBox(
             width: width - 80.0,
             height: height - 200.0,
@@ -315,12 +319,21 @@ class _SwipingPageState extends State<SwipingPage> {
         else
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20.0),
-            child: SuggestionCard(
-              width: width - 80.0,
-              height: height - 250.0,
-              user: otherProfile,
-              onLike: _like,
-              onNope: _nope,
+            child: DescribedFeatureOverlay(
+              featureId: 'suggestion_card',
+              tapTarget: SizedBox.shrink(),
+              title: Text('View a profile'),
+              description:
+                  Text('Click on the card to learn more about this person'),
+              targetColor: MyPalette.white.withOpacity(0.8),
+              backgroundColor: Theme.of(context).accentColor,
+              child: SuggestionCard(
+                width: width - 80.0,
+                height: height - 250.0,
+                user: otherProfile,
+                onLike: _like,
+                onNope: _nope,
+              ),
             ),
           ),
         Padding(

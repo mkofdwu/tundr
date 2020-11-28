@@ -15,13 +15,15 @@ class _SetupAboutMePageState extends State<SetupAboutMePage> {
   final TextEditingController _controller = TextEditingController();
 
   void _return() {
-    Provider.of<RegistrationInfo>(context).aboutMe = _controller.text;
+    Provider.of<RegistrationInfo>(context, listen: false).aboutMe =
+        _controller.text;
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = Provider.of<RegistrationInfo>(context).aboutMe;
+    _controller.text =
+        Provider.of<RegistrationInfo>(context, listen: false).aboutMe;
     return StackScrollPage(
       color: MyPalette.white,
       builder: (context, width, height) => <Widget>[

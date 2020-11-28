@@ -70,7 +70,8 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   );
                 }
-                final uid = Provider.of<User>(context).profile.uid;
+                final uid =
+                    Provider.of<User>(context, listen: false).profile.uid;
                 return SingleChildScrollView(
                   child: Column(
                     children: List<Widget>.from(

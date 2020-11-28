@@ -36,7 +36,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
         //     break;
         //   case 'newMessage':
         //     final String currentUid =
-        //         Provider.of<User>(context).profile.uid;
+        //         Provider.of<User>(context, listen: false).profile.uid;
         //     final LocalDatabaseService localDatabaseService =
         //         DatabaseService;
 
@@ -77,7 +77,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
     //     _openItsAMatch(message['data']['uid']);
     //     break;
     //   case 'newMessage':
-    //     final String currentUid = Provider.of<User>(context).profile.uid;
+    //     final String currentUid = Provider.of<User>(context, listen: false).profile.uid;
     //     final LocalDatabaseService localDatabaseService =
     //         DatabaseService;
 

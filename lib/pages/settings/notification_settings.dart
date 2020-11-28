@@ -9,7 +9,8 @@ import 'widgets/switch_setting_field.dart';
 class NotificationSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final settings = Provider.of<User>(context).privateInfo.settings;
+    final settings =
+        Provider.of<User>(context, listen: false).privateInfo.settings;
     return Scaffold(
       // FUTURE: DESIGN: make this nicer
       appBar: AppBar(
@@ -35,7 +36,7 @@ class NotificationSettingsPage extends StatelessWidget {
               selected: settings.newMatchNotification,
               onChanged: (value) {
                 settings.newMatchNotification = value;
-                Provider.of<User>(context)
+                Provider.of<User>(context, listen: false)
                     .writeField('settings', UserPrivateInfo);
               },
             ),
@@ -46,7 +47,7 @@ class NotificationSettingsPage extends StatelessWidget {
               selected: settings.messageNotification,
               onChanged: (value) {
                 settings.messageNotification = value;
-                Provider.of<User>(context)
+                Provider.of<User>(context, listen: false)
                     .writeField('settings', UserPrivateInfo);
               },
             ),

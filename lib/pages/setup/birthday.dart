@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
-import 'package:tundr/pages/profile_setup/gender.dart';
+import 'package:tundr/pages/setup/gender.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/textfields/digit.dart';
@@ -30,7 +30,8 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((duration) {
-      final birthday = Provider.of<RegistrationInfo>(context).birthday;
+      final birthday =
+          Provider.of<RegistrationInfo>(context, listen: false).birthday;
 
       if (birthday != null) {
         setState(() {
@@ -105,7 +106,8 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
           ),
         );
       } else {
-        Provider.of<RegistrationInfo>(context).birthday = birthday;
+        Provider.of<RegistrationInfo>(context, listen: false).birthday =
+            birthday;
         Navigator.push(
           context,
           PageRouteBuilder(

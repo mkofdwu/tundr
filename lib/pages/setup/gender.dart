@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/enums/gender.dart';
 import 'package:tundr/repositories/registration_info.dart';
-import 'package:tundr/pages/profile_setup/profile_pic.dart';
+import 'package:tundr/pages/setup/profile_pic.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
@@ -24,7 +24,7 @@ class SetupGenderPage extends StatefulWidget {
 
 class _SetupGenderPageState extends State<SetupGenderPage> {
   void _nextPage() {
-    if (Provider.of<RegistrationInfo>(context).gender != null) {
+    if (Provider.of<RegistrationInfo>(context, listen: false).gender != null) {
       Navigator.push(
         context,
         PageRouteBuilder(
@@ -73,10 +73,11 @@ class _SetupGenderPageState extends State<SetupGenderPage> {
                 theme: ThemeMode.dark,
                 options: ['Male', 'Female'],
                 selected: genderToString[
-                    Provider.of<RegistrationInfo>(context).gender],
+                    Provider.of<RegistrationInfo>(context, listen: false)
+                        .gender],
                 onChanged: (option) => setState(() =>
-                    Provider.of<RegistrationInfo>(context).gender =
-                        stringToGender[option]),
+                    Provider.of<RegistrationInfo>(context, listen: false)
+                        .gender = stringToGender[option]),
               ),
             ),
             SizedBox(height: 20.0),

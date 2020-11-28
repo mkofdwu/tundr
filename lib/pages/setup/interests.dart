@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/pages/profile_setup/phone_number.dart';
+import 'package:tundr/pages/setup/phone_number.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/interests/widgets/interests_browser.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
@@ -40,9 +40,11 @@ class _SetupInterestsPageState extends State<SetupInterestsPage> {
             SizedBox(height: 24),
             Expanded(
               child: InterestsBrowser(
-                interests: Provider.of<RegistrationInfo>(context).interests,
+                interests: Provider.of<RegistrationInfo>(context, listen: false)
+                    .interests,
                 customInterests:
-                    Provider.of<RegistrationInfo>(context).customInterests,
+                    Provider.of<RegistrationInfo>(context, listen: false)
+                        .customInterests,
                 onInterestsChanged: () {},
                 onCustomInterestsChanged: () {},
               ),

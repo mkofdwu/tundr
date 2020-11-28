@@ -39,7 +39,7 @@ class SettingField extends StatelessWidget {
                   ),
           ],
         ),
-        SizedBox(height: 5.0),
+        SizedBox(height: 10),
         Padding(
           padding: EdgeInsets.only(left: 20.0),
           child: child,

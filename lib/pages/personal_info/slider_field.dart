@@ -48,9 +48,11 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
         color: MyPalette.black,
         child: Stack(
           children: <Widget>[
-            TileIconButton(
-              icon: Icons.arrow_back,
-              onPressed: _return,
+            SafeArea(
+              child: TileIconButton(
+                icon: Icons.arrow_back,
+                onPressed: _return,
+              ),
             ),
             Positioned(
               left: width * 37 / 375,

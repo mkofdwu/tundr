@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
-import 'package:tundr/pages/profile_setup/birthday.dart';
+import 'package:tundr/pages/setup/birthday.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/textfields/tile.dart';
@@ -16,7 +16,8 @@ class _SetupNamePageState extends State<SetupNamePage> {
 
   void _nextPage() {
     if (_nameController.text.isNotEmpty) {
-      Provider.of<RegistrationInfo>(context).name = _nameController.text;
+      Provider.of<RegistrationInfo>(context, listen: false).name =
+          _nameController.text;
       Navigator.push(
         context,
         PageRouteBuilder(
@@ -38,7 +39,8 @@ class _SetupNamePageState extends State<SetupNamePage> {
 
   @override
   Widget build(BuildContext context) {
-    _nameController.text = Provider.of<RegistrationInfo>(context).name;
+    _nameController.text =
+        Provider.of<RegistrationInfo>(context, listen: false).name;
     return ScrollDownPage(
       onScrollDown: _nextPage,
       builder: (context, width, height) {

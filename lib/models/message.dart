@@ -34,7 +34,7 @@ class Message {
       media: data['mediaType'] == null
           ? null
           : Media(
-              type: MediaType.values.elementAt(data['mediaType']),
+              type: MediaType.values[data['mediaType']],
               url: data['mediaUrl'],
             ),
     );

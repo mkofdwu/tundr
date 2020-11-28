@@ -43,9 +43,11 @@ class _TextFieldPageState extends State<TextFieldPage> {
       },
       child: StackScrollPage(
         builder: (context, width, height) => <Widget>[
-          TileIconButton(
-            icon: Icons.arrow_back,
-            onPressed: _return,
+          SafeArea(
+            child: TileIconButton(
+              icon: Icons.arrow_back,
+              onPressed: _return,
+            ),
           ),
           Positioned(
             left: width * 37 / 375,

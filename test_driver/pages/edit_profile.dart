@@ -8,7 +8,7 @@ void editProfileTests() {
     driver = await FlutterDriver.connect();
     // should be at home page
     await driver.waitFor(find.byType('HomePage'));
-    await driver.tap(find.byValueKey('tab0'));
+    await driver.tap(find.byValueKey('dashboardTab'));
     await driver.tap(find.text('Profile'));
     await driver.waitFor(find.byType('OwnProfilePage'));
   });
@@ -17,7 +17,12 @@ void editProfileTests() {
     if (driver != null) await driver.close();
   });
 
-  test('Change name', () async {});
+  test('Change about', () async {
+    await driver.tap(find.byValueKey('editAboutMeBtn'));
+    await driver.enterText('(updated)\nTesting');
+    await driver.tap(find.byValueKey('updateAboutMeBtn'));
+    await driver.getText(find.byValueKey('aboutMeField'));
+  });
 
   test('Edit interests', () async {});
 

@@ -36,7 +36,7 @@ class _SimpleRangeSliderState extends State<SimpleRangeSlider> {
       max: widget.max,
       values: _rangeValues,
       activeColor: MyPalette.gold,
-      inactiveColor: Theme.of(context).accentColor,
+      inactiveColor: Theme.of(context).colorScheme.onPrimary,
       divisions: (widget.max - widget.min).toInt(),
       labels: RangeLabels(
         _rangeValues.start.toInt().toString(),

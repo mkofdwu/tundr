@@ -33,10 +33,10 @@
 //                     }
 
 //                     final currentUser = snapshot.data;
-//                     Provider.of<User>(context).profile = currentUser.profile;
-//                     Provider.of<User>(context).privateInfo =
+//                     Provider.of<User>(context, listen: false).profile = currentUser.profile;
+//                     Provider.of<User>(context, listen: false).privateInfo =
 //                         currentUser.privateInfo;
-//                     Provider.of<User>(context).algorithmData =
+//                     Provider.of<User>(context, listen: false).algorithmData =
 //                         currentUser.algorithmData;
 
 //                     if (currentUser.privateInfo.theme == null) {
@@ -46,10 +46,10 @@
 //                           currentUser.privateInfo.theme;
 //                       return AppStateHandler(
 //                         onExit: () {
-//                           Provider.of<User>(context).updateOnline(false);
+//                           Provider.of<User>(context, listen: false).updateOnline(false);
 //                         },
 //                         onStart: () {
-//                           Provider.of<User>(context).updateOnline(true);
+//                           Provider.of<User>(context, listen: false).updateOnline(true);
 //                         },
 //                         child: NotificationHandler(
 //                           child: HomePage(),

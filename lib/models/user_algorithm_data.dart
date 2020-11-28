@@ -29,7 +29,7 @@ class UserAlgorithmData {
         Filter(
           field: PersonalInfoField.fromMap(name, personalInfoFields[name]),
           options: value['options'],
-          method: FilterMethod.values.elementAt(value['method']),
+          method: FilterMethod.values[value['method']],
         ),
       );
     });
@@ -65,8 +65,10 @@ class UserAlgorithmData {
       'ageRangeMin': ageRangeMin,
       'ageRangeMax': ageRangeMax,
       'otherFilters': otherFilters.map((name, value) {
-        return MapEntry(
-            name, {'method': value.method, 'options': value.options});
+        return MapEntry(name, {
+          'method': FilterMethod.values.indexOf(value.method),
+          'options': value.options,
+        });
       })
     };
   }

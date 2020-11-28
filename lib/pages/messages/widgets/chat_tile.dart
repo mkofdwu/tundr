@@ -124,7 +124,8 @@ class ChatTile extends StatelessWidget {
                                     messages.reversed.map(
                                       (message) {
                                         final fromMe = message.senderUid ==
-                                            Provider.of<User>(context)
+                                            Provider.of<User>(context,
+                                                    listen: false)
                                                 .profile
                                                 .uid;
                                         return Align(
@@ -310,7 +311,8 @@ class ChatTile extends StatelessWidget {
                                           messages.reversed.map(
                                         (message) {
                                           final fromMe = message.senderUid ==
-                                              Provider.of<User>(context)
+                                              Provider.of<User>(context,
+                                                      listen: false)
                                                   .profile
                                                   .uid;
                                           return Align(

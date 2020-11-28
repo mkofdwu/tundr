@@ -10,7 +10,7 @@ class Media {
   factory Media.fromMap(Map map) {
     if (map['type'] == null) return null;
     return Media(
-      type: MediaType.values.elementAt(map['type']),
+      type: MediaType.values[map['type']],
       url: map['url'],
       isLocalFile: false,
     );

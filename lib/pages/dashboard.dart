@@ -42,8 +42,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final profile = Provider.of<User>(context).profile;
-    final privateInfo = Provider.of<User>(context).privateInfo;
+    final profile = Provider.of<User>(context, listen: false).profile;
+    final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Material(
@@ -239,7 +239,8 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _changeName() {
-    Provider.of<User>(context).updateProfile({'name': _nameController.text});
+    Provider.of<User>(context, listen: false)
+        .updateProfile({'name': _nameController.text});
     setState(() => _editingName = false);
   }
 
@@ -269,11 +270,11 @@ class _DashboardPageState extends State<DashboardPage> {
     );
     if (imageMedia == null) return;
     final newProfileImageUrl = await StorageService.uploadMedia(
-      uid: Provider.of<User>(context).profile.uid,
+      uid: Provider.of<User>(context, listen: false).profile.uid,
       media: imageMedia,
       prefix: 'profile_image',
     );
-    await Provider.of<User>(context)
+    await Provider.of<User>(context, listen: false)
         .updateProfile({'profileImageUrl': newProfileImageUrl});
   }
 

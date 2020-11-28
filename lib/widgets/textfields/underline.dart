@@ -43,13 +43,13 @@ class UnderlineTextField extends StatelessWidget {
         ),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: color ?? Theme.of(context).accentColor,
+            color: color ?? Theme.of(context).colorScheme.onPrimary,
             width: 2.0,
           ),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: color ?? Theme.of(context).accentColor,
+            color: color ?? Theme.of(context).colorScheme.onPrimary,
             width: 5.0,
           ),
         ),

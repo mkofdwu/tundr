@@ -13,7 +13,7 @@ class SetupThemePage extends StatefulWidget {
 class _SetupThemePageState extends State<SetupThemePage> {
   Future<void> _selectTheme(ThemeMode theme) async {
     Provider.of<ThemeManager>(context).theme = theme;
-    await Provider.of<User>(context)
+    await Provider.of<User>(context, listen: false)
         .updatePrivateInfo({'theme': theme == ThemeMode.dark ? 0 : 1});
     Navigator.popUntil(context, (route) => route.isFirst);
   }

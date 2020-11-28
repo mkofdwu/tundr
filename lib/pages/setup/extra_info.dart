@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/pages/profile_setup/about_me.dart';
-import 'package:tundr/pages/profile_setup/extra_media.dart';
-import 'package:tundr/pages/profile_setup/interests.dart';
-import 'package:tundr/pages/profile_setup/personal_info.dart';
-import 'package:tundr/pages/profile_setup/phone_number.dart';
+import 'package:tundr/pages/setup/about_me.dart';
+import 'package:tundr/pages/setup/extra_media.dart';
+import 'package:tundr/pages/setup/interests.dart';
+import 'package:tundr/pages/setup/personal_info.dart';
+import 'package:tundr/pages/setup/phone_number.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/light_tile.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';

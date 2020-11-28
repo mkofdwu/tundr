@@ -1,3 +1,4 @@
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/repositories/theme_manager.dart';
 import 'package:tundr/pages/loading.dart';
 import 'package:tundr/pages/home.dart';
-import 'package:tundr/pages/profile_setup/theme.dart';
+import 'package:tundr/pages/setup/theme.dart';
 import 'package:tundr/pages/other_profile/main.dart';
 import 'package:tundr/pages/welcome.dart';
 import 'package:tundr/constants/my_palette.dart';
@@ -106,10 +107,10 @@ class _TundrAppState extends State<TundrApp> {
         } else {
           home = AppStateHandler(
             onExit: () {
-              Provider.of<User>(context).updateOnline(false);
+              Provider.of<User>(context, listen: false).updateOnline(false);
             },
             onStart: () {
-              Provider.of<User>(context).updateOnline(true);
+              Provider.of<User>(context, listen: false).updateOnline(true);
             },
             child: NotificationHandler(
               child: HomePage(),
@@ -119,16 +120,18 @@ class _TundrAppState extends State<TundrApp> {
 
         return Consumer<ThemeManager>(
           builder: (context, themeNotifier, child) {
-            return MaterialApp(
-              title: 'tundr',
-              theme: _lightTheme,
-              darkTheme: _darkTheme,
-              themeMode: themeNotifier.theme,
-              debugShowCheckedModeBanner: false,
-              home: home,
-              routes: {
-                '/user_profile': (context) => OtherProfileMainPage(),
-              },
+            return FeatureDiscovery(
+              child: MaterialApp(
+                title: 'tundr',
+                theme: _lightTheme,
+                darkTheme: _darkTheme,
+                themeMode: themeNotifier.theme,
+                debugShowCheckedModeBanner: false,
+                home: home,
+                routes: {
+                  '/user_profile': (context) => OtherProfileMainPage(),
+                },
+              ),
             );
           },
         );
@@ -138,6 +141,7 @@ class _TundrAppState extends State<TundrApp> {
 
   final _darkTheme = ThemeData(
     canvasColor: MyPalette.black,
+    primaryColor: MyPalette.black,
     colorScheme: ColorScheme(
       primary: MyPalette.black,
       primaryVariant: MyPalette.black,
@@ -161,16 +165,11 @@ class _TundrAppState extends State<TundrApp> {
     iconTheme: IconThemeData(
       color: MyPalette.white,
     ),
-    accentIconTheme: IconThemeData(
-      color: MyPalette.white,
-    ),
-    primaryIconTheme: IconThemeData(
-      color: MyPalette.white,
-    ),
   );
 
   final _lightTheme = ThemeData(
     canvasColor: MyPalette.white,
+    primaryColor: MyPalette.white,
     colorScheme: ColorScheme(
       primary: MyPalette.white,
       primaryVariant: MyPalette.white,

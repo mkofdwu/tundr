@@ -15,11 +15,12 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
 
   void _deleteAccount(BuildContext context) async {
     if (await AuthService.signIn(
-          username: Provider.of<User>(context).profile.username,
+          username: Provider.of<User>(context, listen: false).profile.username,
           password: _passwordController.text,
         ) ==
         null) {
-      await AuthService.deleteAccount(Provider.of<User>(context).profile.uid);
+      await AuthService.deleteAccount(
+          Provider.of<User>(context, listen: false).profile.uid);
       Navigator.popUntil(context, (route) => route.isFirst);
       await showDialog(
         context: context,

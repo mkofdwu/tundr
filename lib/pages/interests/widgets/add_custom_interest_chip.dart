@@ -53,11 +53,9 @@ class _AddCustomInterestChipState extends State<AddCustomInterestChip> {
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding: EdgeInsets.symmetric(vertical: 2),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: MyPalette.gold),
-                    ),
-                    fillColor: Colors.red,
+                    focusedBorder: InputBorder.none,
                   ),
+                  style: TextStyle(color: MyPalette.black),
                   autofocus: true,
                   onSubmitted: (customInterest) {
                     widget.onAddCustomInterest(customInterest);

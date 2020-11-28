@@ -89,7 +89,9 @@ class ReferencedMessageTile extends StatelessWidget {
                 Text(
                   snapshot.hasData
                       ? (snapshot.data.senderUid ==
-                              Provider.of<User>(context).profile.uid
+                              Provider.of<User>(context, listen: false)
+                                  .profile
+                                  .uid
                           ? '- You'
                           : '- $otherUserName')
                       : '- ?',

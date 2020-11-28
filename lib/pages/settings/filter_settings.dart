@@ -44,16 +44,18 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
         },
       ),
     );
-    Provider.of<User>(context).algorithmData.otherFilters[filter.field.name] =
-        filter;
-    await Provider.of<User>(context)
+    Provider.of<User>(context, listen: false)
+        .algorithmData
+        .otherFilters[filter.field.name] = filter;
+    await Provider.of<User>(context, listen: false)
         .writeField('otherFilters', UserAlgorithmData);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    final filters = Provider.of<User>(context).algorithmData.otherFilters;
+    final filters =
+        Provider.of<User>(context, listen: false).algorithmData.otherFilters;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

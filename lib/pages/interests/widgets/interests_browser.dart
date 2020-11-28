@@ -48,7 +48,7 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
             child: PlainTextField(
               controller: _searchController,
               hintText: 'Search',
-              hintTextColor: Theme.of(context).accentColor,
+              hintTextColor: Theme.of(context).colorScheme.onPrimary,
               fontSize: 30.0,
             ),
           ),

@@ -26,7 +26,6 @@ class _SimpleIconButtonState extends State<SimpleIconButton> {
 
   @override
   Widget build(BuildContext context) {
-    // ANIMATION: wrap in animatedcontainer?
     return GestureDetector(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -34,9 +33,7 @@ class _SimpleIconButtonState extends State<SimpleIconButton> {
               Icon(
                 widget.icon,
                 size: widget.size,
-                color: _pressed
-                    ? MyPalette.gold
-                    : widget.color ?? Theme.of(context).accentColor,
+                color: _pressed ? MyPalette.gold : widget.color,
               ),
             ] +
             (widget.label.isEmpty
@@ -46,9 +43,7 @@ class _SimpleIconButtonState extends State<SimpleIconButton> {
                     Text(
                       widget.label,
                       style: TextStyle(
-                        color: _pressed
-                            ? MyPalette.gold
-                            : widget.color ?? Theme.of(context).accentColor,
+                        color: _pressed ? MyPalette.gold : widget.color,
                         fontSize: 16.0,
                       ),
                     ),

@@ -88,7 +88,7 @@
 //   //       filters.add(Filter(
 //   //         field: PersonalInfoField.fromMap(name, personalInfoFields[name]),
 //   //         options: value['options'],
-//   //         method: FilterMethod.values.elementAt(value['method']),
+//   //         method: FilterMethod.values[value['method']],
 //   //       ));
 //   //     },
 //   //   );

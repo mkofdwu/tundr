@@ -49,19 +49,20 @@ class OtherProfileAboutMePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScrollDownPage(
-      color: Theme.of(context).primaryColor,
       builder: (context, width, height) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-              TileIconButton(
-                icon: Icons.close,
-                onPressed: () {
-                  Navigator.popUntil(
-                    context,
-                    (route) => route.settings.name == '/user_profile',
-                  );
-                  Navigator.pop(context);
-                },
+              SafeArea(
+                child: TileIconButton(
+                  icon: Icons.close,
+                  onPressed: () {
+                    Navigator.popUntil(
+                      context,
+                      (route) => route.settings.name == '/user_profile',
+                    );
+                    Navigator.pop(context);
+                  },
+                ),
               ),
               SizedBox(height: 30.0),
               Padding(

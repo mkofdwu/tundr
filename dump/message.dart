@@ -57,7 +57,7 @@
 //       media: doc.data["mediaType"] == null
 //           ? null
 //           : Media(
-//               type: MediaType.values.elementAt(doc.data["mediaType"]),
+//               type: MediaType.values[doc.data["mediaType"]],
 //               url: doc.data["mediaUrl"],
 //             ),
 //     );
@@ -77,7 +77,7 @@
 //   //     text: map["text"],
 //   //     mediaType: map["media_type"] == null
 //   //         ? null
-//   //         : MediaType.values.elementAt(map["media_type"]),
+//   //         : MediaType.values[map["media_type"]],
 //   //     mediaUrl: map["media_url"],
 //   //     readByMe: map["read_by_me"] == 1,
 //   //   );

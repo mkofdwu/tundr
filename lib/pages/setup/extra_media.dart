@@ -55,13 +55,14 @@ class _SetupExtraMediaPageState extends State<SetupExtraMediaPage> {
                         MediaQuery.of(context).size.height -
                             170), // FIXME: FUTURE: how to get actual available height (by restricting height of column?)
                     extraMedia:
-                        Provider.of<RegistrationInfo>(context).extraMedia,
+                        Provider.of<RegistrationInfo>(context, listen: false)
+                            .extraMedia,
                     onChangeMedia: (i, media) => setState(() =>
-                        Provider.of<RegistrationInfo>(context).extraMedia[i] =
-                            media),
+                        Provider.of<RegistrationInfo>(context, listen: false)
+                            .extraMedia[i] = media),
                     onRemoveMedia: (i) => setState(() =>
-                        Provider.of<RegistrationInfo>(context).extraMedia[i] =
-                            null),
+                        Provider.of<RegistrationInfo>(context, listen: false)
+                            .extraMedia[i] = null),
                   ),
                 ),
               ],

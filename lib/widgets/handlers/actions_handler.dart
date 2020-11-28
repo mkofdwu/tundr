@@ -23,8 +23,7 @@
 //       final appAction.Action action = appAction.Action.fromDoc(doc);
 //       switch (action.type) {
 //         case ActionType.notifyReadMessage:
-//           Provider.of<User>(context)
-//               .localDatabaseService
+//           Provider.of<User>(context, listen: false)//               .localDatabaseService
 //               .updateOtherUserLastReadChat(
 //                 action.senderUid,
 //                 action.payload.millisecondsSinceEpoch,
@@ -35,8 +34,7 @@
 //               .payload); // FUTURE: or change it to null, and display tile saying 'this message was deleted'?
 //           break;
 //         case ActionType.newMatch:
-//           Provider.of<User>(context)
-//               .localDatabaseService
+//           Provider.of<User>(context, listen: false)//               .localDatabaseService
 //               .saveMatch(action.senderUid);
 //           break;
 //         default:
@@ -50,7 +48,7 @@
 //   Widget build(BuildContext context) {
 //     return StreamBuilder<QuerySnapshot>(
 //       stream: DatabaseService.actionsStream(
-//           Provider.of<User>(context).profile.uid),
+//           Provider.of<User>(context, listen: false).profile.uid),
 //       builder: (context, snapshot) {
 //         if (snapshot.hasData)
 //           _retrieveActions(snapshot.data.docs)
