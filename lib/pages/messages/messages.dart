@@ -57,7 +57,6 @@ class _MessagesPageState extends State<MessagesPage> {
         final unknownChats =
             snapshot.data.where((chat) => chat.type == ChatType.unknown);
         return RefreshIndicator(
-          color: Theme.of(context).accentColor,
           backgroundColor: MyPalette.gold,
           onRefresh: () async => setState(() {}),
           child: Padding(

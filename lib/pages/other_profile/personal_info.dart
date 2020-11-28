@@ -5,19 +5,19 @@ import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/pages/interests/widgets/interests_wrap.dart';
 
-class UserProfilePersonalInfoPage extends StatefulWidget {
+class OtherProfilePersonalInfoPage extends StatefulWidget {
   final UserProfile profile;
 
-  UserProfilePersonalInfoPage({Key key, @required this.profile})
+  OtherProfilePersonalInfoPage({Key key, @required this.profile})
       : super(key: key);
 
   @override
-  _UserProfilePersonalInfoPageState createState() =>
-      _UserProfilePersonalInfoPageState();
+  _OtherProfilePersonalInfoPageState createState() =>
+      _OtherProfilePersonalInfoPageState();
 }
 
-class _UserProfilePersonalInfoPageState
-    extends State<UserProfilePersonalInfoPage> {
+class _OtherProfilePersonalInfoPageState
+    extends State<OtherProfilePersonalInfoPage> {
   final ScrollController _scrollController = ScrollController();
   bool _scrolledToTopOnce = true;
 
@@ -88,7 +88,6 @@ class _UserProfilePersonalInfoPageState
                         Text(
                           name,
                           style: TextStyle(
-                            color: Theme.of(context).accentColor,
                             fontSize: 20.0,
                           ),
                         ),
@@ -98,7 +97,6 @@ class _UserProfilePersonalInfoPageState
                             value is List ? value.join(', ') : value.toString(),
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              color: Theme.of(context).accentColor,
                               fontSize: 20.0,
                             ),
                           ),
@@ -112,7 +110,6 @@ class _UserProfilePersonalInfoPageState
               Container(
                 width: 100.0,
                 height: 5.0,
-                color: Theme.of(context).accentColor,
               ),
               SizedBox(height: 30.0),
               widget.profile.interests.isEmpty

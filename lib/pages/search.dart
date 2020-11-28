@@ -41,18 +41,14 @@ class _SearchPageState extends State<SearchPage> {
         title: TextField(
           controller: _usernameController,
           autofocus: true,
-          cursorColor: Theme.of(context).accentColor,
           style: Theme.of(context).textTheme.headline6,
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: 'Search',
-            hintStyle: TextStyle(
-              fontSize: 18.0,
-              color: Theme.of(context).accentColor,
-            ),
+            hintStyle: TextStyle(fontSize: 18.0),
             suffixIcon: Icon(
               Icons.search,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
         ),

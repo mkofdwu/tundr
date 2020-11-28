@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage>
             indicatorWeight: 3,
             indicatorColor: MyPalette.gold,
             labelColor: MyPalette.gold,
-            unselectedLabelColor: Theme.of(context).accentColor,
+            unselectedLabelColor: Theme.of(context).colorScheme.onPrimary,
             tabs: <IconData>[
               Icons.person,
               Icons.people,
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage>
                   (i, iconData) => MapEntry(
                     i,
                     Tab(
-                      // key: ValueKey('tab' + i.toString()),
+                      key: ValueKey('tab' + i.toString()),
                       child: Icon(iconData),
                     ),
                   ),
@@ -86,10 +86,7 @@ class _HomePageState extends State<HomePage>
               width: constraints.maxWidth,
             ),
           ),
-          Container(
-            color: Colors.yellow,
-          ),
-          // SwipingPage(),
+          SwipingPage(),
           SizedBox.shrink(),
           MessagesPage(),
         ],

@@ -45,7 +45,6 @@ class _SimpleCheckboxState extends State<SimpleCheckbox> {
         Text(
           widget.text,
           style: TextStyle(
-            color: Theme.of(context).accentColor,
             fontSize: 16.0,
           ),
         ),

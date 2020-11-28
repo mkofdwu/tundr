@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:tundr/repositories/user.dart';
-import 'package:tundr/pages/own_profile.dart';
+import 'package:tundr/pages/profile.dart';
 import 'package:tundr/pages/settings/settings.dart';
 
 import 'package:tundr/services/media_picker_service.dart';
@@ -29,8 +29,8 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((duration) =>
-        _nameController.text = Provider.of<User>(context).profile.name);
+    WidgetsBinding.instance.addPostFrameCallback((duration) => _nameController
+        .text = Provider.of<User>(context, listen: false).profile.name);
   }
 
   @override
@@ -197,9 +197,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               SizedBox(height: 10.0),
                               Text(
                                 privateInfo.popularityScore.toString(),
-                                style: TextStyle(
-                                  color: Theme.of(context).accentColor,
-                                ),
+                                style: TextStyle(),
                               ),
                             ],
                           ),
@@ -292,8 +290,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void _openOwnProfileEdit() => Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) =>
-              OwnProfileEditPage(),
+          pageBuilder: (context, animation1, animation2) => ProfileEditPage(),
           // transitionsBuilder: (context, animation1, animation2) { ANIMATION
 
           // },

@@ -1,7 +1,7 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
-import 'utils/login.dart';
+import '../utils/auth.dart';
 
 const NEW_USERNAME = 'username2';
 const NEW_PASSWORD = 'password2';
@@ -62,6 +62,7 @@ void registrationTests() {
 
     await driver.waitFor(find.byType('SetupProfilePicPage'));
     await driver.tap(find.text('Camera'));
+    await driver.waitFor(null, timeout: Duration(minutes: 2));
 
     // await driver.waitFor(find.byType('SetupInterestsPage'));
 
@@ -76,18 +77,15 @@ void registrationTests() {
   //   await driver.waitFor(find.byType('AlertDialog')); // is this sufficient?
   // });
 
-  // test('Delete account', () async {
-  //   await loginWith(driver, username: NEW_USERNAME, password: NEW_PASSWORD);
-  //   await driver.tap(find.byValueKey('tab0'));
-  //   await driver.waitFor(find.byType('DashboardPage'));
-  //   await driver.tap(find.byValueKey('settingsBtn'));
-  //   await driver.waitFor(find.byType('SettingsPage'));
-  //   await driver.tap(find.byValueKey('deleteAccountBtn'));
-  //   await driver.waitFor(find.byType('ConfirmDeleteAccountPage'));
-  //   await driver.tap(find.byValueKey('confirmPasswordField'));
-  //   await driver.enterText(NEW_PASSWORD);
-  //   await driver.tap(find.byValueKey('confirmDeleteAccountBtn'));
-  //   await driver.waitFor(find.byType('WelcomePage'));
-  //   // TODO: alert showing account has been deleted
-  // });
+  test('Delete account', () async {
+    await driver.tap(find.byValueKey('tab0'));
+    await driver.tap(find.byValueKey('settingsBtn'));
+    await driver.tap(find.byValueKey('deleteAccountBtn'));
+    await driver.tap(find.byValueKey('confirmPasswordField'));
+    await driver.enterText(NEW_PASSWORD);
+    await driver.tap(find.byValueKey('confirmDeleteAccountBtn'));
+    await driver.waitFor(find.byType('WelcomePage'));
+    await driver.waitFor(
+        find.text('Success')); // alert dialog showing account has been deleted
+  });
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/repositories/theme_notifier.dart';
-import 'package:tundr/enums/app_theme.dart';
+import 'package:tundr/repositories/theme_manager.dart';
 import 'package:tundr/widgets/buttons/back.dart';
 
 class AboutPage extends StatelessWidget {
@@ -20,7 +19,6 @@ class AboutPage extends StatelessWidget {
             child: Text(
               'About',
               style: TextStyle(
-                color: Theme.of(context).accentColor,
                 fontSize: 40,
               ),
             ),
@@ -30,7 +28,7 @@ class AboutPage extends StatelessWidget {
             right: 30,
             width: 180,
             child: Image.asset(
-                'assets/images/logo-${Provider.of<ThemeNotifier>(context).theme == AppTheme.dark ? 'dark' : 'light'}.png'),
+                'assets/images/logo-${Provider.of<ThemeManager>(context).theme == ThemeMode.dark ? 'dark' : 'light'}.png'),
           ),
           Positioned(
             left: 40,
@@ -42,7 +40,6 @@ class AboutPage extends StatelessWidget {
                 Text(
                   "Primarily made as a dating app for my high school. I can't really remember what motivated me to make this.",
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontSize: 14,
                   ),
                 ),
@@ -50,14 +47,12 @@ class AboutPage extends StatelessWidget {
                 Text(
                   'Developed by Jia Jie',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontSize: 14,
                   ),
                 ),
                 Text(
                   'Version: 0.1.0a',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontSize: 14,
                   ),
                 ),

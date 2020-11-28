@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/user.dart';
-import 'package:tundr/repositories/theme_notifier.dart';
+import 'package:tundr/repositories/theme_manager.dart';
 
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/enums/app_theme.dart';
 
 class SetupThemePage extends StatefulWidget {
   @override
@@ -12,10 +11,10 @@ class SetupThemePage extends StatefulWidget {
 }
 
 class _SetupThemePageState extends State<SetupThemePage> {
-  Future<void> _selectTheme(AppTheme theme) async {
-    Provider.of<ThemeNotifier>(context).theme = theme;
+  Future<void> _selectTheme(ThemeMode theme) async {
+    Provider.of<ThemeManager>(context).theme = theme;
     await Provider.of<User>(context)
-        .updatePrivateInfo({'theme': AppTheme.values.indexOf(theme)});
+        .updatePrivateInfo({'theme': theme == ThemeMode.dark ? 0 : 1});
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 
@@ -55,7 +54,7 @@ class _SetupThemePageState extends State<SetupThemePage> {
                     ),
                   ),
                 ),
-                onTap: () => _selectTheme(AppTheme.light),
+                onTap: () => _selectTheme(ThemeMode.light),
               ),
             ),
             SizedBox(height: 30.0),
@@ -77,7 +76,7 @@ class _SetupThemePageState extends State<SetupThemePage> {
                     ),
                   ),
                 ),
-                onTap: () => _selectTheme(AppTheme.dark),
+                onTap: () => _selectTheme(ThemeMode.dark),
               ),
             ),
           ],

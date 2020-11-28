@@ -1,6 +1,5 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:tundr/enums/app_theme.dart';
-// import 'package:tundr/enums/gender.dart';
+// // import 'package:tundr/enums/gender.dart';
 // import 'package:tundr/models/media.dart';
 // import 'package:tundr/constants/personal_info_fields.dart';
 // import 'package:tundr/models/suggestion.dart';
@@ -35,7 +34,7 @@
 //   List<Chat> chats;
 //   List<Chat> unknownChats;
 //   // shared preferences
-//   AppTheme theme;
+//   ThemeMode theme;
 //   int numRightSwiped;
 
 //   User({
@@ -118,7 +117,7 @@
 //       theme: doc.data.containsKey('theme') // BACKWARDS COMPATIBILITY
 //           ? doc.data['theme'] == null
 //               ? null
-//               : AppTheme.values.elementAt(doc.data['theme'])
+//               : ThemeMode.values.elementAt(doc.data['theme'])
 //           : null,
 //       numRightSwiped:
 //           doc.data.containsKey('numRightSwiped') // BACKWARDS COMPATIBILITY

@@ -107,7 +107,6 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
                                     ),
                               Icon(
                                 Icons.arrow_forward_ios,
-                                color: Theme.of(context).accentColor,
                               ),
                             ],
                           ),
@@ -135,7 +134,6 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
                       GestureDetector(
                         child: Icon(
                           Icons.arrow_forward_ios,
-                          color: Theme.of(context).accentColor,
                         ),
                         onTap: () => _openFilter(
                           context,

@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/user_profile.dart';
-import 'package:tundr/repositories/theme_notifier.dart';
+import 'package:tundr/repositories/theme_manager.dart';
 
-import 'package:tundr/pages/user_profile/extra_media.dart';
-import 'package:tundr/pages/user_profile/personal_info.dart';
-import 'package:tundr/enums/app_theme.dart';
+import 'package:tundr/pages/other_profile/extra_media.dart';
+import 'package:tundr/pages/other_profile/personal_info.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
-class UserProfileAboutMePage extends StatelessWidget {
+class OtherProfileAboutMePage extends StatelessWidget {
   final UserProfile profile;
 
-  UserProfileAboutMePage({Key key, @required this.profile}) : super(key: key);
+  OtherProfileAboutMePage({Key key, @required this.profile}) : super(key: key);
 
   bool _hasInfoLeft(UserProfile profile) =>
       profile.extraMedia.any((media) => media != null) ||
@@ -23,10 +22,10 @@ class UserProfileAboutMePage extends StatelessWidget {
   void _nextPage(BuildContext context) {
     Widget page;
     if (profile.extraMedia.any((media) => media != null)) {
-      page = UserProfileExtraMediaPage(profile: profile);
+      page = OtherProfileExtraMediaPage(profile: profile);
     } else if (profile.interests.isNotEmpty ||
         profile.personalInfo.isNotEmpty) {
-      page = UserProfilePersonalInfoPage(profile: profile);
+      page = OtherProfilePersonalInfoPage(profile: profile);
     } else {
       throw Exception('No more pages left');
     }
@@ -78,8 +77,8 @@ class UserProfileAboutMePage extends StatelessWidget {
                     Spacer(),
                     Center(
                       child: ScrollDownArrow(
-                        dark: Provider.of<ThemeNotifier>(context).theme ==
-                            AppTheme.dark,
+                        dark: Provider.of<ThemeManager>(context).theme ==
+                            ThemeMode.dark,
                         onNextPage: () => _nextPage(context),
                       ),
                     ),

@@ -111,7 +111,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
   void _saveDeviceToken() async {
     final token = await _fcm.getToken();
     if (token != null) {
-      Provider.of<User>(context).fcmToken = token;
+      Provider.of<User>(context, listen: false).fcmToken = token;
       final uid = auth.FirebaseAuth.instance.currentUser.uid;
       await NotificationsService.saveToken(uid, token);
     }

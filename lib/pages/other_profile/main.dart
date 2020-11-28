@@ -5,9 +5,9 @@ import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/repositories/user.dart';
 
 import 'package:tundr/pages/chat/chat.dart';
-import 'package:tundr/pages/user_profile/about_me.dart';
-import 'package:tundr/pages/user_profile/extra_media.dart';
-import 'package:tundr/pages/user_profile/personal_info.dart';
+import 'package:tundr/pages/other_profile/about_me.dart';
+import 'package:tundr/pages/other_profile/extra_media.dart';
+import 'package:tundr/pages/other_profile/personal_info.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/chats_service.dart';
@@ -19,12 +19,12 @@ import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 
-class UserProfileMainPage extends StatefulWidget {
+class OtherProfileMainPage extends StatefulWidget {
   @override
-  _UserProfileMainPageState createState() => _UserProfileMainPageState();
+  _OtherProfileMainPageState createState() => _OtherProfileMainPageState();
 }
 
-class _UserProfileMainPageState extends State<UserProfileMainPage> {
+class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
   bool _hasInfoLeft(UserProfile user) =>
       user.aboutMe.isNotEmpty ||
       user.extraMedia.any((media) => media != null) ||
@@ -34,11 +34,11 @@ class _UserProfileMainPageState extends State<UserProfileMainPage> {
   void _nextPage(UserProfile user) {
     Widget page;
     if (user.aboutMe.isNotEmpty) {
-      page = UserProfileAboutMePage(profile: user);
+      page = OtherProfileAboutMePage(profile: user);
     } else if (user.extraMedia.any((media) => media != null)) {
-      page = UserProfileExtraMediaPage(profile: user);
+      page = OtherProfileExtraMediaPage(profile: user);
     } else if (user.interests.isNotEmpty || user.personalInfo.isNotEmpty) {
-      page = UserProfilePersonalInfoPage(profile: user);
+      page = OtherProfilePersonalInfoPage(profile: user);
     } else {
       throw Exception('No pages left');
     }

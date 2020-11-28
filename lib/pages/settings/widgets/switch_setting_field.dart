@@ -28,7 +28,7 @@ class SwitchSettingField extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: MyPalette.gold,
+                  color: Theme.of(context).accentColor,
                   fontSize: 20.0,
                 ),
               ),
@@ -36,7 +36,6 @@ class SwitchSettingField extends StatelessWidget {
               Text(
                 description,
                 style: TextStyle(
-                  color: Theme.of(context).accentColor,
                   fontSize: 14.0,
                 ),
               ),

@@ -1,17 +1,25 @@
 // http calls from the flutter app
+// all responses must be valid JSON, so all return values must be in the format {result: ...}
+// which will be understood by the client
 
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import {
+  chatsRef,
+  userProfilesRef,
+  usersAlgorithmDataRef,
+  usersPrivateInfoRef,
+} from '../constants';
 
 export const phoneNumberExists = functions.https.onCall(
   async (data, _context) => {
-    const privateInfoDocs = await admin
-      .firestore()
-      .collection('users_private_info')
+    const privateInfoDocs = await usersPrivateInfoRef
       .where('phoneNumber', '==', data.phoneNumber)
       .limit(1)
       .get();
-    return privateInfoDocs.docs.length > 0;
+    return {
+      result: privateInfoDocs.docs.length > 0,
+    };
   }
 );
 
@@ -20,23 +28,17 @@ export const checkReadReceipts = functions.https.onCall(
     // returns whether read receipts will be enabled for the chat between the two users
     const uid = context.auth?.uid;
     if (uid == null) return;
-    const userDoc = await admin
-      .firestore()
-      .collection('users_private_info')
-      .doc(uid)
-      .get();
-    const otherUserDoc = await admin
-      .firestore()
-      .collection('users_private_info')
-      .doc(data.otherUid)
-      .get();
+    const userDoc = await usersPrivateInfoRef.doc(uid).get();
+    const otherUserDoc = await usersPrivateInfoRef.doc(data.otherUid).get();
     const userPrivateInfo = userDoc.data();
     const otherUserPrivateInfo = otherUserDoc.data();
-    if (userPrivateInfo == null || otherUserPrivateInfo == null) return;
-    return (
-      userPrivateInfo.settings.readReceipts &&
-      otherUserPrivateInfo.settings.readReceipts
-    );
+    if (userPrivateInfo == null || otherUserPrivateInfo == null)
+      return { result: null };
+    return {
+      result:
+        userPrivateInfo.settings.readReceipts &&
+        otherUserPrivateInfo.settings.readReceipts,
+    };
   }
 );
 
@@ -45,9 +47,7 @@ const N_MOST_POPULAR = 10;
 export const getMostPopular = functions.https.onCall(
   async (_data, _context) => {
     const userPrivateInfoDocs = (
-      await admin
-        .firestore()
-        .collection('users_private_info')
+      await usersPrivateInfoRef
         .where('settings.showInMostPopular', '==', true)
         .orderBy('popularityScore', 'desc')
         .limit(N_MOST_POPULAR)
@@ -57,13 +57,11 @@ export const getMostPopular = functions.https.onCall(
     for (const privateInfoDoc of userPrivateInfoDocs) {
       const uid = privateInfoDoc.id;
       popularUsers.push({
-        profile: (
-          await admin.firestore().collection('user_profiles').doc(uid).get()
-        ).data(),
+        profile: (await userProfilesRef.doc(uid).get()).data(),
         popularityScore: privateInfoDoc.data().popularityScore,
       });
     }
-    return popularUsers;
+    return { result: popularUsers };
   }
 );
 
@@ -75,9 +73,7 @@ const _canTalkTo = async (
   if (uid == null) return false;
   const otherUid = data.otherUid;
   // check if chat already exists
-  const snapshot = await admin
-    .firestore()
-    .collection('users_private_info')
+  const snapshot = await usersPrivateInfoRef
     .doc(uid)
     .collection('chats')
     .where('uid', '==', otherUid)
@@ -85,19 +81,44 @@ const _canTalkTo = async (
     .get();
   if (snapshot.docs.length !== 0) return true;
   // check if user blocks unknown messages
-  const otherUser = (
-    await admin.firestore().collection('users_private_info').doc(otherUid).get()
+  const otherUserPrivateInfo = (
+    await usersPrivateInfoRef.doc(otherUid).get()
   ).data();
-  if (otherUser == null) return false;
-  if (otherUser['settings']['blockUnknownMessages']) return false;
+  if (otherUserPrivateInfo == null) return false;
+  if (otherUserPrivateInfo['settings']['blockUnknownMessages']) return false;
   // check if user is blocked
-  if (otherUser['blocked'].contains(uid)) return false;
+  if (otherUserPrivateInfo['blocked'].contains(uid)) return false;
+
+  // check if sexualities are appropriate
+  const userProfile = (await userProfilesRef.doc(uid).get()).data();
+  const userAlgorithmData = (await usersPrivateInfoRef.doc(uid).get()).data();
+  const otherUserProfile = (await userProfilesRef.doc(otherUid).get()).data();
+  const otherUserAlgorithmData = (
+    await usersAlgorithmDataRef.doc(otherUid).get()
+  ).data();
+  if (
+    userProfile == null ||
+    userAlgorithmData == null ||
+    otherUserProfile == null ||
+    otherUserAlgorithmData == null
+  )
+    return false;
+  if (userProfile['gender'] == 0 && !otherUserAlgorithmData['showMeBoys'])
+    return false;
+  if (userProfile['gender'] == 1 && !otherUserAlgorithmData['showMeGirls'])
+    return false;
+  if (otherUserProfile['gender'] == 0 && !userAlgorithmData['showMeBoys'])
+    return false;
+  if (otherUserProfile['gender'] == 1 && !userAlgorithmData['showMeGirls'])
+    return false;
+
   return true;
 };
 
 export const canTalkTo = functions.https.onCall(async (data, context) => {
-  const result = await _canTalkTo(data, context);
-  return result;
+  return {
+    result: await _canTalkTo(data, context),
+  };
 });
 
 export const startConversation = functions.https.onCall(
@@ -105,19 +126,16 @@ export const startConversation = functions.https.onCall(
     // add to chats for current user
     // add to unknown chats for other user (if allowed)
     const uid = context.auth?.uid;
-    if (uid == null) return false;
+    if (uid == null) return { result: false };
     // check if allowed to start conversation, respond with error if not allowed
     if (!(await _canTalkTo(data, context))) {
-      return false;
+      return { result: false };
     }
 
     // create chat with participants & messages (add the first message)
-    const chatDoc = await admin
-      .firestore()
-      .collection('chats')
-      .add({
-        participants: [uid, data.otherUid],
-      });
+    const chatDoc = await chatsRef.add({
+      participants: [uid, data.otherUid],
+    });
     chatDoc.collection('messages').add({
       senderUid: uid,
       sentTimestamp: admin.firestore.Timestamp.now(),
@@ -127,25 +145,15 @@ export const startConversation = functions.https.onCall(
       mediaType: data.message.mediaType,
       mediaUrl: data.message.mediaUrl,
     });
-    await admin
-      .firestore()
-      .collection('users_private_info')
-      .doc(uid)
-      .collection('chats')
-      .doc(chatDoc.id)
-      .set({
-        uid: data.otherUid,
-        wallpaperUrl: '',
-        lastReadTimestamp: admin.firestore.Timestamp.now(),
-        type: 1,
-      });
-    await admin
-      .firestore()
-      .collection('users_private_info')
-      .doc(data.otherUid)
-      .update({
-        unknownChats: admin.firestore.FieldValue.arrayUnion(chatDoc.id),
-      });
-    return true;
+    await usersPrivateInfoRef.doc(uid).collection('chats').doc(chatDoc.id).set({
+      uid: data.otherUid,
+      wallpaperUrl: '',
+      lastReadTimestamp: admin.firestore.Timestamp.now(),
+      type: 1,
+    });
+    await usersPrivateInfoRef.doc(data.otherUid).update({
+      unknownChats: admin.firestore.FieldValue.arrayUnion(chatDoc.id),
+    });
+    return { result: true };
   }
 );

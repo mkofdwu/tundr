@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/personal_info_field.dart';
-import 'package:tundr/repositories/theme_notifier.dart';
+import 'package:tundr/repositories/theme_manager.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/radio_groups/tile.dart';
-import 'package:tundr/enums/app_theme.dart';
 
 class RadioGroupFieldPage extends StatefulWidget {
   final PersonalInfoField field;
@@ -60,7 +59,7 @@ class _RadioGroupFieldPageState extends State<RadioGroupFieldPage> {
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: TileRadioGroup(
-            theme: AppTheme.dark,
+            theme: ThemeMode.dark,
             forceColumn: widget.field.options.length > 5,
             options: List<String>.from(widget.field.options),
             selected: widget.value,
@@ -97,7 +96,7 @@ class _RadioGroupFieldPageState extends State<RadioGroupFieldPage> {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: TileRadioGroup(
-            theme: AppTheme.light,
+            theme: ThemeMode.light,
             forceColumn: widget.field.options.length > 5,
             options: List<String>.from(widget.field.options),
             selected: widget.value,
@@ -110,14 +109,14 @@ class _RadioGroupFieldPageState extends State<RadioGroupFieldPage> {
 
   @override
   Widget build(BuildContext context) {
-    switch (Provider.of<ThemeNotifier>(context).theme) {
-      case AppTheme.dark:
+    switch (Provider.of<ThemeManager>(context).theme) {
+      case ThemeMode.dark:
         return _buildDark(context);
-      case AppTheme.light:
+      case ThemeMode.light:
         return _buildLight(context);
       default:
         throw Exception('Invalid theme: ' +
-            Provider.of<ThemeNotifier>(context).theme.toString());
+            Provider.of<ThemeManager>(context).theme.toString());
     }
   }
 }

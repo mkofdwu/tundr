@@ -3,8 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
-import 'package:tundr/repositories/theme_notifier.dart';
-import 'package:tundr/enums/app_theme.dart';
+import 'package:tundr/repositories/theme_manager.dart';
 import 'package:tundr/widgets/media/extra_media_grid.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 
@@ -20,7 +19,7 @@ class _SetupExtraMediaPageState extends State<SetupExtraMediaPage> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ThemeNotifier>(context).theme = AppTheme.dark;
+    Provider.of<ThemeManager>(context).theme = ThemeMode.dark;
     return Material(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

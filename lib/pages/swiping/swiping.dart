@@ -38,7 +38,7 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   Future<void> _loadSuggestionProfiles(_) async {
-    final privateInfo = Provider.of<User>(context).privateInfo;
+    final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     final suggestions = privateInfo.respondedSuggestions;
     suggestions.addAll(privateInfo.dailyGeneratedSuggestions
         .asMap()
@@ -162,8 +162,7 @@ class _SwipingPageState extends State<SwipingPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
               GestureDetector(
-                child: Icon(Icons.close,
-                    color: Theme.of(context).accentColor, size: 30.0),
+                child: Icon(Icons.close, size: 30.0),
                 onTap: _nope,
               ),
             ] +
@@ -182,8 +181,7 @@ class _SwipingPageState extends State<SwipingPage> {
                       ),
                     ),
                     GestureDetector(
-                      child: Icon(Icons.undo,
-                          color: Theme.of(context).accentColor, size: 30.0),
+                      child: Icon(Icons.undo, size: 30.0),
                       onTap: _undo,
                     ),
                     Padding(
@@ -212,8 +210,7 @@ class _SwipingPageState extends State<SwipingPage> {
                   ]) +
             [
               GestureDetector(
-                child: Icon(Icons.done,
-                    color: Theme.of(context).accentColor, size: 30.0),
+                child: Icon(Icons.done, size: 30.0),
                 onTap: _like,
               ),
             ],
@@ -289,8 +286,7 @@ class _SwipingPageState extends State<SwipingPage> {
     return Column(
       children: <Widget>[
         if (_i == _suggestionWithProfiles.length ||
-            Provider.of<User>(context).privateInfo.numRightSwiped >=
-                10) // should be just == 10
+            Provider.of<User>(context).privateInfo.numRightSwiped >= 10)
           SizedBox(
             width: width - 80.0,
             height: height - 200.0,
@@ -301,7 +297,6 @@ class _SwipingPageState extends State<SwipingPage> {
                   Text(
                     "You've gone through everyone",
                     style: TextStyle(
-                      color: Theme.of(context).accentColor,
                       fontSize: 20.0,
                     ),
                   ),
@@ -329,7 +324,7 @@ class _SwipingPageState extends State<SwipingPage> {
             ),
           ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0), // FTUURE: 20
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: ThemeBuilder(
             buildDark: _buildDarkOptions,
             buildLight: _buildLightOptions,

@@ -78,7 +78,6 @@ class _TextListFieldPageState extends State<TextListFieldPage> {
                                       Container(
                                         width: text.length * 10.0,
                                         height: 5.0,
-                                        color: Theme.of(context).accentColor,
                                       ),
                                       Text(
                                         text,

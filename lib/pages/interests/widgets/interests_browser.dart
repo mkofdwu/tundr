@@ -49,13 +49,11 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
               controller: _searchController,
               hintText: 'Search',
               hintTextColor: Theme.of(context).accentColor,
-              color: Theme.of(context).accentColor,
               fontSize: 30.0,
             ),
           ),
           Icon(
             Icons.search,
-            color: Theme.of(context).accentColor,
             size: 30.0,
           ),
         ],
@@ -63,7 +61,6 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
 
   List<Widget> _buildBody() => [
         SimpleTabBar(
-          color: Theme.of(context).accentColor,
           tabNames: ['Custom'] + interests.keys.toList(),
           defaultTab: interests.keys.first,
           onSelected: (tab) {

@@ -11,12 +11,12 @@ import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/media/extra_media_grid.dart';
 
-class OwnProfileEditPage extends StatefulWidget {
+class ProfileEditPage extends StatefulWidget {
   @override
-  _OwnProfileEditPageState createState() => _OwnProfileEditPageState();
+  _ProfileEditPageState createState() => _ProfileEditPageState();
 }
 
-class _OwnProfileEditPageState extends State<OwnProfileEditPage> {
+class _ProfileEditPageState extends State<ProfileEditPage> {
   final TextEditingController _aboutMeController = TextEditingController();
   final FocusNode _aboutMeFocusNode = FocusNode();
 

@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tundr/constants/firebase_ref.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/user_algorithm_data.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
 
-class User extends ChangeNotifier {
+class User {
   UserProfile profile;
   UserPrivateInfo privateInfo;
   UserAlgorithmData algorithmData;
@@ -18,21 +17,21 @@ class User extends ChangeNotifier {
     final profileMap = profile.toMap()..addAll(data);
     profile = UserProfile.fromMap(profileMap);
     await userProfilesRef.doc(profile.uid).update(data);
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> updatePrivateInfo(Map<String, dynamic> data) async {
     final privateInfoMap = privateInfo.toMap()..addAll(data);
     privateInfo = UserPrivateInfo.fromMap(privateInfoMap);
     await usersPrivateInfoRef.doc(profile.uid).update(data);
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> updateAlgorithmData(Map<String, dynamic> data) async {
     final algorithmDataMap = algorithmData.toMap()..addAll(data);
     algorithmData = UserAlgorithmData.fromMap(algorithmDataMap);
     await usersAlgorithmDataRef.doc(profile.uid).update(data);
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> updateOnline(bool online) {

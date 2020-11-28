@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/models/user_profile.dart';
-import 'package:tundr/repositories/theme_notifier.dart';
+import 'package:tundr/repositories/theme_manager.dart';
 
-import 'package:tundr/pages/user_profile/personal_info.dart';
-import 'package:tundr/enums/app_theme.dart';
+import 'package:tundr/pages/other_profile/personal_info.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
-class UserProfileExtraMediaPage extends StatefulWidget {
+class OtherProfileExtraMediaPage extends StatefulWidget {
   final UserProfile profile;
 
-  UserProfileExtraMediaPage({Key key, @required this.profile})
+  OtherProfileExtraMediaPage({Key key, @required this.profile})
       : super(key: key);
 
   @override
-  _UserProfileExtraMediaPageState createState() =>
-      _UserProfileExtraMediaPageState();
+  _OtherProfileExtraMediaPageState createState() =>
+      _OtherProfileExtraMediaPageState();
 }
 
-class _UserProfileExtraMediaPageState extends State<UserProfileExtraMediaPage> {
+class _OtherProfileExtraMediaPageState
+    extends State<OtherProfileExtraMediaPage> {
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -48,7 +48,7 @@ class _UserProfileExtraMediaPageState extends State<UserProfileExtraMediaPage> {
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) =>
-            UserProfilePersonalInfoPage(profile: widget.profile),
+            OtherProfilePersonalInfoPage(profile: widget.profile),
         transitionsBuilder: (context, animation1, animation2, child) {
           return SlideTransition(
             position:
@@ -95,7 +95,7 @@ class _UserProfileExtraMediaPageState extends State<UserProfileExtraMediaPage> {
               height: 150.0,
               decoration: BoxDecoration(
                 gradient:
-                    Provider.of<ThemeNotifier>(context).theme == AppTheme.dark
+                    Provider.of<ThemeManager>(context).theme == ThemeMode.dark
                         ? MyPalette.transparentToBlack
                         : MyPalette.transparentToGold,
               ),

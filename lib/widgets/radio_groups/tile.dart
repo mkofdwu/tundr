@@ -1,11 +1,11 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/enums/app_theme.dart';
 
 class TileRadioGroup extends StatefulWidget {
-  final AppTheme theme;
+  final ThemeMode theme;
   final bool forceColumn;
   final List<String> options;
   final String selected;
@@ -119,10 +119,10 @@ class _TileRadioGroupState extends State<TileRadioGroup> {
   Widget build(BuildContext context) {
     Function(String) tileRadioBuilder;
     switch (widget.theme) {
-      case AppTheme.dark:
+      case ThemeMode.dark:
         tileRadioBuilder = _buildDarkTileRadio;
         break;
-      case AppTheme.light:
+      case ThemeMode.light:
         tileRadioBuilder = _buildLightTileRadio;
         break;
       default:

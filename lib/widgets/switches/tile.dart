@@ -35,7 +35,7 @@ class _TileSwitchState extends State<TileSwitch> {
           color: _selected ? MyPalette.gold : null,
           border: _selected
               ? null
-              : Border.all(color: Theme.of(context).accentColor),
+              : Border.all(color: Theme.of(context).colorScheme.onPrimary),
           borderRadius: fromTheme(
             context,
             dark: null,
@@ -49,8 +49,9 @@ class _TileSwitchState extends State<TileSwitch> {
             width: 20.0,
             height: 20.0,
             decoration: BoxDecoration(
-              color:
-                  _selected ? MyPalette.white : Theme.of(context).accentColor,
+              color: _selected
+                  ? MyPalette.white
+                  : Theme.of(context).colorScheme.onPrimary,
               borderRadius: fromTheme(
                 context,
                 dark: null,

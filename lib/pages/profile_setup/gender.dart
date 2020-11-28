@@ -4,7 +4,6 @@ import 'package:tundr/enums/gender.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/profile_setup/profile_pic.dart';
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/enums/app_theme.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 import 'package:tundr/widgets/radio_groups/tile.dart';
@@ -71,7 +70,7 @@ class _SetupGenderPageState extends State<SetupGenderPage> {
             SizedBox(height: 30.0),
             Expanded(
               child: TileRadioGroup(
-                theme: AppTheme.dark,
+                theme: ThemeMode.dark,
                 options: ['Male', 'Female'],
                 selected: genderToString[
                     Provider.of<RegistrationInfo>(context).gender],

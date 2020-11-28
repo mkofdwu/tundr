@@ -1,11 +1,11 @@
-import * as functions from "firebase-functions";
+import * as functions from 'firebase-functions';
 
-import generateSuggestions from "../algorithms/generate-suggestions";
-import { db } from "../constants";
+import generateSuggestions from '../algorithms/generate-suggestions';
+import { usersAlgorithmDataRef } from '../constants';
 
 export default functions.firestore
   .document(
-    "thisdocdoesnotexist/{andwillneverbecreated}/butthisfunctionwillbecalledmanually/thequickbrownfoxjumpsoverthelazydog"
+    'thisdocdoesnotexist/{andwillneverbecreated}/butthisfunctionwillbecalledmanually/thequickbrownfoxjumpsoverthelazydog'
   )
   .onCreate(async (snapshot, context) => {
     const userDocsById: Map<
@@ -13,7 +13,7 @@ export default functions.firestore
       FirebaseFirestore.QueryDocumentSnapshot
     > = new Map();
     const users: Array<FirebaseFirestore.DocumentData> = [];
-    (await db.collection("users").get()).docs.forEach((userDoc) => {
+    (await usersAlgorithmDataRef.get()).docs.forEach((userDoc) => {
       userDocsById.set(userDoc.id, userDoc);
       users.push(userDoc.data());
     });

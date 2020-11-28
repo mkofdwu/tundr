@@ -1,9 +1,8 @@
-import 'package:flutter/widgets.dart';
-import 'package:tundr/enums/app_theme.dart';
+import 'package:flutter/material.dart';
 import 'package:tundr/enums/gender.dart';
 import 'package:tundr/models/media.dart';
 
-class RegistrationInfo extends ChangeNotifier {
+class RegistrationInfo {
   String username = '';
   String password = '';
   String confirmPassword = '';
@@ -18,7 +17,7 @@ class RegistrationInfo extends ChangeNotifier {
   List<String> customInterests = [];
   String phoneNumber = '+65';
   String uid;
-  AppTheme theme;
+  ThemeMode theme;
 
   String smsVerificationId;
   bool isCreatingAccount = false;

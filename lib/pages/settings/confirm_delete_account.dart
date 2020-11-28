@@ -20,6 +20,14 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
         ) ==
         null) {
       await AuthService.deleteAccount(Provider.of<User>(context).profile.uid);
+      Navigator.popUntil(context, (route) => route.isFirst);
+      await showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Success'),
+          content: Text('Your account has been deleted'),
+        ),
+      );
     } else {
       await showDialog(
         context: context,

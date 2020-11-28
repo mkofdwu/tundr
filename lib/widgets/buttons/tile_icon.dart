@@ -40,7 +40,7 @@ class _TileIconButtonState extends State<TileIconButton> {
           size: widget.iconSize,
           color: _pressed
               ? MyPalette.white
-              : widget.iconColor ?? Theme.of(context).accentColor,
+              : widget.iconColor ?? Theme.of(context).colorScheme.onPrimary,
         ),
       ),
       onTapDown: (TapDownDetails details) => setState(

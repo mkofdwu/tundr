@@ -1,49 +1,44 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
 
-import { db, fcm } from "../constants";
+import { fcm, userProfilesRef, usersPrivateInfoRef } from '../constants';
 
 export default functions.firestore
-  .document("usermatches/{uid}/matches/{matchUid}")
+  .document('usermatches/{uid}/matches/{matchUid}')
   .onCreate(async (snapshot, context) => {
-    const user: FirebaseFirestore.DocumentSnapshot = await db
-      .collection("users")
-      .doc(context.params.uid)
-      .get();
-    if (!user.exists) return;
+    // TODO FIXME
+    const userPrivateInfo = (
+      await usersPrivateInfoRef.doc(context.params.uid).get()
+    ).data();
+    if (userPrivateInfo == null)
+      throw new Error('user exists but data() returned undefined');
 
-    const userData: FirebaseFirestore.DocumentData | undefined = user.data();
-    if (userData == undefined)
-      throw new Error("user exists but data() returned undefined");
-
-    if (userData.newMatchNotification) {
+    if (userPrivateInfo['settings']['newMatchNotification']) {
       const tokens: string[] = (
-        await db
-          .collection("users")
+        await usersPrivateInfoRef
           .doc(context.params.uid)
-          .collection("tokens")
+          .collection('tokens')
           .get()
       ).docs.map((doc) => doc.id);
 
-      const otherUser: FirebaseFirestore.DocumentSnapshot = await db
-        .collection("users")
-        .doc(context.params.matchUid)
-        .get();
+      const otherUserProfile = (
+        await userProfilesRef.doc(context.params.matchUid).get()
+      ).data();
 
-      if (!otherUser.exists)
+      if (otherUserProfile == null)
         throw new Error(
           `user with uid ${context.params.matchUid} initiated match but seems to have disappeared`
         );
 
-      const matchName: string = otherUser.data()?.name;
+      const matchName: string = otherUserProfile['name'];
       if (matchName == null)
-        throw new Error("user exists but data() returned undefined");
+        throw new Error('user exists but data() returned undefined');
 
       const payload: admin.messaging.MessagingPayload = {
         notification: {
-          title: "Congratulations!",
+          title: 'Congratulations!',
           body: `${matchName} liked you too!`,
-          clickAction: "FLUTTER_NOTIFICATION_CLICK",
+          clickAction: 'FLUTTER_NOTIFICATION_CLICK',
         },
         // data: {
         //     type: "newMatch",

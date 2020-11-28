@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
-import 'package:tundr/repositories/theme_notifier.dart';
-import 'package:tundr/enums/app_theme.dart';
+import 'package:tundr/repositories/theme_manager.dart';
 import 'package:tundr/constants/personal_info_fields.dart';
 import 'package:tundr/pages/personal_info/widgets/personal_info_field_button.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
@@ -16,7 +15,7 @@ class _SetupPersonalInfoPageState extends State<SetupPersonalInfoPage> {
   @override
   Widget build(BuildContext context) {
     final personalInfo = Provider.of<RegistrationInfo>(context).personalInfo;
-    Provider.of<ThemeNotifier>(context).theme = AppTheme.dark;
+    Provider.of<ThemeManager>(context).theme = ThemeMode.dark;
     return Material(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

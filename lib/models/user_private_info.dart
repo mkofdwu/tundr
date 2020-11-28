@@ -1,4 +1,4 @@
-import 'package:tundr/enums/app_theme.dart';
+import 'package:flutter/material.dart';
 import 'package:tundr/models/user_settings.dart';
 import 'package:tundr/repositories/registration_info.dart';
 
@@ -11,7 +11,7 @@ class UserPrivateInfo {
   List<String> dailyGeneratedSuggestions;
   Map<String, bool> respondedSuggestions;
   Map<String, bool> suggestionsGoneThrough; // uid: liked
-  AppTheme theme;
+  ThemeMode theme;
   int numRightSwiped;
   List<String> blocked;
   List<String> matches;
@@ -41,7 +41,8 @@ class UserPrivateInfo {
       respondedSuggestions: Map<String, bool>.from(map['respondedSuggestions']),
       suggestionsGoneThrough:
           Map<String, bool>.from(map['suggestionsGoneThrough']),
-      theme: AppTheme.values.elementAt(map['theme']),
+      // only 2 themes, may have multiple accents in the future
+      theme: map['theme'] == 0 ? ThemeMode.dark : ThemeMode.light,
       numRightSwiped: map['numRightSwiped'],
       blocked: List<String>.from(map['blocked']),
       matches: List<String>.from(map['matches']),
@@ -57,7 +58,7 @@ class UserPrivateInfo {
       dailyGeneratedSuggestions: [],
       respondedSuggestions: {},
       suggestionsGoneThrough: {},
-      theme: AppTheme.dark,
+      theme: ThemeMode.dark,
       numRightSwiped: 0,
       blocked: [],
       matches: [],
@@ -73,7 +74,7 @@ class UserPrivateInfo {
       'dailyGeneratedSuggestions': dailyGeneratedSuggestions,
       'respondedSuggestions': respondedSuggestions,
       'suggestionsGoneThrough': suggestionsGoneThrough,
-      'theme': AppTheme.values.indexOf(theme),
+      'theme': theme == ThemeMode.dark ? 0 : 1,
       'numRightSwiped': numRightSwiped,
       'blocked': blocked,
       'matches': matches,

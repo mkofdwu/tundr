@@ -44,7 +44,8 @@ class _RoundRadioGroupState extends State<RoundRadioGroup> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     border: Border.all(
-                        color: Theme.of(context).accentColor, width: 3.0),
+                        width: 3.0,
+                        color: Theme.of(context).colorScheme.onPrimary),
                   ),
                   child: i == _selectedOptionIndex
                       ? Center(
@@ -52,8 +53,8 @@ class _RoundRadioGroupState extends State<RoundRadioGroup> {
                             width: 20.0,
                             height: 20.0,
                             decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.onPrimary,
                               borderRadius: BorderRadius.circular(10.0),
-                              color: Theme.of(context).accentColor,
                             ),
                           ),
                         )

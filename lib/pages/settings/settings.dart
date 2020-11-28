@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/models/personal_info_field.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/repositories/user.dart';
-import 'package:tundr/repositories/theme_notifier.dart';
+import 'package:tundr/repositories/theme_manager.dart';
 import 'package:tundr/pages/about.dart';
 import 'package:tundr/pages/personal_info/text_field.dart';
 import 'package:tundr/pages/settings/blocked_users.dart';
@@ -15,7 +15,6 @@ import 'package:tundr/pages/settings/filter_settings.dart';
 import 'package:tundr/pages/settings/notification_settings.dart';
 
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/enums/app_theme.dart';
 import 'package:tundr/enums/gender.dart';
 import 'package:tundr/services/notifications_service.dart';
 import 'package:tundr/widgets/buttons/light_tile.dart';
@@ -84,12 +83,10 @@ class _SettingsPageState extends State<SettingsPage> {
         title: Text('Are you sure you would like to logout?'),
         actions: <Widget>[
           FlatButton(
-            key: ValueKey('okBtn'),
             child: Text('OK'),
             onPressed: () => Navigator.pop(context, true),
           ),
           FlatButton(
-            key: ValueKey('cancelBtn'),
             child: Text('CANCEL'),
             onPressed: () => Navigator.pop(context, false),
           ),
@@ -104,7 +101,7 @@ class _SettingsPageState extends State<SettingsPage> {
       );
       await FirebaseMessaging().deleteInstanceID();
       await auth.FirebaseAuth.instance.signOut();
-      // Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
 
@@ -144,7 +141,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text(
                   profile.username,
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontSize: 14,
                   ),
                 ),
@@ -161,7 +157,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text(
                   privateInfo.phoneNumber,
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontSize: 14,
                   ),
                 ),
@@ -267,14 +262,15 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: 'Theme',
                 child: RoundRadioGroup(
                   options: ['Dark', 'Light'],
-                  selected: AppTheme.values
-                      .indexOf(Provider.of<ThemeNotifier>(context).theme),
+                  selected:
+                      Provider.of<ThemeManager>(context).theme == ThemeMode.dark
+                          ? 0
+                          : 1,
                   onChanged: (option) {
-                    Provider.of<ThemeNotifier>(context).theme =
-                        AppTheme.values[option];
+                    Provider.of<ThemeManager>(context, listen: false).theme =
+                        option == 0 ? ThemeMode.dark : ThemeMode.light;
                     setState(() {});
-                    Provider.of<ThemeNotifier>(context).notifyListeners_();
-                    Provider.of<User>(context)
+                    Provider.of<User>(context, listen: false)
                         .updatePrivateInfo({'theme': option});
                   },
                 ),
@@ -292,7 +288,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
               SizedBox(height: 20),
-              Provider.of<ThemeNotifier>(context).theme == AppTheme.dark
+              Provider.of<ThemeManager>(context).theme == ThemeMode.dark
                   ? GestureDetector(
                       // FUTURE: make this work for other themes, refractor to darktilebutton
                       child: Container(

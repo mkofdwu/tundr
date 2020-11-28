@@ -3,9 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/personal_info_field.dart';
-import 'package:tundr/repositories/theme_notifier.dart';
+import 'package:tundr/repositories/theme_manager.dart';
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/enums/app_theme.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 
 class SliderFieldPage extends StatefulWidget {
@@ -137,14 +136,14 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
 
   @override
   Widget build(BuildContext context) {
-    switch (Provider.of<ThemeNotifier>(context).theme) {
-      case AppTheme.dark:
+    switch (Provider.of<ThemeManager>(context).theme) {
+      case ThemeMode.dark:
         return _buildDark();
-      case AppTheme.light:
+      case ThemeMode.light:
         return _buildLight();
       default:
         throw Exception(
-            'Invalid theme: ${Provider.of<ThemeNotifier>(context).theme}');
+            'Invalid theme: ${Provider.of<ThemeManager>(context).theme}');
     }
   }
 }

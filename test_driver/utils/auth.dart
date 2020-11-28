@@ -2,8 +2,8 @@ import 'package:flutter_driver/flutter_driver.dart';
 
 Future<void> loginWith(
   driver, {
-  String username = 'username1',
-  String password = 'password1',
+  String username = 'test',
+  String password = '123456',
 }) async {
   await driver.tap(find.byValueKey('loginBtn'));
   await driver.tap(find.byValueKey('usernameField'));
@@ -12,4 +12,13 @@ Future<void> loginWith(
   await driver.enterText(password);
   await driver.tap(find.byValueKey('loginSubmitBtn'));
   await driver.waitFor(find.byType('HomePage'));
+}
+
+Future<void> logoutWith(driver) async {
+  await driver.tap(find.byValueKey('tab0'));
+  await driver.tap(find.text('Settings'));
+  await driver.scrollIntoView(find.text('Logout'));
+  await driver.tap(find.text('Logout'));
+  await driver.tap(find.text('OK'));
+  await driver.waitFor(find.byType('WelcomePage'));
 }

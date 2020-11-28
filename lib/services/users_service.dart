@@ -11,10 +11,11 @@ import 'package:tundr/repositories/user.dart';
 
 Future<T> callHttpsFunction<T>(String functionName,
     [dynamic parameters]) async {
-  final result = await CloudFunctions.instance
-      .getHttpsCallable(functionName: functionName)
+  final result = await FirebaseFunctions.instance
+      .httpsCallable(functionName)
       .call(parameters);
-  return result.data as T;
+  // if there is only a single value returned it will be in a field named 'result'
+  return result.data['result'] as T;
 }
 
 class UsersService {
@@ -59,25 +60,6 @@ class UsersService {
         .map((userStatusDoc) => UserStatus.fromMap(userStatusDoc.data()));
   }
 
-  // static Future<void> setProfileField(String uid, String field, dynamic value) {
-  //   return userProfilesRef.doc(uid).update({field: value});
-  // }
-
-  // static Future<void> setPrivateInfo(String uid, String field, dynamic value) {
-  //   return usersPrivateInfoRef.doc(uid).update({field: value});
-  // }
-
-  // static Future<void> setAlgorithmData(
-  //     String uid, String field, dynamic value) {
-  //   return usersAlgorithmDataRef.doc(uid).update({field: value});
-  // }
-
-  // static Future<void> setOnline(String uid, bool online) {
-  //   return userStatusesRef
-  //       .doc(uid)
-  //       .update({'online': true, 'lastSeen': online ? null : Timestamp.now()});
-  // }
-
   static Future<bool> usernameAlreadyExists(String username) async {
     return (await userProfilesRef
             .where('username', isEqualTo: username)
@@ -121,10 +103,10 @@ class UsersService {
   }
 
   static Future<bool> isBlockedBy(String otherUid) =>
-      callHttpsFunction('isBlockedBy', {'otherUid': otherUid});
+      callHttpsFunction<bool>('isBlockedBy', {'otherUid': otherUid});
 
   static Future<List<PopularUser>> getMostPopular() async {
-    final mostPopularUsers = await callHttpsFunction('getMostPopular');
+    final mostPopularUsers = await callHttpsFunction<List>('getMostPopular');
     print(mostPopularUsers);
     return mostPopularUsers.map<PopularUser>((popUser) {
       final unserializedBirthday = popUser['profile']['birthday'];
@@ -141,5 +123,5 @@ class UsersService {
   }
 
   static Future<bool> allowedToTalkTo(String otherUid) =>
-      callHttpsFunction('allowedToTalkTo', {'otherUid': otherUid});
+      callHttpsFunction<bool>('allowedToTalkTo', {'otherUid': otherUid});
 }

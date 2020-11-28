@@ -1,27 +1,31 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
 
-import { db, fcm } from "../constants";
+import {
+  chatsRef,
+  fcm,
+  userProfilesRef,
+  usersPrivateInfoRef,
+} from '../constants';
 
 export default functions.firestore
-  .document("chats/{chatId}/messages/{messageId}")
+  .document('chats/{chatId}/messages/{messageId}')
   .onCreate(async (snapshot, context) => {
-    const participants: FirebaseFirestore.QuerySnapshot = await db
-      .collection("chats")
+    const participants: FirebaseFirestore.QuerySnapshot = await chatsRef
       .doc(context.params.chatId)
-      .collection("participants")
+      .collection('participants')
       .get();
     const message: FirebaseFirestore.DocumentData | undefined = snapshot.data();
     if (message == undefined)
-      throw new Error("message created but mysteriously disappeared");
+      throw new Error('message created but mysteriously disappeared');
 
     const senderUserData: FirebaseFirestore.DocumentData | undefined = (
-      await db.collection("users").doc(message.senderUid).get()
+      await userProfilesRef.doc(message.senderUid).get()
     ).data();
 
     let senderName: string;
     // user sent a message but somehow he doesn't exist
-    if (senderUserData == undefined) senderName = "<Deleted>";
+    if (senderUserData == undefined) senderName = '<Deleted>';
     else senderName = senderUserData.name;
 
     const tokens: string[] = [];
@@ -29,7 +33,7 @@ export default functions.firestore
       if (doc.id == message.senderUid) return; // don't send the notification to the original sender
       tokens.push(
         ...(
-          await db.collection("users").doc(doc.id).collection("tokens").get()
+          await usersPrivateInfoRef.doc(doc.id).collection('tokens').get()
         ).docs.map((doc) => doc.id)
       );
     });
@@ -38,7 +42,7 @@ export default functions.firestore
       notification: {
         title: senderName,
         body: message.text,
-        clickAction: "FLUTTER_NOTIFICATION_CLICK",
+        clickAction: 'FLUTTER_NOTIFICATION_CLICK',
       },
       // data: {
       //     type: "newMessage",

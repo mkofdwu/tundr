@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 
-import 'utils/login.dart';
+import '../utils/auth.dart';
 
 void swipingPageTests() {
   final card = find.byValueKey('card');
