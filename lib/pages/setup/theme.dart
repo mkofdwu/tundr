@@ -12,7 +12,7 @@ class SetupThemePage extends StatefulWidget {
 
 class _SetupThemePageState extends State<SetupThemePage> {
   Future<void> _selectTheme(ThemeMode theme) async {
-    Provider.of<ThemeManager>(context).theme = theme;
+    Provider.of<ThemeManager>(context, listen: false).theme = theme;
     await Provider.of<User>(context, listen: false)
         .updatePrivateInfo({'theme': theme == ThemeMode.dark ? 0 : 1});
     Navigator.popUntil(context, (route) => route.isFirst);
@@ -23,33 +23,34 @@ class _SetupThemePageState extends State<SetupThemePage> {
     return Material(
       color: MyPalette.white,
       child: Padding(
-        padding: const EdgeInsets.all(30.0),
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
         child: Column(
           children: <Widget>[
+            SizedBox(height: 20),
             Text(
               'Select a theme',
               style: TextStyle(
                 color: MyPalette.black,
-                fontSize: 30.0,
+                fontSize: 30,
                 fontFamily: 'Helvetica Neue',
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 30.0),
+            SizedBox(height: 30),
             Expanded(
               child: GestureDetector(
                 child: Container(
                   decoration: BoxDecoration(
                     color: MyPalette.white,
-                    borderRadius: BorderRadius.circular(30.0),
-                    boxShadow: [MyPalette.primaryShadow],
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [MyPalette.secondaryShadow],
                   ),
                   child: Center(
                     child: Text(
                       'Light',
                       style: TextStyle(
                         color: MyPalette.black,
-                        fontSize: 20.0,
+                        fontSize: 20,
                       ),
                     ),
                   ),
@@ -57,21 +58,21 @@ class _SetupThemePageState extends State<SetupThemePage> {
                 onTap: () => _selectTheme(ThemeMode.light),
               ),
             ),
-            SizedBox(height: 30.0),
+            SizedBox(height: 50),
             Expanded(
               child: GestureDetector(
                 child: Container(
                   decoration: BoxDecoration(
                     color: MyPalette.black,
-                    borderRadius: BorderRadius.circular(30.0),
-                    boxShadow: [MyPalette.primaryShadow],
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [MyPalette.secondaryShadow],
                   ),
                   child: Center(
                     child: Text(
                       'Dark',
                       style: TextStyle(
                         color: MyPalette.white,
-                        fontSize: 20.0,
+                        fontSize: 20,
                       ),
                     ),
                   ),

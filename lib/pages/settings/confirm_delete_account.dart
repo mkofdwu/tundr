@@ -57,7 +57,7 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
           width: width - 100,
           child: Text(
             'Confirm your password to delete your account',
-            style: Theme.of(context).textTheme.headline3,
+            style: TextStyle(fontSize: 40),
           ),
         ),
         Positioned(

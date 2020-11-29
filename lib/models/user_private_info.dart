@@ -42,7 +42,9 @@ class UserPrivateInfo {
       suggestionsGoneThrough:
           Map<String, bool>.from(map['suggestionsGoneThrough']),
       // only 2 themes, may have multiple accents in the future
-      theme: map['theme'] == 0 ? ThemeMode.dark : ThemeMode.light,
+      theme: map['theme'] == null
+          ? null
+          : (map['theme'] == 0 ? ThemeMode.dark : ThemeMode.light),
       numRightSwiped: map['numRightSwiped'],
       blocked: List<String>.from(map['blocked']),
       matches: List<String>.from(map['matches']),
@@ -58,7 +60,7 @@ class UserPrivateInfo {
       dailyGeneratedSuggestions: [],
       respondedSuggestions: {},
       suggestionsGoneThrough: {},
-      theme: ThemeMode.dark,
+      theme: null,
       numRightSwiped: 0,
       blocked: [],
       matches: [],
@@ -74,7 +76,7 @@ class UserPrivateInfo {
       'dailyGeneratedSuggestions': dailyGeneratedSuggestions,
       'respondedSuggestions': respondedSuggestions,
       'suggestionsGoneThrough': suggestionsGoneThrough,
-      'theme': theme == ThemeMode.dark ? 0 : 1,
+      'theme': theme == null ? null : (theme == ThemeMode.dark ? 0 : 1),
       'numRightSwiped': numRightSwiped,
       'blocked': blocked,
       'matches': matches,

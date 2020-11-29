@@ -54,6 +54,7 @@ class TundrApp extends StatefulWidget {
 
 class _TundrAppState extends State<TundrApp> {
   bool _loadingUser = true;
+  bool _setupTheme = false;
 
   Future<void> _loadUser() async {
     await Firebase.initializeApp();
@@ -74,10 +75,7 @@ class _TundrAppState extends State<TundrApp> {
       Provider.of<User>(context, listen: false).algorithmData =
           user.algorithmData;
       if (user.privateInfo.theme == null) {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SetupThemePage()),
-        );
+        setState(() => _setupTheme = true);
       } else {
         Provider.of<ThemeManager>(context, listen: false).theme =
             user.privateInfo.theme;
@@ -104,6 +102,8 @@ class _TundrAppState extends State<TundrApp> {
             user.privateInfo == null ||
             user.algorithmData == null) {
           home = WelcomePage();
+        } else if (_setupTheme) {
+          home = SetupThemePage();
         } else {
           home = AppStateHandler(
             onExit: () {

@@ -23,7 +23,7 @@ class UserAlgorithmData {
   });
 
   factory UserAlgorithmData.fromMap(Map<String, dynamic> map) {
-    final otherFilters = map['otherFilters'].map((name, value) {
+    final otherFilters = map['otherFilters'].map<String, Filter>((name, value) {
       return MapEntry<String, Filter>(
         name,
         Filter(
@@ -39,9 +39,7 @@ class UserAlgorithmData {
       showMeGirls: map['showMeGirls'],
       ageRangeMin: map['ageRangeMin'],
       ageRangeMax: map['ageRangeMax'],
-      otherFilters: Map<String, Filter>.from(otherFilters.map(
-          (name, filterMap) =>
-              MapEntry(name, Filter.fromMap(name, filterMap)))),
+      otherFilters: otherFilters,
     );
   }
 

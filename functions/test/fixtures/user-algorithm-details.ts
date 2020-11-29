@@ -3,13 +3,14 @@ export default [
   {
     uid: '0',
     gender: 0,
+    // birthday: new Date(year, month, date),
     showMeBoys: true,
     showMeGirls: true,
     ageRangeMin: 10,
     ageRangeMax: 10,
     filters: {},
     personalInfo: {},
-    interests: [],
+    interests: [0, 1, 2],
   },
   {
     uid: '1',
@@ -20,7 +21,7 @@ export default [
     ageRangeMax: 10,
     filters: {},
     personalInfo: {},
-    interests: [],
+    interests: [], // none
   },
   {
     uid: '2',
@@ -31,7 +32,7 @@ export default [
     ageRangeMax: 10,
     filters: {},
     personalInfo: {},
-    interests: [],
+    interests: [2, 3, 8],
   },
   {
     uid: '3',
@@ -42,7 +43,7 @@ export default [
     ageRangeMax: 10,
     filters: {},
     personalInfo: {},
-    interests: [],
+    interests: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], // selected all, or many interests
   },
   {
     uid: '4',

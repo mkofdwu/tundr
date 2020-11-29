@@ -128,10 +128,7 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
                     children: <Widget>[
                       Text(
                         fieldName,
-                        style: TextStyle(
-                          color: MyPalette.white,
-                          fontSize: 16.0,
-                        ),
+                        style: TextStyle(fontSize: 16.0),
                       ),
                       GestureDetector(
                         child: Icon(

@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
+import 'package:tundr/pages/settings/filter_settings.dart';
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/pages/its_a_match.dart';
 
@@ -159,71 +160,84 @@ class _SwipingPageState extends State<SwipingPage> {
         .updatePrivateInfo({'numRightSwiped': FieldValue.increment(1)});
   }
 
+  void _goToFilterSettings() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => FilterSettingsPage()),
+    );
+  }
+
   Widget _buildDarkOptions() => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
               GestureDetector(
-                child: Icon(Icons.close, size: 30.0),
+                child: Icon(Icons.close, size: 30),
                 onTap: _nope,
               ),
             ] +
             (_canUndo
                 ? [
                     Padding(
-                      padding: const EdgeInsets.only(
-                        left: 20.0,
-                        top: 20.0,
-                        right: 20.0,
-                      ),
+                      padding:
+                          const EdgeInsets.only(left: 20, top: 10, right: 20),
                       child: Container(
-                        width: 3.0,
-                        height: 60.0,
+                        width: 2,
+                        height: 60,
                         color: MyPalette.gold,
                       ),
                     ),
                     GestureDetector(
-                      child: Icon(Icons.undo, size: 30.0),
+                      child: Icon(Icons.undo, size: 30),
                       onTap: _undo,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                        left: 20.0,
-                        right: 20.0,
-                        bottom: 20.0,
-                      ),
+                          left: 20, right: 20, bottom: 10),
                       child: Container(
-                        width: 3.0,
-                        height: 60.0,
+                        width: 2,
+                        height: 60,
                         color: MyPalette.gold,
                       ),
                     ),
                   ]
                 : [
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 10.0),
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, bottom: 10),
                       child: Container(
-                        width: 3.0,
-                        height: 60.0,
+                        width: 2,
+                        height: 60,
                         color: MyPalette.gold,
                       ),
                     ),
                   ]) +
             [
               GestureDetector(
-                child: Icon(Icons.done, size: 30.0),
+                child: Icon(Icons.done, size: 30),
                 onTap: _like,
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+                  child: Container(
+                    width: 2,
+                    height: 60,
+                    color: MyPalette.gold,
+                  )),
+              GestureDetector(
+                onTap: _goToFilterSettings,
+                child: Icon(Icons.filter_alt),
               ),
             ],
       );
 
   Widget _buildLightOptions() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          SizedBox(width: 40),
           GestureDetector(
             child: Container(
-              width: 70.0,
-              height: 70.0,
+              width: 70,
+              height: 70,
               decoration: ShapeDecoration(
                 shape: CircleBorder(),
                 color: MyPalette.gold,
@@ -232,34 +246,33 @@ class _SwipingPageState extends State<SwipingPage> {
               child: Icon(
                 Icons.close,
                 color: MyPalette.white,
-                size: 30.0,
+                size: 30,
               ),
             ),
             onTap: _nope,
           ),
           _canUndo
               ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: GestureDetector(
                     child: Container(
-                      width: 40.0,
-                      height: 40.0,
+                      width: 50,
+                      height: 50,
                       decoration: ShapeDecoration(
                         shape: CircleBorder(),
                         color: MyPalette.white,
                         shadows: [MyPalette.primaryShadow],
                       ),
-                      child:
-                          Icon(Icons.undo, color: MyPalette.black, size: 20.0),
+                      child: Icon(Icons.undo, color: MyPalette.black, size: 24),
                     ),
                     onTap: _undo,
                   ),
                 )
-              : SizedBox(width: 50.0),
+              : SizedBox(width: 50),
           GestureDetector(
             child: Container(
-              width: 70.0,
-              height: 70.0,
+              width: 70,
+              height: 70,
               decoration: ShapeDecoration(
                 shape: CircleBorder(),
                 color: MyPalette.gold,
@@ -268,10 +281,34 @@ class _SwipingPageState extends State<SwipingPage> {
               child: Icon(
                 Icons.done,
                 color: MyPalette.white,
-                size: 30.0,
+                size: 30,
               ),
             ),
             onTap: _like,
+          ),
+          SizedBox(width: 10),
+          SizedBox(
+            height: 70,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: GestureDetector(
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: ShapeDecoration(
+                    shape: CircleBorder(),
+                    color: MyPalette.grey,
+                    shadows: [MyPalette.primaryShadow],
+                  ),
+                  child: Icon(
+                    Icons.filter_alt,
+                    color: MyPalette.white,
+                    size: 16,
+                  ),
+                ),
+                onTap: _goToFilterSettings,
+              ),
+            ),
           ),
         ],
       );
@@ -292,8 +329,8 @@ class _SwipingPageState extends State<SwipingPage> {
                     .numRightSwiped >=
                 10)
           SizedBox(
-            width: width - 80.0,
-            height: height - 200.0,
+            width: width - 80,
+            height: height - 200,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -301,15 +338,15 @@ class _SwipingPageState extends State<SwipingPage> {
                   Text(
                     "You've gone through everyone",
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 20,
                     ),
                   ),
-                  SizedBox(height: 10.0),
+                  SizedBox(height: 10),
                   Text(
                     'Try editing your filters to see more people',
                     style: TextStyle(
                       color: MyPalette.grey,
-                      fontSize: 14.0,
+                      fontSize: 14,
                     ),
                   ),
                 ],
@@ -318,7 +355,7 @@ class _SwipingPageState extends State<SwipingPage> {
           )
         else
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: DescribedFeatureOverlay(
               featureId: 'suggestion_card',
               tapTarget: SizedBox.shrink(),
@@ -328,8 +365,8 @@ class _SwipingPageState extends State<SwipingPage> {
               targetColor: MyPalette.white.withOpacity(0.8),
               backgroundColor: Theme.of(context).accentColor,
               child: SuggestionCard(
-                width: width - 80.0,
-                height: height - 250.0,
+                width: width - 80,
+                height: height - 250,
                 user: otherProfile,
                 onLike: _like,
                 onNope: _nope,
@@ -337,7 +374,7 @@ class _SwipingPageState extends State<SwipingPage> {
             ),
           ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: ThemeBuilder(
             buildDark: _buildDarkOptions,
             buildLight: _buildLightOptions,

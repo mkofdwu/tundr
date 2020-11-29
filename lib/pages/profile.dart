@@ -1,3 +1,4 @@
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/my_palette.dart';
@@ -92,9 +93,18 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         ),
         title: Text('My profile'),
         actions: <Widget>[
-          TileIconButton(
-            icon: Icons.remove_red_eye, // DESIGN: find better icon
-            onPressed: _previewProfile,
+          DescribedFeatureOverlay(
+            featureId: 'preview_profile',
+            tapTarget: Icon(Icons.remove_red_eye),
+            title: Text('Preview profile'),
+            description: Text(
+                'Click on this eye to learn how others will view your profile'),
+            targetColor: MyPalette.white.withOpacity(0.8),
+            backgroundColor: Theme.of(context).accentColor,
+            child: TileIconButton(
+              icon: Icons.remove_red_eye, // DESIGN: find better icon
+              onPressed: _previewProfile,
+            ),
           ),
         ],
       ),
