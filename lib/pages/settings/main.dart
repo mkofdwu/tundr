@@ -6,13 +6,8 @@ import 'package:tundr/models/personal_info_field.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/repositories/theme_manager.dart';
-import 'package:tundr/pages/about.dart';
 import 'package:tundr/pages/personal_info/text_field.dart';
-import 'package:tundr/pages/settings/blocked_users.dart';
-import 'package:tundr/pages/settings/change_password.dart';
 import 'package:tundr/pages/settings/confirm_delete_account.dart';
-import 'package:tundr/pages/settings/filters.dart';
-import 'package:tundr/pages/settings/notifications.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/gender.dart';

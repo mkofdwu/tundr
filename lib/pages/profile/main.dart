@@ -5,9 +5,6 @@ import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/repositories/user.dart';
 
 import 'package:tundr/pages/chat/chat.dart';
-import 'package:tundr/pages/profile/about_me.dart';
-import 'package:tundr/pages/profile/extra_media.dart';
-import 'package:tundr/pages/profile/personal_info.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/chats_service.dart';

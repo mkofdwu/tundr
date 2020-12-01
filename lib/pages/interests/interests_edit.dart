@@ -4,7 +4,6 @@ import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/widgets/buttons/back.dart';
 
-import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/pages/interests/widgets/interests_browser.dart';
 
 class InterestsEditPage extends StatelessWidget {

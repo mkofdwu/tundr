@@ -1,9 +1,7 @@
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
-import 'package:tundr/pages/me.dart';
 import 'package:tundr/pages/chats_list/chats_list.dart';
 import 'package:tundr/pages/most_popular.dart';
-import 'package:tundr/pages/search.dart';
 import 'package:tundr/pages/swiping/swiping.dart';
 import 'package:tundr/constants/my_palette.dart';
 
@@ -31,8 +29,6 @@ class _HomePageState extends State<HomePage>
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await FeatureDiscovery.clearPreferences(
-          context, <String>['most_popular_tab']); // TODO REMOVE THIS
       FeatureDiscovery.discoverFeatures(context, <String>['most_popular_tab']);
     });
   }

@@ -1,8 +1,8 @@
 enum ChatType {
+  nonExistent,
   newMatch,
-  // starred,
+  starred,
   normal,
   unknown,
   // hidden,
-  nonExistent
 }

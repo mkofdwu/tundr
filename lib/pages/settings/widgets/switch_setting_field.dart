@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/switches/tile.dart';
 
 class SwitchSettingField extends StatelessWidget {

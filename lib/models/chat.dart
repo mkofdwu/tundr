@@ -22,8 +22,8 @@ class Chat {
       id: doc.id,
       uid: data['uid'],
       wallpaperUrl: data['wallpaperUrl'],
-      lastRead: data['lastRead'],
-      type: data['type'],
+      lastRead: data['lastRead'].toDate(),
+      type: ChatType.values[data['type']],
     );
   }
 }

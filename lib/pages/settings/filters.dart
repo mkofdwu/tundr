@@ -8,7 +8,6 @@ import 'package:tundr/pages/filters/checkbox_filter.dart';
 import 'package:tundr/pages/filters/range_slider_filter.dart';
 import 'package:tundr/pages/filters/text_list_filter.dart';
 
-import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/filter_method.dart';
 import 'package:tundr/enums/personal_info_type.dart';
 import 'package:tundr/constants/personal_info_fields.dart';

@@ -1,3 +1,9 @@
+// algorithm runtimes:
+// 25 users: around 3.2 seconds
+// 100 users: around 3.6 seconds
+// 1000 users: around 11.5 seconds
+// 3100 users: around 23 seconds
+
 import { interestsToGroupNo, numInterestGroups } from '../constants';
 import { FilterMethod } from '../enums/filter-method';
 import Filter from '../models/filter';
@@ -172,6 +178,12 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
         ); // sort by score in descending order
       const thisSuggestions = [];
       for (const userAndScore of usersAndScoresSorted) {
+        if (userAndScore == null) {
+          // this arises when calculating similarity between the same gay person.
+          // When the similarity matrix was constructed the diagonal was left filled
+          // with undefined values, as the similarity of a person to him/herself was not calculated
+          continue;
+        }
         const otherUser = <FirebaseFirestore.DocumentData>userAndScore[0];
         if (otherUserPassesFilters(user, otherUser)) {
           thisSuggestions.push(otherUser.uid);

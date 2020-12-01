@@ -63,6 +63,8 @@ class _ChatsListPageState extends State<ChatsListPage> {
               ),
             );
           }
+          final starredChats =
+              snapshot.data.where((chat) => chat.type == ChatType.starred);
           final normalChats =
               snapshot.data.where((chat) => chat.type == ChatType.normal);
           final unknownChats =
@@ -80,24 +82,20 @@ class _ChatsListPageState extends State<ChatsListPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          'New matches',
-                          style: TextStyle(fontSize: 24),
-                        ),
+                        Text('New matches', style: TextStyle(fontSize: 24)),
                         SizedBox(height: 10),
                         _buildMatchesList(user.privateInfo.matches),
                         SizedBox(height: 20),
-                        Text(
-                          'Messages',
-                          style: TextStyle(fontSize: 24),
-                        ),
+                        Text('Starred', style: TextStyle(fontSize: 24)),
+                        SizedBox(height: 10),
+                        _buildChatCategoryList(starredChats),
+                        SizedBox(height: 20),
+                        Text('Messages', style: TextStyle(fontSize: 24)),
                         SizedBox(height: 10),
                         _buildChatCategoryList(normalChats),
                         SizedBox(height: 20),
-                        Text(
-                          'Unknown messages',
-                          style: TextStyle(fontSize: 24),
-                        ),
+                        Text('Unknown messages',
+                            style: TextStyle(fontSize: 24)),
                         SizedBox(height: 10),
                         _buildChatCategoryList(unknownChats),
                       ],

@@ -3,7 +3,7 @@ import datetime
 
 from constants import *
 
-NUM_USERS = 25
+NUM_USERS = 300
 user_algorithm_details = []
 
 
@@ -11,6 +11,20 @@ class FilterMethod:
     none = 0
     if_contains_all = 1
     if_contains_any = 2
+
+
+class Date:
+
+    def __init__(self, year, month, day):
+        self.year = year
+        self.month = month
+        self.day = day
+
+    def __str__(self):
+        return f'new Date({self.year}, {self.month}, {self.day})'
+
+    def __repr__(self):
+        return self.__str__()
 
 
 def b(): return bool(random.getrandbits(1))
@@ -42,7 +56,7 @@ def random_filters():
         'Anime': {'options': [random.randint(1, 3), random.randint(3, 5)]} if anime_preference else None,
     }
 
-    return filters
+    return {key: value for key, value in filters.items() if value is not None}
 
 
 def random_personal_info():
@@ -68,7 +82,7 @@ for i in range(NUM_USERS):
     user_algorithm_details.append({
         'uid': str(i),
         'gender': gender,
-        'birthday': f'new Date({now.year - age}, {now.month}, {now.day})',
+        'birthday': Date(now.year - age, now.month, now.day),
         'showMeBoys': (gender == 1 and is_straight) or (gender == 0 and is_gay),
         'showMeGirls': (gender == 0 and is_straight) or (gender == 1 and is_gay),
         'ageRangeMin': age - random.randrange(-1, 4),
@@ -78,5 +92,6 @@ for i in range(NUM_USERS):
         'interests': random.sample(INTERESTS, k=random.randrange(0, 20)),
     })
 
-print('export default ' + str(user_algorithm_details).replace(
-    'True', 'true').replace('False', 'false'))
+with open('../fixtures/user-algorithm-details.ts', 'w') as f:
+    f.write('export default ' + str(user_algorithm_details).replace(
+        'True', 'true').replace('False', 'false'))

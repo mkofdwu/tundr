@@ -4,7 +4,6 @@ import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/back.dart';
-import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/underline.dart';
 

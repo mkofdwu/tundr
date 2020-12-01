@@ -177,12 +177,13 @@ class _ChatPageState extends State<ChatPage> {
       widget.chat.id = await ChatsService.startConversation(
           uid, widget.otherUser.uid, message);
     } else if (widget.chat.type == ChatType.newMatch) {
-      await ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 1});
+      await ChatsService.updateChatDetails(
+          uid, widget.chat.id, {'type': 3}); // normal
       privateInfo.matches.remove(widget.otherUser.uid);
       await Provider.of<User>(context, listen: false)
           .writeField('matches', UserPrivateInfo);
     } else if (widget.chat.type == ChatType.unknown) {
-      await ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 1});
+      await ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 3});
     }
 
     await ChatsService.sendMessage(widget.chat.id, message);
@@ -230,6 +231,16 @@ class _ChatPageState extends State<ChatPage> {
       widget.chat.id,
       {'wallpaperUrl': wallpaperUrl},
     );
+  }
+
+  void _starChat() {
+    final uid = Provider.of<User>(context, listen: false).profile.uid;
+    ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 2});
+  }
+
+  void _unstarChat() {
+    final uid = Provider.of<User>(context, listen: false).profile.uid;
+    ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 3});
   }
 
   Widget _buildMediaTileDark() {
@@ -572,6 +583,19 @@ class _ChatPageState extends State<ChatPage> {
                         text: 'Wallpaper',
                         onPressed: _changeWallpaper,
                       ),
+                      if (widget.chat.type == ChatType.normal ||
+                          widget.chat.type == ChatType.starred)
+                        MenuDivider(),
+                      if (widget.chat.type == ChatType.normal)
+                        MenuOption(
+                          text: 'Star chat',
+                          onPressed: _starChat,
+                        )
+                      else if (widget.chat.type == ChatType.starred)
+                        MenuOption(
+                          text: 'Unstar chat',
+                          onPressed: _unstarChat,
+                        ),
                       MenuDivider(),
                       MenuOption(
                         text: 'Block and delete chat',

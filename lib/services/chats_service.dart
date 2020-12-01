@@ -42,8 +42,8 @@ class ChatsService {
 
   static Future<String> startConversation(
       String uid, String otherUid, Message message) async {
-    final result = await CloudFunctions.instance
-        .getHttpsCallable(functionName: 'startConversation')
+    final result = await FirebaseFunctions.instance
+        .httpsCallable('startConversation')
         .call({'otherUid': otherUid, 'message': message.toMap()});
     return result.data;
   }
@@ -101,8 +101,8 @@ class ChatsService {
   // using http calls to firebase cloud functions
 
   static Future<bool> checkReadReceipts(String otherUid) async {
-    final callable = CloudFunctions.instance
-        .getHttpsCallable(functionName: 'checkReadReceipts');
+    final callable =
+        FirebaseFunctions.instance.httpsCallable('checkReadReceipts');
     final result = await callable.call({otherUid: otherUid});
     return result
         .data; // true or false depending on whether both users consent to read receipts

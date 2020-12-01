@@ -8,21 +8,21 @@ class SuggestionsService {
     String toUid,
     bool liked,
   }) async {
-    await CloudFunctions.instance
-        .getHttpsCallable(functionName: 'respondToSuggestion')
+    await FirebaseFunctions.instance
+        .httpsCallable('respondToSuggestion')
         .call({'otherUid': toUid, 'liked': liked});
   }
 
   static Future<void> undoSuggestionResponse(
       String userId, String suggestionUserUid) async {
-    await CloudFunctions.instance
-        .getHttpsCallable(functionName: 'undoSuggestionResponse')
+    await FirebaseFunctions.instance
+        .httpsCallable('undoSuggestionResponse')
         .call({'otherUid': suggestionUserUid});
   }
 
   static Future<void> match(String otherUid) async {
-    await CloudFunctions.instance
-        .getHttpsCallable(functionName: 'match')
+    await FirebaseFunctions.instance
+        .httpsCallable('match')
         .call({'otherUid': otherUid});
   }
 }
