@@ -1,23 +1,23 @@
-import { interestsToGroupNo, numInterestGroups } from "../constants";
-import { FilterMethod } from "../enums/filter-method";
-import Filter from "../models/filter";
-import pearsonCorrelation from "../utils/pearson-correlation";
-import transposeArray from "../utils/transpose-array";
+import { interestsToGroupNo, numInterestGroups } from '../constants';
+import { FilterMethod } from '../enums/filter-method';
+import Filter from '../models/filter';
+import pearsonCorrelation from '../utils/pearson-correlation';
+import transposeArray from '../utils/transpose-array';
 
 const N = 10; // maximum amount of suggestions generated per day for each user
 
 const valuePassesFilter = (value: any, filter: Filter) => {
   switch (filter.name) {
-    case "Height":
-    case "Personality":
-    case "K-Pop":
-    case "Anime":
-      return filter.options.first <= value && value <= filter.options.last;
-    case "Religion":
-    case "Star sign":
-    case "Relationship status":
+    case 'Height':
+    case 'Personality':
+    case 'K-Pop':
+    case 'Anime':
+      return filter.options[0] <= value && value <= filter.options[1];
+    case 'Religion':
+    case 'Star sign':
+    case 'Relationship status':
       return filter.options.includes(value);
-    case "Pets":
+    case 'Pets':
       switch (filter.method) {
         case FilterMethod.none:
           return true;
@@ -26,10 +26,10 @@ const valuePassesFilter = (value: any, filter: Filter) => {
         case FilterMethod.ifContainsAny:
           return value.some((item: any) => filter.options.includes(item));
         default:
-          throw new Error("invalid filter method: " + filter.method);
+          throw new Error('invalid filter method: ' + filter.method);
       }
     default:
-      throw new Error("invalid filter field name: " + filter.name);
+      throw new Error('invalid filter field name: ' + filter.name);
   }
 };
 
@@ -107,14 +107,14 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
       const user = sexualityMembers[i];
       const interestsVector = usersInterestsVectors.get(user.uid);
       if (interestsVector == null)
-        throw new Error("could not get interests vector for user: " + user.uid);
+        throw new Error('could not get interests vector for user: ' + user.uid);
 
       for (let j = i + 1; j < sexualityMembers.length; ++j) {
         // calculate similarity with all males after him (triangle number)
         const otherUser = sexualityMembers[j];
         const otherInterestsVector = usersInterestsVectors.get(otherUser.uid);
         if (otherInterestsVector == null)
-          throw new Error("could not get interests for user: " + otherUser.uid);
+          throw new Error('could not get interests for user: ' + otherUser.uid);
 
         const similarityScore = pearsonCorrelation(
           interestsVector,
@@ -131,13 +131,13 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
     const male = males[maleIndex];
     const interestsVector = usersInterestsVectors.get(male.uid);
     if (interestsVector == null)
-      throw new Error("could not get interests vector for user: " + male);
+      throw new Error('could not get interests vector for user: ' + male);
 
     for (let femaleIndex = 0; femaleIndex < females.length; ++femaleIndex) {
       const female = females[femaleIndex];
       const otherInterestsVector = usersInterestsVectors.get(female.uid);
       if (otherInterestsVector == null)
-        throw new Error("could not get interests for user: " + female.uid);
+        throw new Error('could not get interests for user: ' + female.uid);
 
       const similarityScore = pearsonCorrelation(
         interestsVector,

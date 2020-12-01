@@ -13,6 +13,9 @@ class User {
 
   User({this.profile, this.privateInfo, this.algorithmData});
 
+  bool get loggedIn =>
+      profile != null && privateInfo != null && algorithmData != null;
+
   Future<void> updateProfile(Map<String, dynamic> data) async {
     final profileMap = profile.toMap()..addAll(data);
     profile = UserProfile.fromMap(profileMap);

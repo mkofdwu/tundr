@@ -12,6 +12,19 @@
         "--flavor",
         "dev"
       ]
+    },
+    {
+      "name": "firebase functions tests",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}/functions",
+      "program": "${workspaceRoot}/functions/node_modules/.bin/jest",
+      // "args": ["${relativeFile}"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "windows": {
+        "program": "${workspaceRoot}/functions/node_modules/jest/bin/jest"
+      }
     }
   ]
 }

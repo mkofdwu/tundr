@@ -66,21 +66,27 @@ class _TundrAppState extends State<TundrApp> {
       }
       if (Provider.of<RegistrationInfo>(context, listen: false)
           .isCreatingAccount) {
-        // still loading user
-        return;
-      }
-      final user = await UsersService.getUserRepo(firebaseUser.uid);
-      Provider.of<User>(context, listen: false).profile = user.profile;
-      Provider.of<User>(context, listen: false).privateInfo = user.privateInfo;
-      Provider.of<User>(context, listen: false).algorithmData =
-          user.algorithmData;
-      if (user.privateInfo.theme == null) {
-        setState(() => _setupTheme = true);
+        // change the first page to setup theme so it is shown when account has
+        // been created & navigator pops back to first page.
+        setState(() {
+          _loadingUser = false;
+          _setupTheme = true;
+        });
       } else {
-        Provider.of<ThemeManager>(context, listen: false).theme =
-            user.privateInfo.theme;
+        final user = await UsersService.getUserRepo(firebaseUser.uid);
+        Provider.of<User>(context, listen: false).profile = user.profile;
+        Provider.of<User>(context, listen: false).privateInfo =
+            user.privateInfo;
+        Provider.of<User>(context, listen: false).algorithmData =
+            user.algorithmData;
+        if (user.privateInfo.theme == null) {
+          setState(() => _setupTheme = true);
+        } else {
+          Provider.of<ThemeManager>(context, listen: false).theme =
+              user.privateInfo.theme;
+        }
+        setState(() => _loadingUser = false);
       }
-      setState(() => _loadingUser = false);
     });
   }
 
@@ -98,12 +104,10 @@ class _TundrAppState extends State<TundrApp> {
 
         if (_loadingUser) {
           home = LoadingPage();
-        } else if (user.profile == null ||
-            user.privateInfo == null ||
-            user.algorithmData == null) {
-          home = WelcomePage();
         } else if (_setupTheme) {
           home = SetupThemePage();
+        } else if (user.loggedIn) {
+          home = WelcomePage();
         } else {
           home = AppStateHandler(
             onExit: () {

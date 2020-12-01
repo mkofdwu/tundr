@@ -31,7 +31,6 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
           false;
       if (success) {
         Navigator.popUntil(context, (route) => route.isFirst);
-        // TODO: rebuild first route
       } else {
         await showDialog(
           context: context,
