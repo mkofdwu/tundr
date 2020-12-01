@@ -33,8 +33,8 @@ class _SetupAboutMePageState extends State<SetupAboutMePage> {
           onPressed: _return,
         ),
         Positioned(
-          left: 40.0,
-          top: 60.0,
+          left: 40,
+          top: 60,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -43,14 +43,14 @@ class _SetupAboutMePageState extends State<SetupAboutMePage> {
                 style: TextStyle(
                   color: MyPalette.black,
                   // fontFamily: 'javanese text',
-                  fontSize: 60.0,
+                  fontSize: 60,
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(left: 20.0, top: 10.0),
+                padding: EdgeInsets.only(left: 20, top: 10),
                 child: Text(
                   'Write a short, interesting description about yourself\n(not more than 200 characters)', // FUTURE: change this text
-                  style: TextStyle(color: MyPalette.black, fontSize: 12.0),
+                  style: TextStyle(color: MyPalette.black, fontSize: 12),
                 ),
               ),
             ],
@@ -60,7 +60,7 @@ class _SetupAboutMePageState extends State<SetupAboutMePage> {
           alignment: Alignment.center,
           child: TileTextField(
             width: MediaQuery.of(context).size.width - 75,
-            height: 200.0,
+            height: 200,
             controller: _controller,
             maxChars: 200,
             maxLines: null,

@@ -48,13 +48,13 @@ class _TextListFieldPageState extends State<TextListFieldPage> {
               children: <Widget>[
                 Text(
                   widget.field.name,
-                  style: TextStyle(fontSize: 60.0),
+                  style: TextStyle(fontSize: 60),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 10.0),
+                  padding: EdgeInsets.only(left: 10),
                   child: Text(
                     widget.field.prompt,
-                    style: TextStyle(fontSize: 12.0),
+                    style: TextStyle(fontSize: 12),
                   ),
                 ),
               ],
@@ -62,7 +62,7 @@ class _TextListFieldPageState extends State<TextListFieldPage> {
           ),
           Positioned(
             top: height * 82 / 812,
-            right: 20.0,
+            right: 20,
             // width: width / 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -72,18 +72,18 @@ class _TextListFieldPageState extends State<TextListFieldPage> {
                         .map((i, text) => MapEntry(
                               i,
                               Padding(
-                                padding: EdgeInsets.symmetric(vertical: 10.0),
+                                padding: EdgeInsets.symmetric(vertical: 10),
                                 child: GestureDetector(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: <Widget>[
                                       Container(
                                         width: text.length * 10.0,
-                                        height: 5.0,
+                                        height: 5,
                                       ),
                                       Text(
                                         text,
-                                        style: TextStyle(fontSize: 20.0),
+                                        style: TextStyle(fontSize: 20),
                                       ),
                                     ],
                                   ),
@@ -96,11 +96,11 @@ class _TextListFieldPageState extends State<TextListFieldPage> {
                   ) +
                   [
                     Padding(
-                      padding: EdgeInsets.only(top: 20.0),
+                      padding: EdgeInsets.only(top: 20),
                       child: _inputting
                           ? Container(
-                              width: 200.0,
-                              padding: EdgeInsets.symmetric(horizontal: 10.0),
+                              width: 200,
+                              padding: EdgeInsets.symmetric(horizontal: 10),
                               color: MyPalette.gold,
                               child: TextField(
                                 autofocus: true,
@@ -119,16 +119,16 @@ class _TextListFieldPageState extends State<TextListFieldPage> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: <Widget>[
                                   Container(
-                                    width: 50.0,
-                                    height: 5.0,
+                                    width: 50,
+                                    height: 5,
                                     color: MyPalette.gold,
                                   ),
-                                  SizedBox(height: 3.0),
+                                  SizedBox(height: 3),
                                   Text(
                                     '+ Add new',
                                     style: TextStyle(
                                       color: MyPalette.gold,
-                                      fontSize: 20.0,
+                                      fontSize: 20,
                                     ),
                                   ),
                                 ],

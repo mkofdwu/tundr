@@ -52,12 +52,12 @@ class _RadioGroupFieldPageState extends State<RadioGroupFieldPage> {
             widget.field.name,
             style: TextStyle(
               color: MyPalette.white,
-              fontSize: 20.0,
+              fontSize: 20,
             ),
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20),
           child: TileRadioGroup(
             theme: ThemeMode.dark,
             forceColumn: widget.field.options.length > 5,
@@ -80,7 +80,7 @@ class _RadioGroupFieldPageState extends State<RadioGroupFieldPage> {
         backgroundColor: MyPalette.white,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          elevation: 0.0,
+          elevation: 0,
           leading: TileIconButton(
             icon: Icons.arrow_back,
             onPressed: _return,
@@ -89,12 +89,12 @@ class _RadioGroupFieldPageState extends State<RadioGroupFieldPage> {
             widget.field.name,
             style: TextStyle(
               color: MyPalette.black,
-              fontSize: 20.0,
+              fontSize: 20,
             ),
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: TileRadioGroup(
             theme: ThemeMode.light,
             forceColumn: widget.field.options.length > 5,

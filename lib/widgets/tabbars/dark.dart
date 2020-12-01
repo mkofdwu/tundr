@@ -20,7 +20,7 @@ class TabBarDark extends StatefulWidget implements PreferredSizeWidget {
   _TabBarDarkState createState() => _TabBarDarkState();
 
   @override
-  Size get preferredSize => Size.fromHeight(30.0);
+  Size get preferredSize => Size.fromHeight(30);
 }
 
 class _TabBarDarkState extends State<TabBarDark> {
@@ -38,9 +38,9 @@ class _TabBarDarkState extends State<TabBarDark> {
               child: Column(
                 children: <Widget>[
                   tab,
-                  SizedBox(height: 10.0),
+                  SizedBox(height: 10),
                   Container(
-                    height: 2.0,
+                    height: 2,
                     color: MyPalette.gold,
                   ),
                 ],

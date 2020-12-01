@@ -6,7 +6,7 @@ import 'package:tundr/repositories/user.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'widgets/switch_setting_field.dart';
 
-class NotificationSettingsPage extends StatelessWidget {
+class NotificationsSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings =
@@ -26,10 +26,10 @@ class NotificationSettingsPage extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           children: <Widget>[
-            SizedBox(height: 20.0),
+            SizedBox(height: 20),
             SwitchSettingField(
               title: 'New matches',
               description: "Be notified when you're matched with someone",
@@ -40,7 +40,7 @@ class NotificationSettingsPage extends StatelessWidget {
                     .writeField('settings', UserPrivateInfo);
               },
             ),
-            SizedBox(height: 10.0),
+            SizedBox(height: 10),
             SwitchSettingField(
               title: 'Messages',
               description: 'Be notified when someone sends you a message',

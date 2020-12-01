@@ -62,7 +62,7 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
         ),
         Positioned(
           top: height * 500 / 812,
-          right: 40.0,
+          right: 40,
           width: width * 170 / 375,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,

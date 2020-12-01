@@ -35,13 +35,13 @@ class _TileRadioGroupState extends State<TileRadioGroup> {
 
   Widget _buildDarkTileRadio(option) => Expanded(
         child: Padding(
-          padding: EdgeInsets.all(5.0),
+          padding: EdgeInsets.all(5),
           child: GestureDetector(
             child: Container(
-              padding: EdgeInsets.all(3.0),
+              padding: EdgeInsets.all(3),
               decoration: BoxDecoration(
                 border: Border.all(
-                  width: 2.0,
+                  width: 2,
                   color: MyPalette.gold,
                 ),
               ),
@@ -57,7 +57,7 @@ class _TileRadioGroupState extends State<TileRadioGroup> {
                         color: option == _selectedOption
                             ? MyPalette.black
                             : MyPalette.gold,
-                        fontSize: min(constraints.maxHeight - 3, 40.0),
+                        fontSize: min(constraints.maxHeight - 3, 40),
                       ),
                     ),
                   ),
@@ -76,19 +76,19 @@ class _TileRadioGroupState extends State<TileRadioGroup> {
 
   Widget _buildLightTileRadio(option) => Expanded(
         child: Padding(
-          padding: EdgeInsets.all(5.0),
+          padding: EdgeInsets.all(5),
           child: GestureDetector(
             child: Container(
-              padding: EdgeInsets.all(3.0),
+              padding: EdgeInsets.all(3),
               decoration: BoxDecoration(
                 color: option == _selectedOption
                     ? MyPalette.gold
                     : MyPalette.white,
                 border: Border.all(
-                  width: 2.0,
+                  width: 2,
                   color: MyPalette.gold,
                 ),
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [MyPalette.secondaryShadow],
               ),
               child: Center(
@@ -99,7 +99,7 @@ class _TileRadioGroupState extends State<TileRadioGroup> {
                       color: option == _selectedOption
                           ? MyPalette.white
                           : MyPalette.gold,
-                      fontSize: min(constraints.maxHeight - 3, 40.0),
+                      fontSize: min(constraints.maxHeight - 3, 40),
                     ),
                   ),
                 ),

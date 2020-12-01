@@ -25,20 +25,20 @@ class _SetupPersonalInfoPageState extends State<SetupPersonalInfoPage> {
             icon: Icons.arrow_back,
             onPressed: () => Navigator.pop(context),
           ),
-          SizedBox(height: 10.0),
+          SizedBox(height: 10),
           Padding(
-            padding: const EdgeInsets.only(left: 20.0),
+            padding: const EdgeInsets.only(left: 20),
             child: Text(
               'Personal info',
               style: TextStyle(
-                fontSize: 40.0,
+                fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          SizedBox(height: 30.0),
+          SizedBox(height: 30),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               children: List<Widget>.from(personalInfoFields.keys.map(
                 (fieldName) => PersonalInfoFieldButton(

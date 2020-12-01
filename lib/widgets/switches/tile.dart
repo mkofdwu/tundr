@@ -29,8 +29,8 @@ class _TileSwitchState extends State<TileSwitch> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        width: 60.0,
-        height: 30.0,
+        width: 60,
+        height: 30,
         decoration: BoxDecoration(
           color: _selected ? MyPalette.gold : null,
           border: _selected
@@ -39,15 +39,15 @@ class _TileSwitchState extends State<TileSwitch> {
           borderRadius: fromTheme(
             context,
             dark: null,
-            light: BorderRadius.circular(15.0),
+            light: BorderRadius.circular(15),
           ),
         ),
-        padding: EdgeInsets.all(5.0),
+        padding: EdgeInsets.all(5),
         child: Align(
           alignment: _selected ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
-            width: 20.0,
-            height: 20.0,
+            width: 20,
+            height: 20,
             decoration: BoxDecoration(
               color: _selected
                   ? MyPalette.white
@@ -55,7 +55,7 @@ class _TileSwitchState extends State<TileSwitch> {
               borderRadius: fromTheme(
                 context,
                 dark: null,
-                light: BorderRadius.circular(10.0),
+                light: BorderRadius.circular(10),
               ),
             ),
           ),

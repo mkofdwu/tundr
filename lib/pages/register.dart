@@ -65,8 +65,8 @@ class _RegisterPageState extends State<RegisterPage> {
           transitionsBuilder: (context, animation1, animation2, child) {
             return SlideTransition(
               position: Tween<Offset>(
-                begin: Offset(0.0, 1.0),
-                end: Offset(0.0, 0.0),
+                begin: Offset(0, 1),
+                end: Offset(0, 0),
               ).animate(animation1),
               child: child,
             );
@@ -93,8 +93,8 @@ class _RegisterPageState extends State<RegisterPage> {
             builder: (context, width, height) => <Widget>[
               Positioned(
                 left: width * 33 / 375,
-                top: 0.0,
-                bottom: 0.0,
+                top: 0,
+                bottom: 0,
                 child: Container(
                   width: width * 78 / 375,
                   color: MyPalette.gold,
@@ -102,8 +102,8 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               Positioned(
                 left: width * 134 / 375,
-                top: 0.0,
-                bottom: 0.0,
+                top: 0,
+                bottom: 0,
                 child: Container(
                   width: width * 52 / 375,
                   color: MyPalette.gold,
@@ -111,8 +111,8 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               Positioned(
                 left: width * 194 / 375,
-                top: 0.0,
-                bottom: 0.0,
+                top: 0,
+                bottom: 0,
                 child: Container(
                   width: width * 11 / 375,
                   color: MyPalette.gold,
@@ -129,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       'Register',
                       style: TextStyle(
                         color: MyPalette.black,
-                        fontSize: 60.0,
+                        fontSize: 60,
                         fontFamily: 'Helvetica Neue',
                         fontWeight: FontWeight.bold,
                       ),
@@ -139,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       'Enter a username and password',
                       style: TextStyle(
                         color: MyPalette.black,
-                        fontSize: 16.0,
+                        fontSize: 16,
                       ),
                     ),
                     SizedBox(height: 100),
@@ -154,12 +154,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               color: MyPalette.red,
                               boxShadow: [MyPalette.primaryShadow],
                             ),
-                            padding: EdgeInsets.all(10.0),
+                            padding: EdgeInsets.all(10),
                             child: Text(
                               'Your username cannot contain any spaces',
                               style: TextStyle(
                                 color: MyPalette.white,
-                                fontSize: 14.0,
+                                fontSize: 14,
                               ),
                             ),
                           )
@@ -171,12 +171,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               color: MyPalette.red,
                               boxShadow: [MyPalette.primaryShadow],
                             ),
-                            padding: EdgeInsets.all(10.0),
+                            padding: EdgeInsets.all(10),
                             child: Text(
                               'Your username must be at least 4 characters long',
                               style: TextStyle(
                                 color: MyPalette.white,
-                                fontSize: 14.0,
+                                fontSize: 14,
                               ),
                             ),
                           )
@@ -188,17 +188,17 @@ class _RegisterPageState extends State<RegisterPage> {
                               color: MyPalette.red,
                               boxShadow: [MyPalette.primaryShadow],
                             ),
-                            padding: EdgeInsets.all(10.0),
+                            padding: EdgeInsets.all(10),
                             child: Text(
                               'This username is already taken',
                               style: TextStyle(
                                 color: MyPalette.white,
-                                fontSize: 14.0,
+                                fontSize: 14,
                               ),
                             ),
                           )
                         : SizedBox.shrink(),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 20),
                     TileTextField(
                       hintText: 'Password',
                       controller: _passwordController,
@@ -211,17 +211,17 @@ class _RegisterPageState extends State<RegisterPage> {
                               color: MyPalette.red,
                               boxShadow: [MyPalette.primaryShadow],
                             ),
-                            padding: EdgeInsets.all(10.0),
+                            padding: EdgeInsets.all(10),
                             child: Text(
                               'Your password must be at least 6 characters long',
                               style: TextStyle(
                                 color: MyPalette.white,
-                                fontSize: 14.0,
+                                fontSize: 14,
                               ),
                             ),
                           )
                         : SizedBox.shrink(),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 20),
                     TileTextField(
                       hintText: 'Confirm password',
                       controller: _confirmPasswordController,
@@ -236,12 +236,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               color: MyPalette.red,
                               boxShadow: [MyPalette.primaryShadow],
                             ),
-                            padding: EdgeInsets.all(10.0),
+                            padding: EdgeInsets.all(10),
                             child: Text(
                               'The passwords do not match',
                               style: TextStyle(
                                 color: MyPalette.white,
-                                fontSize: 14.0,
+                                fontSize: 14,
                               ),
                             ),
                           )
@@ -260,7 +260,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         'Setup',
                         style: TextStyle(
                           color: MyPalette.white,
-                          fontSize: 16.0,
+                          fontSize: 16,
                         ),
                       ),
                       Icon(

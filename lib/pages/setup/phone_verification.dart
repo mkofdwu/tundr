@@ -72,7 +72,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                     'Enter\nverification\ncode',
                     style: TextStyle(
                       color: MyPalette.white,
-                      fontSize: 40.0,
+                      fontSize: 40,
                       fontFamily: 'Helvetica Neue',
                       fontWeight: FontWeight.bold,
                     ),
@@ -87,7 +87,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                       RichText(
                         text: TextSpan(
                           style:
-                              TextStyle(color: MyPalette.white, fontSize: 16.0),
+                              TextStyle(color: MyPalette.white, fontSize: 16),
                           children: [
                             TextSpan(
                               text: 'A 6-digit verification code was\nsent to ',
@@ -100,20 +100,20 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 10.0),
+                      SizedBox(height: 10),
                       Row(
                         children: <Widget>[
                           Text(
                             "Didn't receive the code?",
-                            style: TextStyle(
-                                color: MyPalette.white, fontSize: 14.0),
+                            style:
+                                TextStyle(color: MyPalette.white, fontSize: 14),
                           ),
-                          SizedBox(width: 5.0),
+                          SizedBox(width: 5),
                           GestureDetector(
                             child: Text(
                               'Resend SMS',
                               style: TextStyle(
-                                  color: MyPalette.gold, fontSize: 14.0),
+                                  color: MyPalette.gold, fontSize: 14),
                             ),
                             onTap: () => AuthService.sendSMS(
                                 Provider.of<RegistrationInfo>(context,
@@ -129,27 +129,27 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                               onChanged: (digit) =>
                                   setState(() => _verificationCode[0] = digit),
                             ),
-                            SizedBox(width: 5.0),
+                            SizedBox(width: 5),
                             DigitEntry(
                               onChanged: (digit) =>
                                   setState(() => _verificationCode[1] = digit),
                             ),
-                            SizedBox(width: 5.0),
+                            SizedBox(width: 5),
                             DigitEntry(
                               onChanged: (digit) =>
                                   setState(() => _verificationCode[2] = digit),
                             ),
-                            SizedBox(width: 5.0),
+                            SizedBox(width: 5),
                             DigitEntry(
                               onChanged: (digit) =>
                                   setState(() => _verificationCode[3] = digit),
                             ),
-                            SizedBox(width: 5.0),
+                            SizedBox(width: 5),
                             DigitEntry(
                               onChanged: (digit) =>
                                   setState(() => _verificationCode[4] = digit),
                             ),
-                            SizedBox(width: 5.0),
+                            SizedBox(width: 5),
                             DigitEntry(
                               moveFocus: false,
                               onChanged: (digit) {
@@ -165,7 +165,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                 ),
                 Positioned(
                   left: width * 179 / 375,
-                  bottom: 20.0,
+                  bottom: 20,
                   child: ScrollDownArrow(onNextPage: _onSubmit),
                 ),
               ],

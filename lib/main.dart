@@ -3,16 +3,35 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/pages/about.dart';
+import 'package:tundr/pages/chat/chat.dart';
+import 'package:tundr/pages/edit_profile.dart';
+import 'package:tundr/pages/me.dart';
+import 'package:tundr/pages/login.dart';
+import 'package:tundr/pages/media/edit_extra_media.dart';
+import 'package:tundr/pages/media/media_view.dart';
+import 'package:tundr/pages/profile/about_me.dart';
+import 'package:tundr/pages/profile/extra_media.dart';
+import 'package:tundr/pages/profile/personal_info.dart';
+import 'package:tundr/pages/register.dart';
+import 'package:tundr/pages/search.dart';
+import 'package:tundr/pages/settings/blocked_users.dart';
+import 'package:tundr/pages/settings/change_password.dart';
+import 'package:tundr/pages/settings/confirm_delete_account.dart';
+import 'package:tundr/pages/settings/filters.dart';
+import 'package:tundr/pages/settings/notifications.dart';
+import 'package:tundr/pages/settings/main.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/repositories/theme_manager.dart';
 import 'package:tundr/pages/loading.dart';
 import 'package:tundr/pages/home.dart';
 import 'package:tundr/pages/setup/theme.dart';
-import 'package:tundr/pages/other_profile/main.dart';
+import 'package:tundr/pages/profile/main.dart';
 import 'package:tundr/pages/welcome.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/auth_service.dart';
+import 'package:tundr/services/notifications_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/handlers/app_state_handler.dart';
 import 'package:tundr/widgets/handlers/notification_handler.dart';
@@ -36,7 +55,7 @@ void main() {
   //       home: Material(
   //         child: Center(
   //           child: Padding(
-  //             padding: const EdgeInsets.all(20.0),
+  //             padding: const EdgeInsets.all(20),
   //             child: Text(error),
   //           ),
   //         ),
@@ -104,10 +123,10 @@ class _TundrAppState extends State<TundrApp> {
 
         if (_loadingUser) {
           home = LoadingPage();
+        } else if (!user.loggedIn) {
+          home = WelcomePage();
         } else if (_setupTheme) {
           home = SetupThemePage();
-        } else if (user.loggedIn) {
-          home = WelcomePage();
         } else {
           home = AppStateHandler(
             onExit: () {
@@ -133,7 +152,28 @@ class _TundrAppState extends State<TundrApp> {
                 debugShowCheckedModeBanner: false,
                 home: home,
                 routes: {
-                  '/user_profile': (context) => OtherProfileMainPage(),
+                  '/welcome': (context) => WelcomePage(),
+                  '/login': (context) => LoginPage(),
+                  '/register': (context) => RegisterPage(),
+                  '/home': (context) => HomePage(),
+                  '/me': (context) => MePage(),
+                  '/search': (context) => SearchPage(),
+                  '/edit_profile': (context) => EditProfilePage(),
+                  '/profile': (context) => MainProfilePage(),
+                  '/profile/about_me': (context) => AboutMeProfilePage(),
+                  '/profile/extra_media': (context) => ExtraMediaProfilePage(),
+                  '/profile/personal_info': (context) =>
+                      PersonalInfoProfilePage(),
+                  '/settings': (context) => MainSettingsPage(),
+                  '/settings/filters': (context) => FiltersSettingsPage(),
+                  '/settings/notifications': (context) =>
+                      NotificationsSettingsPage(),
+                  '/settings/change_password': (context) =>
+                      ChangePasswordPage(),
+                  '/settings/blocked_users': (context) => BlockedUsersPage(),
+                  '/settings/confirm_delete_account': (context) =>
+                      ConfirmDeleteAccountPage(),
+                  '/about': (context) => AboutPage(),
                 },
               ),
             );
@@ -237,18 +277,18 @@ class _TundrAppState extends State<TundrApp> {
   //     textTheme: TextTheme(
   //       headline3: TextStyle(
   //         color: textColor,
-  //         fontSize: 40.0,
+  //         fontSize: 40,
   //         fontFamily: 'Helvetica Neue',
   //         fontWeight: FontWeight.bold,
   //       ),
   //       headline5: TextStyle(color: textColor),
   //       headline6: TextStyle(
   //         color: textColor,
-  //         fontSize: 20.0,
+  //         fontSize: 20,
   //       ),
   //       bodyText2: TextStyle(
   //         color: textColor,
-  //         fontSize: 14.0,
+  //         fontSize: 14,
   //       ),
   //       bodyText1: TextStyle(color: textColor),
   //       subtitle1: TextStyle(color: textColor),

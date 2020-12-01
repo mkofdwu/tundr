@@ -9,18 +9,18 @@ class InterestsWrap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 10.0,
+      spacing: 10,
       children: List<Widget>.from(
         interests.map(
           (interest) {
             return Chip(
               backgroundColor: MyPalette.gold,
-              elevation: 5.0,
+              elevation: 5,
               label: Text(
                 interest,
                 style: TextStyle(
                   color: MyPalette.white,
-                  fontSize: 14.0,
+                  fontSize: 14,
                 ),
               ),
             );

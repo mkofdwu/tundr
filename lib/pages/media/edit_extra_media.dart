@@ -11,13 +11,12 @@ import 'package:tundr/widgets/popup_menus/menu_divider.dart';
 import 'package:tundr/widgets/popup_menus/menu_option.dart';
 import 'package:tundr/widgets/popup_menus/popup_menu.dart';
 
-class ExtraMediaEditPage extends StatefulWidget {
-  // FIXME: FUTURE: improve design
+class EditExtraMediaPage extends StatefulWidget {
   final Media media;
   final Function(Media) onReplace;
   final Function onRemove;
 
-  ExtraMediaEditPage({
+  EditExtraMediaPage({
     Key key,
     @required this.media,
     @required this.onReplace,
@@ -25,10 +24,10 @@ class ExtraMediaEditPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ExtraMediaEditPageState createState() => _ExtraMediaEditPageState();
+  _EditExtraMediaPageState createState() => _EditExtraMediaPageState();
 }
 
-class _ExtraMediaEditPageState extends State<ExtraMediaEditPage> {
+class _EditExtraMediaPageState extends State<EditExtraMediaPage> {
   Media _media;
   bool _showOptions = false;
 
@@ -116,7 +115,7 @@ class _ExtraMediaEditPageState extends State<ExtraMediaEditPage> {
               context,
               dark: Container(
                 width: width,
-                height: 100.0,
+                height: 100,
                 decoration:
                     BoxDecoration(gradient: MyPalette.blackToTransparent),
               ),
@@ -148,8 +147,8 @@ class _ExtraMediaEditPageState extends State<ExtraMediaEditPage> {
             ),
             if (_showOptions)
               Positioned(
-                top: 10.0,
-                right: 10.0,
+                top: 10,
+                right: 10,
                 child: PopupMenu(
                   children: <Widget>[
                     MenuOption(
@@ -167,10 +166,10 @@ class _ExtraMediaEditPageState extends State<ExtraMediaEditPage> {
             fromTheme(
               context,
               dark: Positioned(
-                bottom: 0.0,
+                bottom: 0,
                 child: Container(
                   width: width,
-                  height: 100.0,
+                  height: 100,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.bottomCenter,

@@ -90,17 +90,17 @@ class _MostPopularPageState extends State<MostPopularPage> {
                       height: size,
                       decoration: themeManager.theme == ThemeMode.dark
                           ? BoxDecoration(
-                              border: Border.all(
-                                  color: MyPalette.white, width: 2.0),
+                              border:
+                                  Border.all(color: MyPalette.white, width: 2),
                             )
                           : BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(20),
                               boxShadow: [MyPalette.secondaryShadow],
                             ),
                       child: ClipRRect(
                         borderRadius: themeManager.theme == ThemeMode.dark
                             ? BorderRadius.zero
-                            : BorderRadius.circular(20.0),
+                            : BorderRadius.circular(20),
                         child: Hero(
                           tag: popUser.profile.profileImageUrl,
                           child:
@@ -137,7 +137,7 @@ class _MostPopularPageState extends State<MostPopularPage> {
           'There is no one here yet.',
           style: TextStyle(
             color: MyPalette.grey,
-            fontSize: 16.0,
+            fontSize: 16,
           ),
         ),
       );

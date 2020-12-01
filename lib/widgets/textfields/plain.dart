@@ -14,7 +14,7 @@ class PlainTextField extends StatelessWidget {
     this.hintText = '',
     this.hintTextColor,
     this.color,
-    this.fontSize = 20.0,
+    this.fontSize = 20,
     this.fontFamily,
   }) : super(key: key);
 

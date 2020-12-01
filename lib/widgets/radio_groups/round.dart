@@ -28,7 +28,7 @@ class _RoundRadioGroupState extends State<RoundRadioGroup> {
   MapEntry<int, Widget> _buildRoundRadio(int i, String option) => MapEntry(
         i,
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 5.0),
+          padding: EdgeInsets.symmetric(vertical: 5),
           child: GestureDetector(
             onTap: i == _selectedOptionIndex
                 ? null
@@ -39,31 +39,31 @@ class _RoundRadioGroupState extends State<RoundRadioGroup> {
             child: Row(
               children: <Widget>[
                 Container(
-                  width: 30.0,
-                  height: 30.0,
+                  width: 30,
+                  height: 30,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
+                    borderRadius: BorderRadius.circular(15),
                     border: Border.all(
-                        width: 3.0,
+                        width: 3,
                         color: Theme.of(context).colorScheme.onPrimary),
                   ),
                   child: i == _selectedOptionIndex
                       ? Center(
                           child: Container(
-                            width: 20.0,
-                            height: 20.0,
+                            width: 20,
+                            height: 20,
                             decoration: BoxDecoration(
                               color: Theme.of(context).colorScheme.onPrimary,
-                              borderRadius: BorderRadius.circular(10.0),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                         )
                       : null,
                 ),
-                SizedBox(width: 10.0),
+                SizedBox(width: 10),
                 Text(
                   option,
-                  style: TextStyle(fontSize: 18.0),
+                  style: TextStyle(fontSize: 18),
                 ),
               ],
             ),

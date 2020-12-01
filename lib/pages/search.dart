@@ -33,7 +33,7 @@ class _SearchPageState extends State<SearchPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
         leading: TileIconButton(
           icon: Icons.arrow_back,
           onPressed: () => Navigator.pop(context),
@@ -45,7 +45,7 @@ class _SearchPageState extends State<SearchPage> {
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: 'Search',
-            hintStyle: TextStyle(fontSize: 18.0),
+            hintStyle: TextStyle(fontSize: 18),
             suffixIcon: Icon(
               Icons.search,
               color: Theme.of(context).colorScheme.onPrimary,
@@ -65,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
                       'No users found :(',
                       style: TextStyle(
                         color: MyPalette.grey,
-                        fontSize: 16.0,
+                        fontSize: 16,
                       ),
                     ),
                   );
@@ -79,9 +79,9 @@ class _SearchPageState extends State<SearchPage> {
                         if (otherUser.uid == uid) return SizedBox.shrink();
                         return Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 40.0, vertical: 20.0),
+                              horizontal: 40, vertical: 20),
                           child: SizedBox(
-                            height: 200.0,
+                            height: 200,
                             child: GestureDetector(
                               child: ProfileTile(profile: otherUser),
                               onTap: () => _openUser(otherUser),

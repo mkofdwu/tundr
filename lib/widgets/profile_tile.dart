@@ -14,7 +14,7 @@ class ProfileTile extends StatelessWidget {
   ProfileTile({
     Key key,
     @required this.profile,
-    this.fontSize = 30.0,
+    this.fontSize = 30,
     this.description,
   }) : super(key: key);
 
@@ -27,7 +27,7 @@ class ProfileTile extends StatelessWidget {
           borderRadius: fromTheme(
             context,
             dark: BorderRadius.zero,
-            light: BorderRadius.circular(20.0),
+            light: BorderRadius.circular(20),
           ),
           child: Stack(
             children: <Widget>[
@@ -36,7 +36,7 @@ class ProfileTile extends StatelessWidget {
                 decoration: fromTheme(
                   context,
                   dark: BoxDecoration(
-                    border: Border.all(color: MyPalette.white, width: 2.0),
+                    border: Border.all(color: MyPalette.white, width: 2),
                   ),
                   light: BoxDecoration(boxShadow: [MyPalette.secondaryShadow]),
                 ),
@@ -46,7 +46,7 @@ class ProfileTile extends StatelessWidget {
                 ),
               ),
               Positioned(
-                bottom: 0.0,
+                bottom: 0,
                 child: Container(
                   width: constraints.maxWidth,
                   height: constraints.maxHeight / 2,
@@ -55,7 +55,7 @@ class ProfileTile extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: 20.0,
+                left: 20,
                 bottom: constraints.maxHeight / 8,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +88,7 @@ class ProfileTile extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 5.0),
+                    SizedBox(height: 5),
                     if (description != null)
                       Text(
                         description,

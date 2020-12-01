@@ -55,8 +55,8 @@ class ChatTile extends StatelessWidget {
             return Stack(
               children: <Widget>[
                     Container(
-                      width: 150.0,
-                      height: 250.0,
+                      width: 150,
+                      height: 250,
                       decoration: BoxDecoration(
                         border: Border.all(color: MyPalette.white),
                         image: DecorationImage(
@@ -76,29 +76,29 @@ class ChatTile extends StatelessWidget {
                             color: MyPalette.black.withOpacity(0.8),
                           ),
                           Positioned.fill(
-                            top: 20.0,
+                            top: 20,
                             child: Text(
                               'Blocked',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: MyPalette.white,
-                                fontSize: 24.0,
+                                fontSize: 24,
                               ),
                             ),
                           ),
                           Positioned.fill(
-                            bottom: 20.0,
+                            bottom: 20,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 Icon(Icons.delete,
-                                    color: MyPalette.red, size: 30.0),
-                                SizedBox(height: 3.0),
+                                    color: MyPalette.red, size: 30),
+                                SizedBox(height: 3),
                                 Text(
                                   'Delete',
                                   style: TextStyle(
                                     color: MyPalette.red,
-                                    fontSize: 16.0,
+                                    fontSize: 16,
                                   ),
                                 ),
                               ],
@@ -107,9 +107,9 @@ class ChatTile extends StatelessWidget {
                         ]
                       : <Widget>[
                           Positioned(
-                            left: 10.0,
-                            top: 10.0,
-                            right: 10.0,
+                            left: 10,
+                            top: 10,
+                            right: 10,
                             child: StreamBuilder/*<QuerySnapshot>*/(
                               stream: ChatsService.messagesStream(chat.id, 3),
                               builder: (context, snapshot) {
@@ -134,7 +134,7 @@ class ChatTile extends StatelessWidget {
                                               : Alignment.centerLeft,
                                           child: Padding(
                                             padding: EdgeInsets.symmetric(
-                                                vertical: 2.0),
+                                                vertical: 2),
                                             child: Text(
                                               message.text,
                                               textAlign: fromMe
@@ -142,7 +142,7 @@ class ChatTile extends StatelessWidget {
                                                   : TextAlign.left,
                                               style: TextStyle(
                                                 color: MyPalette.white,
-                                                fontSize: 14.0,
+                                                fontSize: 14,
                                               ),
                                             ),
                                           ),
@@ -155,8 +155,8 @@ class ChatTile extends StatelessWidget {
                             ),
                           ),
                           Positioned(
-                            left: 15.0,
-                            bottom: 15.0,
+                            left: 15,
+                            bottom: 15,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -164,10 +164,10 @@ class ChatTile extends StatelessWidget {
                                   user.name,
                                   style: TextStyle(
                                     color: MyPalette.white,
-                                    fontSize: 30.0,
+                                    fontSize: 30,
                                   ),
                                 ),
-                                SizedBox(height: 3.0),
+                                SizedBox(height: 3),
                                 StreamBuilder<UserStatus>(
                                   stream: UsersService.getUserStatusStream(
                                       user.uid),
@@ -182,7 +182,7 @@ class ChatTile extends StatelessWidget {
                                           : formatDate(status.lastSeen),
                                       style: TextStyle(
                                         color: MyPalette.white,
-                                        fontSize: 16.0,
+                                        fontSize: 16,
                                       ),
                                     );
                                   },
@@ -210,23 +210,23 @@ class ChatTile extends StatelessWidget {
             return Container(
               decoration: BoxDecoration(boxShadow: [MyPalette.secondaryShadow]),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(20),
                 child: Stack(
                   children: <Widget>[
                         Container(
-                          width: 150.0,
-                          height: 250.0,
+                          width: 150,
+                          height: 250,
                           color: MyPalette.black,
                           child: user.profileImageUrl.isEmpty
                               ? null
                               : getNetworkImage(user.profileImageUrl),
                         ),
                         Positioned(
-                          left: -50.0,
-                          bottom: -70.0,
+                          left: -50,
+                          bottom: -70,
                           child: Container(
-                            width: 200.0,
-                            height: 200.0,
+                            width: 200,
+                            height: 200,
                             decoration: BoxDecoration(
                               gradient: RadialGradient(
                                 colors: [
@@ -238,11 +238,11 @@ class ChatTile extends StatelessWidget {
                           ),
                         ),
                         Positioned(
-                          top: -50.0,
-                          right: -100.0,
+                          top: -50,
+                          right: -100,
                           child: Container(
-                            width: 200.0,
-                            height: 200.0,
+                            width: 200,
+                            height: 200,
                             decoration: BoxDecoration(
                               gradient: RadialGradient(
                                 colors: [
@@ -260,29 +260,29 @@ class ChatTile extends StatelessWidget {
                                 color: MyPalette.black.withOpacity(0.8),
                               ),
                               Positioned.fill(
-                                top: 20.0,
+                                top: 20,
                                 child: Text(
                                   'Blocked',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: MyPalette.white,
-                                    fontSize: 24.0,
+                                    fontSize: 24,
                                   ),
                                 ),
                               ),
                               Positioned.fill(
-                                bottom: 20.0,
+                                bottom: 20,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
                                     Icon(Icons.delete,
-                                        color: MyPalette.red, size: 30.0),
-                                    SizedBox(height: 3.0),
+                                        color: MyPalette.red, size: 30),
+                                    SizedBox(height: 3),
                                     Text(
                                       'Delete',
                                       style: TextStyle(
                                         color: MyPalette.red,
-                                        fontSize: 16.0,
+                                        fontSize: 16,
                                       ),
                                     ),
                                   ],
@@ -291,9 +291,9 @@ class ChatTile extends StatelessWidget {
                             ]
                           : <Widget>[
                               Positioned(
-                                left: 10.0,
-                                top: 10.0,
-                                right: 10.0,
+                                left: 10,
+                                top: 10,
+                                right: 10,
                                 child: StreamBuilder/*<QuerySnapshot>*/(
                                   stream:
                                       ChatsService.messagesStream(chat.uid, 3),
@@ -321,12 +321,12 @@ class ChatTile extends StatelessWidget {
                                                 : Alignment.centerLeft,
                                             child: Padding(
                                               padding: EdgeInsets.symmetric(
-                                                  vertical: 2.0),
+                                                  vertical: 2),
                                               child: Text(
                                                 message.text,
                                                 style: TextStyle(
                                                   color: MyPalette.white,
-                                                  fontSize: 14.0,
+                                                  fontSize: 14,
                                                 ),
                                               ),
                                             ),
@@ -338,18 +338,18 @@ class ChatTile extends StatelessWidget {
                                 ),
                               ),
                               Positioned(
-                                left: 15.0,
-                                bottom: 15.0,
+                                left: 15,
+                                bottom: 15,
                                 child: Column(
                                   children: <Widget>[
                                     Text(
                                       user.name,
                                       style: TextStyle(
                                         color: MyPalette.white,
-                                        fontSize: 30.0,
+                                        fontSize: 30,
                                       ),
                                     ),
-                                    SizedBox(height: 3.0),
+                                    SizedBox(height: 3),
                                     StreamBuilder<UserStatus>(
                                         stream:
                                             UsersService.getUserStatusStream(
@@ -365,7 +365,7 @@ class ChatTile extends StatelessWidget {
                                                 : formatDate(status.lastSeen),
                                             style: TextStyle(
                                               color: MyPalette.white,
-                                              fontSize: 16.0,
+                                              fontSize: 16,
                                             ),
                                           );
                                         }),

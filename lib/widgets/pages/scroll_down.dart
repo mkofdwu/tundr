@@ -26,9 +26,9 @@ class ScrollDownPage extends StatelessWidget {
         builder: builder,
       ),
       onVerticalDragUpdate: (details) {
-        if (details.delta.dy < -2.0 && canScrollDown) {
+        if (details.delta.dy < -2 && canScrollDown) {
           onScrollDown();
-        } else if (details.delta.dy > 2.0 && canScrollUp) {
+        } else if (details.delta.dy > 2 && canScrollUp) {
           Navigator.pop(context);
         }
       },

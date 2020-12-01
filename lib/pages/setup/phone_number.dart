@@ -69,8 +69,8 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
           // ANIMATION: curved animation with set duration
           return SlideTransition(
             position: Tween<Offset>(
-              begin: Offset(0.0, 1.0),
-              end: Offset(0.0, 0.0),
+              begin: Offset(0, 1),
+              end: Offset(0, 0),
             ).animate(animation1),
             child: child,
           );
@@ -101,7 +101,7 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                     'Phone number',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 40.0,
+                      fontSize: 40,
                       fontFamily: 'Helvetica Neue',
                       fontWeight: FontWeight.bold,
                     ),
@@ -114,7 +114,7 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                     'A verification code will be sent\nto you via SMS.',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16.0,
+                      fontSize: 16,
                     ),
                   ),
                 ),
@@ -126,17 +126,17 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                     children: <Widget>[
                       Container(
                         color: MyPalette.white,
-                        height: 60.0,
-                        width: 90.0,
+                        height: 60,
+                        width: 90,
                         child: Row(
                           children: <Widget>[
-                            SizedBox(width: 5.0),
-                            Icon(Icons.add, color: MyPalette.black, size: 30.0),
+                            SizedBox(width: 5),
+                            Icon(Icons.add, color: MyPalette.black, size: 30),
                             Text(
                               '65',
                               style: TextStyle(
                                 color: MyPalette.black,
-                                fontSize: 40.0,
+                                fontSize: 40,
                                 fontFamily: 'Helvetica Neue',
                                 fontWeight: FontWeight.bold,
                               ),
@@ -144,26 +144,26 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                           ],
                         ),
                       ),
-                      SizedBox(width: 10.0),
+                      SizedBox(width: 10),
                       Expanded(
                         child: TextField(
                           style: TextStyle(
                             color: MyPalette.white,
-                            fontSize: 40.0,
+                            fontSize: 40,
                           ),
                           decoration: InputDecoration(
                             counterText: '',
-                            contentPadding: EdgeInsets.only(bottom: 5.0),
+                            contentPadding: EdgeInsets.only(bottom: 5),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                 color: MyPalette.white,
-                                width: 2.0,
+                                width: 2,
                               ),
                             ),
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                 color: MyPalette.white,
-                                width: 5.0,
+                                width: 5,
                               ),
                             ),
                           ),
@@ -187,7 +187,7 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                 ),
                 Positioned(
                   left: width * 179 / 375,
-                  bottom: 20.0,
+                  bottom: 20,
                   child: ScrollDownArrow(onNextPage: _nextPage),
                 ),
               ],

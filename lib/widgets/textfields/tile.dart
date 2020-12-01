@@ -17,7 +17,7 @@ class TileTextField extends StatelessWidget {
   TileTextField({
     Key key,
     this.width = double.infinity,
-    this.height = 40.0,
+    this.height = 40,
     this.color = MyPalette.white,
     @required this.controller,
     this.hintText = '',
@@ -46,13 +46,13 @@ class TileTextField extends StatelessWidget {
           hintText: hintText,
           hintStyle: TextStyle(
             color: MyPalette.grey,
-            fontSize: 20.0,
+            fontSize: 20,
             fontFamily: 'Helvetica Neue',
           ),
         ),
         style: TextStyle(
           color: MyPalette.black,
-          fontSize: 20.0,
+          fontSize: 20,
           fontFamily: 'Helvetica Neue',
         ),
         cursorColor: MyPalette.black,

@@ -18,7 +18,7 @@ class SeparatePageSettingField extends StatelessWidget {
             title,
             style: TextStyle(
               color: MyPalette.gold,
-              fontSize: 20.0,
+              fontSize: 20,
             ),
           ),
           Icon(Icons.arrow_forward_ios, color: MyPalette.gold),

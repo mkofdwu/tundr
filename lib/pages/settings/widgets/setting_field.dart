@@ -25,7 +25,7 @@ class SettingField extends StatelessWidget {
               title,
               style: TextStyle(
                 color: MyPalette.gold,
-                fontSize: 20.0,
+                fontSize: 20,
               ),
             ),
             onEdit == null
@@ -41,7 +41,7 @@ class SettingField extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Padding(
-          padding: EdgeInsets.only(left: 20.0),
+          padding: EdgeInsets.only(left: 20),
           child: child,
         ),
       ],

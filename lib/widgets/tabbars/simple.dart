@@ -39,7 +39,7 @@ class _SimpleTabBarState extends State<SimpleTabBar> {
         children: List<Widget>.from(widget.tabNames.map((name) {
           if (name == _currentTab) {
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              padding: EdgeInsets.symmetric(horizontal: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -47,13 +47,13 @@ class _SimpleTabBarState extends State<SimpleTabBar> {
                     name,
                     style: TextStyle(
                       color: MyPalette.gold,
-                      fontSize: 20.0,
+                      fontSize: 20,
                     ),
                   ),
-                  SizedBox(height: 5.0),
+                  SizedBox(height: 5),
                   Container(
-                    width: 50.0,
-                    height: 3.0,
+                    width: 50,
+                    height: 3,
                     color: MyPalette.gold,
                   )
                 ],
@@ -61,11 +61,11 @@ class _SimpleTabBarState extends State<SimpleTabBar> {
             );
           }
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            padding: EdgeInsets.symmetric(horizontal: 10),
             child: GestureDetector(
               child: Text(
                 name,
-                style: TextStyle(color: widget.color, fontSize: 20.0),
+                style: TextStyle(color: widget.color, fontSize: 20),
               ),
               onTap: () {
                 setState(() => _currentTab = name);

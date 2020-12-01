@@ -34,7 +34,7 @@ class ItsAMatchPage extends StatelessWidget {
               ),
             ),
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
               child: Container(
                 color: MyPalette.black.withOpacity(0.2),
               ),
@@ -74,7 +74,7 @@ class ItsAMatchPage extends StatelessWidget {
               'Congratulations',
               style: TextStyle(
                 color: MyPalette.gold,
-                fontSize: 40.0,
+                fontSize: 40,
               ),
             ),
           ),
@@ -84,7 +84,7 @@ class ItsAMatchPage extends StatelessWidget {
             child: Container(
               width: width * 195 / 375,
               height: height * 195 / 812,
-              padding: EdgeInsets.all(20.0), // or 10
+              padding: EdgeInsets.all(20), // or 10
               color: MyPalette.grey,
               child: Text(
                 '${user.name} liked you\ntoo!',
@@ -92,13 +92,13 @@ class ItsAMatchPage extends StatelessWidget {
                   color: MyPalette.white,
                   fontFamily: 'Helvetica Neue',
                   fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
+                  fontSize: 20,
                 ),
               ),
             ),
           ),
           Positioned(
-            left: 0.0,
+            left: 0,
             top: height * 524 / 812,
             child: Container(
               width: width * 82 / 375,
@@ -107,7 +107,7 @@ class ItsAMatchPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 0.0,
+            left: 0,
             top: height * 528 / 812,
             child: GestureDetector(
               child: Container(
@@ -117,13 +117,13 @@ class ItsAMatchPage extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     Positioned(
-                      left: 50.0,
-                      top: 10.0,
+                      left: 50,
+                      top: 10,
                       child: Text(
                         'Say something ...',
                         style: TextStyle(
                           color: MyPalette.white,
-                          fontSize: 20.0,
+                          fontSize: 20,
                         ),
                       ),
                     ),
@@ -158,7 +158,7 @@ class ItsAMatchPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 0.0,
+            left: 0,
             top: height * 589 / 812,
             child: Container(
               width: width * 250 / 375,
@@ -167,7 +167,7 @@ class ItsAMatchPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 0.0,
+            left: 0,
             top: height * 634 / 812,
             child: GestureDetector(
               child: Container(
@@ -177,11 +177,11 @@ class ItsAMatchPage extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     Positioned(
-                      left: 40.0,
-                      top: 2.0,
+                      left: 40,
+                      top: 2,
                       child: Text(
                         'Undo',
-                        style: TextStyle(fontSize: 16.0),
+                        style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ],
@@ -191,7 +191,7 @@ class ItsAMatchPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 0.0,
+            left: 0,
             top: height * 666 / 812,
             child: Container(
               width: width * 159 / 375,
@@ -200,7 +200,7 @@ class ItsAMatchPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 0.0,
+            left: 0,
             top: height * 687 / 812,
             child: Container(
               width: width * 43 / 375,
@@ -209,7 +209,7 @@ class ItsAMatchPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 0.0,
+            left: 0,
             top: height * 689 / 812,
             child: Container(
               width: width * 120 / 375,
@@ -218,7 +218,7 @@ class ItsAMatchPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 0.0,
+            left: 0,
             top: height * 703 / 812,
             child: Container(
               width: width * 145 / 375,
@@ -227,7 +227,7 @@ class ItsAMatchPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 0.0,
+            left: 0,
             top: height * 721 / 812,
             child: Container(
               width: width * 32 / 375,
@@ -236,7 +236,7 @@ class ItsAMatchPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 0.0,
+            left: 0,
             top: height * 737 / 812,
             child: Container(
               width: width * 101 / 375,
@@ -246,7 +246,7 @@ class ItsAMatchPage extends StatelessWidget {
           ),
           Positioned(
             top: height * 669 / 812,
-            right: 0.0,
+            right: 0,
             child: Container(
               width: width * 33 / 375,
               height: height * 30 / 812,
@@ -255,7 +255,7 @@ class ItsAMatchPage extends StatelessWidget {
           ),
           Positioned(
             top: height * 712 / 812,
-            right: 0.0,
+            right: 0,
             child: Container(
               width: width * 40 / 375,
               height: height * 5 / 812,
@@ -264,7 +264,7 @@ class ItsAMatchPage extends StatelessWidget {
           ),
           Positioned(
             top: height * 725 / 812,
-            right: 0.0,
+            right: 0,
             child: Container(
               width: width * 32 / 375,
               height: height * 5 / 812,
@@ -273,7 +273,7 @@ class ItsAMatchPage extends StatelessWidget {
           ),
           Positioned(
             top: height * 737 / 812,
-            right: 0.0,
+            right: 0,
             child: Container(
               width: width * 64 / 375,
               height: height * 8 / 812,
@@ -282,7 +282,7 @@ class ItsAMatchPage extends StatelessWidget {
           ),
           Positioned(
             top: height * 752 / 812,
-            right: 0.0,
+            right: 0,
             child: GestureDetector(
               child: Container(
                 width: width * 178 / 375,
@@ -291,11 +291,11 @@ class ItsAMatchPage extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     Positioned(
-                      left: 20.0,
-                      top: 0.0,
+                      left: 20,
+                      top: 0,
                       child: Text(
                         'Continue',
-                        style: TextStyle(color: MyPalette.gold, fontSize: 18.0),
+                        style: TextStyle(color: MyPalette.gold, fontSize: 18),
                       ),
                     ),
                   ],
@@ -306,7 +306,7 @@ class ItsAMatchPage extends StatelessWidget {
           ),
           Positioned(
             top: height * 784 / 812,
-            right: 0.0,
+            right: 0,
             child: Container(
               width: width * 156 / 375,
               height: height * 5 / 812,
@@ -315,7 +315,7 @@ class ItsAMatchPage extends StatelessWidget {
           ),
           Positioned(
             top: height * 792 / 812,
-            right: 0.0,
+            right: 0,
             child: Container(
               width: width * 90 / 375,
               height: height * 11 / 812,

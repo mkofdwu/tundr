@@ -24,7 +24,7 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
         leading: TileIconButton(
           icon: Icons.arrow_back,
           onPressed: () => Navigator.pop(context),
@@ -37,7 +37,7 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                 'No blocked users',
                 style: TextStyle(
                   color: MyPalette.grey,
-                  fontSize: 16.0,
+                  fontSize: 16,
                 ),
               ),
             )
@@ -50,20 +50,20 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                   final user = snapshot.data;
                   return Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0, vertical: 10.0),
+                        horizontal: 20, vertical: 10),
                     child: Row(
                       children: <Widget>[
                         Container(
-                          width: 50.0,
-                          height: 50.0,
+                          width: 50,
+                          height: 50,
                           decoration: fromTheme(
                             context,
                             dark: BoxDecoration(
-                              border: Border.all(
-                                  color: MyPalette.white, width: 1.0),
+                              border:
+                                  Border.all(color: MyPalette.white, width: 1),
                             ),
                             light: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
+                              borderRadius: BorderRadius.circular(10),
                               boxShadow: [MyPalette.primaryShadow],
                             ),
                           ),
@@ -71,18 +71,18 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                             borderRadius: fromTheme(
                               context,
                               dark: BorderRadius.zero,
-                              light: BorderRadius.circular(10.0),
+                              light: BorderRadius.circular(10),
                             ),
                             child: getNetworkImage(user.profileImageUrl),
                           ),
                         ),
-                        SizedBox(width: 10.0),
+                        SizedBox(width: 10),
                         Expanded(
                           child: Text(
                             user.name,
                             style: TextStyle(
                               color: MyPalette.white,
-                              fontSize: 20.0,
+                              fontSize: 20,
                             ),
                           ),
                         ),

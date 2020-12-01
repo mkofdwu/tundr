@@ -24,8 +24,8 @@ class UnsentMessageTile extends StatelessWidget {
     // FUTURE: improve on this design
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: 20.0,
-        vertical: 10.0,
+        horizontal: 20,
+        vertical: 10,
       ),
       child: Align(
         alignment: Alignment.centerRight,
@@ -33,13 +33,13 @@ class UnsentMessageTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             Container(
-              constraints: BoxConstraints(maxWidth: 200.0),
+              constraints: BoxConstraints(maxWidth: 200),
               decoration: fromTheme(
                 context,
                 dark: BoxDecoration(color: MyPalette.white),
                 light: BoxDecoration(
                   color: MyPalette.white,
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(10),
                   boxShadow: [MyPalette.primaryShadow],
                 ),
               ),
@@ -54,7 +54,7 @@ class UnsentMessageTile extends StatelessWidget {
                     ),
                   if (message.media != null)
                     Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10),
                       child: Container(
                         decoration: BoxDecoration(
                           boxShadow: [MyPalette.secondaryShadow],
@@ -63,29 +63,29 @@ class UnsentMessageTile extends StatelessWidget {
                           borderRadius: fromTheme(
                             context,
                             dark: BorderRadius.zero,
-                            light: BorderRadius.circular(10.0),
+                            light: BorderRadius.circular(10),
                           ),
                           child: MediaThumbnail(message.media),
                         ),
                       ),
                     ),
                   Padding(
-                    padding: EdgeInsets.all(10.0),
+                    padding: EdgeInsets.all(10),
                     child: Text(
                       message.text,
                       style: TextStyle(
                         color: MyPalette.black,
-                        fontSize: 14.0,
+                        fontSize: 14,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 5.0),
+            SizedBox(height: 5),
             SizedBox(
-              width: 10.0,
-              height: 10.0,
+              width: 10,
+              height: 10,
               child: Loader(),
             ),
           ],

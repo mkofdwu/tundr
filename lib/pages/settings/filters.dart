@@ -16,12 +16,12 @@ import 'package:tundr/widgets/buttons/tile_icon.dart';
 
 // FUTURE: find a better way to organize filters
 
-class FilterSettingsPage extends StatefulWidget {
+class FiltersSettingsPage extends StatefulWidget {
   @override
-  _FilterSettingsPageState createState() => _FilterSettingsPageState();
+  _FiltersSettingsPageState createState() => _FiltersSettingsPageState();
 }
 
-class _FilterSettingsPageState extends State<FilterSettingsPage> {
+class _FiltersSettingsPageState extends State<FiltersSettingsPage> {
   void _openFilter(BuildContext context, Filter filter) async {
     // filter value is modified directly
     await Navigator.push(
@@ -59,7 +59,7 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
         leading: TileIconButton(
           icon: Icons.arrow_back,
           onPressed: () => Navigator.pop(context),
@@ -67,7 +67,7 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
         title: Text('Filters'),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           children: List<Widget>.from(
             personalInfoFields.keys.map(
@@ -83,13 +83,13 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
                           method: null,
                         );
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
                           fieldName,
-                          style: TextStyle(fontSize: 16.0),
+                          style: TextStyle(fontSize: 16),
                         ),
                         GestureDetector(
                           child: Row(
@@ -98,13 +98,13 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
                                   ? SizedBox.shrink()
                                   : ConstrainedBox(
                                       constraints:
-                                          BoxConstraints(maxWidth: 100.0),
+                                          BoxConstraints(maxWidth: 100),
                                       child: Text(
                                         filter.options is List
                                             ? filter.options.join(', ')
                                             : filter.options.toString(),
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(fontSize: 14.0),
+                                        style: TextStyle(fontSize: 14),
                                       ),
                                     ),
                               Icon(
@@ -122,13 +122,13 @@ class _FilterSettingsPageState extends State<FilterSettingsPage> {
                   );
                 }
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
                         fieldName,
-                        style: TextStyle(fontSize: 16.0),
+                        style: TextStyle(fontSize: 16),
                       ),
                       GestureDetector(
                         child: Icon(

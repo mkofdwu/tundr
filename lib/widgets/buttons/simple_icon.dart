@@ -13,7 +13,7 @@ class SimpleIconButton extends StatefulWidget {
     @required this.icon,
     this.label = '',
     this.color,
-    this.size = 30.0,
+    this.size = 30,
     @required this.onPressed,
   }) : super(key: key);
 
@@ -39,12 +39,12 @@ class _SimpleIconButtonState extends State<SimpleIconButton> {
             (widget.label.isEmpty
                 ? []
                 : [
-                    SizedBox(height: 10.0),
+                    SizedBox(height: 10),
                     Text(
                       widget.label,
                       style: TextStyle(
                         color: _pressed ? MyPalette.gold : widget.color,
-                        fontSize: 16.0,
+                        fontSize: 16,
                       ),
                     ),
                   ]),

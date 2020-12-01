@@ -49,12 +49,12 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
               controller: _searchController,
               hintText: 'Search',
               hintTextColor: Theme.of(context).colorScheme.onPrimary,
-              fontSize: 30.0,
+              fontSize: 30,
             ),
           ),
           Icon(
             Icons.search,
-            size: 30.0,
+            size: 30,
           ),
         ],
       );
@@ -67,16 +67,16 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
             setState(() => _selectedCategory = tab);
           },
         ),
-        SizedBox(height: 14.0),
+        SizedBox(height: 14),
         if (_selectedCategory == null)
           SizedBox.shrink()
         else if (_selectedCategory == 'Custom')
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Wrap(
-                  spacing: 10.0,
+                  spacing: 10,
                   children: <Widget>[
                         AddCustomInterestChip(
                           onAddCustomInterest: (interest) {
@@ -90,12 +90,12 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
                         widget.customInterests.map((interest) {
                           return Chip(
                             backgroundColor: MyPalette.gold,
-                            elevation: 5.0,
+                            elevation: 5,
                             label: Text(
                               interest,
                               style: TextStyle(
                                 color: MyPalette.white,
-                                fontSize: 14.0,
+                                fontSize: 14,
                               ),
                             ),
                             deleteIconColor: MyPalette.white,
@@ -115,9 +115,9 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Wrap(
-                  spacing: 10.0,
+                  spacing: 10,
                   children: _buildInterestChips(interests[_selectedCategory]),
                 ),
               ),
@@ -134,7 +134,7 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
                 'No interests found :(',
                 style: TextStyle(
                   color: MyPalette.grey,
-                  fontSize: 16.0,
+                  fontSize: 16,
                 ),
               ),
             )
@@ -142,9 +142,9 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Wrap(
-                  spacing: 10.0,
+                  spacing: 10,
                   children: _buildInterestChips(searchResults),
                 ),
               ),
@@ -159,12 +159,12 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
             return GestureDetector(
               child: Chip(
                 backgroundColor: selected ? MyPalette.gold : MyPalette.white,
-                elevation: 5.0,
+                elevation: 5,
                 label: Text(
                   interest,
                   style: TextStyle(
                     color: selected ? MyPalette.white : MyPalette.black,
-                    fontSize: 14.0,
+                    fontSize: 14,
                   ),
                 ),
               ),
@@ -192,7 +192,7 @@ class _InterestsBrowserState extends State<InterestsBrowser> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _buildSearchTextField(),
-          SizedBox(height: 20.0),
+          SizedBox(height: 20),
           if (_searchController.text.length < 3)
             ...(_buildBody())
           else

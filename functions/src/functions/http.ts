@@ -87,11 +87,11 @@ const _canTalkTo = async (
   if (otherUserPrivateInfo == null) return false;
   if (otherUserPrivateInfo['settings']['blockUnknownMessages']) return false;
   // check if user is blocked
-  if (otherUserPrivateInfo['blocked'].contains(uid)) return false;
+  if (otherUserPrivateInfo['blocked'].includes(uid)) return false;
 
   // check if sexualities are appropriate
   const userProfile = (await userProfilesRef.doc(uid).get()).data();
-  const userAlgorithmData = (await usersPrivateInfoRef.doc(uid).get()).data();
+  const userAlgorithmData = (await usersAlgorithmDataRef.doc(uid).get()).data();
   const otherUserProfile = (await userProfilesRef.doc(otherUid).get()).data();
   const otherUserAlgorithmData = (
     await usersAlgorithmDataRef.doc(otherUid).get()

@@ -33,24 +33,24 @@ class UnderlineTextField extends StatelessWidget {
       keyboardType: keyboardType,
       style: TextStyle(
         color: color,
-        fontSize: 20.0,
+        fontSize: 20,
       ),
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(
           color: MyPalette.grey,
-          fontSize: 20.0,
+          fontSize: 20,
         ),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: color ?? Theme.of(context).colorScheme.onPrimary,
-            width: 2.0,
+            width: 2,
           ),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: color ?? Theme.of(context).colorScheme.onPrimary,
-            width: 5.0,
+            width: 5,
           ),
         ),
       ),

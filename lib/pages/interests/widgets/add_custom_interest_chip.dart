@@ -40,7 +40,7 @@ class _AddCustomInterestChipState extends State<AddCustomInterestChip> {
         child: Chip(
           labelPadding: const EdgeInsets.only(left: 4, right: 6),
           backgroundColor: MyPalette.white,
-          elevation: 5.0,
+          elevation: 5,
           avatar: _inputting
               ? null
               : Icon(
@@ -67,7 +67,7 @@ class _AddCustomInterestChipState extends State<AddCustomInterestChip> {
                   'Add new',
                   style: TextStyle(
                     color: MyPalette.gold,
-                    fontSize: 16.0,
+                    fontSize: 16,
                   ),
                 ),
         ),

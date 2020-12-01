@@ -117,8 +117,8 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
                   CurvedAnimation(parent: animation1, curve: Curves.easeOut);
               return SlideTransition(
                 position: Tween<Offset>(
-                  begin: Offset(0.0, 1.0),
-                  end: Offset(0.0, 0.0),
+                  begin: Offset(0, 1),
+                  end: Offset(0, 0),
                 ).animate(curve),
                 child: child,
               );
@@ -173,7 +173,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
               'Birthday',
               style: TextStyle(
                 color: MyPalette.black,
-                fontSize: 40.0,
+                fontSize: 40,
                 fontFamily: 'Helvetica Neue',
                 fontWeight: FontWeight.bold,
               ),
@@ -190,7 +190,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
                   controller: _day1Controller,
                   onChanged: (digit) => setState(() => _day1 = digit),
                 ),
-                SizedBox(width: 2.0),
+                SizedBox(width: 2),
                 DigitEntry(
                   hintChar: 'D',
                   controller: _day2Controller,
@@ -222,7 +222,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
                   controller: _month1Controller,
                   onChanged: (digit) => setState(() => _month1 = digit),
                 ),
-                SizedBox(width: 2.0),
+                SizedBox(width: 2),
                 DigitEntry(
                   hintChar: 'M',
                   controller: _month2Controller,
@@ -253,19 +253,19 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
                   controller: _year1Controller,
                   onChanged: (digit) => setState(() => _year1 = digit),
                 ),
-                SizedBox(width: 2.0),
+                SizedBox(width: 2),
                 DigitEntry(
                   hintChar: 'Y',
                   controller: _year2Controller,
                   onChanged: (digit) => setState(() => _year2 = digit),
                 ),
-                SizedBox(width: 2.0),
+                SizedBox(width: 2),
                 DigitEntry(
                   hintChar: 'Y',
                   controller: _year3Controller,
                   onChanged: (digit) => setState(() => _year3 = digit),
                 ),
-                SizedBox(width: 2.0),
+                SizedBox(width: 2),
                 DigitEntry(
                   hintChar: 'Y',
                   moveFocus: false,
@@ -280,7 +280,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
           ),
           Positioned(
             left: width * 179 / 375,
-            bottom: 20.0,
+            bottom: 20,
             child: ScrollDownArrow(onNextPage: _nextPage),
           ),
         ],

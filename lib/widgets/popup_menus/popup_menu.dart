@@ -10,17 +10,17 @@ class PopupMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: 150.0,
+      // width: 150,
       decoration: BoxDecoration(
         color: MyPalette.white,
         boxShadow: [MyPalette.secondaryShadow],
         borderRadius: fromTheme(
           context,
           dark: BorderRadius.zero,
-          light: BorderRadius.circular(20.0),
+          light: BorderRadius.circular(20),
         ),
       ),
-      padding: EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,

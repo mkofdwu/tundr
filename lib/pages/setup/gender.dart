@@ -33,8 +33,8 @@ class _SetupGenderPageState extends State<SetupGenderPage> {
           transitionsBuilder: (context, animation1, animation2, child) {
             return SlideTransition(
               position: Tween<Offset>(
-                begin: Offset(0.0, 1.0),
-                end: Offset(0.0, 0.0),
+                begin: Offset(0, 1),
+                end: Offset(0, 0),
               ).animate(animation1),
               child: child,
             );
@@ -49,10 +49,10 @@ class _SetupGenderPageState extends State<SetupGenderPage> {
     return ScrollDownPage(
       color: MyPalette.black,
       builder: (context, width, height) => Container(
-        padding: EdgeInsets.all(30.0),
+        padding: EdgeInsets.all(30),
         child: Column(
           children: <Widget>[
-            SizedBox(height: 30.0),
+            SizedBox(height: 30),
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -61,13 +61,13 @@ class _SetupGenderPageState extends State<SetupGenderPage> {
                   'Gender',
                   style: TextStyle(
                     color: MyPalette.white,
-                    fontSize: 30.0,
+                    fontSize: 30,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 30.0),
+            SizedBox(height: 30),
             Expanded(
               child: TileRadioGroup(
                 theme: ThemeMode.dark,
@@ -80,9 +80,9 @@ class _SetupGenderPageState extends State<SetupGenderPage> {
                         .gender = stringToGender[option]),
               ),
             ),
-            SizedBox(height: 20.0),
+            SizedBox(height: 20),
             ScrollDownArrow(onNextPage: _nextPage),
-            SizedBox(height: 20.0),
+            SizedBox(height: 20),
           ],
         ),
       ),

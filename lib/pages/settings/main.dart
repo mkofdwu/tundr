@@ -11,8 +11,8 @@ import 'package:tundr/pages/personal_info/text_field.dart';
 import 'package:tundr/pages/settings/blocked_users.dart';
 import 'package:tundr/pages/settings/change_password.dart';
 import 'package:tundr/pages/settings/confirm_delete_account.dart';
-import 'package:tundr/pages/settings/filter_settings.dart';
-import 'package:tundr/pages/settings/notification_settings.dart';
+import 'package:tundr/pages/settings/filters.dart';
+import 'package:tundr/pages/settings/notifications.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/gender.dart';
@@ -26,12 +26,12 @@ import 'widgets/separate_page_setting_field.dart';
 import 'widgets/setting_field.dart';
 import 'widgets/switch_setting_field.dart';
 
-class SettingsPage extends StatefulWidget {
+class MainSettingsPage extends StatefulWidget {
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  _MainSettingsPageState createState() => _MainSettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _MainSettingsPageState extends State<MainSettingsPage> {
   void _changeUsername(String uid, String username) async {
     final newUsername = await Navigator.push(
       context,
@@ -47,34 +47,6 @@ class _SettingsPageState extends State<SettingsPage> {
     );
     await Provider.of<User>(context, listen: false)
         .updateProfile({'username': newUsername});
-  }
-
-  void _changePassword() => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ChangePasswordPage()),
-      );
-
-  void _openFilterSettings() => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => FilterSettingsPage()),
-      );
-
-  void _openBlockedUsers() => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => BlockedUsersPage()),
-      );
-
-  void _openNotificationSettings() => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => NotificationSettingsPage()),
-      );
-
-  void _openAbout() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => AboutPage()), // DESIGN: transitions
-    );
   }
 
   void _confirmLogout() async {
@@ -152,7 +124,8 @@ class _SettingsPageState extends State<SettingsPage> {
               SizedBox(height: 20),
               SeparatePageSettingField(
                 title: 'Change password',
-                onNextPage: _changePassword,
+                onNextPage: () =>
+                    Navigator.pushNamed(context, '/settings/change_password'),
               ),
               SizedBox(height: 20),
               SettingField(
@@ -220,12 +193,14 @@ class _SettingsPageState extends State<SettingsPage> {
               SizedBox(height: 20),
               SeparatePageSettingField(
                 title: 'Filters',
-                onNextPage: _openFilterSettings,
+                onNextPage: () =>
+                    Navigator.pushNamed(context, '/settings/filters'),
               ),
               SizedBox(height: 20),
               SeparatePageSettingField(
                 title: 'Blocked users',
-                onNextPage: _openBlockedUsers,
+                onNextPage: () =>
+                    Navigator.pushNamed(context, '/settings/blocked_users'),
               ),
               SizedBox(height: 20),
               SwitchSettingField(
@@ -263,7 +238,8 @@ class _SettingsPageState extends State<SettingsPage> {
               SizedBox(height: 20),
               SeparatePageSettingField(
                 title: 'Notifications',
-                onNextPage: _openNotificationSettings,
+                onNextPage: () =>
+                    Navigator.pushNamed(context, '/settings/notifications'),
               ),
               SizedBox(height: 20),
               SettingField(
@@ -319,7 +295,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           ],
                         ),
                       ),
-                      onTap: _openAbout,
+                      onTap: () => Navigator.pushNamed(context, '/about'),
                     )
                   : LightTileButton(
                       color: MyPalette.gold,
@@ -340,7 +316,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ],
                       ),
-                      onTap: _openAbout,
+                      onTap: () => Navigator.pushNamed(context, '/about'),
                     ),
               SizedBox(height: 20),
               FlatButton(

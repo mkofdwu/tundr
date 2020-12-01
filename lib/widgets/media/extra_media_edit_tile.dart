@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tundr/models/media.dart';
-import 'package:tundr/pages/media/extra_media_edit.dart';
+import 'package:tundr/pages/media/edit_extra_media.dart';
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
@@ -83,7 +83,7 @@ class ExtraMediaEditTile extends StatelessWidget {
       await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ExtraMediaEditPage(
+          builder: (context) => EditExtraMediaPage(
             media: media,
             onReplace: onChangeMedia,
             onRemove: onRemoveMedia,
@@ -120,18 +120,18 @@ class ExtraMediaEditTile extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
           color: MyPalette.white,
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [MyPalette.primaryShadow],
         ),
         child: media == null
             ? Center(
                 child: Icon(
                   Icons.add,
-                  size: 30.0,
+                  size: 30,
                 ),
               )
             : ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(20),
                 child: MediaThumbnail(media),
               ),
       );
@@ -144,7 +144,7 @@ class ExtraMediaEditTile extends StatelessWidget {
             ? Center(
                 child: Icon(
                   Icons.add,
-                  size: 30.0,
+                  size: 30,
                   color: MyPalette.white,
                 ),
               )

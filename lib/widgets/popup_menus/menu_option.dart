@@ -14,9 +14,9 @@ class MenuOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: SizedBox(
-        height: 40.0,
+        height: 40,
         child: FlatButton(
           child: Align(
             alignment: Alignment.centerRight,
@@ -24,7 +24,7 @@ class MenuOption extends StatelessWidget {
               text,
               style: TextStyle(
                 color: MyPalette.black,
-                fontSize: 20.0,
+                fontSize: 20,
               ),
             ),
           ),

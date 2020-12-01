@@ -58,29 +58,29 @@ class PersonalInfoFieldButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
+      padding: EdgeInsets.symmetric(vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
             fieldName,
-            style: TextStyle(fontSize: 16.0),
+            style: TextStyle(fontSize: 16),
           ),
           GestureDetector(
             child: Row(
               children: <Widget>[
                 if (value != null)
                   ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 100.0),
+                    constraints: BoxConstraints(maxWidth: 100),
                     child: Text(
                       value is List ? value.join(', ') : value.toString(),
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 14.0),
+                      style: TextStyle(fontSize: 14),
                     ),
                   ),
                 Icon(
                   Icons.arrow_forward_ios, // DESIGN: replace icon?
-                  size: 20.0,
+                  size: 20,
                   color: fromTheme(
                     context,
                     dark: MyPalette.white,

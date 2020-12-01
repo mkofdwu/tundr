@@ -17,13 +17,13 @@ class MyPalette {
   // shadows
   static const BoxShadow primaryShadow = BoxShadow(
     color: MyPalette._shadowGrey,
-    offset: Offset(0.0, 6.0),
-    blurRadius: 10.0,
+    offset: Offset(0, 6),
+    blurRadius: 10,
   );
   static const BoxShadow secondaryShadow = BoxShadow(
     color: MyPalette._shadowGrey,
-    offset: Offset(0, 10.0),
-    blurRadius: 20.0,
+    offset: Offset(0, 10),
+    blurRadius: 20,
   );
 
   // gradients

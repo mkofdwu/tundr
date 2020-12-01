@@ -44,8 +44,8 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context, width, height) => <Widget>[
         Positioned(
           left: width * 33 / 375,
-          top: 0.0,
-          bottom: 0.0,
+          top: 0,
+          bottom: 0,
           child: Container(
             width: width * 78 / 375,
             color: MyPalette.gold,
@@ -53,8 +53,8 @@ class _LoginPageState extends State<LoginPage> {
         ),
         Positioned(
           left: width * 134 / 375,
-          top: 0.0,
-          bottom: 0.0,
+          top: 0,
+          bottom: 0,
           child: Container(
             width: width * 52 / 375,
             color: MyPalette.gold,
@@ -62,8 +62,8 @@ class _LoginPageState extends State<LoginPage> {
         ),
         Positioned(
           left: width * 194 / 375,
-          top: 0.0,
-          bottom: 0.0,
+          top: 0,
+          bottom: 0,
           child: Container(
             width: width * 11 / 375,
             color: MyPalette.gold,
@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                 'Login',
                 style: TextStyle(
                   color: MyPalette.black,
-                  fontSize: 60.0,
+                  fontSize: 60,
                   fontFamily: 'Helvetica Neue',
                   fontWeight: FontWeight.bold,
                 ),
@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                 'Enter a username and password',
                 style: TextStyle(
                   color: MyPalette.black,
-                  fontSize: 16.0,
+                  fontSize: 16,
                 ),
               ),
               SizedBox(height: 100),
@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                 hintText: 'Username',
                 controller: _usernameController,
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20),
               TileTextField(
                 key: ValueKey('passwordField'),
                 hintText: 'Password',
@@ -117,11 +117,11 @@ class _LoginPageState extends State<LoginPage> {
           child: GestureDetector(
             key: ValueKey('loginSubmitBtn'),
             child: Container(
-              width: 60.0,
-              height: 60.0,
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
                 color: MyPalette.black,
-                borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.circular(30),
                 boxShadow: [MyPalette.secondaryShadow],
               ),
               child: Center(

@@ -66,38 +66,38 @@ class OtherUserMessageTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          width: 50.0,
-          height: 50.0,
+          width: 50,
+          height: 50,
           decoration: fromTheme(
             context,
             dark: BoxDecoration(
-              border: Border.all(color: MyPalette.white, width: 1.0),
+              border: Border.all(color: MyPalette.white, width: 1),
             ),
             light: BoxDecoration(
-              borderRadius: BorderRadius.circular(25.0),
+              borderRadius: BorderRadius.circular(25),
               boxShadow: [MyPalette.primaryShadow],
             ),
           ),
           child: ClipRRect(
             borderRadius: fromTheme(
               context,
-              light: BorderRadius.circular(25.0),
+              light: BorderRadius.circular(25),
               dark: BorderRadius.zero,
             ),
             child: getNetworkImage(profileImageUrl),
           ),
         ),
-        SizedBox(width: 10.0),
+        SizedBox(width: 10),
         GestureDetector(
           onLongPress: () => _selectOption(context),
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 200.0),
+            constraints: BoxConstraints(maxWidth: 200),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 if (message.referencedMessageId != null)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
+                    padding: const EdgeInsets.only(bottom: 10),
                     child: GestureDetector(
                       child: ReferencedMessageTile(
                         chatId: chatId,
@@ -118,7 +118,7 @@ class OtherUserMessageTile extends StatelessWidget {
                             borderRadius: fromTheme(
                               context,
                               dark: BorderRadius.zero,
-                              light: BorderRadius.circular(10.0),
+                              light: BorderRadius.circular(10),
                             ),
                             child: MediaThumbnail(message.media),
                           ),
@@ -126,17 +126,17 @@ class OtherUserMessageTile extends StatelessWidget {
                         onTap: () => _openMedia(context),
                       ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text(
                     message.text,
-                    style: TextStyle(fontSize: 14.0),
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
                 Text(
                   DateFormat.jm().format(message.sentOn),
                   style: TextStyle(
                     color: MyPalette.grey,
-                    fontSize: 12.0,
+                    fontSize: 12,
                   ),
                 ),
               ],

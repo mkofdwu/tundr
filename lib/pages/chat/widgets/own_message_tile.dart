@@ -72,13 +72,13 @@ class OwnMessageTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           Container(
-            constraints: BoxConstraints(maxWidth: 200.0),
+            constraints: BoxConstraints(maxWidth: 200),
             decoration: fromTheme(
               context,
               dark: BoxDecoration(color: MyPalette.white),
               light: BoxDecoration(
                 color: MyPalette.white,
-                borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(10),
                 boxShadow: [MyPalette.primaryShadow],
               ),
             ),
@@ -96,7 +96,7 @@ class OwnMessageTile extends StatelessWidget {
                   ),
                 if (message.media != null)
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10),
                     child: GestureDetector(
                       child: Container(
                         decoration: BoxDecoration(
@@ -106,7 +106,7 @@ class OwnMessageTile extends StatelessWidget {
                           borderRadius: fromTheme(
                             context,
                             dark: BorderRadius.zero,
-                            light: BorderRadius.circular(10.0),
+                            light: BorderRadius.circular(10),
                           ),
                           child: MediaThumbnail(message.media),
                         ),
@@ -115,19 +115,19 @@ class OwnMessageTile extends StatelessWidget {
                     ),
                   ),
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(10),
                   child: Text(
                     message.text,
                     style: TextStyle(
                       color: MyPalette.black,
-                      fontSize: 14.0,
+                      fontSize: 14,
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 5.0),
+          SizedBox(height: 5),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -135,10 +135,10 @@ class OwnMessageTile extends StatelessWidget {
                 DateFormat.jm().format(message.sentOn),
                 style: TextStyle(
                   color: MyPalette.grey,
-                  fontSize: 12.0,
+                  fontSize: 12,
                 ),
               ),
-              SizedBox(width: 5.0),
+              SizedBox(width: 5),
               Icon(
                 // DESIGN: find another icon
                 Icons.done,

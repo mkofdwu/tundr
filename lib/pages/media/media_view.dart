@@ -7,7 +7,7 @@ import 'package:tundr/pages/media/widgets/media_viewer.dart';
 class MediaViewPage extends StatelessWidget {
   final Media media;
 
-  MediaViewPage({Key key, this.media}) : super(key: key);
+  MediaViewPage({Key key, @required this.media}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +15,11 @@ class MediaViewPage extends StatelessWidget {
       children: <Widget>[
         Center(child: MediaViewer(media: media)),
         Positioned(
-          left: -150.0,
-          top: -150.0,
+          left: -150,
+          top: -150,
           child: Container(
-            width: 300.0,
-            height: 300.0,
+            width: 300,
+            height: 300,
             decoration: BoxDecoration(
               gradient: RadialGradient(
                 colors: [

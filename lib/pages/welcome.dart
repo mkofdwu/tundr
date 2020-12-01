@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/pages/register.dart';
-import 'package:tundr/pages/login.dart';
 import 'package:tundr/constants/my_palette.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -11,28 +9,6 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   bool _loginBtnPressed = false;
   bool _registerBtnPressed = false;
-
-  void _signInPage(BuildContext context) => Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => LoginPage(),
-          transitionsBuilder: (context, animation1, animation2, child) {
-            return FadeTransition(
-                opacity: animation1, child: child); // FUTURE: animations
-          },
-        ),
-      );
-
-  void _registerPage(BuildContext context) => Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => RegisterPage(),
-          transitionsBuilder: (context, animation1, animation2, child) {
-            return FadeTransition(
-                opacity: animation1, child: child); // ANIMATIONS: animations
-          },
-        ),
-      );
 
   List<Widget> _buildTitle() => <Widget>[
         Positioned(
@@ -155,7 +131,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       setState(() => _loginBtnPressed = true),
                   onTapUp: (_details) {
                     setState(() => _loginBtnPressed = false);
-                    _signInPage(context);
+                    Navigator.pushNamed(context, '/login');
                   },
                 ),
               ),
@@ -191,7 +167,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       setState(() => _registerBtnPressed = true),
                   onTapUp: (_details) {
                     setState(() => _registerBtnPressed = false);
-                    _registerPage(context);
+                    Navigator.pushNamed(context, '/register');
                   },
                 ),
               ),

@@ -52,7 +52,6 @@ class _ChatPageState extends State<ChatPage> {
 
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textController = TextEditingController();
-  // Timer _updater;
   String _referencedMessageId;
   Media _media;
   bool _showChatOptions = false;
@@ -79,12 +78,6 @@ class _ChatPageState extends State<ChatPage> {
         }
       }
     });
-  }
-
-  @override
-  void dispose() {
-    // _updater.cancel();
-    super.dispose();
   }
 
   void _selectImage() async {
@@ -242,8 +235,8 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildMediaTileDark() {
     return Container(
       width: double.infinity,
-      height: 200.0,
-      margin: const EdgeInsets.only(bottom: 20.0),
+      height: 200,
+      margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         border: Border.all(color: MyPalette.white),
         boxShadow: [MyPalette.primaryShadow],
@@ -255,33 +248,33 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildMediaTileLight() {
     return Container(
       width: double.infinity,
-      height: 200.0,
-      margin: const EdgeInsets.only(bottom: 20.0),
+      height: 200,
+      margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
+        borderRadius: BorderRadius.circular(25),
         boxShadow: const [MyPalette.primaryShadow],
       ), // FUTURE: DESIGN
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(25.0),
+        borderRadius: BorderRadius.circular(25),
         child: MediaThumbnail(_media),
       ),
     );
   }
 
   Widget _buildMessageInputDark() => Container(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _referencedMessageId == null
                 ? SizedBox.shrink()
                 : Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
+                    padding: const EdgeInsets.only(bottom: 20),
                     child: ReferencedMessageTile(
                       chatId: widget.chat.id,
                       messageId: _referencedMessageId,
                       otherUserName: widget.otherUser.name,
-                      borderRadius: 25.0,
+                      borderRadius: 25,
                     ),
                   ),
             _media == null ? SizedBox.shrink() : _buildMediaTileDark(),
@@ -293,21 +286,21 @@ class _ChatPageState extends State<ChatPage> {
                             icon: Icons.photo_camera,
                             onPressed: _selectImage,
                           ),
-                          SizedBox(width: 10.0),
+                          SizedBox(width: 10),
                           SimpleIconButton(
                             icon: Icons.videocam,
                             onPressed: _selectVideo,
                           ),
-                          SizedBox(width: 10.0),
+                          SizedBox(width: 10),
                           Container(
-                            width: 2.0,
-                            height: 50.0,
+                            width: 2,
+                            height: 50,
                             color: MyPalette.white,
                           ),
                         ]
                       : <Widget>[]) +
                   <Widget>[
-                    SizedBox(width: 20.0),
+                    SizedBox(width: 20),
                     Expanded(
                       child: PlainTextField(
                         controller: _textController,
@@ -316,7 +309,7 @@ class _ChatPageState extends State<ChatPage> {
                         color: MyPalette.white,
                       ),
                     ),
-                    SizedBox(width: 10.0),
+                    SizedBox(width: 10),
                     if (_textController.text.isNotEmpty)
                       TileIconButton(
                         icon: Icons.send,
@@ -329,15 +322,15 @@ class _ChatPageState extends State<ChatPage> {
       );
 
   Widget _buildMessageInputLight() => Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10),
         child: Container(
           decoration: BoxDecoration(
             color: MyPalette.gold,
-            borderRadius: BorderRadius.circular(35.0),
+            borderRadius: BorderRadius.circular(35),
             boxShadow: [MyPalette.primaryShadow],
           ),
           child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,12 +338,12 @@ class _ChatPageState extends State<ChatPage> {
                 _referencedMessageId == null
                     ? SizedBox.shrink()
                     : Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
+                        padding: const EdgeInsets.only(bottom: 10),
                         child: ReferencedMessageTile(
                           chatId: widget.chat.id,
                           messageId: _referencedMessageId,
                           otherUserName: widget.otherUser.name,
-                          borderRadius: 25.0,
+                          borderRadius: 25,
                         ),
                       ),
                 _media == null ? SizedBox.shrink() : _buildMediaTileLight(),
@@ -358,31 +351,31 @@ class _ChatPageState extends State<ChatPage> {
                   children: <Widget>[
                     if (_media == null)
                       Container(
-                        height: 50.0,
+                        height: 50,
                         decoration: BoxDecoration(
                           color: MyPalette.white,
-                          borderRadius: BorderRadius.circular(25.0),
+                          borderRadius: BorderRadius.circular(25),
                           boxShadow: [MyPalette.primaryShadow],
                         ),
-                        padding: EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(10),
                         child: Row(
                           children: <Widget>[
                             SimpleIconButton(
                               // DESIGN: replace with a better button in the future
                               icon: Icons.photo_camera,
-                              size: 30.0,
+                              size: 30,
                               onPressed: _selectImage,
                             ),
-                            SizedBox(width: 10.0),
+                            SizedBox(width: 10),
                             SimpleIconButton(
                               icon: Icons.videocam,
-                              size: 30.0,
+                              size: 30,
                               onPressed: _selectVideo,
                             ),
                           ],
                         ),
                       ),
-                    SizedBox(width: 20.0),
+                    SizedBox(width: 20),
                     Expanded(
                       child: PlainTextField(
                         controller: _textController,
@@ -391,7 +384,7 @@ class _ChatPageState extends State<ChatPage> {
                         color: MyPalette.black,
                       ),
                     ),
-                    SizedBox(width: 10.0),
+                    SizedBox(width: 10),
                     if (_textController.text.isNotEmpty)
                       TileIconButton(
                         icon: Icons.send,
@@ -446,10 +439,10 @@ class _ChatPageState extends State<ChatPage> {
                         reverse: true,
                         controller: _scrollController,
                         padding: EdgeInsets.only(
-                          top: 50.0,
+                          top: 50,
                           bottom: 70.0 +
-                              (_media == null ? 0 : 220.0) +
-                              (_referencedMessageId == null ? 0 : 110.0),
+                              (_media == null ? 0 : 220) +
+                              (_referencedMessageId == null ? 0 : 110),
                         ),
                         itemCount: _unsentMessages.length + messages.length,
                         itemBuilder: (context, i) {
@@ -469,8 +462,8 @@ class _ChatPageState extends State<ChatPage> {
                                   .uid;
                           return Padding(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0,
-                              vertical: 10.0,
+                              horizontal: 20,
+                              vertical: 10,
                             ),
                             child: Align(
                               alignment: fromMe
@@ -509,7 +502,7 @@ class _ChatPageState extends State<ChatPage> {
                   },
                 ),
               Container(
-                height: 100.0,
+                height: 100,
                 decoration: BoxDecoration(
                   gradient: fromTheme(
                     context,
@@ -519,19 +512,19 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               SizedBox(
-                height: 50.0,
+                height: 50,
                 child: Row(
                   children: <Widget>[
                     TileIconButton(
                       icon: Icons.arrow_back,
                       onPressed: () => Navigator.pop(context),
                     ),
-                    SizedBox(width: 10.0),
+                    SizedBox(width: 10),
                     Expanded(
                       child: GestureDetector(
                         child: Text(
                           widget.otherUser.name,
-                          style: TextStyle(fontSize: 20.0),
+                          style: TextStyle(fontSize: 20),
                         ),
                         onTap: () async => Navigator.pushNamed(
                           context,
@@ -548,9 +541,9 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               Positioned(
-                bottom: 0.0,
+                bottom: 0,
                 child: Container(
-                  height: _media == null ? 100.0 : 300.0,
+                  height: _media == null ? 100 : 300,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     gradient: fromTheme(
@@ -562,7 +555,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               Positioned(
-                bottom: 0.0,
+                bottom: 0,
                 width: MediaQuery.of(context).size.width,
                 child: ThemeBuilder(
                   buildDark: _buildMessageInputDark,
@@ -571,8 +564,8 @@ class _ChatPageState extends State<ChatPage> {
               ),
               if (_showChatOptions)
                 Positioned(
-                  top: 10.0,
-                  right: 10.0,
+                  top: 10,
+                  right: 10,
                   child: PopupMenu(
                     children: <Widget>[
                       MenuOption(

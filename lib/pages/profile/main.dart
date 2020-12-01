@@ -5,9 +5,9 @@ import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/repositories/user.dart';
 
 import 'package:tundr/pages/chat/chat.dart';
-import 'package:tundr/pages/other_profile/about_me.dart';
-import 'package:tundr/pages/other_profile/extra_media.dart';
-import 'package:tundr/pages/other_profile/personal_info.dart';
+import 'package:tundr/pages/profile/about_me.dart';
+import 'package:tundr/pages/profile/extra_media.dart';
+import 'package:tundr/pages/profile/personal_info.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/chats_service.dart';
@@ -20,49 +20,36 @@ import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 
-class OtherProfileMainPage extends StatefulWidget {
+class MainProfilePage extends StatefulWidget {
   @override
-  _OtherProfileMainPageState createState() => _OtherProfileMainPageState();
+  _MainProfilePageState createState() => _MainProfilePageState();
 }
 
-class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
-  bool _hasInfoLeft(UserProfile user) =>
-      user.aboutMe.isNotEmpty ||
-      user.extraMedia.any((media) => media != null) ||
-      user.interests.isNotEmpty ||
-      user.personalInfo.isNotEmpty;
+class _MainProfilePageState extends State<MainProfilePage> {
+  bool _hasInfoLeft(UserProfile profile) =>
+      profile.aboutMe.isNotEmpty ||
+      profile.extraMedia.any((media) => media != null) ||
+      profile.interests.isNotEmpty ||
+      profile.personalInfo.isNotEmpty;
 
-  void _nextPage(UserProfile user) {
-    Widget page;
-    if (user.aboutMe.isNotEmpty) {
-      page = OtherProfileAboutMePage(profile: user);
-    } else if (user.extraMedia.any((media) => media != null)) {
-      page = OtherProfileExtraMediaPage(profile: user);
-    } else if (user.interests.isNotEmpty || user.personalInfo.isNotEmpty) {
-      page = OtherProfilePersonalInfoPage(profile: user);
+  void _nextPage(UserProfile profile) {
+    String route;
+    if (profile.aboutMe.isNotEmpty) {
+      route = '/profile/about_me';
+    } else if (profile.extraMedia.any((media) => media != null)) {
+      route = '/profile/extra_media';
+    } else if (profile.interests.isNotEmpty ||
+        profile.personalInfo.isNotEmpty) {
+      route = '/profile/personal_info';
     } else {
       throw Exception('No pages left');
     }
-
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) => page,
-        transitionsBuilder: (context, animation1, animation2, child) {
-          return SlideTransition(
-            position:
-                Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0))
-                    .animate(animation1),
-            child: child,
-          );
-        },
-      ),
-    );
+    Navigator.pushNamed(context, route, arguments: profile);
   }
 
   @override
   Widget build(BuildContext context) {
-    final my = Provider.of<User>(context, listen: false).profile;
+    final myProfile = Provider.of<User>(context, listen: false).profile;
     final otherProfile =
         ModalRoute.of(context).settings.arguments as UserProfile;
     return ScrollDownPage(
@@ -78,7 +65,7 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-              height: 200.0,
+              height: 200,
               decoration: BoxDecoration(
                 gradient: fromTheme(
                   context,
@@ -91,7 +78,7 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: 200.0,
+              height: 200,
               decoration: BoxDecoration(
                 gradient: fromTheme(
                   context,
@@ -102,13 +89,13 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
             ),
           ),
           MyBackButton(),
-          if (otherProfile.uid != my.uid)
+          if (otherProfile.uid != myProfile.uid)
             Align(
               alignment: Alignment.topRight,
               child: FutureBuilder(
                 future: Future.wait([
-                  UsersService.allowedToTalkTo(otherProfile.uid),
-                  ChatsService.getChatFromUid(my.uid, otherProfile.uid),
+                  UsersService.canTalkTo(otherProfile.uid),
+                  ChatsService.getChatFromUid(myProfile.uid, otherProfile.uid),
                 ]),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return SizedBox.shrink();
@@ -117,14 +104,16 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
                       .privateInfo
                       .blocked
                       .contains(otherProfile.uid);
-                  final allowedToTalk = snapshot.data[0];
+                  final canTalk = snapshot.data[0];
                   final chat = snapshot.data[1];
+
+                  print('can talk: ' + canTalk.toString());
 
                   if (iBlockedUser) {
                     return DarkTileButton(
                       child: Text(
                         'Unblock',
-                        style: TextStyle(fontSize: 16.0),
+                        style: TextStyle(fontSize: 16),
                       ),
                       color: MyPalette.red,
                       onTap: () async {
@@ -138,7 +127,7 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
                       },
                     );
                   }
-                  if (allowedToTalk) {
+                  if (canTalk) {
                     return TileIconButton(
                       icon: Icons.chat_bubble_outline,
                       onPressed: () {
@@ -151,8 +140,8 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
                                 (context, animation1, animation2, child) {
                               return SlideTransition(
                                 position: Tween<Offset>(
-                                  begin: Offset(0.0, 1.0),
-                                  end: Offset(0.0, 0.0),
+                                  begin: Offset(0, 1),
+                                  end: Offset(0, 0),
                                 ).animate(animation1),
                                 child: child,
                               );
@@ -169,7 +158,7 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
@@ -179,11 +168,11 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
                       color: Colors.transparent,
                       child: Text(
                         '${otherProfile.name}, ${otherProfile.ageInYears}',
-                        style: TextStyle(fontSize: 40.0),
+                        style: TextStyle(fontSize: 40),
                       ),
                     ),
                   ),
-                  SizedBox(height: 40.0),
+                  SizedBox(height: 40),
                   _hasInfoLeft(otherProfile)
                       ? ScrollDownArrow(
                           dark: fromTheme(
@@ -194,7 +183,7 @@ class _OtherProfileMainPageState extends State<OtherProfileMainPage> {
                           onNextPage: () => _nextPage(otherProfile),
                         )
                       : SizedBox.shrink(),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 20),
                 ],
               ),
             ),

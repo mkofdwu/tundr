@@ -17,7 +17,7 @@ class ReferencedMessageTile extends StatelessWidget {
     @required this.chatId,
     @required this.messageId,
     @required this.otherUserName,
-    this.borderRadius = 10.0,
+    this.borderRadius = 10,
   }) : super(key: key);
 
   @override
@@ -38,19 +38,19 @@ class ReferencedMessageTile extends StatelessWidget {
                 boxShadow: [MyPalette.secondaryShadow],
               ),
             ),
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 SizedBox(
-                  height: 50.0,
+                  height: 50,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Align(
                         alignment: Alignment.topCenter,
                         child: SizedBox(
-                          width: 20.0,
+                          width: 20,
                           child:
                               Image.asset('assets/images/open-apostrophe.png'),
                         ),
@@ -61,7 +61,7 @@ class ReferencedMessageTile extends StatelessWidget {
                             snapshot.data.text,
                             style: TextStyle(
                               color: MyPalette.black,
-                              fontSize: 20.0,
+                              fontSize: 20,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -71,13 +71,13 @@ class ReferencedMessageTile extends StatelessWidget {
                           '...',
                           style: TextStyle(
                             color: MyPalette.black,
-                            fontSize: 40.0,
+                            fontSize: 40,
                           ),
                         ),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: SizedBox(
-                          width: 20.0,
+                          width: 20,
                           child:
                               Image.asset('assets/images/close-apostrophe.png'),
                         ),
@@ -85,7 +85,7 @@ class ReferencedMessageTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 5.0),
+                SizedBox(height: 5),
                 Text(
                   snapshot.hasData
                       ? (snapshot.data.senderUid ==
@@ -97,7 +97,7 @@ class ReferencedMessageTile extends StatelessWidget {
                       : '- ?',
                   style: TextStyle(
                     color: MyPalette.black,
-                    fontSize: 12.0,
+                    fontSize: 12,
                     fontStyle: FontStyle.italic,
                   ),
                 )

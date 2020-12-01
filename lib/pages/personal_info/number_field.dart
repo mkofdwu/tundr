@@ -55,7 +55,7 @@ class _NumberFieldPageState extends State<NumberFieldPage> {
                 widget.field.prompt,
                 style: TextStyle(
                   color: MyPalette.white,
-                  fontSize: 40.0,
+                  fontSize: 40,
                 ),
               ),
             ),
@@ -70,19 +70,19 @@ class _NumberFieldPageState extends State<NumberFieldPage> {
                 cursorColor: MyPalette.white,
                 style: TextStyle(
                   color: MyPalette.white,
-                  fontSize: 20.0,
+                  fontSize: 20,
                 ),
                 decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: MyPalette.white,
-                      width: 2.0,
+                      width: 2,
                     ),
                   ),
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: MyPalette.white,
-                      width: 5.0,
+                      width: 5,
                     ),
                   ),
                 ),
@@ -111,7 +111,7 @@ class _NumberFieldPageState extends State<NumberFieldPage> {
                 widget.field.prompt,
                 style: TextStyle(
                   color: MyPalette.black,
-                  fontSize: 40.0,
+                  fontSize: 40,
                 ),
               ),
             ),
@@ -131,19 +131,19 @@ class _NumberFieldPageState extends State<NumberFieldPage> {
               //   cursorColor: AppColors.black,
               //   style: TextStyle(
               //     color: AppColors.black,
-              //     fontSize: 20.0,
+              //     fontSize: 20,
               //   ),
               //   decoration: InputDecoration(
               //     enabledBorder: UnderlineInputBorder(
               //       borderSide: BorderSide(
               //         color: AppColors.black,
-              //         width: 2.0,
+              //         width: 2,
               //       ),
               //     ),
               //     focusedBorder: UnderlineInputBorder(
               //       borderSide: BorderSide(
               //         color: AppColors.black,
-              //         width: 5.0,
+              //         width: 5,
               //       ),
               //     ),
               //   ),

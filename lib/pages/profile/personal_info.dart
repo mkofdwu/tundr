@@ -5,19 +5,13 @@ import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/pages/interests/widgets/interests_wrap.dart';
 
-class OtherProfilePersonalInfoPage extends StatefulWidget {
-  final UserProfile profile;
-
-  OtherProfilePersonalInfoPage({Key key, @required this.profile})
-      : super(key: key);
-
+class PersonalInfoProfilePage extends StatefulWidget {
   @override
-  _OtherProfilePersonalInfoPageState createState() =>
-      _OtherProfilePersonalInfoPageState();
+  _PersonalInfoProfilePageState createState() =>
+      _PersonalInfoProfilePageState();
 }
 
-class _OtherProfilePersonalInfoPageState
-    extends State<OtherProfilePersonalInfoPage> {
+class _PersonalInfoProfilePageState extends State<PersonalInfoProfilePage> {
   final ScrollController _scrollController = ScrollController();
   bool _scrolledToTopOnce = true;
 
@@ -30,7 +24,7 @@ class _OtherProfilePersonalInfoPageState
           Navigator.pop(context);
         } else {
           _scrolledToTopOnce = true;
-          _scrollController.jumpTo(1.0);
+          _scrollController.jumpTo(1);
         }
       } else if (_scrollController.position.userScrollDirection ==
           ScrollDirection.forward) {
@@ -47,13 +41,14 @@ class _OtherProfilePersonalInfoPageState
 
   @override
   Widget build(BuildContext context) {
+    final profile = ModalRoute.of(context).settings.arguments as UserProfile;
     return Material(
       child: SingleChildScrollView(
         controller: _scrollController,
         padding: const EdgeInsets.only(
-          left: 30.0,
-          top: 1.0,
-          right: 30.0,
+          left: 30,
+          top: 1,
+          right: 30,
         ),
         child: ConstrainedBox(
           constraints: BoxConstraints(
@@ -71,33 +66,33 @@ class _OtherProfilePersonalInfoPageState
                   Navigator.pop(context);
                 },
               ),
-              SizedBox(height: 30.0),
+              SizedBox(height: 30),
               Column(
-                children: List<Widget>.from(
-                    widget.profile.personalInfo.keys.map((name) {
-                  final dynamic value = widget.profile.personalInfo[name];
+                children:
+                    List<Widget>.from(profile.personalInfo.keys.map((name) {
+                  final dynamic value = profile.personalInfo[name];
                   assert(value != null);
                   if ((value is String || value is List) && value.isEmpty) {
                     return SizedBox.shrink();
                   }
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
                           name,
                           style: TextStyle(
-                            fontSize: 20.0,
+                            fontSize: 20,
                           ),
                         ),
                         ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: 100.0),
+                          constraints: BoxConstraints(maxWidth: 100),
                           child: Text(
                             value is List ? value.join(', ') : value.toString(),
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 20.0,
+                              fontSize: 20,
                             ),
                           ),
                         ),
@@ -106,18 +101,18 @@ class _OtherProfilePersonalInfoPageState
                   );
                 })),
               ),
-              SizedBox(height: 30.0),
+              SizedBox(height: 30),
               Container(
-                width: 100.0,
-                height: 5.0,
+                width: 100,
+                height: 5,
               ),
-              SizedBox(height: 30.0),
-              widget.profile.interests.isEmpty
+              SizedBox(height: 30),
+              profile.interests.isEmpty
                   ? Text(
                       'No interests',
                       style: TextStyle(
                         color: MyPalette.grey,
-                        fontSize: 16.0,
+                        fontSize: 16,
                       ),
                     )
                   : Column(
@@ -129,12 +124,12 @@ class _OtherProfilePersonalInfoPageState
                             'Interests',
                             style: TextStyle(
                               color: MyPalette.gold,
-                              fontSize: 20.0,
+                              fontSize: 20,
                             ),
                           ),
                         ),
-                        SizedBox(height: 10.0),
-                        InterestsWrap(interests: widget.profile.interests),
+                        SizedBox(height: 10),
+                        InterestsWrap(interests: profile.interests),
                       ],
                     ),
             ],

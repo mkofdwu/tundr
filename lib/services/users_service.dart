@@ -122,6 +122,6 @@ class UsersService {
     }).toList();
   }
 
-  static Future<bool> allowedToTalkTo(String otherUid) =>
-      callHttpsFunction<bool>('allowedToTalkTo', {'otherUid': otherUid});
+  static Future<bool> canTalkTo(String otherUid) =>
+      callHttpsFunction<bool>('canTalkTo', {'otherUid': otherUid});
 }

@@ -26,8 +26,8 @@ class _SetupNamePageState extends State<SetupNamePage> {
             return SlideTransition(
               // FUTURE: curved animation (ease out)
               position: Tween<Offset>(
-                begin: Offset(0.0, 1.0),
-                end: Offset(0.0, 0.0),
+                begin: Offset(0, 1),
+                end: Offset(0, 0),
               ).animate(animation1),
               child: child,
             );
@@ -71,7 +71,7 @@ class _SetupNamePageState extends State<SetupNamePage> {
             ),
             Positioned(
               left: width * 179 / 375,
-              bottom: 20.0,
+              bottom: 20,
               child: ScrollDownArrow(onNextPage: _nextPage),
             ),
           ],

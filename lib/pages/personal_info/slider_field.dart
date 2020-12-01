@@ -62,7 +62,7 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
                 widget.field.prompt,
                 style: TextStyle(
                   color: MyPalette.white,
-                  fontSize: 40.0,
+                  fontSize: 40,
                 ),
               ),
             ),
@@ -71,7 +71,7 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
               top: height * 500 / 812,
               width: width * 200 / 375,
               child: Slider(
-                min: 1.0,
+                min: 1,
                 max: widget.field.options.toDouble(),
                 divisions: widget.field.options - 1,
                 value: _value,
@@ -111,7 +111,7 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
                 widget.field.prompt,
                 style: TextStyle(
                   color: MyPalette.black,
-                  fontSize: 40.0,
+                  fontSize: 40,
                 ),
               ),
             ),
@@ -120,7 +120,7 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
               top: height * 500 / 812,
               width: width * 200 / 375,
               child: Slider(
-                min: 1.0,
+                min: 1,
                 max: widget.field.options.toDouble(),
                 divisions: widget.field.options - 1,
                 value: _value,

@@ -28,26 +28,26 @@ class _SetupExtraMediaPageState extends State<SetupExtraMediaPage> {
             icon: Icons.arrow_back,
             onPressed: _return,
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: 20),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
+            padding: EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   'Add more photos and videos?',
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: 40,
                     fontFamily: 'Helvetica Neue',
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                // SizedBox(height: 10.0),
+                // SizedBox(height: 10),
                 // Text(
                 //   'You can scroll down to skip this step, but it will probably increase your chances of finding a match',
-                //   style: TextStyle(fontSize: 12.0),
+                //   style: TextStyle(fontSize: 12),
                 // ),
-                SizedBox(height: 50.0),
+                SizedBox(height: 50),
                 LayoutBuilder(
                   builder: (context, constraints) => ExtraMediaGrid(
                     size: min(

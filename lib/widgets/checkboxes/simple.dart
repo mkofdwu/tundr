@@ -51,7 +51,7 @@ class _SimpleCheckboxState extends State<SimpleCheckbox> {
         Text(
           widget.text,
           style: TextStyle(
-            fontSize: 18.0,
+            fontSize: 18,
           ),
         ),
       ],

@@ -24,7 +24,7 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
   void initState() {
     super.initState();
     _range = widget.filter.options == null
-        ? RangeValues(1.0, widget.filter.field.options.toDouble())
+        ? RangeValues(1, widget.filter.field.options.toDouble())
         : RangeValues(
             widget.filter.options.first.toDouble(),
             widget.filter.options.last.toDouble(),
@@ -50,7 +50,7 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
               widget.filter.field.name,
               style: TextStyle(
                 color: MyPalette.white,
-                fontSize: 40.0,
+                fontSize: 40,
               ),
             ),
           ),
@@ -59,7 +59,7 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
             top: height * 500 / 812,
             width: width * 200 / 375,
             child: RangeSlider(
-              min: 1.0,
+              min: 1,
               max: widget.filter.field.options.toDouble(),
               divisions: widget.filter.field.options - 1,
               values: _range,
@@ -107,7 +107,7 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
                 widget.filter.field.name,
                 style: TextStyle(
                   color: MyPalette.black,
-                  fontSize: 40.0,
+                  fontSize: 40,
                 ),
               ),
             ),
@@ -116,7 +116,7 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
               top: height * 500 / 812,
               width: width * 200 / 375,
               child: RangeSlider(
-                min: 1.0,
+                min: 1,
                 max: widget.filter.field.options.toDouble(),
                 divisions: widget.filter.field.options - 1,
                 values: _range,

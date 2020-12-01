@@ -17,7 +17,7 @@ class ExtraMediaGrid extends StatelessWidget {
   }) : super(key: key);
 
   Widget _buildExtraMediaTile(i) => ExtraMediaEditTile(
-        size: (size - 40.0) / 3,
+        size: (size - 40) / 3,
         media: extraMedia[i],
         onChangeMedia: (media) => onChangeMedia(i, media),
         onRemoveMedia: () => onRemoveMedia(i),
@@ -33,33 +33,33 @@ class ExtraMediaGrid extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _buildExtraMediaTile(0),
-            SizedBox(width: 10.0),
+            SizedBox(width: 10),
             _buildExtraMediaTile(1),
-            SizedBox(width: 10.0),
+            SizedBox(width: 10),
             _buildExtraMediaTile(2),
           ],
         ),
-        SizedBox(height: 10.0),
+        SizedBox(height: 10),
         Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _buildExtraMediaTile(3),
-            SizedBox(width: 10.0),
+            SizedBox(width: 10),
             _buildExtraMediaTile(4),
-            SizedBox(width: 10.0),
+            SizedBox(width: 10),
             _buildExtraMediaTile(5),
           ],
         ),
-        SizedBox(height: 10.0),
+        SizedBox(height: 10),
         Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _buildExtraMediaTile(6),
-            SizedBox(width: 10.0),
+            SizedBox(width: 10),
             _buildExtraMediaTile(7),
-            SizedBox(width: 10.0),
+            SizedBox(width: 10),
             _buildExtraMediaTile(8),
           ],
         ),

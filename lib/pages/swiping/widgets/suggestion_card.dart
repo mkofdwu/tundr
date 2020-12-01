@@ -30,7 +30,7 @@ class _SuggestionCardState extends State<SuggestionCard>
   static const int climax = 15; // angle at which nope / like is decided
 
   Offset _initialOffset;
-  double _angle = 0.0;
+  double _angle = 0;
 
   bool _goingToLike = false;
   bool _goingToNope = false;
@@ -72,7 +72,7 @@ class _SuggestionCardState extends State<SuggestionCard>
     // fade in animation
     _fadeInController = AnimationController(
         duration: const Duration(milliseconds: 500), vsync: this);
-    _fadeInAnimation = Tween(begin: 0.0, end: 1.0).animate(_fadeInController);
+    _fadeInAnimation = Tween(begin: 0, end: 1).animate(_fadeInController);
 
     // like animation
     _likeController = AnimationController(
@@ -80,12 +80,11 @@ class _SuggestionCardState extends State<SuggestionCard>
     _likeController.addListener(() {
       setState(() {});
     });
-    _likeTranslateAnimation = Tween<Offset>(
-            begin: Offset(0.0, 0.0), end: Offset(300.0, 200.0))
-        .animate(
+    _likeTranslateAnimation =
+        Tween<Offset>(begin: Offset(0, 0), end: Offset(300, 200)).animate(
             CurvedAnimation(parent: _likeController, curve: Curves.easeOut));
     _likeRotateAnimation =
-        Tween<double>(begin: 0.0, end: 45.0).animate(_likeController);
+        Tween<double>(begin: 0, end: 45).animate(_likeController);
 
     // nope animation
     _nopeController = AnimationController(
@@ -94,10 +93,10 @@ class _SuggestionCardState extends State<SuggestionCard>
       setState(() {});
     });
     _nopeTranslateAnimation = Tween<Offset>(
-            begin: Offset(0.0, 0.0), end: Offset(-300.0, 200.0))
+            begin: Offset(0, 0), end: Offset(-300, 200))
         .animate(CurvedAnimation(parent: _nopeController, curve: Curves.ease));
     _nopeRotateAnimation =
-        Tween<double>(begin: 0.0, end: -45.0).animate(_nopeController);
+        Tween<double>(begin: 0, end: -45).animate(_nopeController);
   }
 
   @override
@@ -135,20 +134,20 @@ class _SuggestionCardState extends State<SuggestionCard>
                   ProfileTile(profile: widget.user),
                   _goingToLike
                       ? Positioned(
-                          left: 50.0,
-                          top: 50.0,
+                          left: 50,
+                          top: 50,
                           child: Transform.rotate(
                             angle: -pi / 9,
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0),
+                                borderRadius: BorderRadius.circular(5),
                                 border: Border.all(color: Colors.greenAccent),
                               ),
-                              padding: const EdgeInsets.all(5.0),
+                              padding: const EdgeInsets.all(5),
                               child: Text(
                                 'LIKE',
                                 style: TextStyle(
-                                  fontSize: 20.0,
+                                  fontSize: 20,
                                   color: Colors.greenAccent,
                                 ),
                               ),
@@ -158,20 +157,20 @@ class _SuggestionCardState extends State<SuggestionCard>
                       : SizedBox.shrink(),
                   _goingToNope
                       ? Positioned(
-                          top: 50.0,
-                          right: 50.0,
+                          top: 50,
+                          right: 50,
                           child: Transform.rotate(
                             angle: pi / 9,
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0),
+                                borderRadius: BorderRadius.circular(5),
                                 border: Border.all(color: Colors.redAccent),
                               ),
-                              padding: const EdgeInsets.all(5.0),
+                              padding: const EdgeInsets.all(5),
                               child: Text(
                                 'NOPE',
                                 style: TextStyle(
-                                  fontSize: 20.0,
+                                  fontSize: 20,
                                   color: Colors.redAccent,
                                 ),
                               ),

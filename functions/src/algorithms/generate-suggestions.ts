@@ -38,14 +38,13 @@ const otherUserPassesFilters = (
   otherUser: FirebaseFirestore.DocumentData
 ) => {
   // NOTE: gender is already verified to be acceptable
-  // TODO: FIXME: may encounter problems keeping filters & personal info consistent between client & functions
   if (
     (Date.now() - otherUser.birthday) / 31536000000 < user.ageRangeMin ||
     (Date.now() - otherUser.birthday) / 31536000000 > user.ageRangeMax
   )
     return false;
-  for (const filterFieldName in user.filters) {
-    const { options, method } = user.filters[filterFieldName];
+  for (const filterFieldName in user.otherFilters) {
+    const { options, method } = user.otherFilters[filterFieldName];
     const value = otherUser.personalInfo[filterFieldName];
     if (!valuePassesFilter(value, { name: filterFieldName, method, options }))
       return false;

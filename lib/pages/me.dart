@@ -4,8 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:tundr/repositories/user.dart';
-import 'package:tundr/pages/profile.dart';
-import 'package:tundr/pages/settings/settings.dart';
+import 'package:tundr/pages/edit_profile.dart';
+import 'package:tundr/pages/settings/main.dart';
 
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';
@@ -16,12 +16,12 @@ import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/simple_icon.dart';
 import 'package:tundr/widgets/verified_badge.dart';
 
-class DashboardPage extends StatefulWidget {
+class MePage extends StatefulWidget {
   @override
-  _DashboardPageState createState() => _DashboardPageState();
+  _MePageState createState() => _MePageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _MePageState extends State<MePage> {
   final TextEditingController _nameController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
   bool _editingName = false;
@@ -61,20 +61,20 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               Container(
                 width: width,
-                height: 100.0,
+                height: 100,
                 decoration: BoxDecoration(
                   gradient: MyPalette.blackToTransparent,
                 ),
               ),
               MyBackButton(iconColor: MyPalette.white),
               Positioned(
-                bottom: 0.0,
+                bottom: 0,
                 child: Container(
                   width: width,
-                  height: 100.0,
+                  height: 100,
                   // padding:
-                  //     EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  //     EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
                     gradient: MyPalette.transparentToBlack,
                   ),
@@ -95,7 +95,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       backgroundCursorColor: MyPalette.white,
                                       style: TextStyle(
                                         color: MyPalette.white,
-                                        fontSize: 30.0,
+                                        fontSize: 30,
                                       ),
                                       onEditingComplete: _changeName,
                                     )
@@ -108,7 +108,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                               text: profile.name,
                                               style: TextStyle(
                                                 color: MyPalette.white,
-                                                fontSize: 30.0,
+                                                fontSize: 30,
                                               ),
                                             ),
                                             WidgetSpan(
@@ -120,12 +120,12 @@ class _DashboardPageState extends State<DashboardPage> {
                                         ),
                                       ),
                                     ),
-                              SizedBox(height: 5.0),
+                              SizedBox(height: 5),
                               Text(
                                 'Born ${DateFormat.yMd().format(profile.birthday)}',
                                 style: TextStyle(
                                   color: MyPalette.white,
-                                  fontSize: 16.0,
+                                  fontSize: 16,
                                 ),
                               ),
                             ],
@@ -150,12 +150,12 @@ class _DashboardPageState extends State<DashboardPage> {
                       'Your popularity history will be shown here',
                       style: TextStyle(
                         color: MyPalette.grey,
-                        fontSize: 16.0,
+                        fontSize: 16,
                       ),
                     ),
                   )
                 : Padding(
-                    padding: EdgeInsets.all(20.0),
+                    padding: EdgeInsets.all(20),
                     child: Stack(
                       children: <Widget>[
                         Center(
@@ -191,10 +191,10 @@ class _DashboardPageState extends State<DashboardPage> {
                                 'Popularity',
                                 style: TextStyle(
                                   color: MyPalette.gold,
-                                  fontSize: 20.0,
+                                  fontSize: 20,
                                 ),
                               ),
-                              SizedBox(height: 10.0),
+                              SizedBox(height: 10),
                               Text(
                                 privateInfo.popularityScore.toString(),
                                 style: TextStyle(),
@@ -207,7 +207,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 20.0),
+            padding: EdgeInsets.symmetric(vertical: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -216,14 +216,15 @@ class _DashboardPageState extends State<DashboardPage> {
                   icon: Icons.settings,
                   size: 34,
                   label: 'Settings',
-                  onPressed: _openSettings,
+                  onPressed: () => Navigator.pushNamed(context, '/settings'),
                 ),
                 SimpleIconButton(
                   key: ValueKey('myProfileBtn'),
                   icon: Icons.person,
                   size: 34,
                   label: 'Profile',
-                  onPressed: _openOwnProfileEdit,
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/edit_profile'),
                 ),
               ],
             ),
@@ -277,24 +278,4 @@ class _DashboardPageState extends State<DashboardPage> {
     await Provider.of<User>(context, listen: false)
         .updateProfile({'profileImageUrl': newProfileImageUrl});
   }
-
-  void _openSettings() => Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => SettingsPage(),
-          // transitionsBuilder: (context, animation1, animation2) { ANIMATION
-
-          // },
-        ),
-      );
-
-  void _openOwnProfileEdit() => Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => ProfileEditPage(),
-          // transitionsBuilder: (context, animation1, animation2) { ANIMATION
-
-          // },
-        ),
-      );
 }

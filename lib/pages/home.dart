@@ -1,7 +1,7 @@
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
-import 'package:tundr/pages/dashboard.dart';
-import 'package:tundr/pages/messages/messages.dart';
+import 'package:tundr/pages/me.dart';
+import 'package:tundr/pages/chats_list/chats_list.dart';
 import 'package:tundr/pages/most_popular.dart';
 import 'package:tundr/pages/search.dart';
 import 'package:tundr/pages/swiping/swiping.dart';
@@ -23,15 +23,11 @@ class _HomePageState extends State<HomePage>
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) return;
       if (_tabController.index == 0) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => DashboardPage()),
-        ).then((_) => _tabController.animateTo(_tabController.previousIndex));
+        Navigator.pushNamed(context, '/me').then(
+            (_) => _tabController.animateTo(_tabController.previousIndex));
       } else if (_tabController.index == 3) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SearchPage()),
-        ).then((_) => _tabController.animateTo(_tabController.previousIndex));
+        Navigator.pushNamed(context, '/search').then(
+            (_) => _tabController.animateTo(_tabController.previousIndex));
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -106,7 +102,7 @@ class _HomePageState extends State<HomePage>
           ),
           SwipingPage(),
           SizedBox.shrink(),
-          MessagesPage(),
+          ChatsListPage(),
         ],
       ),
     );

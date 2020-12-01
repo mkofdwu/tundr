@@ -10,9 +10,9 @@ class TrianglePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.drawPath(
       Path()
-        ..lineTo(0.0, size.height)
+        ..lineTo(0, size.height)
         ..lineTo(size.width, size.height / 2)
-        ..lineTo(0.0, 0.0),
+        ..lineTo(0, 0),
       Paint()..color = color,
     );
   }
@@ -24,7 +24,7 @@ class TrianglePainter extends CustomPainter {
 class Triangle extends StatelessWidget {
   final double size;
 
-  Triangle({Key key, this.size = 30.0}) : super(key: key);
+  Triangle({Key key, this.size = 30}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -50,8 +50,8 @@ class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
         transitionsBuilder: (context, animation1, animation2, child) {
           return SlideTransition(
             position: Tween<Offset>(
-              begin: Offset(0.0, 1.0),
-              end: Offset(0.0, 0.0),
+              begin: Offset(0, 1),
+              end: Offset(0, 0),
             ).animate(animation1),
             child: child,
           );
@@ -65,7 +65,7 @@ class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
     return ScrollDownPage(
       color: MyPalette.white,
       builder: (context, width, height) => Padding(
-        padding: const EdgeInsets.all(30.0),
+        padding: const EdgeInsets.all(30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -73,46 +73,46 @@ class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
               'Setup extra\ninfo?',
               style: TextStyle(
                 color: MyPalette.black,
-                fontSize: 40.0,
+                fontSize: 40,
                 fontFamily: 'Helvetica Neue',
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10.0),
+            SizedBox(height: 10),
             Text(
               'You can skip these steps, but they will probably\nincrease your chances of finding a match.',
               style: TextStyle(
                 color: MyPalette.black,
-                fontSize: 12.0,
+                fontSize: 12,
               ),
             ),
-            SizedBox(height: 50.0),
+            SizedBox(height: 50),
             LightTileButton(
               // FUTURE: change colour if setup done
               child: Text(
                 'About me',
-                style: TextStyle(color: MyPalette.black, fontSize: 20.0),
+                style: TextStyle(color: MyPalette.black, fontSize: 20),
               ),
               onTap: _setupAboutMe,
             ),
             LightTileButton(
               child: Text(
                 'Extra photos & videos',
-                style: TextStyle(color: MyPalette.black, fontSize: 20.0),
+                style: TextStyle(color: MyPalette.black, fontSize: 20),
               ),
               onTap: _setupExtraMedia,
             ),
             LightTileButton(
               child: Text(
                 'Personal info',
-                style: TextStyle(color: MyPalette.black, fontSize: 20.0),
+                style: TextStyle(color: MyPalette.black, fontSize: 20),
               ),
               onTap: _setupPersonalInfo,
             ),
             LightTileButton(
               child: Text(
                 'Interests',
-                style: TextStyle(color: MyPalette.black, fontSize: 20.0),
+                style: TextStyle(color: MyPalette.black, fontSize: 20),
               ),
               onTap: _setupInterests,
             ),

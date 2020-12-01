@@ -1,20 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
-import 'package:tundr/pages/settings/filter_settings.dart';
+import 'package:tundr/pages/settings/filters.dart';
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/pages/its_a_match.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 
 import 'package:flutter/material.dart';
-import 'package:tundr/pages/swiping/widgets/suggestion_card.dart';
 import 'package:tundr/services/suggestions_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/theme_builder.dart'; // for icons, remove when alternative image has been found
+
+import 'widgets/suggestion_card.dart';
 
 class SuggestionWithProfile {
   final UserProfile profile;
@@ -157,13 +157,13 @@ class _SwipingPageState extends State<SwipingPage> {
     }
 
     await Provider.of<User>(context, listen: false)
-        .updatePrivateInfo({'numRightSwiped': FieldValue.increment(1)});
+        .writeField('numRightSwiped', UserPrivateInfo);
   }
 
   void _goToFilterSettings() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => FilterSettingsPage()),
+      MaterialPageRoute(builder: (context) => FiltersSettingsPage()),
     );
   }
 

@@ -46,16 +46,16 @@ class _ScrollDownArrowState extends State<ScrollDownArrow>
     return GestureDetector(
       onTap: widget.onNextPage,
       child: SizedBox(
-        width: 20.0,
-        height: 40.0,
+        width: 20,
+        height: 40,
         child: Stack(
           children: <Widget>[
             Positioned(
-              bottom: _animationController.value * 20.0,
+              bottom: _animationController.value * 20,
               child: Image.asset(
                 'assets/images/down-${widget.dark ? 'dark' : 'light'}.png',
-                width: 20.0,
-                height: 20.0,
+                width: 20,
+                height: 20,
               ),
             ),
           ],

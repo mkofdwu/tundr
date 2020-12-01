@@ -34,7 +34,7 @@ class _CheckboxFilterPageState extends State<CheckboxFilterPage> {
           widget.filter.field.name,
           style: Theme.of(context).textTheme.headline6,
         ),
-        elevation: 0.0,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -42,8 +42,8 @@ class _CheckboxFilterPageState extends State<CheckboxFilterPage> {
             widget.filter.field.options.map(
               (option) => Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 10.0,
+                  horizontal: 20,
+                  vertical: 10,
                 ),
                 child: SimpleCheckbox(
                   text: option,

@@ -41,10 +41,10 @@ class MatchTile extends StatelessWidget {
           future: UsersService.getUserProfile(uid),
           builder: (context, snapshot) {
             return Container(
-              width: 100.0,
-              height: 100.0,
+              width: 100,
+              height: 100,
               decoration: BoxDecoration(
-                border: Border.all(color: MyPalette.white, width: 1.0),
+                border: Border.all(color: MyPalette.white, width: 1),
               ),
               child: snapshot.hasData
                   ? getNetworkImage(snapshot.data.profileImageUrl)
@@ -60,15 +60,15 @@ class MatchTile extends StatelessWidget {
           future: UsersService.getUserProfile(uid),
           builder: (context, snapshot) {
             return Container(
-              width: 100.0,
-              height: 100.0,
+              width: 100,
+              height: 100,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [MyPalette.secondaryShadow],
               ),
               child: snapshot.hasData
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(20),
                       child: getNetworkImage(snapshot.data.profileImageUrl),
                     )
                   : null,

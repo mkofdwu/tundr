@@ -75,7 +75,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         ),
         Positioned(
           top: height * 400 / 812,
-          right: 20.0,
+          right: 20,
           width: width * 200 / 375,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -88,14 +88,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 hintText: 'Current password',
                 obscureText: true,
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 10),
               UnderlineTextField(
                 controller: _newPasswordController,
                 color: _passwordsDoNotMatch ? MyPalette.red : null,
                 hintText: 'New password',
                 obscureText: true,
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 10),
               UnderlineTextField(
                 controller: _confirmNewPasswordController,
                 color: _passwordsDoNotMatch ? MyPalette.red : null,
@@ -104,15 +104,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 moveFocus: false,
                 onEditingComplete: () => FocusScope.of(context).unfocus(),
               ),
-              SizedBox(height: 30.0),
+              SizedBox(height: 30),
               GestureDetector(
                 onTap: _changePassword,
                 child: Container(
-                  width: 50.0,
-                  height: 50.0,
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
                     color: MyPalette.gold,
-                    borderRadius: BorderRadius.circular(25.0),
+                    borderRadius: BorderRadius.circular(25),
                     boxShadow: [MyPalette.secondaryShadow],
                   ),
                   child: Icon(Icons.arrow_forward_ios,

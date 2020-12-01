@@ -11,7 +11,7 @@ class DarkTileButton extends StatefulWidget {
   DarkTileButton({
     Key key,
     this.width,
-    this.height = 60.0,
+    this.height = 60,
     @required this.child,
     this.color = MyPalette.gold,
     @required this.onTap,
@@ -30,7 +30,7 @@ class _DarkTileButtonState extends State<DarkTileButton> {
       child: Container(
         width: widget.width,
         height: widget.height,
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20),
         color: _pressed ? widget.color : widget.color.withOpacity(0.8),
         child: widget.child,
       ),

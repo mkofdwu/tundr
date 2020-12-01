@@ -5,8 +5,8 @@ class MenuDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 70.0,
-      height: 2.0,
+      width: 70,
+      height: 2,
       color: MyPalette.black,
     );
   }

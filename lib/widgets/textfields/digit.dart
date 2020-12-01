@@ -56,31 +56,31 @@ class _DigitEntryState extends State<DigitEntry> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 30.0,
-      height: 50.0,
+      width: 30,
+      height: 50,
       child: TextField(
         controller: _controller,
         style: _containsDigit
             ? TextStyle(
                 color: MyPalette.gold,
-                fontSize: 30.0,
+                fontSize: 30,
               )
             : TextStyle(
                 color: MyPalette.grey,
-                fontSize: 24.0,
+                fontSize: 24,
               ),
         decoration: InputDecoration(
           counterText: '',
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
               color: MyPalette.white,
-              width: 2.0,
+              width: 2,
             ),
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
               color: MyPalette.white,
-              width: 5.0,
+              width: 5,
             ),
           ),
         ),
