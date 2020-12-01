@@ -87,7 +87,7 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
   > = new Map(); // map of documentsnapshot to interestVector
 
   for (const user of allUsers) {
-    const interestsVector: Array<number> = new Array(numInterestGroups);
+    const interestsVector: Array<number> = new Array(numInterestGroups).fill(0);
     user.interests.forEach((interest: string) => {
       const groupNo = interestsToGroupNo[interest];
       ++interestsVector[groupNo];
@@ -97,12 +97,16 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
 
   // calculate all the users similarities to each other
 
-  const maleToFemaleSimilaritiesMatrix: Array<Array<number>> = [];
+  const maleToFemaleSimilaritiesMatrix: Array<Array<number>> = new Array(
+    males.length
+  ).fill([]);
 
   const calculateSimilaritiesWithinSameSex = (
     sexualityMembers: Array<FirebaseFirestore.DocumentData>
   ) => {
-    const similaritiesMatrix: Array<Array<number>> = [];
+    const similaritiesMatrix: Array<Array<number>> = new Array(
+      sexualityMembers.length
+    ).fill([]);
     for (let i = 0; i < sexualityMembers.length; ++i) {
       const user = sexualityMembers[i];
       const interestsVector = usersInterestsVectors.get(user.uid);
@@ -156,13 +160,13 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
 
   const addTopNSuggestions = (
     sexualityMembers: Array<FirebaseFirestore.DocumentData>,
-    toSexualityMembers: Array<FirebaseFirestore.DocumentData>,
+    targetSexualityMembers: Array<FirebaseFirestore.DocumentData>,
     similarityMatrix: Array<Array<number>>
   ) => {
     for (let i = 0; i < sexualityMembers.length; ++i) {
       const user = sexualityMembers[i];
       const usersAndScoresSorted = similarityMatrix[i]
-        .map((score, j) => [toSexualityMembers[j], score]) // label each score with the user object
+        .map((score, j) => [targetSexualityMembers[j], score]) // label each score with the user object
         .sort(
           (userAndScore1, userAndScore2) =>
             <number>userAndScore2[1] - <number>userAndScore1[1]
@@ -187,8 +191,8 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
 
   addTopNSuggestions(males, females, maleToFemaleSimilaritiesMatrix);
   addTopNSuggestions(
-    males,
     females,
+    males,
     transposeArray(maleToFemaleSimilaritiesMatrix)
   );
   addTopNSuggestions(gays, gays, gaysSimilaritiesMatrix);

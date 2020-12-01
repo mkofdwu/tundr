@@ -18,7 +18,11 @@ const center = (arr: Array<number>) => {
 const cosSimilarity = (a: Array<number>, b: Array<number>) => {
   if (a.length != b.length)
     throw Error(
-      "cannot compute cos similarity: arrays are not of the same length"
+      'cannot compute cos similarity: arrays are not of the same length (' +
+        a.length +
+        ' and ' +
+        b.length +
+        ')'
     );
 
   let top = 0;

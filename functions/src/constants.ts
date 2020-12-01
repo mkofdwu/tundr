@@ -10,7 +10,7 @@ export const usersPrivateInfoRef = db.collection('users_private_info');
 export const usersAlgorithmDataRef = db.collection('users_algorithm_data');
 export const chatsRef = db.collection('chats');
 
-export const numInterestGroups = 51;
+export const numInterestGroups = 52;
 export const interestsToGroupNo: Record<string, number> = {
   Animals: 0,
   'Bird Watching': 0,
