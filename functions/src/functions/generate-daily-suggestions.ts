@@ -38,9 +38,9 @@ export default functions.firestore
 
     console.log('Generated suggestions:');
     console.log(uidToSuggestions);
-    for (const uid in uidToSuggestions) {
+    for (const [uid, suggestions] of uidToSuggestions) {
       await usersPrivateInfoRef.doc(uid).update({
-        dailyGeneratedSuggestions: uidToSuggestions.get(uid),
+        dailyGeneratedSuggestions: suggestions,
       });
     }
   });

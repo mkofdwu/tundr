@@ -108,17 +108,11 @@ class _MostPopularPageState extends State<MostPopularPage> {
                         ),
                       ),
                     ),
-                    onTap: () => Navigator.push(
+                    onTap: () => Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ItsAMatchPage(user: popUser.profile)),
+                      '/profile',
+                      arguments: popUser.profile,
                     ),
-                    // onTap: () => Navigator.pushNamed(
-                    //   context,
-                    //   '/profile',
-                    //   arguments: popUser.profile,
-                    // ),
                   ),
                 ),
               );

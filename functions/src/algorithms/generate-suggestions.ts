@@ -170,14 +170,14 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
       if (otherInterestsVector == null)
         throw new Error('could not get interests for user: ' + female.uid);
 
-      const similarityScore = pearsonCorrelation(
-        interestsVector,
-        otherInterestsVector
-      );
-      // const similarityScore = numberOfSimilarInterests(
+      // const similarityScore = pearsonCorrelation(
       //   interestsVector,
       //   otherInterestsVector
       // );
+      const similarityScore = numberOfSimilarInterests(
+        interestsVector,
+        otherInterestsVector
+      );
       maleToFemaleSimilaritiesMatrix[maleIndex][femaleIndex] = similarityScore;
     }
   }
@@ -212,6 +212,7 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
         }
         const otherUser = <FirebaseFirestore.DocumentData>userAndScore[0];
         if (otherUserPassesFilters(user, otherUser)) {
+          // && otherUserPassesFilters(otherUser, user)
           thisSuggestions.push(otherUser.uid);
           if (thisSuggestions.length >= N) break;
         }

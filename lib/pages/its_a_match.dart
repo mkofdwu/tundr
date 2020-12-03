@@ -37,7 +37,7 @@ class ItsAMatchPage extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color.fromRGBO(0, 0, 0, 0.9),
+                  Color.fromRGBO(0, 0, 0, 0.8),
                   Color.fromRGBO(0, 0, 0, 0.2)
                 ],
                 begin: Alignment.bottomCenter,
@@ -86,35 +86,31 @@ class ItsAMatchPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 0,
-            top: height * 528 / 812,
+            top: height * 345 / 736,
+            width: width * 104 / 414,
+            height: 4,
+            child: Container(color: MyPalette.black),
+          ),
+          Positioned(
+            top: height * 365 / 736,
+            width: width * 217 / 414,
+            height: height * 46 / 736,
             child: GestureDetector(
               child: Container(
-                width: width * 207 / 414,
-                height: height * 43 / 812,
                 color: MyPalette.gold,
-                child: Stack(
-                  children: <Widget>[
-                    Positioned(
-                      left: 50,
-                      top: 10,
-                      child: Text(
-                        'Say something ...',
-                        style: TextStyle(
-                          color: MyPalette.white,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ],
+                padding: const EdgeInsets.only(left: 26, bottom: 10),
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  'Say something...',
+                  style: TextStyle(fontSize: 18, color: MyPalette.white),
                 ),
               ),
               onTap: () {
                 Navigator.pop(context, false);
                 Navigator.push(
                   context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => ChatPage(
+                  MaterialPageRoute(
+                    builder: (context) => ChatPage(
                       otherUser: user,
                       chat: Chat(
                         id: null,
@@ -124,74 +120,82 @@ class ItsAMatchPage extends StatelessWidget {
                         type: ChatType.newMatch,
                       ),
                     ),
-                    transitionsBuilder:
-                        (context, animation1, animation2, child) {
-                      return FadeTransition(
-                        opacity: animation1,
-                        child: child,
-                      ); // FUTURE: better transition?
-                    },
                   ),
                 );
               },
             ),
           ),
           Positioned(
-            left: 0,
-            top: height * 589 / 812,
-            child: Container(
-              width: width * 250 / 375,
-              height: height * 27 / 812,
-              color: MyPalette.green,
-            ),
+            top: height * 425 / 736,
+            width: width * 156 / 414,
+            height: height * 16 / 736,
+            child: Container(color: MyPalette.white),
           ),
           Positioned(
-            left: 0,
-            top: height * 634 / 812,
+            top: height * 448 / 736,
+            width: width * 194 / 414,
+            height: 3,
+            child: Container(color: Color(0xFF848484)),
+          ),
+          Positioned(
+            top: height * 488 / 736,
+            width: width * 86 / 414,
+            height: 8,
+            child: Container(color: Color(0xFFC4C4C4)),
+          ),
+          Positioned(
+            top: height * 503 / 736,
+            width: width * 114 / 414,
+            height: height * 39 / 736,
             child: GestureDetector(
               child: Container(
-                width: width * 175 / 375,
-                height: height * 29 / 812,
                 color: MyPalette.white,
-                child: Stack(
-                  children: <Widget>[
-                    Positioned(
-                      left: 40,
-                      top: 2,
-                      child: Text(
-                        'Undo',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ],
+                padding: const EdgeInsets.only(top: 14, left: 36),
+                child: Text(
+                  'Undo',
+                  style: TextStyle(fontSize: 14, color: MyPalette.black),
                 ),
               ),
               onTap: () => Navigator.pop(context, true),
             ),
           ),
           Positioned(
-            top: height * 752 / 812,
+            top: height * 551 / 736,
+            width: width * 67 / 414,
+            height: height * 17 / 736,
+            child: Container(color: MyPalette.black),
+          ),
+          Positioned(
             right: 0,
+            top: height * 590 / 736,
+            width: width * 70 / 414,
+            height: height * 12 / 736,
+            child: Container(color: MyPalette.gold),
+          ),
+          Positioned(
+            right: 0,
+            top: height * 608 / 736,
+            width: width * 134 / 414,
+            height: height * 35 / 736,
             child: GestureDetector(
               child: Container(
-                width: width * 178 / 375,
-                height: height * 28 / 812,
-                color: MyPalette.white,
-                child: Stack(
-                  children: <Widget>[
-                    Positioned(
-                      left: 20,
-                      top: 0,
-                      child: Text(
-                        'Continue',
-                        style: TextStyle(color: MyPalette.gold, fontSize: 18),
-                      ),
-                    ),
-                  ],
+                color: MyPalette.black,
+                padding: const EdgeInsets.only(right: 20, bottom: 8),
+                alignment: Alignment.bottomRight,
+                child: Text(
+                  'Continue',
+                  style: TextStyle(fontSize: 16, color: MyPalette.white),
                 ),
               ),
               onTap: () => Navigator.pop(context, false),
             ),
+          ),
+          Positioned(
+            right: 0,
+            top: height * 648 / 736,
+            width: width * 121 / 414,
+            height: 3,
+            child: Container(color: MyPalette.black),
           ),
         ],
       ),

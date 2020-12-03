@@ -6,6 +6,7 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import {
   chatsRef,
+  fcm,
   userProfilesRef,
   usersAlgorithmDataRef,
   usersPrivateInfoRef,
@@ -157,3 +158,48 @@ export const startConversation = functions.https.onCall(
     return { result: true };
   }
 );
+
+export const matchWith = functions.https.onCall(async (data, context) => {
+  // TODO check if both users have indeed liked each other
+  const uid = context.auth?.uid;
+  const otherUid = data.otherUid;
+  if (uid == null || otherUid == null) return;
+
+  await usersPrivateInfoRef.doc(uid).update({
+    matches: admin.firestore.FieldValue.arrayUnion(otherUid),
+  });
+  await usersPrivateInfoRef.doc(otherUid).update({
+    matches: admin.firestore.FieldValue.arrayUnion(uid),
+  });
+
+  const otherPrivateInfo = (
+    await usersPrivateInfoRef.doc(otherUid).get()
+  ).data();
+  if (otherPrivateInfo == null)
+    throw 'user exists but data() returned undefined';
+
+  if (otherPrivateInfo['settings']['newMatchNotification']) {
+    // send notification to other user
+    const tokens: string[] = (
+      await usersPrivateInfoRef.doc(otherUid).collection('tokens').get()
+    ).docs.map((doc) => doc.id);
+    const userProfile = (await userProfilesRef.doc(uid).get()).data();
+    if (userProfile == null)
+      throw `user with uid ${uid} initiated match but seems to have disappeared`;
+    const matchName: string = userProfile['name'];
+    if (matchName == null) throw 'user exists but data() returned undefined';
+    const payload: admin.messaging.MessagingPayload = {
+      notification: {
+        title: 'Congratulations!',
+        body: `${matchName} liked you too!`,
+        clickAction: 'FLUTTER_NOTIFICATION_CLICK',
+      },
+      // data: {
+      //     type: "newMatch",
+      //     uid: action.sender
+      // }
+    };
+    return fcm.sendToDevice(tokens, payload);
+  }
+  return;
+});

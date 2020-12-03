@@ -55,8 +55,8 @@ class ProfileTile extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: 20,
-                bottom: constraints.maxHeight / 8,
+                left: 30,
+                bottom: 30,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[

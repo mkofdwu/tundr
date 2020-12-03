@@ -110,76 +110,70 @@ class _SuggestionCardState extends State<SuggestionCard>
   @override
   Widget build(BuildContext context) {
     _fadeInController.forward();
-
     return GestureDetector(
-      child: FadeTransition(
-        opacity: _fadeInAnimation,
-        child: Transform.translate(
-          offset: _likeTranslateAnimation?.value ??
-              _nopeTranslateAnimation?.value ??
-              Offset.zero,
-          child: Transform.rotate(
-            angle: (_angle +
-                    (_likeRotateAnimation?.value ??
-                        _nopeRotateAnimation ??
-                        0)) *
-                pi /
-                180,
-            origin: Offset(0, 300),
-            child: SizedBox(
-              width: widget.width,
-              height: widget.height,
-              child: Stack(
-                children: <Widget>[
-                  ProfileTile(profile: widget.user),
-                  _goingToLike
-                      ? Positioned(
-                          left: 50,
-                          top: 50,
-                          child: Transform.rotate(
-                            angle: -pi / 9,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(color: Colors.greenAccent),
-                              ),
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                'LIKE',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.greenAccent,
-                                ),
+      child: Transform.translate(
+        offset: _likeTranslateAnimation?.value ??
+            _nopeTranslateAnimation?.value ??
+            Offset.zero,
+        child: Transform.rotate(
+          angle: (_angle +
+                  (_likeRotateAnimation?.value ?? _nopeRotateAnimation ?? 0)) *
+              pi /
+              180,
+          origin: Offset(0, 300),
+          child: SizedBox(
+            width: widget.width,
+            height: widget.height,
+            child: Stack(
+              children: <Widget>[
+                ProfileTile(profile: widget.user),
+                _goingToLike
+                    ? Positioned(
+                        left: 50,
+                        top: 50,
+                        child: Transform.rotate(
+                          angle: -pi / 9,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.greenAccent),
+                            ),
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              'LIKE',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.greenAccent,
                               ),
                             ),
                           ),
-                        )
-                      : SizedBox.shrink(),
-                  _goingToNope
-                      ? Positioned(
-                          top: 50,
-                          right: 50,
-                          child: Transform.rotate(
-                            angle: pi / 9,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(color: Colors.redAccent),
-                              ),
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                'NOPE',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.redAccent,
-                                ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
+                _goingToNope
+                    ? Positioned(
+                        top: 50,
+                        right: 50,
+                        child: Transform.rotate(
+                          angle: pi / 9,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.redAccent),
+                            ),
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              'NOPE',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.redAccent,
                               ),
                             ),
                           ),
-                        )
-                      : SizedBox.shrink(),
-                ],
-              ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
+              ],
             ),
           ),
         ),

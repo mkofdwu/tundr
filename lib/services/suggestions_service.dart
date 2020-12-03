@@ -20,9 +20,9 @@ class SuggestionsService {
         .call({'otherUid': suggestionUserUid});
   }
 
-  static Future<void> match(String otherUid) async {
+  static Future<void> matchWith(String otherUid) async {
     await FirebaseFunctions.instance
-        .httpsCallable('match')
+        .httpsCallable('matchWith')
         .call({'otherUid': otherUid});
   }
 }
