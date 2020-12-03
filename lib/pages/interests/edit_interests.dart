@@ -7,6 +7,7 @@ import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/pages/interests/widgets/interests_browser.dart';
 
 class EditInterestsPage extends StatelessWidget {
+  // cannot have less than 10 interests?
   @override
   Widget build(BuildContext context) {
     return Scaffold(

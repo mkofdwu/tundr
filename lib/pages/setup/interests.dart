@@ -12,13 +12,7 @@ class SetupInterestsPage extends StatefulWidget {
 }
 
 class _SetupInterestsPageState extends State<SetupInterestsPage> {
-  final TextEditingController _searchController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _searchController.addListener(() => setState(() {}));
-  }
+  final _minInterests = 10;
 
   @override
   Widget build(BuildContext context) {
@@ -62,21 +56,39 @@ class _SetupInterestsPageState extends State<SetupInterestsPage> {
   }
 
   void _nextPage() {
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) =>
-            SetupPhoneNumberPage(),
-        transitionsBuilder: (context, animation1, animation2, child) {
-          return SlideTransition(
-            position: Tween<Offset>(
-              begin: Offset(0, 1),
-              end: Offset(0, 0),
-            ).animate(animation1),
-            child: child,
-          );
-        },
-      ),
-    );
+    if (Provider.of<RegistrationInfo>(context, listen: false).interests.length <
+        _minInterests) {
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Insufficient interests'),
+          content: Text(
+              'Please select at least 10 interests. This will be crucial when people are suggested to you.'),
+          actions: [
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      );
+    } else {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) =>
+              SetupPhoneNumberPage(),
+          transitionsBuilder: (context, animation1, animation2, child) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: Offset(0, 1),
+                end: Offset(0, 0),
+              ).animate(animation1),
+              child: child,
+            );
+          },
+        ),
+      );
+    }
   }
 }

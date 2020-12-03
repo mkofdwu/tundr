@@ -12,6 +12,23 @@ import transposeArray from '../utils/transpose-array';
 
 const N = 10; // maximum amount of suggestions generated per day for each user
 
+const numberOfSimilarInterests = (a: Array<number>, b: Array<number>) => {
+  if (a.length != b.length) {
+    throw (
+      'Interest vectors do not have the same length (' +
+      a.length +
+      ' and ' +
+      b.length +
+      ')'
+    );
+  }
+  let num = 0;
+  for (let i = 0; i < a.length; ++i) {
+    num += Math.min(a[i], b[i]);
+  }
+  return num;
+};
+
 const valuePassesFilter = (value: any, filter: Filter) => {
   switch (filter.name) {
     case 'Height':
@@ -157,6 +174,10 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
         interestsVector,
         otherInterestsVector
       );
+      // const similarityScore = numberOfSimilarInterests(
+      //   interestsVector,
+      //   otherInterestsVector
+      // );
       maleToFemaleSimilaritiesMatrix[maleIndex][femaleIndex] = similarityScore;
     }
   }
