@@ -130,7 +130,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       style: TextStyle(
                         color: MyPalette.black,
                         fontSize: 60,
-                        fontFamily: 'Helvetica Neue',
                         fontWeight: FontWeight.bold,
                       ),
                     ),

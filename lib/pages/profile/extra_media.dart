@@ -68,7 +68,7 @@ class _ExtraMediaProfilePageState extends State<ExtraMediaProfilePage> {
             icon: Icons.close,
             onPressed: () {
               Navigator.popUntil(
-                  context, (route) => route.settings.name == '/user_profile');
+                  context, (route) => route.settings.name == '/profile');
               Navigator.pop(context);
             },
           ),

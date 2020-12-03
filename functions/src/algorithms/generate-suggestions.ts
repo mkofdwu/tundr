@@ -28,9 +28,13 @@ const valuePassesFilter = (value: any, filter: Filter) => {
         case FilterMethod.none:
           return true;
         case FilterMethod.ifContainsAll:
-          return value.every((item: any) => filter.options.includes(item));
+          return filter.options.every((item: any) => value.includes(item));
         case FilterMethod.ifContainsAny:
-          return value.some((item: any) => filter.options.includes(item));
+          return filter.options.some((item: any) => value.includes(item));
+        case FilterMethod.ifDoesNotContainAll:
+          return !filter.options.every((item: any) => value.includes(item));
+        case FilterMethod.ifDoesNotContainAny:
+          return !filter.options.some((item: any) => value.includes(item));
         default:
           throw new Error('invalid filter method: ' + filter.method);
       }
@@ -52,6 +56,7 @@ const otherUserPassesFilters = (
   for (const filterFieldName in user.otherFilters) {
     const { options, method } = user.otherFilters[filterFieldName];
     const value = otherUser.personalInfo[filterFieldName];
+    if (value == null) return true; // not sure if this is the most appropriate response
     if (!valuePassesFilter(value, { name: filterFieldName, method, options }))
       return false;
   }

@@ -74,7 +74,6 @@ class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
               style: TextStyle(
                 color: MyPalette.black,
                 fontSize: 40,
-                fontFamily: 'Helvetica Neue',
                 fontWeight: FontWeight.bold,
               ),
             ),

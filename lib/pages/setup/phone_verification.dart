@@ -73,7 +73,6 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                     style: TextStyle(
                       color: MyPalette.white,
                       fontSize: 40,
-                      fontFamily: 'Helvetica Neue',
                       fontWeight: FontWeight.bold,
                     ),
                   ),

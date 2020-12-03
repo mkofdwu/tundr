@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/models/user_profile.dart';
-import 'package:tundr/pages/interests/interests_edit.dart';
+import 'package:tundr/pages/interests/edit_interests.dart';
 import 'package:tundr/pages/interests/widgets/interests_wrap.dart';
 import 'package:tundr/pages/personal_info/widgets/personal_info_list.dart';
 import 'package:tundr/repositories/user.dart';
@@ -23,7 +23,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void _previewProfile() => Navigator.pushNamed(
         context,
-        '/user_profile',
+        '/profile',
         arguments: Provider.of<User>(context, listen: false).profile,
       );
 
@@ -49,7 +49,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void _editInterests() => Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => InterestsEditPage(),
+          pageBuilder: (context, animation1, animation2) => EditInterestsPage(),
           transitionsBuilder: (context, animation1, animation2, child) {
             return FadeTransition(
                 opacity: animation1, child: child); // ANIMATION
@@ -80,6 +80,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     final profile = Provider.of<User>(context, listen: false).profile;
     _aboutMeController.text = profile.aboutMe;
     return Scaffold(
@@ -165,7 +166,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 24),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -176,37 +177,34 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       fontSize: 20,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  LayoutBuilder(
-                    builder: (context, constraints) => ExtraMediaGrid(
-                      size: constraints.maxWidth,
-                      extraMedia: profile.extraMedia,
-                      onChangeMedia: (i, media) async {
-                        media.url = await StorageService.uploadMedia(
-                          uid: profile.uid,
-                          media: media,
-                          oldUrl: profile.extraMedia[i]?.url,
-                          prefix: 'extra_media',
-                        );
-                        media.isLocalFile = false;
-                        if (mounted) {
-                          setState(() =>
-                              Provider.of<User>(context, listen: false)
-                                  .profile
-                                  .extraMedia[i] = media);
-                          _updateMedia();
-                        }
-                      },
-                      onRemoveMedia: (i) {
-                        StorageService.deleteMedia(profile.extraMedia[i].url);
-                        setState(() => profile.extraMedia[i] = null);
+                  SizedBox(height: 16),
+                  ExtraMediaGrid(
+                    size: width - 60,
+                    extraMedia: profile.extraMedia,
+                    onChangeMedia: (i, media) async {
+                      media.url = await StorageService.uploadMedia(
+                        uid: profile.uid,
+                        media: media,
+                        oldUrl: profile.extraMedia[i]?.url,
+                        prefix: 'extra_media',
+                      );
+                      media.isLocalFile = false;
+                      if (mounted) {
+                        setState(() => Provider.of<User>(context, listen: false)
+                            .profile
+                            .extraMedia[i] = media);
                         _updateMedia();
-                      },
-                    ),
+                      }
+                    },
+                    onRemoveMedia: (i) {
+                      StorageService.deleteMedia(profile.extraMedia[i].url);
+                      setState(() => profile.extraMedia[i] = null);
+                      _updateMedia();
+                    },
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 30),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -217,6 +215,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       fontSize: 20,
                     ),
                   ),
+                  SizedBox(height: 10),
                   PersonalInfoList(
                     personalInfo: profile.personalInfo,
                     onChanged: (name, value) {
@@ -230,7 +229,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 24),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -251,6 +250,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 10),
                   _buildInterests(profile.interests + profile.customInterests),
                 ],
               ),

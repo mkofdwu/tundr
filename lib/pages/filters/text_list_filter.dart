@@ -26,23 +26,24 @@ class _TextListFilterPageState extends State<TextListFilterPage> {
       builder: (context, width, height) => <Widget>[
         MyBackButton(),
         Positioned(
-          left: width * 48 / 375,
-          top: height * 90 / 812,
+          left: width * 50 / 375,
+          top: height * 150 / 812,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 widget.filter.field.name,
-                style: TextStyle(
-                  color: MyPalette.white,
-                  fontSize: 60,
-                ),
+                style: TextStyle(fontSize: 50),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: FilterMethodSelector(
-                  defaultMethod: widget.filter.method,
-                  onChanged: (method) => widget.filter.method = method,
-                ),
+              SizedBox(height: 10),
+              Text(
+                widget.filter.field.prompt,
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 20),
+              FilterMethodSelector(
+                defaultMethod: widget.filter.method,
+                onChanged: (method) => widget.filter.method = method,
               ),
             ],
           ),
@@ -94,17 +95,21 @@ class _TextListFilterPageState extends State<TextListFilterPage> {
                     child: _inputting
                         ? Container(
                             width: 200,
-                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            padding: EdgeInsets.symmetric(horizontal: 16),
                             color: MyPalette.gold,
                             child: TextField(
                               autofocus: true,
                               textDirection: TextDirection.rtl,
                               cursorColor: MyPalette.white,
-                              style: Theme.of(context).textTheme.headline6,
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: MyPalette.white,
+                              ),
                               decoration:
                                   InputDecoration(border: InputBorder.none),
                               onSubmitted: (text) => setState(() {
                                 if (text.isNotEmpty) {
+                                  widget.filter.options ??= [];
                                   widget.filter.options.add(text);
                                 }
                                 _inputting = false;

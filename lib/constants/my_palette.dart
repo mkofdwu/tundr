@@ -9,7 +9,7 @@ class MyPalette {
   static const Color gold = Color(0xFFAC9227);
   static const Color red = Color(0xFFAC2727);
   static const Color _shadowGrey = Color.fromRGBO(0, 0, 0, 0.25);
-  static const Color darkGrey = Color(0xFF222222);
+  static const Color darkGrey = Color(0xFF1E1E1E);
   static const Color transparentBlack = Color(0x00000000);
   static const Color transparentGold = Color(0x00AC9227);
   static const Color transparentGrey = Color(0x00BBBBBB);

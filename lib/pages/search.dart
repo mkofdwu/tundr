@@ -23,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
 
   void _openUser(user) => Navigator.pushNamed(
         context,
-        '/user_profile',
+        '/profile',
         arguments: user,
       );
 

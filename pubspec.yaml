@@ -52,9 +52,16 @@ flutter:
     - assets/images/
 
   fonts:
-    - family: .AppleSystemUIFont
+    # - family: Helvetica Neue
+    #   fonts:
+    #     - asset: assets/fonts/HelveticaNeue.ttc
+    - family: Liberation Sans
       fonts:
-        - asset: assets/fonts/SFNS.ttf
-    - family: Helvetica Neue
-      fonts:
-        - asset: assets/fonts/HelveticaNeue.ttc
+        - asset: assets/fonts/LiberationSans-Regular.ttf
+        - asset: assets/fonts/LiberationSans-Italic.ttf
+          style: italic
+        - asset: assets/fonts/LiberationSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/LiberationSans-BoldItalic.ttf
+          weight: 700
+          style: italic

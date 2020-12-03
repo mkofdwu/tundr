@@ -9,6 +9,7 @@ import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
+import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/simple_icon.dart';
@@ -69,10 +70,9 @@ class _MePageState extends State<MePage> {
                 bottom: 0,
                 child: Container(
                   width: width,
-                  height: 100,
-                  // padding:
-                  //     EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  height: 120,
+                  alignment: Alignment.bottomCenter,
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 40),
                   decoration: BoxDecoration(
                     gradient: MyPalette.transparentToBlack,
                   ),
@@ -142,70 +142,83 @@ class _MePageState extends State<MePage> {
             ],
           ),
           Expanded(
-            child: privateInfo.popularityHistory.isEmpty
-                ? Center(
-                    child: Text(
-                      'Your popularity history will be shown here',
-                      style: TextStyle(
-                        color: MyPalette.grey,
-                        fontSize: 16,
+            child: Container(
+              transform: Matrix4.translationValues(0, -30, 0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: fromTheme(
+                  context,
+                  dark: BorderRadius.zero,
+                  light: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+              ),
+              child: privateInfo.popularityHistory.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Your popularity history will be shown here',
+                        style: TextStyle(
+                          color: MyPalette.grey,
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                  )
-                : Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Stack(
-                      children: <Widget>[
-                        Center(
-                          child: LineChart(
-                            LineChartData(
-                              gridData: FlGridData(show: false),
-                              borderData: FlBorderData(show: false),
-                              titlesData: FlTitlesData(show: false),
-                              lineBarsData: [
-                                LineChartBarData(
-                                  colors: [Theme.of(context).accentColor],
-                                  dotData: FlDotData(show: false),
-                                  spots: List<FlSpot>.from(privateInfo
-                                      .popularityHistory
-                                      .map((entryString) {
-                                    // each entry string is formatted as: `timestamp:score`
-                                    final entry = entryString.split(':');
-                                    return FlSpot(
-                                      double.parse(entry[0]),
-                                      double.parse(entry[1]),
-                                    );
-                                  })),
+                    )
+                  : Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 26, vertical: 20),
+                      child: Stack(
+                        children: <Widget>[
+                          Center(
+                            child: LineChart(
+                              LineChartData(
+                                gridData: FlGridData(show: false),
+                                borderData: FlBorderData(show: false),
+                                titlesData: FlTitlesData(show: false),
+                                lineBarsData: [
+                                  LineChartBarData(
+                                    colors: [Theme.of(context).accentColor],
+                                    dotData: FlDotData(show: false),
+                                    spots: List<FlSpot>.from(privateInfo
+                                        .popularityHistory
+                                        .map((entryString) {
+                                      // each entry string is formatted as: `timestamp:score`
+                                      final entry = entryString.split(':');
+                                      return FlSpot(
+                                        double.parse(entry[0]),
+                                        double.parse(entry[1]),
+                                      );
+                                    })),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Popularity',
+                                  style: TextStyle(
+                                    color: MyPalette.gold,
+                                    fontSize: 20,
+                                  ),
                                 ),
+                                SizedBox(height: 8),
+                                Text(privateInfo.popularityScore.toString()),
                               ],
                             ),
                           ),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                'Popularity',
-                                style: TextStyle(
-                                  color: MyPalette.gold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                privateInfo.popularityScore.toString(),
-                                style: TextStyle(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+            ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
+            padding: EdgeInsets.only(bottom: 40),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[

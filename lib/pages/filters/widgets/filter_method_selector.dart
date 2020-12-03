@@ -14,7 +14,6 @@ class FilterMethodSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // FUTURE: temporary fix, replace with better custom widget in the future
-
     return Theme(
       data: ThemeData(canvasColor: Theme.of(context).dialogBackgroundColor),
       child: DropdownButton<FilterMethod>(
@@ -33,14 +32,14 @@ class FilterMethodSelector extends StatelessWidget {
             child: Text('Must contains any of ...'),
             value: FilterMethod.ifContainsAny,
           ),
-          // DropdownMenuItem(
-          //   child: Text('Cannot not contain all of ...'),
-          //   value: FilterMethod.ifDoesNotContainAll,
-          // ),
-          // DropdownMenuItem(
-          //   child: Text('Cannot not contain any of ...'),
-          //   value: FilterMethod.ifDoesNotContainAny,
-          // ),
+          DropdownMenuItem(
+            child: Text('Cannot not contain all of ...'),
+            value: FilterMethod.ifDoesNotContainAll,
+          ),
+          DropdownMenuItem(
+            child: Text('Cannot not contain any of ...'),
+            value: FilterMethod.ifDoesNotContainAny,
+          ),
         ],
         onChanged: onChanged,
       ),

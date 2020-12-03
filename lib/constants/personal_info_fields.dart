@@ -49,7 +49,7 @@ const Map<String, Map<String, dynamic>> personalInfoFields = {
   'K-Pop': {
     'type': 2,
     'prompt':
-        "On a scale of 1 to 5, how much do you listen to / are you into K-Pop? (1 indicating you don't like it",
+        "On a scale of 1 to 5, how much do you listen to / are you into K-Pop? (1 indicating you don't like it)",
     'options': 5,
   },
   'Anime': {

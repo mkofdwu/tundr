@@ -47,13 +47,11 @@ class TileTextField extends StatelessWidget {
           hintStyle: TextStyle(
             color: MyPalette.grey,
             fontSize: 20,
-            fontFamily: 'Helvetica Neue',
           ),
         ),
         style: TextStyle(
           color: MyPalette.black,
           fontSize: 20,
-          fontFamily: 'Helvetica Neue',
         ),
         cursorColor: MyPalette.black,
         controller: controller,

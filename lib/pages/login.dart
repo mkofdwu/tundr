@@ -81,7 +81,6 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(
                   color: MyPalette.black,
                   fontSize: 60,
-                  fontFamily: 'Helvetica Neue',
                   fontWeight: FontWeight.bold,
                 ),
               ),

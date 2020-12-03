@@ -36,7 +36,8 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
     Navigator.pop(context, _value.toInt());
   }
 
-  Widget _buildDark() {
+  @override
+  Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return WillPopScope(
@@ -45,7 +46,6 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
         return Future(() => false);
       },
       child: Material(
-        color: MyPalette.black,
         child: Stack(
           children: <Widget>[
             SafeArea(
@@ -55,15 +55,12 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
               ),
             ),
             Positioned(
-              left: width * 37 / 375,
-              top: height * 100 / 812,
-              width: width * 200 / 375,
+              left: 40,
+              top: height * 120 / 812,
+              width: width - 100,
               child: Text(
                 widget.field.prompt,
-                style: TextStyle(
-                  color: MyPalette.white,
-                  fontSize: 40,
-                ),
+                style: TextStyle(fontSize: 34),
               ),
             ),
             Positioned(
@@ -76,7 +73,7 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
                 divisions: widget.field.options - 1,
                 value: _value,
                 activeColor: MyPalette.gold,
-                inactiveColor: MyPalette.white,
+                inactiveColor: Theme.of(context).colorScheme.onPrimary,
                 label: _value.toInt().toString(),
                 onChanged: (value) => setState(() => _value = value),
               ),
@@ -85,67 +82,5 @@ class _SliderFieldPageState extends State<SliderFieldPage> {
         ),
       ),
     );
-  }
-
-  Widget _buildLight() {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-    return WillPopScope(
-      onWillPop: () {
-        _return();
-        return Future(() => false);
-      },
-      child: Material(
-        color: MyPalette.white,
-        child: Stack(
-          children: <Widget>[
-            TileIconButton(
-              icon: Icons.arrow_back,
-              onPressed: _return,
-            ),
-            Positioned(
-              left: width * 37 / 375,
-              top: height * 100 / 812,
-              width: width * 200 / 375,
-              child: Text(
-                widget.field.prompt,
-                style: TextStyle(
-                  color: MyPalette.black,
-                  fontSize: 40,
-                ),
-              ),
-            ),
-            Positioned(
-              left: width * 150 / 375,
-              top: height * 500 / 812,
-              width: width * 200 / 375,
-              child: Slider(
-                min: 1,
-                max: widget.field.options.toDouble(),
-                divisions: widget.field.options - 1,
-                value: _value,
-                activeColor: MyPalette.gold,
-                inactiveColor: MyPalette.black,
-                label: _value.toInt().toString(),
-                onChanged: (value) => setState(() => _value = value),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    switch (Provider.of<ThemeManager>(context).theme) {
-      case ThemeMode.dark:
-        return _buildDark();
-      case ThemeMode.light:
-        return _buildLight();
-      default:
-        throw Exception(
-            'Invalid theme: ${Provider.of<ThemeManager>(context).theme}');
-    }
   }
 }

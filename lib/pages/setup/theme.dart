@@ -32,7 +32,6 @@ class _SetupThemePageState extends State<SetupThemePage> {
               style: TextStyle(
                 color: MyPalette.black,
                 fontSize: 30,
-                fontFamily: 'Helvetica Neue',
                 fontWeight: FontWeight.bold,
               ),
             ),

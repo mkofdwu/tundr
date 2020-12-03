@@ -57,7 +57,7 @@ class _TileRadioGroupState extends State<TileRadioGroup> {
                         color: option == _selectedOption
                             ? MyPalette.black
                             : MyPalette.gold,
-                        fontSize: min(constraints.maxHeight - 3, 40),
+                        fontSize: min(constraints.maxHeight - 10, 40),
                       ),
                     ),
                   ),
@@ -99,7 +99,7 @@ class _TileRadioGroupState extends State<TileRadioGroup> {
                       color: option == _selectedOption
                           ? MyPalette.white
                           : MyPalette.gold,
-                      fontSize: min(constraints.maxHeight - 3, 40),
+                      fontSize: min(constraints.maxHeight - 10, 40),
                     ),
                   ),
                 ),

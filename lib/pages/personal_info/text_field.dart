@@ -35,7 +35,8 @@ class _TextFieldPageState extends State<TextFieldPage> {
     Navigator.pop(context, _controller.text);
   }
 
-  Widget _buildDark() {
+  @override
+  Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
         _return();
@@ -55,40 +56,23 @@ class _TextFieldPageState extends State<TextFieldPage> {
             width: width * 200 / 375,
             child: Text(
               widget.field.prompt,
-              style: TextStyle(
-                color: MyPalette.white,
-                fontSize: 40,
-              ),
+              style: TextStyle(fontSize: 40),
             ),
           ),
           Positioned(
-            left: width * 150 / 375,
-            top: height * 500 / 812,
+            right: 40,
+            top: height * 400 / 812,
             width: width * 200 / 375,
-            // child: UnderlineTextField(
-            //   controller: _controller,
-            //   autoFocus: true,
-            // ),
             child: TextField(
               autofocus: true,
               controller: _controller,
-              cursorColor: MyPalette.white,
-              style: TextStyle(
-                color: MyPalette.white,
-                fontSize: 20,
-              ),
+              style: TextStyle(fontSize: 20),
               decoration: InputDecoration(
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: MyPalette.white,
-                    width: 2,
-                  ),
+                  borderSide: BorderSide(width: 2),
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: MyPalette.white,
-                    width: 5,
-                  ),
+                  borderSide: BorderSide(width: 5),
                 ),
               ),
             ),
@@ -96,73 +80,5 @@ class _TextFieldPageState extends State<TextFieldPage> {
         ],
       ),
     );
-  }
-
-  Widget _buildLight() => WillPopScope(
-        onWillPop: () {
-          _return();
-          return Future(() => false);
-        },
-        child: StackScrollPage(
-          builder: (context, width, height) => <Widget>[
-            TileIconButton(
-              icon: Icons.arrow_back,
-              onPressed: _return,
-            ),
-            Positioned(
-              left: width * 37 / 375,
-              top: height * 100 / 812,
-              width: width * 200 / 375,
-              child: Text(
-                widget.field.prompt,
-                style: TextStyle(
-                  color: MyPalette.black,
-                  fontSize: 40,
-                ),
-              ),
-            ),
-            Positioned(
-              left: width * 150 / 375,
-              top: height * 500 / 812,
-              width: width * 200 / 375,
-              child: TextField(
-                autofocus: true,
-                controller: _controller,
-                cursorColor: MyPalette.black,
-                style: TextStyle(
-                  color: MyPalette.black,
-                  fontSize: 20,
-                ),
-                decoration: InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MyPalette.black,
-                      width: 2,
-                    ),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MyPalette.black,
-                      width: 5,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-
-  @override
-  Widget build(BuildContext context) {
-    switch (Provider.of<ThemeManager>(context).theme) {
-      case ThemeMode.dark:
-        return _buildDark();
-      case ThemeMode.light:
-        return _buildLight();
-      default:
-        throw Exception(
-            'Invalid theme: ${Provider.of<ThemeManager>(context).theme}');
-    }
   }
 }

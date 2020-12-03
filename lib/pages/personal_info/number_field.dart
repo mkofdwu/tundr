@@ -34,135 +34,57 @@ class _NumberFieldPageState extends State<NumberFieldPage> {
     Navigator.pop(context, int.tryParse(_controller.text));
   }
 
-  Widget _buildDark() => WillPopScope(
-        onWillPop: () {
-          _return();
-          return Future(() => false);
-        },
-        child: StackScrollPage(
-          builder: (context, width, height) => <Widget>[
-            SafeArea(
-              child: TileIconButton(
-                icon: Icons.arrow_back,
-                onPressed: _return,
-              ),
-            ),
-            Positioned(
-              left: width * 37 / 375,
-              top: height * 100 / 812,
-              width: width * 200 / 375,
-              child: Text(
-                widget.field.prompt,
-                style: TextStyle(
-                  color: MyPalette.white,
-                  fontSize: 40,
-                ),
-              ),
-            ),
-            Positioned(
-              left: width * 150 / 375,
-              top: height * 500 / 812,
-              width: width * 200 / 375,
-              child: TextField(
-                autofocus: true,
-                keyboardType: TextInputType.number,
-                controller: _controller,
-                cursorColor: MyPalette.white,
-                style: TextStyle(
-                  color: MyPalette.white,
-                  fontSize: 20,
-                ),
-                decoration: InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MyPalette.white,
-                      width: 2,
-                    ),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MyPalette.white,
-                      width: 5,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-
-  Widget _buildLight() => WillPopScope(
-        onWillPop: () {
-          _return();
-          return Future(() => false);
-        },
-        child: StackScrollPage(
-          builder: (context, width, height) => <Widget>[
-            TileIconButton(
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () {
+        _return();
+        return Future(() => false);
+      },
+      child: StackScrollPage(
+        builder: (context, width, height) => <Widget>[
+          SafeArea(
+            child: TileIconButton(
               icon: Icons.arrow_back,
               onPressed: _return,
             ),
-            Positioned(
-              left: width * 37 / 375,
-              top: height * 100 / 812,
-              width: width * 200 / 375,
-              child: Text(
-                widget.field.prompt,
-                style: TextStyle(
-                  color: MyPalette.black,
-                  fontSize: 40,
+          ),
+          Positioned(
+            left: 40,
+            top: height * 120 / 812,
+            width: width - 100,
+            child: Text(
+              widget.field.prompt,
+              style: TextStyle(fontSize: 34),
+            ),
+          ),
+          Positioned(
+            left: width * 150 / 375,
+            top: height * 500 / 812,
+            width: width * 200 / 375,
+            child: TextField(
+              autofocus: true,
+              keyboardType: TextInputType.number,
+              controller: _controller,
+              style: TextStyle(fontSize: 20),
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    // color: MyPalette.white,
+                    width: 2,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    // color: MyPalette.white,
+                    width: 5,
+                  ),
                 ),
               ),
             ),
-            Positioned(
-              left: width * 150 / 375,
-              top: height * 500 / 812,
-              width: width * 200 / 375,
-              child: UnderlineTextField(
-                controller: _controller,
-                autoFocus: true,
-                keyboardType: TextInputType.number,
-              ),
-              // child: TextField(
-              //   autofocus: true,
-              //   keyboardType: TextInputType.number,
-              //   controller: _controller,
-              //   cursorColor: AppColors.black,
-              //   style: TextStyle(
-              //     color: AppColors.black,
-              //     fontSize: 20,
-              //   ),
-              //   decoration: InputDecoration(
-              //     enabledBorder: UnderlineInputBorder(
-              //       borderSide: BorderSide(
-              //         color: AppColors.black,
-              //         width: 2,
-              //       ),
-              //     ),
-              //     focusedBorder: UnderlineInputBorder(
-              //       borderSide: BorderSide(
-              //         color: AppColors.black,
-              //         width: 5,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ),
-          ],
-        ),
-      );
-
-  @override
-  Widget build(BuildContext context) {
-    switch (Provider.of<ThemeManager>(context).theme) {
-      case ThemeMode.dark:
-        return _buildDark();
-      case ThemeMode.light:
-        return _buildLight();
-      default:
-        throw Exception(
-            'Invalid theme: ${Provider.of<ThemeManager>(context).theme}');
-    }
+          ),
+        ],
+      ),
+    );
   }
 }

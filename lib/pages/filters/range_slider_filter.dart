@@ -35,7 +35,8 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
     widget.filter.options = [_range.start.toInt(), _range.end.toInt()];
   }
 
-  Widget _buildDark() {
+  @override
+  Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Material(
@@ -43,21 +44,28 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
         children: <Widget>[
           MyBackButton(),
           Positioned(
-            left: width * 37 / 375,
-            top: height * 100 / 812,
-            width: width * 200 / 375,
-            child: Text(
-              widget.filter.field.name,
-              style: TextStyle(
-                color: MyPalette.white,
-                fontSize: 40,
-              ),
+            left: width * 40 / 375,
+            top: height * 150 / 812,
+            width: width * 220 / 375,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.filter.field.name,
+                  style: TextStyle(fontSize: 50),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  widget.filter.field.prompt,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
             ),
           ),
           Positioned(
-            left: width * 150 / 375,
             top: height * 500 / 812,
-            width: width * 200 / 375,
+            right: 40,
+            width: width * 220 / 375,
             child: RangeSlider(
               min: 1,
               max: widget.filter.field.options.toDouble(),
@@ -77,69 +85,6 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildLight() {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-    return WillPopScope(
-      onWillPop: () {
-        _saveOptions();
-        return Future(() => true);
-      },
-      child: Material(
-        color: MyPalette.white,
-        child: Stack(
-          children: <Widget>[
-            TileIconButton(
-              icon: Icons.arrow_back,
-              onPressed: () {
-                _saveOptions();
-                Navigator.pop(context);
-              },
-            ),
-            Positioned(
-              left: width * 37 / 375,
-              top: height * 100 / 812,
-              width: width * 200 / 375,
-              child: Text(
-                widget.filter.field.name,
-                style: TextStyle(
-                  color: MyPalette.black,
-                  fontSize: 40,
-                ),
-              ),
-            ),
-            Positioned(
-              left: width * 150 / 375,
-              top: height * 500 / 812,
-              width: width * 200 / 375,
-              child: RangeSlider(
-                min: 1,
-                max: widget.filter.field.options.toDouble(),
-                divisions: widget.filter.field.options - 1,
-                values: _range,
-                activeColor: MyPalette.gold,
-                inactiveColor: MyPalette.black,
-                labels: RangeLabels(
-                  _range.start.toString(),
-                  _range.end.toString(),
-                ),
-                onChanged: (range) => setState(() => _range = range),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ThemeBuilder(
-      buildDark: _buildDark,
-      buildLight: _buildLight,
     );
   }
 }

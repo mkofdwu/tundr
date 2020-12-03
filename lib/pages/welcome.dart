@@ -41,7 +41,6 @@ class _WelcomePageState extends State<WelcomePage> {
           child: Text(
             'By Jia Jie',
             style: TextStyle(
-              fontFamily: 'Helvetica Neue',
               color: MyPalette.black,
               fontSize: 20,
             ),

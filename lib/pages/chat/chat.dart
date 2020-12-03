@@ -539,7 +539,7 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                         onTap: () async => Navigator.pushNamed(
                           context,
-                          '/user_profile',
+                          '/profile',
                           arguments: widget.otherUser,
                         ),
                       ),

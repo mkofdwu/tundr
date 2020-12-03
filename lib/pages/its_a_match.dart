@@ -26,84 +26,63 @@ class ItsAMatchPage extends StatelessWidget {
     return Material(
       child: Stack(
         children: <Widget>[
+          SizedBox.expand(
+            child: CachedNetworkImage(
+              imageUrl: user.profileImageUrl,
+              fit: BoxFit.cover,
+            ),
+          ),
           Container(
+            height: double.infinity,
             decoration: BoxDecoration(
-              image: DecorationImage(
-                image: CachedNetworkImageProvider(user.profileImageUrl),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-              child: Container(
-                color: MyPalette.black.withOpacity(0.2),
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromRGBO(0, 0, 0, 0.9),
+                  Color.fromRGBO(0, 0, 0, 0.2)
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
+          Positioned(
+            top: height * 80 / 736,
+            left: 40,
             child: Container(
-              height: height,
+              width: 120,
+              height: 180,
               decoration: BoxDecoration(
-                gradient: MyPalette.transparentToBlack,
+                color: MyPalette.darkGrey,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.5),
+                    offset: Offset(0, 30),
+                    blurRadius: 30,
+                  ),
+                ],
               ),
             ),
           ),
           Positioned(
-            left: width * 100 / 375,
-            top: height * 191 / 812,
-            child: Container(
-              width: width * 248 / 375,
-              height: height * 199 / 812,
-              color: MyPalette.green,
-            ),
-          ),
-          Positioned(
-            left: width * 26 / 375,
-            top: height * 79 / 812,
-            child: Container(
-              width: width * 162 / 375,
-              height: height * 285 / 812,
-              color: MyPalette.white,
-            ),
-          ),
-          Positioned(
-            left: width * 49 / 375,
-            top: height * 90 / 812,
-            child: Text(
-              'Congratulations',
-              style: TextStyle(
-                color: MyPalette.gold,
-                fontSize: 40,
-              ),
-            ),
-          ),
-          Positioned(
-            left: width * 117 / 375,
-            top: height * 235 / 812,
-            child: Container(
-              width: width * 195 / 375,
-              height: height * 195 / 812,
-              padding: EdgeInsets.all(20), // or 10
-              color: MyPalette.grey,
-              child: Text(
-                '${user.name} liked you\ntoo!',
-                style: TextStyle(
-                  color: MyPalette.white,
-                  fontFamily: 'Helvetica Neue',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+            top: height * 110 / 736,
+            left: 65,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Congratulations',
+                  style: TextStyle(
+                    color: MyPalette.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
+                  ),
                 ),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 0,
-            top: height * 524 / 812,
-            child: Container(
-              width: width * 82 / 375,
-              height: height * 96 / 812,
-              color: MyPalette.grey,
+                SizedBox(height: 14),
+                Text(
+                  'Donald liked you too!',
+                  style: TextStyle(color: MyPalette.white, fontSize: 16),
+                ),
+              ],
             ),
           ),
           Positioned(
@@ -111,7 +90,7 @@ class ItsAMatchPage extends StatelessWidget {
             top: height * 528 / 812,
             child: GestureDetector(
               child: Container(
-                width: width * 224 / 375,
+                width: width * 207 / 414,
                 height: height * 43 / 812,
                 color: MyPalette.gold,
                 child: Stack(
@@ -191,96 +170,6 @@ class ItsAMatchPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 0,
-            top: height * 666 / 812,
-            child: Container(
-              width: width * 159 / 375,
-              height: height * 6 / 812,
-              color: MyPalette.white,
-            ),
-          ),
-          Positioned(
-            left: 0,
-            top: height * 687 / 812,
-            child: Container(
-              width: width * 43 / 375,
-              height: height * 30 / 812,
-              color: MyPalette.white,
-            ),
-          ),
-          Positioned(
-            left: 0,
-            top: height * 689 / 812,
-            child: Container(
-              width: width * 120 / 375,
-              height: height * 12 / 812,
-              color: MyPalette.green,
-            ),
-          ),
-          Positioned(
-            left: 0,
-            top: height * 703 / 812,
-            child: Container(
-              width: width * 145 / 375,
-              height: height * 4 / 812,
-              color: MyPalette.gold,
-            ),
-          ),
-          Positioned(
-            left: 0,
-            top: height * 721 / 812,
-            child: Container(
-              width: width * 32 / 375,
-              height: height * 4 / 812,
-              color: MyPalette.white,
-            ),
-          ),
-          Positioned(
-            left: 0,
-            top: height * 737 / 812,
-            child: Container(
-              width: width * 101 / 375,
-              height: height * 15 / 812,
-              color: MyPalette.white,
-            ),
-          ),
-          Positioned(
-            top: height * 669 / 812,
-            right: 0,
-            child: Container(
-              width: width * 33 / 375,
-              height: height * 30 / 812,
-              color: MyPalette.white,
-            ),
-          ),
-          Positioned(
-            top: height * 712 / 812,
-            right: 0,
-            child: Container(
-              width: width * 40 / 375,
-              height: height * 5 / 812,
-              color: MyPalette.green,
-            ),
-          ),
-          Positioned(
-            top: height * 725 / 812,
-            right: 0,
-            child: Container(
-              width: width * 32 / 375,
-              height: height * 5 / 812,
-              color: MyPalette.gold,
-            ),
-          ),
-          Positioned(
-            top: height * 737 / 812,
-            right: 0,
-            child: Container(
-              width: width * 64 / 375,
-              height: height * 8 / 812,
-              color: MyPalette.white,
-            ),
-          ),
-          Positioned(
             top: height * 752 / 812,
             right: 0,
             child: GestureDetector(
@@ -302,24 +191,6 @@ class ItsAMatchPage extends StatelessWidget {
                 ),
               ),
               onTap: () => Navigator.pop(context, false),
-            ),
-          ),
-          Positioned(
-            top: height * 784 / 812,
-            right: 0,
-            child: Container(
-              width: width * 156 / 375,
-              height: height * 5 / 812,
-              color: MyPalette.white,
-            ),
-          ),
-          Positioned(
-            top: height * 792 / 812,
-            right: 0,
-            child: Container(
-              width: width * 90 / 375,
-              height: height * 11 / 812,
-              color: MyPalette.gold,
             ),
           ),
         ],

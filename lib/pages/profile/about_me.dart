@@ -40,7 +40,7 @@ class AboutMeProfilePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.popUntil(
                       context,
-                      (route) => route.settings.name == '/user_profile',
+                      (route) => route.settings.name == '/profile',
                     );
                     Navigator.pop(context);
                   },

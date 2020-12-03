@@ -102,7 +102,6 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 40,
-                      fontFamily: 'Helvetica Neue',
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -137,7 +136,6 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                               style: TextStyle(
                                 color: MyPalette.black,
                                 fontSize: 40,
-                                fontFamily: 'Helvetica Neue',
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

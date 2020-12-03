@@ -253,7 +253,6 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
               style: TextStyle(
                 color: MyPalette.black,
                 fontSize: 40,
-                fontFamily: 'Helvetica Neue',
                 fontWeight: FontWeight.bold,
               ),
             ),

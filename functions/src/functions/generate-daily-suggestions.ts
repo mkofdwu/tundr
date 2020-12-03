@@ -31,10 +31,15 @@ export default functions.firestore
         ...algorithmData.data(),
       });
     }
+    console.log('Users:');
+    console.log(users);
 
     const uidToSuggestions = generateSuggestions(users);
+
+    console.log('Generated suggestions:');
+    console.log(uidToSuggestions);
     for (const uid in uidToSuggestions) {
-      usersPrivateInfoRef.doc(uid).update({
+      await usersPrivateInfoRef.doc(uid).update({
         dailyGeneratedSuggestions: uidToSuggestions.get(uid),
       });
     }

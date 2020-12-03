@@ -33,7 +33,6 @@ class _SetupInterestsPageState extends State<SetupInterestsPage> {
               'Interests',
               style: TextStyle(
                 fontSize: 40,
-                fontFamily: 'Helvetica Neue',
                 fontWeight: FontWeight.bold,
               ),
             ),

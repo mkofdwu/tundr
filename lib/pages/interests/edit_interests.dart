@@ -6,7 +6,7 @@ import 'package:tundr/widgets/buttons/back.dart';
 
 import 'package:tundr/pages/interests/widgets/interests_browser.dart';
 
-class InterestsEditPage extends StatelessWidget {
+class EditInterestsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,6 +16,8 @@ class InterestsEditPage extends StatelessWidget {
           'Edit interests',
           style: Theme.of(context).textTheme.headline6,
         ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),

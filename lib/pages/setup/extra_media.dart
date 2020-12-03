@@ -38,7 +38,6 @@ class _SetupExtraMediaPageState extends State<SetupExtraMediaPage> {
                   'Add more photos and videos?',
                   style: TextStyle(
                     fontSize: 40,
-                    fontFamily: 'Helvetica Neue',
                     fontWeight: FontWeight.bold,
                   ),
                 ),

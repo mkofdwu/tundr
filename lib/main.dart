@@ -197,7 +197,7 @@ class _TundrAppState extends State<TundrApp> {
       brightness: Brightness.dark,
     ),
     accentColor: MyPalette.gold,
-    fontFamily: '.AppleSystemUIFont',
+    fontFamily: 'Liberation Sans',
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: MyPalette.white,
     ),
@@ -225,17 +225,11 @@ class _TundrAppState extends State<TundrApp> {
       brightness: Brightness.light,
     ),
     accentColor: MyPalette.gold,
-    fontFamily: '.AppleSystemUIFont',
+    fontFamily: 'Liberation Sans',
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: MyPalette.black,
     ),
     iconTheme: IconThemeData(
-      color: MyPalette.black,
-    ),
-    accentIconTheme: IconThemeData(
-      color: MyPalette.black,
-    ),
-    primaryIconTheme: IconThemeData(
       color: MyPalette.black,
     ),
   );
@@ -273,7 +267,7 @@ class _TundrAppState extends State<TundrApp> {
   //       headline3: TextStyle(
   //         color: textColor,
   //         fontSize: 40,
-  //         fontFamily: 'Helvetica Neue',
+  //
   //         fontWeight: FontWeight.bold,
   //       ),
   //       headline5: TextStyle(color: textColor),

@@ -206,7 +206,7 @@ class _SuggestionCardState extends State<SuggestionCard>
       onHorizontalDragCancel: _reset,
       onTap: () => Navigator.pushNamed(
         context,
-        '/user_profile',
+        '/profile',
         arguments: widget.user,
       ),
     );

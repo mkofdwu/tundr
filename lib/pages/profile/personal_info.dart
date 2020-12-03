@@ -61,7 +61,7 @@ class _PersonalInfoProfilePageState extends State<PersonalInfoProfilePage> {
                 onPressed: () {
                   Navigator.popUntil(
                     context,
-                    (route) => route.settings.name == '/user_profile',
+                    (route) => route.settings.name == '/profile',
                   );
                   Navigator.pop(context);
                 },
