@@ -45,7 +45,8 @@ class _SwipingPageState extends State<SwipingPage> {
 
   Future<void> _loadSuggestionProfiles(_) async {
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
-    final suggestions = privateInfo.respondedSuggestions;
+    final suggestions = Map<String, bool>.from(
+        privateInfo.respondedSuggestions); // create a copy
     suggestions.addAll(privateInfo.dailyGeneratedSuggestions
         .asMap()
         .map((__i, uid) => MapEntry<String, bool>(uid, null)));
@@ -59,8 +60,11 @@ class _SwipingPageState extends State<SwipingPage> {
     setState(() {});
   }
 
-  void _addProfileToStream() =>
+  void _addProfileToStream() {
+    if (_i < _suggestionWithProfiles.length) {
       _profileStreamController.add(_suggestionWithProfiles[_i].profile);
+    }
+  }
 
   Future<void> _cleanUp(
     String otherUid, {
@@ -99,10 +103,7 @@ class _SwipingPageState extends State<SwipingPage> {
     final otherUid = _suggestionWithProfiles[_i].profile.uid;
     if (_suggestionWithProfiles[_i].wasLiked == null) {
       await SuggestionsService.respondToSuggestion(
-        fromUid: Provider.of<User>(context, listen: false).profile.uid,
-        toUid: otherUid,
-        liked: false,
-      );
+          toUid: otherUid, liked: false);
     }
     await _cleanUp(
       otherUid,
@@ -126,16 +127,12 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   void _like() async {
-    final user = Provider.of<User>(context, listen: false).profile;
     final suggestionWithProfile = _suggestionWithProfiles[_i];
     final otherUid = suggestionWithProfile.profile.uid;
 
     if (suggestionWithProfile.wasLiked == null) {
       await SuggestionsService.respondToSuggestion(
-        fromUid: user.uid,
-        toUid: otherUid,
-        liked: true,
-      );
+          toUid: otherUid, liked: true);
     } else if (suggestionWithProfile.wasLiked == true) {
       final undo = await Navigator.push(
         context,
@@ -315,7 +312,7 @@ class _SwipingPageState extends State<SwipingPage> {
 
     return Column(
       children: <Widget>[
-        if (_i == _suggestionWithProfiles.length ||
+        if (_i >= _suggestionWithProfiles.length ||
             Provider.of<User>(context, listen: false)
                     .privateInfo
                     .numRightSwiped >=

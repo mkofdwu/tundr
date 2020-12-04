@@ -10,14 +10,18 @@ class ChatsService {
     return usersPrivateInfoRef.doc(uid).collection('chats').doc(chatId);
   }
 
-  static Stream<QuerySnapshot> messagesStream(String chatId, int n) {
-    // stream of last n messages
+  static Stream<List<Message>> messagesStream(String chatId, int n) {
+    // stream of the last n messages
     return chatsRef
         .doc(chatId)
         .collection('messages')
         .orderBy('sentTimestamp', descending: true)
         .limit(n)
-        .snapshots();
+        .snapshots()
+        .asyncMap((querySnapshot) {
+      return Future.wait<Message>(
+          querySnapshot.docs.map((doc) => Message.fromDoc(doc)));
+    });
   }
 
   static Future<String> sendMessage(String chatId, Message message) async {
@@ -36,7 +40,7 @@ class ChatsService {
   }
 
   static Future<Message> getMessage(String chatId, String messageId) async {
-    return Message.fromDoc(
+    return await Message.fromDoc(
         await chatsRef.doc(chatId).collection('messages').doc(messageId).get());
   }
 

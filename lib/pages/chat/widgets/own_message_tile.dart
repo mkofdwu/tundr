@@ -85,12 +85,10 @@ class OwnMessageTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                if (message.referencedMessageId != null)
+                if (message.referencedMessage != null)
                   GestureDetector(
                     child: ReferencedMessageTile(
-                      chatId: chatId,
-                      messageId: message.referencedMessageId,
-                      otherUserName: otherUserName,
+                      message: message.referencedMessage,
                     ),
                     onTap: onViewReferencedMessage,
                   ),

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/my_palette.dart';
@@ -11,6 +10,7 @@ import 'package:tundr/models/media.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
+import 'package:tundr/pages/chat/widgets/message_field.dart';
 
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/chats_service.dart';
@@ -18,18 +18,13 @@ import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
-import 'package:tundr/widgets/buttons/simple_icon.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
-import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'package:tundr/widgets/popup_menus/menu_divider.dart';
 import 'package:tundr/widgets/popup_menus/menu_option.dart';
 import 'package:tundr/widgets/popup_menus/popup_menu.dart';
-import 'package:tundr/widgets/textfields/plain.dart';
-import 'package:tundr/widgets/theme_builder.dart';
 
 import 'widgets/other_user_message_tile.dart';
 import 'widgets/own_message_tile.dart';
-import 'widgets/referenced_message_tile.dart';
 import 'widgets/unsent_message_tile.dart';
 
 class ChatPage extends StatefulWidget {
@@ -51,18 +46,15 @@ class _ChatPageState extends State<ChatPage> {
   int _pages = 1;
 
   final ScrollController _scrollController = ScrollController();
-  final TextEditingController _textController = TextEditingController();
-  String _referencedMessageId;
   Media _media;
+  Message _referencedMessage;
   bool _showChatOptions = false;
   final List<Message> _unsentMessages = [];
 
   @override
   void initState() {
     super.initState();
-    _textController.addListener(() => setState(() {})); // FUTURE: optimize this
-    SchedulerBinding.instance.addPostFrameCallback((duration) async {
-      final currentUser = Provider.of<User>(context);
+    WidgetsBinding.instance.addPostFrameCallback((duration) async {
       if (widget.chat.type != ChatType.nonExistent &&
           await ChatsService.checkReadReceipts(widget.otherUser.uid)) {
         // does this take too much time?
@@ -71,68 +63,13 @@ class _ChatPageState extends State<ChatPage> {
             widget.chat.uid, widget.otherUser.uid);
         if (mounted) {
           await ChatsService.updateChatDetails(
-            currentUser.profile.uid,
+            Provider.of<User>(context, listen: false).profile.uid,
             widget.chat.id,
             {'lastRead': Timestamp.now()},
           );
         }
       }
     });
-  }
-
-  void _selectImage() async {
-    // FUTURE: this and the function below are just temporary fixes, find a better solution / dialog in the future
-    final source = await showDialog(
-      context: context,
-      child: SimpleDialog(
-        title: Text('Select image source'),
-        children: <Widget>[
-          FlatButton(
-            child: Text('Camera'),
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-          ),
-          FlatButton(
-            child: Text('Gallery'),
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-          ),
-        ],
-      ),
-    );
-    if (source == null) return;
-    final media = await MediaPickerService.pickMedia(
-      type: MediaType.image,
-      source: source,
-      context: context,
-    );
-    if (media == null) return;
-    setState(() => _media = media);
-  }
-
-  void _selectVideo() async {
-    final source = await showDialog(
-      context: context,
-      child: SimpleDialog(
-        title: Text('Select video source'),
-        children: <Widget>[
-          FlatButton(
-            child: Text('Camera'),
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-          ),
-          FlatButton(
-            child: Text('Gallery'),
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-          ),
-        ],
-      ),
-    );
-    if (source == null) return;
-    final media = await MediaPickerService.pickMedia(
-      type: MediaType.video,
-      source: source,
-      context: context,
-    );
-    if (media == null) return;
-    setState(() => _media = media);
   }
 
   void _viewReferencedMessage(i) {
@@ -147,43 +84,50 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  void _sendMessage() async {
-    final uid = Provider.of<User>(context, listen: false).profile.uid;
+  void _sendMessage(String text) async {
+    final profile = Provider.of<User>(context, listen: false).profile;
     final unsentMessageIndex = _unsentMessages.length;
     final sentOn = DateTime.now();
 
     _media.url = _media == null
         ? ''
-        : await StorageService.uploadMedia(uid: uid, media: _media);
+        : await StorageService.uploadMedia(uid: profile.uid, media: _media);
 
     final message = Message(
-      senderUid: uid,
+      sender: profile,
       sentOn: sentOn,
       readOn: null,
-      referencedMessageId: _referencedMessageId,
-      text: _textController.text,
+      referencedMessage: _referencedMessage,
+      text: text,
       media: _media,
     );
 
     setState(() {
-      _textController.text = '';
-      _referencedMessageId = null;
-      _media = null;
       _unsentMessages.add(message);
     });
 
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     if (widget.chat.type == ChatType.nonExistent) {
       widget.chat.id = await ChatsService.startConversation(
-          uid, widget.otherUser.uid, message);
+        profile.uid,
+        widget.otherUser.uid,
+        message,
+      );
     } else if (widget.chat.type == ChatType.newMatch) {
       await ChatsService.updateChatDetails(
-          uid, widget.chat.id, {'type': 3}); // normal
+        profile.uid,
+        widget.chat.id,
+        {'type': 3},
+      ); // normal
       privateInfo.matches.remove(widget.otherUser.uid);
       await Provider.of<User>(context, listen: false)
           .writeField('matches', UserPrivateInfo);
     } else if (widget.chat.type == ChatType.unknown) {
-      await ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 3});
+      await ChatsService.updateChatDetails(
+        profile.uid,
+        widget.chat.id,
+        {'type': 3},
+      );
     }
 
     await ChatsService.sendMessage(widget.chat.id, message);
@@ -243,172 +187,6 @@ class _ChatPageState extends State<ChatPage> {
     ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 3});
   }
 
-  Widget _buildMediaTileDark() {
-    return Container(
-      width: double.infinity,
-      height: 200,
-      margin: const EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        border: Border.all(color: MyPalette.white),
-        boxShadow: [MyPalette.primaryShadow],
-      ),
-      child: MediaThumbnail(_media),
-    );
-  }
-
-  Widget _buildMediaTileLight() {
-    return Container(
-      width: double.infinity,
-      height: 200,
-      margin: const EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-        boxShadow: const [MyPalette.primaryShadow],
-      ), // FUTURE: DESIGN
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),
-        child: MediaThumbnail(_media),
-      ),
-    );
-  }
-
-  Widget _buildMessageInputDark() => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _referencedMessageId == null
-                ? SizedBox.shrink()
-                : Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: ReferencedMessageTile(
-                      chatId: widget.chat.id,
-                      messageId: _referencedMessageId,
-                      otherUserName: widget.otherUser.name,
-                      borderRadius: 25,
-                    ),
-                  ),
-            _media == null ? SizedBox.shrink() : _buildMediaTileDark(),
-            Row(
-              children: (_media == null
-                      ? <Widget>[
-                          SimpleIconButton(
-                            // DESIGN: replace with a better button in the future
-                            icon: Icons.photo_camera,
-                            onPressed: _selectImage,
-                          ),
-                          SizedBox(width: 10),
-                          SimpleIconButton(
-                            icon: Icons.videocam,
-                            onPressed: _selectVideo,
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            width: 2,
-                            height: 50,
-                            color: MyPalette.white,
-                          ),
-                        ]
-                      : <Widget>[]) +
-                  <Widget>[
-                    SizedBox(width: 20),
-                    Expanded(
-                      child: PlainTextField(
-                        controller: _textController,
-                        hintText: 'Say something',
-                        hintTextColor: MyPalette.gold,
-                        color: MyPalette.white,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    if (_textController.text.isNotEmpty)
-                      TileIconButton(
-                        icon: Icons.send,
-                        onPressed: _sendMessage,
-                      ),
-                  ],
-            ),
-          ],
-        ),
-      );
-
-  Widget _buildMessageInputLight() => Padding(
-        padding: const EdgeInsets.all(10),
-        child: Container(
-          decoration: BoxDecoration(
-            color: MyPalette.gold,
-            borderRadius: BorderRadius.circular(35),
-            boxShadow: [MyPalette.primaryShadow],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _referencedMessageId == null
-                    ? SizedBox.shrink()
-                    : Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: ReferencedMessageTile(
-                          chatId: widget.chat.id,
-                          messageId: _referencedMessageId,
-                          otherUserName: widget.otherUser.name,
-                          borderRadius: 25,
-                        ),
-                      ),
-                _media == null ? SizedBox.shrink() : _buildMediaTileLight(),
-                Row(
-                  children: <Widget>[
-                    if (_media == null)
-                      Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: MyPalette.white,
-                          borderRadius: BorderRadius.circular(25),
-                          boxShadow: [MyPalette.primaryShadow],
-                        ),
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          children: <Widget>[
-                            SimpleIconButton(
-                              // DESIGN: replace with a better button in the future
-                              icon: Icons.photo_camera,
-                              size: 30,
-                              onPressed: _selectImage,
-                            ),
-                            SizedBox(width: 10),
-                            SimpleIconButton(
-                              icon: Icons.videocam,
-                              size: 30,
-                              onPressed: _selectVideo,
-                            ),
-                          ],
-                        ),
-                      ),
-                    SizedBox(width: 20),
-                    Expanded(
-                      child: PlainTextField(
-                        controller: _textController,
-                        hintText: 'Say something',
-                        hintTextColor: MyPalette.white,
-                        color: MyPalette.black,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    if (_textController.text.isNotEmpty)
-                      TileIconButton(
-                        icon: Icons.send,
-                        onPressed: _sendMessage,
-                      )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -430,14 +208,12 @@ class _ChatPageState extends State<ChatPage> {
                   child: getNetworkImage(widget.chat.wallpaperUrl),
                 ),
               if (widget.chat.type != ChatType.nonExistent)
-                StreamBuilder<QuerySnapshot>(
+                StreamBuilder<List<Message>>(
                   stream: ChatsService.messagesStream(
                       widget.chat.id, _pages * messagesPerPage),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) return SizedBox.shrink();
-                    final messages = snapshot.data.docs
-                        .map((messageDoc) => Message.fromDoc(messageDoc))
-                        .toList();
+                    final messages = snapshot.data;
                     return NotificationListener(
                       onNotification: (ScrollNotification notification) {
                         if (notification is ScrollStartNotification &&
@@ -453,7 +229,7 @@ class _ChatPageState extends State<ChatPage> {
                           top: 50,
                           bottom: 70.0 +
                               (_media == null ? 0 : 220) +
-                              (_referencedMessageId == null ? 0 : 110),
+                              (_referencedMessage == null ? 0 : 110),
                         ),
                         itemCount: _unsentMessages.length + messages.length,
                         itemBuilder: (context, i) {
@@ -467,7 +243,7 @@ class _ChatPageState extends State<ChatPage> {
                           }
                           final messageIndex = i - _unsentMessages.length;
                           final message = messages[messageIndex];
-                          final fromMe = message.senderUid ==
+                          final fromMe = message.sender.uid ==
                               Provider.of<User>(context, listen: false)
                                   .profile
                                   .uid;
@@ -487,8 +263,8 @@ class _ChatPageState extends State<ChatPage> {
                                       message: message,
                                       onViewReferencedMessage: () =>
                                           _viewReferencedMessage(messageIndex),
-                                      onReferenceMessage: () => setState(() =>
-                                          _referencedMessageId = message.id),
+                                      onReferenceMessage: () => setState(
+                                          () => _referencedMessage = message),
                                       onDeleteMessage: () =>
                                           _deleteMessage(message.id),
                                     )
@@ -500,8 +276,8 @@ class _ChatPageState extends State<ChatPage> {
                                       message: message,
                                       viewReferencedMessage: () =>
                                           _viewReferencedMessage(messageIndex),
-                                      onReferenceMessage: () => setState(() =>
-                                          _referencedMessageId = message.id),
+                                      onReferenceMessage: () => setState(
+                                          () => _referencedMessage = message),
                                       onDeleteMessage: () =>
                                           _deleteMessage(message.id),
                                     ),
@@ -513,7 +289,7 @@ class _ChatPageState extends State<ChatPage> {
                   },
                 ),
               Container(
-                height: 100,
+                height: 120,
                 decoration: BoxDecoration(
                   gradient: fromTheme(
                     context,
@@ -522,33 +298,36 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 50,
-                child: Row(
-                  children: <Widget>[
-                    TileIconButton(
-                      icon: Icons.arrow_back,
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: GestureDetector(
-                        child: Text(
-                          widget.otherUser.name,
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        onTap: () async => Navigator.pushNamed(
-                          context,
-                          '/profile',
-                          arguments: widget.otherUser,
+              SafeArea(
+                child: SizedBox(
+                  height: 50,
+                  child: Row(
+                    children: <Widget>[
+                      TileIconButton(
+                        icon: Icons.arrow_back,
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: GestureDetector(
+                          child: Text(
+                            widget.otherUser.name,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          onTap: () async => Navigator.pushNamed(
+                            context,
+                            '/profile',
+                            arguments: widget.otherUser,
+                          ),
                         ),
                       ),
-                    ),
-                    TileIconButton(
-                      icon: Icons.more_vert,
-                      onPressed: () => setState(() => _showChatOptions = true),
-                    ),
-                  ],
+                      TileIconButton(
+                        icon: Icons.more_vert,
+                        onPressed: () =>
+                            setState(() => _showChatOptions = true),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Positioned(
@@ -568,10 +347,13 @@ class _ChatPageState extends State<ChatPage> {
               Positioned(
                 bottom: 0,
                 width: MediaQuery.of(context).size.width,
-                child: ThemeBuilder(
-                  buildDark: _buildMessageInputDark,
-                  buildLight: _buildMessageInputLight,
-                ),
+                child: MessageField(
+                    media: _media,
+                    referencedMessage: _referencedMessage,
+                    onChangeMedia: (newMedia) {
+                      setState(() => _media = newMedia);
+                    },
+                    onSendMessage: _sendMessage),
               ),
               if (_showChatOptions)
                 Positioned(

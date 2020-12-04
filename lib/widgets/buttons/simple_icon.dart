@@ -13,7 +13,7 @@ class SimpleIconButton extends StatefulWidget {
     @required this.icon,
     this.label = '',
     this.color,
-    this.size = 30,
+    this.size = 24,
     @required this.onPressed,
   }) : super(key: key);
 

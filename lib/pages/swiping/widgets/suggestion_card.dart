@@ -218,9 +218,6 @@ class SuggestionCardState extends State<SuggestionCard>
           _initialOffset = details.globalPosition;
         },
         onHorizontalDragUpdate: (DragUpdateDetails details) {
-          print('angle: ' +
-              ((details.globalPosition.dx - _initialOffset.dx) * dampingFactor)
-                  .toString());
           setState(() {
             _angle =
                 (details.globalPosition.dx - _initialOffset.dx) * dampingFactor;
@@ -241,7 +238,7 @@ class SuggestionCardState extends State<SuggestionCard>
         onTap: () => Navigator.pushNamed(
           context,
           '/profile',
-          arguments: widget.profileStream,
+          arguments: _profile,
         ),
       ),
     );

@@ -95,14 +95,12 @@ class OtherUserMessageTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                if (message.referencedMessageId != null)
+                if (message.referencedMessage != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: GestureDetector(
                       child: ReferencedMessageTile(
-                        chatId: chatId,
-                        messageId: message.referencedMessageId,
-                        otherUserName: otherUserName,
+                        message: message.referencedMessage,
                       ),
                       onTap: viewReferencedMessage,
                     ),

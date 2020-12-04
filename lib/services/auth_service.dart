@@ -95,10 +95,6 @@ class AuthService {
       } else {
         info.uid = result.user.uid;
         await _uploadLocalPhotos(info);
-        print(info);
-        print(UserProfile.register(info).toMap());
-        print(UserPrivateInfo.register(info).toMap());
-        print(UserAlgorithmData.register(info).toMap());
         await userProfilesRef
             .doc(info.uid)
             .set(UserProfile.register(info).toMap());

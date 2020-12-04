@@ -46,11 +46,9 @@ class UnsentMessageTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  if (message.referencedMessageId != null)
+                  if (message.referencedMessage != null)
                     ReferencedMessageTile(
-                      chatId: chatId,
-                      otherUserName: otherUserName,
-                      messageId: message.referencedMessageId,
+                      message: message.referencedMessage,
                     ),
                   if (message.media != null)
                     Padding(

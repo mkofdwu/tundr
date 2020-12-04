@@ -107,7 +107,6 @@ class UsersService {
 
   static Future<List<PopularUser>> getMostPopular() async {
     final mostPopularUsers = await callHttpsFunction<List>('getMostPopular');
-    print(mostPopularUsers);
     return mostPopularUsers.map<PopularUser>((popUser) {
       final unserializedBirthday = popUser['profile']['birthday'];
       popUser['profile']['birthday'] = Timestamp(

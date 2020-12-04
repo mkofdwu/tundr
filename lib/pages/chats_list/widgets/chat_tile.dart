@@ -110,20 +110,16 @@ class ChatTile extends StatelessWidget {
                             left: 10,
                             top: 10,
                             right: 10,
-                            child: StreamBuilder/*<QuerySnapshot>*/(
+                            child: StreamBuilder<List<Message>>(
                               stream: ChatsService.messagesStream(chat.id, 3),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) return SizedBox.shrink();
-                                final List<Message> messages = snapshot
-                                    .data.docs
-                                    .map((messageDoc) =>
-                                        Message.fromDoc(messageDoc))
-                                    .toList();
+                                final messages = snapshot.data;
                                 return Column(
                                   children: List<Widget>.from(
                                     messages.reversed.map(
                                       (message) {
-                                        final fromMe = message.senderUid ==
+                                        final fromMe = message.sender.uid ==
                                             Provider.of<User>(context,
                                                     listen: false)
                                                 .profile
@@ -294,23 +290,19 @@ class ChatTile extends StatelessWidget {
                                 left: 10,
                                 top: 10,
                                 right: 10,
-                                child: StreamBuilder/*<QuerySnapshot>*/(
+                                child: StreamBuilder<List<Message>>(
                                   stream:
                                       ChatsService.messagesStream(chat.uid, 3),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return SizedBox.shrink();
                                     }
-                                    final List<Message> messages = snapshot
-                                        .data.docs
-                                        .map((messageDoc) =>
-                                            Message.fromDoc(messageDoc))
-                                        .toList();
+                                    final messages = snapshot.data;
                                     return Column(
                                       children: List<Widget>.from(
                                           messages.reversed.map(
                                         (message) {
-                                          final fromMe = message.senderUid ==
+                                          final fromMe = message.sender.uid ==
                                               Provider.of<User>(context,
                                                       listen: false)
                                                   .profile
