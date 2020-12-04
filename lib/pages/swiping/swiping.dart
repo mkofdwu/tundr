@@ -55,53 +55,51 @@ class _SwipingPageState extends State<SwipingPage> {
     setState(() {});
   }
 
-  @override
-  void deactivate() {
-    // TODO FIXME: this may be causing problems
-    Provider.of<User>(context, listen: false)
-        .writeField('suggestionsGoneThrough', UserPrivateInfo);
-    Provider.of<User>(context, listen: false)
-        .writeField('dailyGeneratedSuggestions', UserPrivateInfo);
-    Provider.of<User>(context, listen: false)
-        .writeField('respondedSuggestions', UserPrivateInfo);
-
-    super.deactivate();
-  }
-
-  Future<void> _removeRespondedSuggestion(String otherUid,
-      {bool likedUser}) async {
+  Future<void> _cleanUp(
+    String otherUid, {
+    bool likedUser,
+    bool isRespondedSuggestion,
+  }) async {
     setState(() {
       _i++;
       _canUndo = true;
     });
-    final suggestionsGoneThrough = Provider.of<User>(context, listen: false)
-        .privateInfo
-        .suggestionsGoneThrough;
-    await Provider.of<User>(context, listen: false).updatePrivateInfo({
-      'numRightSwiped': FieldValue.increment(1),
-      'suggestionsGoneThrough': {
-        ...suggestionsGoneThrough,
-        otherUid: likedUser
-      },
-      'respondedSuggestions': FieldValue.arrayRemove([otherUid]),
-    });
+
+    final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
+    if (likedUser) privateInfo.numRightSwiped++;
+    if (isRespondedSuggestion) {
+      privateInfo.respondedSuggestions.remove(otherUid);
+    } else {
+      privateInfo.dailyGeneratedSuggestions.remove(otherUid);
+    }
+    privateInfo.suggestionsGoneThrough[otherUid] = likedUser;
+
+    await Provider.of<User>(context, listen: false).writeFields(
+      [
+        'numRightSwiped',
+        isRespondedSuggestion
+            ? 'respondedSuggestions'
+            : 'dailyGeneratedSuggestions',
+        'suggestionsGoneThrough'
+      ],
+      UserPrivateInfo,
+    );
   }
 
   void _nope() async {
     final otherUid = _suggestionWithProfiles[_i].profile.uid;
     if (_suggestionWithProfiles[_i].wasLiked == null) {
-      setState(() {
-        _i++;
-        _canUndo = true;
-      });
       await SuggestionsService.respondToSuggestion(
         fromUid: Provider.of<User>(context, listen: false).profile.uid,
         toUid: otherUid,
         liked: false,
       );
-    } else {
-      await _removeRespondedSuggestion(otherUid, likedUser: false);
     }
+    await _cleanUp(
+      otherUid,
+      likedUser: false,
+      isRespondedSuggestion: _suggestionWithProfiles[_i].wasLiked != null,
+    );
   }
 
   void _undo() {
@@ -123,11 +121,6 @@ class _SwipingPageState extends State<SwipingPage> {
     final otherUid = suggestionWithProfile.profile.uid;
 
     if (suggestionWithProfile.wasLiked == null) {
-      setState(() {
-        _i++;
-        _canUndo = true;
-      });
-      // everything is handled in the cloud function
       await SuggestionsService.respondToSuggestion(
         fromUid: user.uid,
         toUid: otherUid,
@@ -141,17 +134,15 @@ class _SwipingPageState extends State<SwipingPage> {
               ItsAMatchPage(user: suggestionWithProfile.profile),
         ),
       );
-      if (!undo) {
-        // everything is handled in the cloud function
-        setState(() {
-          _i++;
-          _canUndo = false;
-        });
-        await SuggestionsService.matchWith(otherUid);
-      }
-    } else if (suggestionWithProfile.wasLiked == false) {
-      await _removeRespondedSuggestion(otherUid, likedUser: true);
+      if (undo) return;
+      await SuggestionsService.matchWith(otherUid);
     }
+
+    await _cleanUp(
+      otherUid,
+      likedUser: true,
+      isRespondedSuggestion: suggestionWithProfile.wasLiked != null,
+    );
   }
 
   void _goToFilterSettings() {

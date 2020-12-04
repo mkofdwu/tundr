@@ -60,6 +60,12 @@ class User {
     await collectionRef.doc(profile.uid).update({field: value});
   }
 
+  Future<void> writeFields(List<String> fields, Type type) async {
+    for (final field in fields) {
+      await writeField(field, type);
+    }
+  }
+
   Stream<List<Chat>> chatsStream() {
     return usersPrivateInfoRef
         .doc(profile.uid)

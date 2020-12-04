@@ -104,13 +104,13 @@ const _canTalkTo = async (
     otherUserAlgorithmData == null
   )
     return false;
-  if (userProfile['gender'] == 0 && !otherUserAlgorithmData['showMeBoys'])
+  if (userProfile['gender'] === 0 && !otherUserAlgorithmData['showMeBoys'])
     return false;
-  if (userProfile['gender'] == 1 && !otherUserAlgorithmData['showMeGirls'])
+  if (userProfile['gender'] === 1 && !otherUserAlgorithmData['showMeGirls'])
     return false;
-  if (otherUserProfile['gender'] == 0 && !userAlgorithmData['showMeBoys'])
+  if (otherUserProfile['gender'] === 0 && !userAlgorithmData['showMeBoys'])
     return false;
-  if (otherUserProfile['gender'] == 1 && !userAlgorithmData['showMeGirls'])
+  if (otherUserProfile['gender'] === 1 && !userAlgorithmData['showMeGirls'])
     return false;
 
   return true;
@@ -159,12 +159,51 @@ export const startConversation = functions.https.onCall(
   }
 );
 
+export const respondToSuggestion = functions.https.onCall(
+  async (data, context) => {
+    const uid = context.auth?.uid;
+    const otherUid = data.otherUid;
+    const liked = data.liked;
+    if (uid == null || otherUid == null || typeof liked !== 'boolean') return;
+    await usersPrivateInfoRef
+      .doc(otherUid)
+      .set({ respondedSuggestions: { [uid]: liked } }, { merge: true });
+  }
+);
+
+export const undoSuggestionResponse = functions.https.onCall(
+  async (data, context) => {
+    const uid = context.auth?.uid;
+    const otherUid = data.otherUid;
+    if (uid == null || otherUid == null) return;
+    await usersPrivateInfoRef.doc(otherUid).set(
+      {
+        respondedSuggestions: { [uid]: admin.firestore.FieldValue.delete() },
+      },
+      { merge: true }
+    );
+  }
+);
+
 export const matchWith = functions.https.onCall(async (data, context) => {
-  // TODO check if both users have indeed liked each other
   const uid = context.auth?.uid;
   const otherUid = data.otherUid;
   if (uid == null || otherUid == null) return;
 
+  // check if both users have indeed liked each other
+  const privateInfo = (await usersPrivateInfoRef.doc(uid).get()).data();
+  const otherPrivateInfo = (
+    await usersPrivateInfoRef.doc(otherUid).get()
+  ).data();
+  if (privateInfo == null || otherPrivateInfo == null) return;
+  if (
+    // both should be true (suggestionsGoneThrough is a map in the format {uid: liked})
+    !privateInfo['suggestionsGoneThrough'][otherUid] ||
+    !otherPrivateInfo['suggestionsGoneThrough'][uid]
+  )
+    return;
+
+  // save matches
   await usersPrivateInfoRef.doc(uid).update({
     matches: admin.firestore.FieldValue.arrayUnion(otherUid),
   });
@@ -172,14 +211,8 @@ export const matchWith = functions.https.onCall(async (data, context) => {
     matches: admin.firestore.FieldValue.arrayUnion(uid),
   });
 
-  const otherPrivateInfo = (
-    await usersPrivateInfoRef.doc(otherUid).get()
-  ).data();
-  if (otherPrivateInfo == null)
-    throw 'user exists but data() returned undefined';
-
+  // send notification to other user (if he / she so desires)
   if (otherPrivateInfo['settings']['newMatchNotification']) {
-    // send notification to other user
     const tokens: string[] = (
       await usersPrivateInfoRef.doc(otherUid).collection('tokens').get()
     ).docs.map((doc) => doc.id);
@@ -194,10 +227,10 @@ export const matchWith = functions.https.onCall(async (data, context) => {
         body: `${matchName} liked you too!`,
         clickAction: 'FLUTTER_NOTIFICATION_CLICK',
       },
-      // data: {
-      //     type: "newMatch",
-      //     uid: action.sender
-      // }
+      data: {
+        type: 'newMatch',
+        uid: uid,
+      },
     };
     return fcm.sendToDevice(tokens, payload);
   }
