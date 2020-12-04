@@ -85,7 +85,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
               ),
             ),
           ),
-          MyBackButton(),
+          MyBackButton(iconColor: MyPalette.white),
           if (otherProfile.uid != myProfile.uid)
             SafeArea(
               child: Align(
@@ -106,8 +106,6 @@ class _MainProfilePageState extends State<MainProfilePage> {
                             .contains(otherProfile.uid);
                     final canTalk = snapshot.data[0];
                     final chat = snapshot.data[1];
-
-                    print('can talk: ' + canTalk.toString());
 
                     if (iBlockedUser) {
                       return DarkTileButton(
@@ -130,22 +128,13 @@ class _MainProfilePageState extends State<MainProfilePage> {
                     if (canTalk) {
                       return TileIconButton(
                         icon: Icons.chat_bubble_outline,
+                        iconColor: MyPalette.white,
                         onPressed: () {
                           return Navigator.push(
                             context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation1, animation2) =>
+                            MaterialPageRoute(
+                              builder: (context) =>
                                   ChatPage(otherUser: otherProfile, chat: chat),
-                              transitionsBuilder:
-                                  (context, animation1, animation2, child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: Offset(0, 1),
-                                    end: Offset(0, 0),
-                                  ).animate(animation1),
-                                  child: child,
-                                );
-                              },
                             ),
                           );
                         },
@@ -169,18 +158,14 @@ class _MainProfilePageState extends State<MainProfilePage> {
                       color: Colors.transparent,
                       child: Text(
                         '${otherProfile.name}, ${otherProfile.ageInYears}',
-                        style: TextStyle(fontSize: 40),
+                        style: TextStyle(fontSize: 40, color: MyPalette.white),
                       ),
                     ),
                   ),
                   SizedBox(height: 40),
                   _hasInfoLeft(otherProfile)
                       ? ScrollDownArrow(
-                          dark: fromTheme(
-                            context,
-                            dark: true,
-                            light: false,
-                          ),
+                          dark: true,
                           onNextPage: () => _nextPage(otherProfile),
                         )
                       : SizedBox.shrink(),

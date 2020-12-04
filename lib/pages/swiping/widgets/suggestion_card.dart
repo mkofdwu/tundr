@@ -7,7 +7,7 @@ import 'package:tundr/widgets/profile_tile.dart';
 class SuggestionCard extends StatefulWidget {
   final double width;
   final double height;
-  final UserProfile user;
+  final Stream<UserProfile> profileStream;
   final Function onLike;
   final Function onNope;
 
@@ -15,19 +15,21 @@ class SuggestionCard extends StatefulWidget {
     Key key,
     this.width,
     this.height,
-    @required this.user,
+    @required this.profileStream,
     @required this.onLike,
     @required this.onNope,
   }) : super(key: key);
 
   @override
-  _SuggestionCardState createState() => _SuggestionCardState();
+  SuggestionCardState createState() => SuggestionCardState();
 }
 
-class _SuggestionCardState extends State<SuggestionCard>
+class SuggestionCardState extends State<SuggestionCard>
     with TickerProviderStateMixin {
   static const double dampingFactor = 0.2;
   static const int climax = 15; // angle at which nope / like is decided
+
+  UserProfile _profile;
 
   Offset _initialOffset;
   double _angle = 0;
@@ -47,9 +49,15 @@ class _SuggestionCardState extends State<SuggestionCard>
   Animation _nopeTranslateAnimation;
   Animation _nopeRotateAnimation;
 
+  AnimationController _resetController;
+  Tween _resetRotateTween;
+  Animation _resetRotateAnimation;
+
   void _reset() {
+    _resetRotateTween.begin = _angle;
+    _resetController.reset();
+    _resetController.forward();
     setState(() {
-      _angle = 0;
       _goingToLike = false;
       _goingToNope = false;
     });
@@ -57,12 +65,10 @@ class _SuggestionCardState extends State<SuggestionCard>
 
   void _onLike() {
     _likeController.forward();
-    widget.onLike();
   }
 
   void _onNope() {
     _nopeController.forward();
-    widget.onNope();
   }
 
   @override
@@ -72,16 +78,19 @@ class _SuggestionCardState extends State<SuggestionCard>
     // fade in animation
     _fadeInController = AnimationController(
         duration: const Duration(milliseconds: 500), vsync: this);
-    _fadeInAnimation = Tween(begin: 0, end: 1).animate(_fadeInController);
+    _fadeInController.addListener(() => setState(() {}));
+    _fadeInAnimation =
+        Tween<double>(begin: 0, end: 1).animate(_fadeInController);
 
     // like animation
     _likeController = AnimationController(
         duration: const Duration(milliseconds: 500), vsync: this);
-    _likeController.addListener(() {
-      setState(() {});
+    _likeController.addListener(() => setState(() {}));
+    _likeController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) widget.onLike(); // !
     });
     _likeTranslateAnimation =
-        Tween<Offset>(begin: Offset(0, 0), end: Offset(300, 200)).animate(
+        Tween<Offset>(begin: Offset(0, 0), end: Offset(300, 100)).animate(
             CurvedAnimation(parent: _likeController, curve: Curves.easeOut));
     _likeRotateAnimation =
         Tween<double>(begin: 0, end: 45).animate(_likeController);
@@ -89,14 +98,38 @@ class _SuggestionCardState extends State<SuggestionCard>
     // nope animation
     _nopeController = AnimationController(
         duration: const Duration(milliseconds: 500), vsync: this);
-    _nopeController.addListener(() {
-      setState(() {});
+    _nopeController.addListener(() => setState(() {}));
+    _nopeController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) widget.onNope(); // !
     });
-    _nopeTranslateAnimation = Tween<Offset>(
-            begin: Offset(0, 0), end: Offset(-300, 200))
-        .animate(CurvedAnimation(parent: _nopeController, curve: Curves.ease));
+    _nopeTranslateAnimation =
+        Tween<Offset>(begin: Offset(0, 0), end: Offset(-300, 100)).animate(
+            CurvedAnimation(parent: _nopeController, curve: Curves.easeOut));
     _nopeRotateAnimation =
         Tween<double>(begin: 0, end: -45).animate(_nopeController);
+
+    // reset animation
+    _resetController = AnimationController(
+        duration: const Duration(milliseconds: 200), vsync: this);
+    _resetController.addListener(() => setState(() {
+          _angle = _resetRotateAnimation.value;
+        }));
+    _resetRotateTween = Tween<double>(begin: _angle, end: 0);
+    _resetRotateAnimation = _resetRotateTween.animate(_resetController);
+
+    // fade in animation when new profile is loaded
+    widget.profileStream.listen((profile) {
+      setState(() => _profile = profile);
+      _fadeInController.reset();
+      _likeController.reset();
+      _nopeController.reset();
+      setState(() {
+        _angle = 0;
+        _goingToLike = false;
+        _goingToNope = false;
+      });
+      _fadeInController.forward();
+    });
   }
 
   @override
@@ -104,104 +137,112 @@ class _SuggestionCardState extends State<SuggestionCard>
     _fadeInController.dispose();
     _likeController.dispose();
     _nopeController.dispose();
+    _resetController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _fadeInController.forward();
-    return GestureDetector(
-      child: Transform.translate(
-        offset: _likeTranslateAnimation?.value ??
-            _nopeTranslateAnimation?.value ??
-            Offset.zero,
-        child: Transform.rotate(
-          angle: (_angle +
-                  (_likeRotateAnimation?.value ?? _nopeRotateAnimation ?? 0)) *
-              pi /
-              180,
-          origin: Offset(0, 300),
-          child: SizedBox(
-            width: widget.width,
-            height: widget.height,
-            child: Stack(
-              children: <Widget>[
-                ProfileTile(profile: widget.user),
-                _goingToLike
-                    ? Positioned(
-                        left: 50,
-                        top: 50,
-                        child: Transform.rotate(
-                          angle: -pi / 9,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.greenAccent),
-                            ),
-                            padding: const EdgeInsets.all(5),
-                            child: Text(
-                              'LIKE',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.greenAccent,
+    return Opacity(
+      opacity: _fadeInAnimation?.value,
+      child: GestureDetector(
+        child: Transform.translate(
+          offset: Offset.zero +
+              _likeTranslateAnimation?.value +
+              _nopeTranslateAnimation?.value,
+          child: Transform.rotate(
+            angle: (_angle +
+                    _likeRotateAnimation?.value +
+                    _nopeRotateAnimation?.value) *
+                pi /
+                180,
+            origin: Offset(0, 300),
+            child: SizedBox(
+              width: widget.width,
+              height: widget.height,
+              child: Stack(
+                children: <Widget>[
+                  if (_profile != null) ProfileTile(profile: _profile),
+                  _goingToLike
+                      ? Positioned(
+                          left: 50,
+                          top: 50,
+                          child: Transform.rotate(
+                            angle: -pi / 9,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.greenAccent),
+                              ),
+                              padding: const EdgeInsets.all(5),
+                              child: Text(
+                                'LIKE',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.greenAccent,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    : SizedBox.shrink(),
-                _goingToNope
-                    ? Positioned(
-                        top: 50,
-                        right: 50,
-                        child: Transform.rotate(
-                          angle: pi / 9,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.redAccent),
-                            ),
-                            padding: const EdgeInsets.all(5),
-                            child: Text(
-                              'NOPE',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.redAccent,
+                        )
+                      : SizedBox.shrink(),
+                  _goingToNope
+                      ? Positioned(
+                          top: 50,
+                          right: 50,
+                          child: Transform.rotate(
+                            angle: pi / 9,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.redAccent),
+                              ),
+                              padding: const EdgeInsets.all(5),
+                              child: Text(
+                                'NOPE',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.redAccent,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    : SizedBox.shrink(),
-              ],
+                        )
+                      : SizedBox.shrink(),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      onHorizontalDragStart: (DragStartDetails details) {
-        _initialOffset = details.globalPosition;
-      },
-      onHorizontalDragUpdate: (DragUpdateDetails details) {
-        setState(() {
-          _angle =
-              (details.globalPosition.dx - _initialOffset.dx) * dampingFactor;
-          _goingToLike = _angle > climax;
-          _goingToNope = _angle < -climax;
-        });
-      },
-      onHorizontalDragEnd: (DragEndDetails details) {
-        if (_goingToLike) {
-          _onLike();
-        } else if (_goingToNope) {
-          _onNope();
-        }
-        _reset();
-      },
-      onHorizontalDragCancel: _reset,
-      onTap: () => Navigator.pushNamed(
-        context,
-        '/profile',
-        arguments: widget.user,
+        onHorizontalDragStart: (DragStartDetails details) {
+          _initialOffset = details.globalPosition;
+        },
+        onHorizontalDragUpdate: (DragUpdateDetails details) {
+          print('angle: ' +
+              ((details.globalPosition.dx - _initialOffset.dx) * dampingFactor)
+                  .toString());
+          setState(() {
+            _angle =
+                (details.globalPosition.dx - _initialOffset.dx) * dampingFactor;
+            _goingToLike = _angle > climax;
+            _goingToNope = _angle < -climax;
+          });
+        },
+        onHorizontalDragEnd: (DragEndDetails details) {
+          if (_goingToLike) {
+            _onLike();
+          } else if (_goingToNope) {
+            _onNope();
+          } else {
+            _reset();
+          }
+        },
+        onHorizontalDragCancel: _reset,
+        onTap: () => Navigator.pushNamed(
+          context,
+          '/profile',
+          arguments: widget.profileStream,
+        ),
       ),
     );
   }

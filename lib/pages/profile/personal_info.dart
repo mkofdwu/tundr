@@ -18,6 +18,7 @@ class _PersonalInfoProfilePageState extends State<PersonalInfoProfilePage> {
   @override
   void initState() {
     super.initState();
+    // TODO FIXME this is not working
     _scrollController.addListener(() {
       if (_scrollController.offset == 0) {
         if (_scrolledToTopOnce) {
@@ -54,85 +55,89 @@ class _PersonalInfoProfilePageState extends State<PersonalInfoProfilePage> {
           constraints: BoxConstraints(
             minHeight: MediaQuery.of(context).size.height,
           ),
-          child: Column(
-            children: <Widget>[
-              TileIconButton(
-                icon: Icons.close,
-                onPressed: () {
-                  Navigator.popUntil(
-                    context,
-                    (route) => route.settings.name == '/profile',
-                  );
-                  Navigator.pop(context);
-                },
-              ),
-              SizedBox(height: 30),
-              Column(
-                children:
-                    List<Widget>.from(profile.personalInfo.keys.map((name) {
-                  final dynamic value = profile.personalInfo[name];
-                  assert(value != null);
-                  if ((value is String || value is List) && value.isEmpty) {
-                    return SizedBox.shrink();
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          name,
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                        ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: 100),
-                          child: Text(
-                            value is List ? value.join(', ') : value.toString(),
-                            overflow: TextOverflow.ellipsis,
+          child: SafeArea(
+            child: Column(
+              children: <Widget>[
+                TileIconButton(
+                  icon: Icons.close,
+                  onPressed: () {
+                    Navigator.popUntil(
+                      context,
+                      (route) => route.settings.name == '/profile',
+                    );
+                    Navigator.pop(context);
+                  },
+                ),
+                SizedBox(height: 30),
+                Column(
+                  children:
+                      List<Widget>.from(profile.personalInfo.keys.map((name) {
+                    final dynamic value = profile.personalInfo[name];
+                    assert(value != null);
+                    if ((value is String || value is List) && value.isEmpty) {
+                      return SizedBox.shrink();
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            name,
                             style: TextStyle(
                               fontSize: 20,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                })),
-              ),
-              SizedBox(height: 30),
-              Container(
-                width: 100,
-                height: 5,
-              ),
-              SizedBox(height: 30),
-              profile.interests.isEmpty
-                  ? Text(
-                      'No interests',
-                      style: TextStyle(
-                        color: MyPalette.grey,
-                        fontSize: 16,
+                          ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 100),
+                            child: Text(
+                              value is List
+                                  ? value.join(', ')
+                                  : value.toString(),
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Interests',
-                            style: TextStyle(
-                              color: MyPalette.gold,
-                              fontSize: 20,
+                    );
+                  })),
+                ),
+                SizedBox(height: 30),
+                Container(
+                  width: 100,
+                  height: 5,
+                ),
+                SizedBox(height: 30),
+                profile.interests.isEmpty
+                    ? Text(
+                        'No interests',
+                        style: TextStyle(
+                          color: MyPalette.grey,
+                          fontSize: 16,
+                        ),
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Interests',
+                              style: TextStyle(
+                                color: MyPalette.gold,
+                                fontSize: 20,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        InterestsWrap(interests: profile.interests),
-                      ],
-                    ),
-            ],
+                          SizedBox(height: 10),
+                          InterestsWrap(interests: profile.interests),
+                        ],
+                      ),
+              ],
+            ),
           ),
         ),
       ),

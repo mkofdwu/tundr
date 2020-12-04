@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,8 @@ class SwipingPage extends StatefulWidget {
 }
 
 class _SwipingPageState extends State<SwipingPage> {
+  final StreamController<UserProfile> _profileStreamController =
+      StreamController();
   final List<SuggestionWithProfile> _suggestionWithProfiles = [];
   int _i = 0;
   bool _canUndo = false;
@@ -45,15 +48,19 @@ class _SwipingPageState extends State<SwipingPage> {
     final suggestions = privateInfo.respondedSuggestions;
     suggestions.addAll(privateInfo.dailyGeneratedSuggestions
         .asMap()
-        .map((_i, uid) => MapEntry<String, bool>(uid, null)));
+        .map((__i, uid) => MapEntry<String, bool>(uid, null)));
     for (final uid in suggestions.keys) {
       _suggestionWithProfiles.add(SuggestionWithProfile(
         profile: await UsersService.getUserProfile(uid),
         wasLiked: suggestions[uid],
       ));
     }
+    _addProfileToStream();
     setState(() {});
   }
+
+  void _addProfileToStream() =>
+      _profileStreamController.add(_suggestionWithProfiles[_i].profile);
 
   Future<void> _cleanUp(
     String otherUid, {
@@ -84,6 +91,8 @@ class _SwipingPageState extends State<SwipingPage> {
       ],
       UserPrivateInfo,
     );
+
+    _addProfileToStream();
   }
 
   void _nope() async {
@@ -102,17 +111,18 @@ class _SwipingPageState extends State<SwipingPage> {
     );
   }
 
-  void _undo() {
+  void _undo() async {
     setState(() {
       _i--;
       _canUndo = false;
     });
     if (_suggestionWithProfiles[_i].wasLiked == null) {
-      SuggestionsService.undoSuggestionResponse(
+      await SuggestionsService.undoSuggestionResponse(
         Provider.of<User>(context, listen: false).profile.uid,
         _suggestionWithProfiles[_i].profile.uid,
       );
     }
+    _addProfileToStream();
   }
 
   void _like() async {
@@ -302,9 +312,6 @@ class _SwipingPageState extends State<SwipingPage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final otherProfile = _i < _suggestionWithProfiles.length
-        ? _suggestionWithProfiles[_i].profile
-        : null;
 
     return Column(
       children: <Widget>[
@@ -352,7 +359,7 @@ class _SwipingPageState extends State<SwipingPage> {
               child: SuggestionCard(
                 width: width - 80,
                 height: height - 250,
-                user: otherProfile,
+                profileStream: _profileStreamController.stream,
                 onLike: _like,
                 onNope: _nope,
               ),
