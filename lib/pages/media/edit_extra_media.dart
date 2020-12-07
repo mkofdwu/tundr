@@ -5,6 +5,7 @@ import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/utils/from_theme.dart';
+import 'package:tundr/utils/show_my_options_dialog.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/pages/media/widgets/media_viewer.dart';
 import 'package:tundr/widgets/popup_menus/menu_divider.dart';
@@ -38,21 +39,13 @@ class _EditExtraMediaPageState extends State<EditExtraMediaPage> {
   }
 
   void _replaceWithImage() async {
-    final source = await showDialog(
+    final source = await showMyOptionsDialog(
       context: context,
-      child: SimpleDialog(
-        title: Text('Select image source'),
-        children: <Widget>[
-          FlatButton(
-            child: Text('camera'),
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-          ),
-          FlatButton(
-            child: Text('gallery'),
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-          ),
-        ],
-      ),
+      title: 'Select image source',
+      options: {
+        'Camera': ImageSource.camera,
+        'Gallery': ImageSource.gallery,
+      },
     );
     if (source == null) return;
     final imageMedia = await MediaPickerService.pickMedia(
@@ -69,22 +62,13 @@ class _EditExtraMediaPageState extends State<EditExtraMediaPage> {
   }
 
   void _replaceWithVideo() async {
-    final source = await showDialog(
-      // RETURNTOTHIS
+    final source = await showMyOptionsDialog(
       context: context,
-      child: SimpleDialog(
-        title: Text('Select video source'),
-        children: <Widget>[
-          FlatButton(
-            child: Text('camera'),
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-          ),
-          FlatButton(
-            child: Text('gallery'),
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-          ),
-        ],
-      ),
+      title: 'Select video source',
+      options: {
+        'Camera': ImageSource.camera,
+        'Gallery': ImageSource.gallery,
+      },
     );
     if (source == null) return;
     final videoMedia = await MediaPickerService.pickMedia(

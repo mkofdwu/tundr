@@ -4,6 +4,7 @@ import 'package:tundr/repositories/user.dart';
 import 'package:tundr/repositories/theme_manager.dart';
 
 import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/widgets/rebuilder.dart';
 
 class SetupThemePage extends StatefulWidget {
   @override
@@ -15,7 +16,8 @@ class _SetupThemePageState extends State<SetupThemePage> {
     Provider.of<ThemeManager>(context, listen: false).theme = theme;
     await Provider.of<User>(context, listen: false)
         .updatePrivateInfo({'theme': theme == ThemeMode.dark ? 0 : 1});
-    Navigator.popUntil(context, (route) => route.isFirst);
+    // TODO FIXME setup extra info pages?
+    Rebuilder.rebuild(context);
   }
 
   @override

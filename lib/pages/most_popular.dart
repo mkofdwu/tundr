@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/pages/its_a_match.dart';
 import 'package:tundr/repositories/theme_manager.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/get_network_image.dart';
@@ -37,7 +36,7 @@ class _MostPopularPageState extends State<MostPopularPage> {
   void _loadPositionedProfileImages() async {
     final sortedUsers = await UsersService.getMostPopular();
     if (sortedUsers.isEmpty) {
-      setState(() => _positionedProfileImages = []);
+      if (mounted) setState(() => _positionedProfileImages = []);
       return;
     }
 
@@ -52,73 +51,75 @@ class _MostPopularPageState extends State<MostPopularPage> {
     final highestScore = sortedUsers.first.popularityScore;
     final tiles = <Rect>[];
     final random = Random();
-    setState(() => _positionedProfileImages = List<Widget>.from(
-          sortedUsers.map(
-            (popUser) {
-              final size = popUser.popularityScore /
-                  highestScore *
-                  min(widget.width, widget.height) *
-                  0.5; // * tileSize;
-              // TODO: FIXME change tileSize
+    if (mounted) {
+      setState(() => _positionedProfileImages = List<Widget>.from(
+            sortedUsers.map(
+              (popUser) {
+                final size = popUser.popularityScore /
+                    highestScore *
+                    min(widget.width, widget.height) *
+                    0.5; // * tileSize;
+                // TODO: FIXME change tileSize
 
-              var tile = Rect.fromLTWH(
-                random.nextDouble() * (widget.width - size),
-                random.nextDouble() * (widget.height - size),
-                size,
-                size,
-              );
-              var attempts = 0;
-              while (_overlapsWithAny(rect: tile, otherRects: tiles) &&
-                  attempts < 100) {
-                tile = Rect.fromLTWH(
+                var tile = Rect.fromLTWH(
                   random.nextDouble() * (widget.width - size),
                   random.nextDouble() * (widget.height - size),
                   size,
                   size,
                 );
-                ++attempts;
-              }
+                var attempts = 0;
+                while (_overlapsWithAny(rect: tile, otherRects: tiles) &&
+                    attempts < 100) {
+                  tile = Rect.fromLTWH(
+                    random.nextDouble() * (widget.width - size),
+                    random.nextDouble() * (widget.height - size),
+                    size,
+                    size,
+                  );
+                  ++attempts;
+                }
 
-              tiles.add(tile);
-              return Consumer<ThemeManager>(
-                builder: (context, themeManager, child) => Positioned(
-                  left: tile.left,
-                  top: tile.top,
-                  child: GestureDetector(
-                    child: Container(
-                      width: size,
-                      height: size,
-                      decoration: themeManager.theme == ThemeMode.dark
-                          ? BoxDecoration(
-                              border:
-                                  Border.all(color: MyPalette.white, width: 2),
-                            )
-                          : BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [MyPalette.secondaryShadow],
-                            ),
-                      child: ClipRRect(
-                        borderRadius: themeManager.theme == ThemeMode.dark
-                            ? BorderRadius.zero
-                            : BorderRadius.circular(20),
-                        child: Hero(
-                          tag: popUser.profile.profileImageUrl,
-                          child:
-                              getNetworkImage(popUser.profile.profileImageUrl),
+                tiles.add(tile);
+                return Consumer<ThemeManager>(
+                  builder: (context, themeManager, child) => Positioned(
+                    left: tile.left,
+                    top: tile.top,
+                    child: GestureDetector(
+                      child: Container(
+                        width: size,
+                        height: size,
+                        decoration: themeManager.theme == ThemeMode.dark
+                            ? BoxDecoration(
+                                border: Border.all(
+                                    color: MyPalette.white, width: 2),
+                              )
+                            : BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [MyPalette.secondaryShadow],
+                              ),
+                        child: ClipRRect(
+                          borderRadius: themeManager.theme == ThemeMode.dark
+                              ? BorderRadius.zero
+                              : BorderRadius.circular(20),
+                          child: Hero(
+                            tag: popUser.profile.profileImageUrl,
+                            child: getNetworkImage(
+                                popUser.profile.profileImageUrl),
+                          ),
                         ),
                       ),
-                    ),
-                    onTap: () => Navigator.pushNamed(
-                      context,
-                      '/profile',
-                      arguments: popUser.profile,
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        '/profile',
+                        arguments: popUser.profile,
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        ));
+                );
+              },
+            ),
+          ));
+    }
   }
 
   bool _overlapsWithAny({Rect rect, List<Rect> otherRects}) {

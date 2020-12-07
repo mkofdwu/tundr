@@ -21,6 +21,7 @@ class RegistrationInfo {
 
   String smsVerificationId;
   bool isCreatingAccount = false;
+  bool takeTour = false;
 
   @override
   String toString() => 'RegistrationInfo('

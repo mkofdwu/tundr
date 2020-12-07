@@ -43,12 +43,14 @@ class _FiltersSettingsPageState extends State<FiltersSettingsPage> {
         },
       ),
     );
-    Provider.of<User>(context, listen: false)
-        .algorithmData
-        .otherFilters[filter.field.name] = filter;
-    await Provider.of<User>(context, listen: false)
-        .writeField('otherFilters', UserAlgorithmData);
-    setState(() {});
+    if (filter.options != null) {
+      Provider.of<User>(context, listen: false)
+          .algorithmData
+          .otherFilters[filter.field.name] = filter;
+      await Provider.of<User>(context, listen: false)
+          .writeField('otherFilters', UserAlgorithmData);
+      setState(() {});
+    }
   }
 
   @override

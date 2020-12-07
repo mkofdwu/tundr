@@ -33,29 +33,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _updateMedia() {
-    Provider.of<User>(context, listen: false).updateProfile({
-      'extraMedia': Provider.of<User>(context, listen: false)
-          .profile
-          .extraMedia
-          .map((media) => media == null
-              ? null
-              : {
-                  'type': MediaType.values.indexOf(media.type),
-                  'url': media.url,
-                })
-    });
+    Provider.of<User>(context, listen: false)
+        .writeField('extraMedia', UserProfile);
   }
 
   void _editInterests() => Navigator.push(
         context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => EditInterestsPage(),
-          transitionsBuilder: (context, animation1, animation2, child) {
-            return FadeTransition(
-                opacity: animation1, child: child); // ANIMATION
-          },
-        ),
-      ).then((_) => setState(() {}));
+        MaterialPageRoute(builder: (context) => EditInterestsPage()),
+      );
 
   Widget _buildInterests(List<String> allInterests) {
     return allInterests.isEmpty
@@ -76,6 +61,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
             onTap: _editInterests,
           )
         : InterestsWrap(interests: allInterests);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
+        FeatureDiscovery.discoverFeatures(
+            context, <String>['preview_profile']));
   }
 
   @override
@@ -219,12 +212,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   PersonalInfoList(
                     personalInfo: profile.personalInfo,
                     onChanged: (name, value) {
-                      Provider.of<User>(context, listen: false)
-                          .profile
-                          .personalInfo[name] = value;
-                      Provider.of<User>(context, listen: false)
-                          .writeField('personalInfo', UserProfile);
-                      setState(() {});
+                      if (value != null) {
+                        Provider.of<User>(context, listen: false)
+                            .profile
+                            .personalInfo[name] = value;
+                        Provider.of<User>(context, listen: false)
+                            .writeField('personalInfo', UserProfile);
+                        setState(() {});
+                      }
                     },
                   ),
                 ],

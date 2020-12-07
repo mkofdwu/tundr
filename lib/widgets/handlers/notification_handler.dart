@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/repositories/user.dart';
@@ -64,9 +65,8 @@ class _NotificationHandlerState extends State<NotificationHandler> {
   //   final User user = await DatabaseService.getUser(uid);
   //   Navigator.push(
   //     context,
-  //     PageRouteBuilder(
-  //       pageBuilder: (context, animation1, animation2) =>
-  //           ItsAMatchPage(user: user),
+  //     MaterialPageRoute(
+  //       builder: (context) => ItsAMatchPage(user: user),
   //     ),
   //   );
   // }

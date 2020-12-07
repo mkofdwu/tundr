@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tundr/models/filter.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/back.dart';
-import 'package:tundr/widgets/buttons/tile_icon.dart';
-import 'package:tundr/widgets/theme_builder.dart';
 
 class RangeSliderFilterPage extends StatefulWidget {
   final Filter filter;

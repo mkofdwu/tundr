@@ -5,9 +5,7 @@ import 'pages/edit_filters.dart';
 import 'pages/edit_profile.dart';
 import 'pages/login.dart';
 import 'pages/most_popular.dart';
-import 'pages/registration.dart';
 import 'pages/seach_users.dart';
-import 'pages/swiping_page.dart';
 
 void main() {
   group('Login', loginTests);

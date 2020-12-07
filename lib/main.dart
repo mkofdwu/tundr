@@ -30,35 +30,20 @@ import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/handlers/app_state_handler.dart';
 import 'package:tundr/widgets/handlers/notification_handler.dart';
+import 'package:tundr/widgets/rebuilder.dart';
 
 void main() {
-  // runZonedGuarded<Future<void>>(
-  //   () async {
-  runApp(MultiProvider(
-    providers: [
-      Provider<User>(create: (context) => User()),
-      Provider<RegistrationInfo>(create: (context) => RegistrationInfo()),
-      ChangeNotifierProvider<ThemeManager>(create: (context) => ThemeManager()),
-    ],
-    child: TundrApp(),
+  runApp(Rebuilder(
+    child: MultiProvider(
+      providers: [
+        Provider<User>(create: (context) => User()),
+        Provider<RegistrationInfo>(create: (context) => RegistrationInfo()),
+        ChangeNotifierProvider<ThemeManager>(
+            create: (context) => ThemeManager()),
+      ],
+      child: TundrApp(),
+    ),
   ));
-  // },
-  // (error, stackTrace) {
-  //   runApp(
-  //     MaterialApp(
-  //       title: 'error',
-  //       home: Material(
-  //         child: Center(
-  //           child: Padding(
-  //             padding: const EdgeInsets.all(20),
-  //             child: Text(error),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // },
-  // );
 }
 
 class TundrApp extends StatefulWidget {
@@ -80,12 +65,12 @@ class _TundrAppState extends State<TundrApp> {
       }
       if (Provider.of<RegistrationInfo>(context, listen: false)
           .isCreatingAccount) {
-        // change the first page to setup theme so it is shown when account has
-        // been created & navigator pops back to first page.
-        setState(() {
-          _loadingUser = false;
-          _setupTheme = true;
-        });
+        // // change the first page to setup theme so it is shown when account has
+        // // been created & navigator pops back to first page.
+        // setState(() {
+        //   _loadingUser = false;
+        //   _setupTheme = true;
+        // });
       } else {
         final user = await UsersService.getUserRepo(firebaseUser.uid);
         Provider.of<User>(context, listen: false).profile = user.profile;
@@ -204,6 +189,9 @@ class _TundrAppState extends State<TundrApp> {
     iconTheme: IconThemeData(
       color: MyPalette.white,
     ),
+    dialogTheme: DialogTheme(
+      contentTextStyle: TextStyle(color: MyPalette.white),
+    ),
   );
 
   final _lightTheme = ThemeData(
@@ -231,6 +219,9 @@ class _TundrAppState extends State<TundrApp> {
     ),
     iconTheme: IconThemeData(
       color: MyPalette.black,
+    ),
+    dialogTheme: DialogTheme(
+      contentTextStyle: TextStyle(color: MyPalette.black),
     ),
   );
 

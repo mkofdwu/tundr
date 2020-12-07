@@ -9,6 +9,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/enums/media_type.dart';
+import 'package:tundr/utils/show_my_error_dialog.dart';
 
 class MediaPickerService {
   static Future<Media> pickMedia({
@@ -37,18 +38,11 @@ class MediaPickerService {
       }
     } on PlatformException catch (error) {
       print(error.message);
-      await showDialog(
+      await showMyErrorDialog(
         context: context,
-        child: AlertDialog(
-          content: Text(
-              "We can't access your ${source == ImageSource.camera ? 'camera' : 'gallery'} without your permission"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
+        title:
+            "We can't access your ${source == ImageSource.camera ? 'camera' : 'gallery'}",
+        content: error.message,
       );
       return null;
     }

@@ -1,9 +1,7 @@
 // FUTURE: replace this with a huge list of manual options
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tundr/models/personal_info_field.dart';
-import 'package:tundr/repositories/theme_manager.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 

@@ -6,6 +6,7 @@ import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/message_option.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
+import 'package:tundr/utils/show_my_options_dialog.dart';
 import 'referenced_message_tile.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 
@@ -30,27 +31,12 @@ class OtherUserMessageTile extends StatelessWidget {
   }) : super(key: key);
 
   Future<void> _selectOption(BuildContext context) async {
-    final option = await showDialog(
-      // FUTURE: improve on this temporary solution
+    final option = await showMyOptionsDialog(
       context: context,
-      child: SimpleDialog(
-        children: <Widget>[
-          FlatButton(
-            onPressed: () =>
-                Navigator.pop(context, MessageOption.referenceMessage),
-            child: const Text('Reply to message'),
-          ),
-        ],
-      ),
+      title: '',
+      options: {'Reply to message': MessageOption.referenceMessage},
     );
-    switch (option) {
-      case MessageOption.referenceMessage:
-        onReferenceMessage();
-        break;
-      case MessageOption.deleteMessage:
-        onDeleteMessage();
-        break;
-    }
+    if (option == MessageOption.referenceMessage) onReferenceMessage();
   }
 
   void _openMedia(BuildContext context) => Navigator.push(

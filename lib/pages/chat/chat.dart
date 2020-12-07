@@ -89,9 +89,10 @@ class _ChatPageState extends State<ChatPage> {
     final unsentMessageIndex = _unsentMessages.length;
     final sentOn = DateTime.now();
 
-    _media.url = _media == null
-        ? ''
-        : await StorageService.uploadMedia(uid: profile.uid, media: _media);
+    if (_media != null) {
+      _media.url =
+          await StorageService.uploadMedia(uid: profile.uid, media: _media);
+    }
 
     final message = Message(
       sender: profile,

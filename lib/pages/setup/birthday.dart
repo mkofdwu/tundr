@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/setup/gender.dart';
 import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/utils/show_my_error_dialog.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/textfields/digit.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
@@ -72,38 +73,16 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
         _day1 * 10 + _day2,
       );
       if (birthday.isAfter(DateTime.now())) {
-        showDialog(
+        showMyErrorDialog(
           context: context,
-          child: AlertDialog(
-            title: Text(
-              'Invalid birthday',
-              style: TextStyle(color: MyPalette.red),
-            ),
-            content: Text('Are you sure you entered your birthday correctly?'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Retry'),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
+          title: 'Invalid birthday',
+          content: 'Are you sure you entered your birthday correctly?',
         );
       } else if (DateTime.now().difference(birthday).inDays > 365 * 50) {
-        showDialog(
+        showMyErrorDialog(
           context: context,
-          child: AlertDialog(
-            title: Text(
-              'Too old',
-              style: TextStyle(color: MyPalette.red),
-            ),
-            content: Text("You can't be above 50 years old"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Retry'),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
+          title: 'Too old',
+          content: "You can't be above 50 years old",
         );
       } else {
         Provider.of<RegistrationInfo>(context, listen: false).birthday =

@@ -28,8 +28,11 @@ class _HomePageState extends State<HomePage>
             (_) => _tabController.animateTo(_tabController.previousIndex));
       }
     });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      FeatureDiscovery.discoverFeatures(context, <String>['most_popular_tab']);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      FeatureDiscovery.discoverFeatures(
+        context,
+        <String>['suggestion_card', 'search_tab', 'most_popular_tab', 'me_tab'],
+      );
     });
   }
 
@@ -55,7 +58,7 @@ class _HomePageState extends State<HomePage>
             tabs: <Tab>[
               Tab(
                 key: ValueKey('dashboardTab'),
-                child: Icon(Icons.person),
+                child: const Icon(Icons.person),
               ),
               Tab(
                 key: ValueKey('mostPopularTab'),
@@ -76,7 +79,16 @@ class _HomePageState extends State<HomePage>
               ),
               Tab(
                 key: ValueKey('searchTab'),
-                child: Icon(Icons.search),
+                child: DescribedFeatureOverlay(
+                  featureId: 'search_tab',
+                  tapTarget: const Icon(Icons.search),
+                  title: Text('Find anyone'),
+                  description: Text(
+                      'Use this to search for anyone on the app, male or female, by their username.'),
+                  targetColor: MyPalette.white.withOpacity(0.8),
+                  backgroundColor: Theme.of(context).accentColor,
+                  child: Icon(Icons.search),
+                ),
               ),
               Tab(
                 key: ValueKey('chatTab'),

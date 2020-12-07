@@ -5,8 +5,9 @@ import 'package:tundr/repositories/registration_info.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/auth_service.dart';
-import 'package:tundr/widgets/buttons/flat_tile.dart';
+import 'package:tundr/utils/show_my_error_dialog.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
+import 'package:tundr/widgets/rebuilder.dart';
 import 'package:tundr/widgets/textfields/digit.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
@@ -30,21 +31,11 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
       Provider.of<RegistrationInfo>(context, listen: false).isCreatingAccount =
           false;
       if (success) {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        Rebuilder.rebuild(context);
       } else {
-        await showDialog(
+        await showMyErrorDialog(
           context: context,
-          child: AlertDialog(
-            title: Text('User could not be created'),
-            titleTextStyle: TextStyle(color: MyPalette.red),
-            actions: <Widget>[
-              FlatTileButton(
-                text: 'Ok',
-                color: MyPalette.gold,
-                onTap: () => Navigator.pop(context),
-              ),
-            ],
-          ),
+          title: 'User could not be created',
         );
       }
     }

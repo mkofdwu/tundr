@@ -4,9 +4,11 @@ import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/auth_service.dart';
 
 import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/utils/show_my_alert_dialog.dart';
 import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/flat_tile.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
+import 'package:tundr/widgets/rebuilder.dart';
 import 'package:tundr/widgets/textfields/underline.dart';
 
 class ConfirmDeleteAccountPage extends StatelessWidget {
@@ -21,27 +23,17 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
         null) {
       await AuthService.deleteAccount(
           Provider.of<User>(context, listen: false).profile.uid);
-      Navigator.popUntil(context, (route) => route.isFirst);
-      await showDialog(
+      Rebuilder.rebuild(context);
+      await showMyAlertDialog(
         context: context,
-        child: AlertDialog(
-          title: Text('Success'),
-          content: Text('Your account has been deleted'),
-        ),
+        title: 'Success',
+        content: 'Your account has been deleted',
       );
     } else {
-      await showDialog(
+      await showMyAlertDialog(
         context: context,
-        child: AlertDialog(
-          title: Text('Invalid password'),
-          content: Text('Failed to delete your account'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
+        title: 'Invalid password',
+        content: 'Failed to delete your account',
       );
     }
   }

@@ -11,6 +11,7 @@ import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
+import 'package:tundr/utils/show_my_options_dialog.dart';
 import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/simple_icon.dart';
 import 'package:tundr/widgets/verified_badge.dart';
@@ -257,22 +258,13 @@ class _MePageState extends State<MePage> {
   }
 
   void _changeProfilePic() async {
-    // FUTURE: better ui for selecting source
-    final source = await showDialog(
+    final source = await showMyOptionsDialog(
       context: context,
-      child: SimpleDialog(
-        title: Text('Change profile picture'),
-        children: <Widget>[
-          FlatButton(
-            child: Text('Camera'),
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-          ),
-          FlatButton(
-            child: Text('Gallery'),
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-          ),
-        ],
-      ),
+      title: 'Change profile picture',
+      options: {
+        'Camera': ImageSource.camera,
+        'Gallery': ImageSource.gallery,
+      },
     );
     if (source == null) return;
     final imageMedia = await MediaPickerService.pickMedia(

@@ -5,6 +5,7 @@ import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/services/media_picker_service.dart';
+import 'package:tundr/utils/show_my_options_dialog.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'package:tundr/widgets/theme_builder.dart';
@@ -40,21 +41,14 @@ class _MessageFieldState extends State<MessageField> {
 
   void _selectImage() async {
     // FUTURE: this and the function below are just temporary fixes, find a better solution / dialog in the future
-    final source = await showDialog(
+
+    final source = await showMyOptionsDialog(
       context: context,
-      child: SimpleDialog(
-        title: Text('Select image source'),
-        children: <Widget>[
-          FlatButton(
-            child: Text('Camera'),
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-          ),
-          FlatButton(
-            child: Text('Gallery'),
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-          ),
-        ],
-      ),
+      title: 'Select image source',
+      options: {
+        'Camera': ImageSource.camera,
+        'Gallery': ImageSource.gallery,
+      },
     );
     if (source == null) return;
     final media = await MediaPickerService.pickMedia(
@@ -67,21 +61,13 @@ class _MessageFieldState extends State<MessageField> {
   }
 
   void _selectVideo() async {
-    final source = await showDialog(
+    final source = await showMyOptionsDialog(
       context: context,
-      child: SimpleDialog(
-        title: Text('Select video source'),
-        children: <Widget>[
-          FlatButton(
-            child: Text('Camera'),
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-          ),
-          FlatButton(
-            child: Text('Gallery'),
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-          ),
-        ],
-      ),
+      title: 'Select image source',
+      options: {
+        'Camera': ImageSource.camera,
+        'Gallery': ImageSource.gallery,
+      },
     );
     if (source == null) return;
     final media = await MediaPickerService.pickMedia(
@@ -237,13 +223,14 @@ class _MessageFieldState extends State<MessageField> {
                         controller: _textController,
                         hintText: 'Say something',
                         hintTextColor: MyPalette.white,
-                        color: MyPalette.black,
+                        color: MyPalette.white,
                       ),
                     ),
                     SizedBox(width: 10),
                     if (_textController.text.isNotEmpty)
                       TileIconButton(
                         icon: Icons.send,
+                        iconColor: MyPalette.white,
                         onPressed: _sendMessage,
                       )
                   ],

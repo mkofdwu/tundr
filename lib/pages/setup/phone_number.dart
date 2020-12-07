@@ -7,6 +7,7 @@ import 'package:tundr/pages/setup/phone_verification.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/services/users_service.dart';
+import 'package:tundr/utils/show_my_error_dialog.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
@@ -23,36 +24,16 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
     final phoneNumber =
         Provider.of<RegistrationInfo>(context, listen: false).phoneNumber;
     if (phoneNumber.length != 11) {
-      await showDialog(
-        context: context,
-        child: AlertDialog(
-          title: Text('Invalid phone number'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Retry'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
-      );
+      await showMyErrorDialog(context: context, title: 'Invalid phone number');
       setState(() => _loading = false);
       return;
     }
 
     if (await UsersService.phoneNumberExists(phoneNumber)) {
-      await showDialog(
+      await showMyErrorDialog(
         context: context,
-        child: AlertDialog(
-          title: Text('Invalid phone number'),
-          content: Text(
-              'This phone number already has an account associated with it'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Close'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
+        title: 'Invalid phone number',
+        content: 'This phone number already has an account associated with it',
       );
       setState(() => _loading = false);
       return;

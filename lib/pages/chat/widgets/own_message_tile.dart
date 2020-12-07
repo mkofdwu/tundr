@@ -6,6 +6,7 @@ import 'package:tundr/pages/media/media_view.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/message_option.dart';
 import 'package:tundr/utils/from_theme.dart';
+import 'package:tundr/utils/show_my_options_dialog.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'referenced_message_tile.dart';
 
@@ -28,31 +29,18 @@ class OwnMessageTile extends StatelessWidget {
   }) : super(key: key);
 
   Future<void> _selectOption(BuildContext context) async {
-    final option = await showDialog(
-      // FUTURE: improve on this temporary solution
+    final option = await showMyOptionsDialog(
       context: context,
-      child: SimpleDialog(
-        children: <Widget>[
-          FlatButton(
-            child: Text('Reply to message'),
-            onPressed: () =>
-                Navigator.pop(context, MessageOption.referenceMessage),
-          ),
-          FlatButton(
-            child: Text('Delete message'),
-            onPressed: () =>
-                Navigator.pop(context, MessageOption.deleteMessage),
-          ),
-        ],
-      ),
+      title: '',
+      options: {
+        'Reply to message': MessageOption.referenceMessage,
+        'Delete message': MessageOption.deleteMessage,
+      },
     );
-    switch (option) {
-      case MessageOption.referenceMessage:
-        onReferenceMessage();
-        break;
-      case MessageOption.deleteMessage:
-        onDeleteMessage();
-        break;
+    if (option == MessageOption.referenceMessage) {
+      onReferenceMessage();
+    } else if (option == MessageOption.deleteMessage) {
+      onDeleteMessage();
     }
   }
 

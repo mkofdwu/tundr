@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/utils/show_my_alert_dialog.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/tile.dart';
 
@@ -21,18 +22,10 @@ class _LoginPageState extends State<LoginPage> {
     if (error == null) {
       Navigator.pop(context);
     } else {
-      await showDialog(
+      await showMyAlertDialog(
         context: context,
-        child: AlertDialog(
-          title: Text('Error'),
-          content: Text(error),
-          actions: [
-            FlatButton(
-              child: Text('Close'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
+        title: 'Error signing in',
+        content: error,
       );
     }
   }

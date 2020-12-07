@@ -30,14 +30,8 @@ class ChatTile extends StatelessWidget {
     final user = await UsersService.getUserProfile(chat.uid);
     await Navigator.push(
       context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) => ChatPage(
-          otherUser: user,
-          chat: chat,
-        ),
-        transitionsBuilder: (context, animation1, animation2, child) {
-          return FadeTransition(opacity: animation1, child: child);
-        },
+      MaterialPageRoute(
+        builder: (context) => ChatPage(otherUser: user, chat: chat),
       ),
     );
   }

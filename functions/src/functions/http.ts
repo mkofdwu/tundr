@@ -126,11 +126,12 @@ export const startConversation = functions.https.onCall(
   async (data, context) => {
     // add to chats for current user
     // add to unknown chats for other user (if allowed)
+    // returns the chat id
     const uid = context.auth?.uid;
-    if (uid == null) return { result: false };
+    if (uid == null) return { result: '' };
     // check if allowed to start conversation, respond with error if not allowed
     if (!(await _canTalkTo(data, context))) {
-      return { result: false };
+      return { result: '' };
     }
 
     // create chat with participants & messages (add the first message)
@@ -155,7 +156,7 @@ export const startConversation = functions.https.onCall(
     await usersPrivateInfoRef.doc(data.otherUid).update({
       unknownChats: admin.firestore.FieldValue.arrayUnion(chatDoc.id),
     });
-    return { result: true };
+    return { result: chatDoc.id };
   }
 );
 

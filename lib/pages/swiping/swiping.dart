@@ -43,6 +43,12 @@ class _SwipingPageState extends State<SwipingPage> {
     WidgetsBinding.instance.addPostFrameCallback(_loadSuggestionProfiles);
   }
 
+  @override
+  void dispose() {
+    _profileStreamController.close();
+    super.dispose();
+  }
+
   Future<void> _loadSuggestionProfiles(_) async {
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     final suggestions = Map<String, bool>.from(
@@ -123,7 +129,7 @@ class _SwipingPageState extends State<SwipingPage> {
         _suggestionWithProfiles[_i].profile.uid,
       );
     }
-    _addProfileToStream();
+    _profileStreamController.addError('undo');
   }
 
   void _like() async {
@@ -349,8 +355,8 @@ class _SwipingPageState extends State<SwipingPage> {
               featureId: 'suggestion_card',
               tapTarget: SizedBox.shrink(),
               title: Text('View a profile'),
-              description:
-                  Text('Click on the card to learn more about this person'),
+              description: Text(
+                  'Click on the card to learn more about this person. Swipe right to like or left to dislike.'),
               targetColor: MyPalette.white.withOpacity(0.8),
               backgroundColor: Theme.of(context).accentColor,
               child: SuggestionCard(

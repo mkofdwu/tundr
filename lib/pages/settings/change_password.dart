@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/utils/show_my_alert_dialog.dart';
 import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/underline.dart';
@@ -42,17 +43,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       if (incorrect) {
         setState(() => _incorrect = true);
       } else {
-        await showDialog(
+        await showMyAlertDialog(
           context: context,
-          child: AlertDialog(
-            title: Text('Your password has been successfully updated.'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
+          title: 'Your password has been successfully updated.',
         ).then((_) => Navigator.pop(context));
       }
     }

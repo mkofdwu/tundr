@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/pages/setup/phone_number.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/interests/widgets/interests_browser.dart';
+import 'package:tundr/utils/show_my_alert_dialog.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
@@ -58,19 +59,11 @@ class _SetupInterestsPageState extends State<SetupInterestsPage> {
   void _nextPage() {
     if (Provider.of<RegistrationInfo>(context, listen: false).interests.length <
         _minInterests) {
-      showDialog(
+      showMyAlertDialog(
         context: context,
-        child: AlertDialog(
-          title: Text('Insufficient interests'),
-          content: Text(
-              'Please select at least 10 interests. This will be crucial when people are suggested to you.'),
-          actions: [
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
+        title: 'Insufficient interests',
+        content:
+            'Please select at least 10 interests. This will be crucial when people are suggested to you.',
       );
     } else {
       Navigator.push(

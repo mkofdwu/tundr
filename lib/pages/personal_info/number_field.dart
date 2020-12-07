@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tundr/models/personal_info_field.dart';
-import 'package:tundr/repositories/theme_manager.dart';
-import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
-import 'package:tundr/widgets/textfields/underline.dart';
 
 class NumberFieldPage extends StatefulWidget {
   final PersonalInfoField field;

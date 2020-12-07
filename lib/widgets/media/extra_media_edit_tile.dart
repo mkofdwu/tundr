@@ -5,6 +5,8 @@ import 'package:tundr/pages/media/edit_extra_media.dart';
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
+import 'package:tundr/utils/show_my_options_dialog.dart';
+import 'package:tundr/utils/show_my_question_dialog.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'package:tundr/widgets/theme_builder.dart';
 
@@ -24,52 +26,21 @@ class ExtraMediaEditTile extends StatelessWidget {
 
   void _editMedia(BuildContext context) async {
     if (media == null) {
-      final mediaType = await showDialog(
-          context: context,
-          builder: (context) {
-            return SimpleDialog(
-              title: Text('Take an image or a video?'),
-              children: <Widget>[
-                FlatButton(
-                  child: Text(
-                    'Image',
-                    style: TextStyle(color: MyPalette.white),
-                  ),
-                  onPressed: () => Navigator.pop(context, MediaType.image),
-                ),
-                FlatButton(
-                  child: Text(
-                    'Video',
-                    style: TextStyle(color: MyPalette.white),
-                  ),
-                  onPressed: () => Navigator.pop(context, MediaType.video),
-                ),
-              ],
-            );
-          });
-      if (mediaType == null) return;
-      final source = await showDialog(
+      final mediaType = await showMyOptionsDialog(
         context: context,
-        builder: (context) {
-          return SimpleDialog(
-            title: Text('Select Image Source'),
-            children: <Widget>[
-              FlatButton(
-                child: Text(
-                  'Camera',
-                  style: TextStyle(color: MyPalette.white),
-                ),
-                onPressed: () => Navigator.pop(context, ImageSource.camera),
-              ),
-              FlatButton(
-                child: Text(
-                  'Gallery',
-                  style: TextStyle(color: MyPalette.white),
-                ),
-                onPressed: () => Navigator.pop(context, ImageSource.gallery),
-              ),
-            ],
-          );
+        title: 'Take an image or a video?',
+        options: {
+          'Image': MediaType.image,
+          'Video': MediaType.video,
+        },
+      );
+      if (mediaType == null) return;
+      final source = await showMyOptionsDialog(
+        context: context,
+        title: 'Select a source',
+        options: {
+          'Camera': ImageSource.camera,
+          'Gallery': ImageSource.gallery,
         },
       );
       if (source == null) return;
@@ -95,24 +66,11 @@ class ExtraMediaEditTile extends StatelessWidget {
 
   void _confirmRemoveImage(BuildContext context) async {
     // temporary fix FUTURE: improve
-    await showDialog(
+    final confirm = await showMyQuestionDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Are you sure you would like to remove this image?'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: onRemoveMedia,
-            ),
-            FlatButton(
-              child: Text('Cancel'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        );
-      },
+      title: 'Are you sure you would like to remove this image?',
     );
+    if (confirm) onRemoveMedia();
   }
 
   Widget _buildLightTile() => Container(

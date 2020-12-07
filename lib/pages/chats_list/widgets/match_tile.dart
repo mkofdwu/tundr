@@ -18,8 +18,8 @@ class MatchTile extends StatelessWidget {
     final user = await UsersService.getUserProfile(uid);
     return Navigator.push(
       context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) => ChatPage(
+      MaterialPageRoute(
+        builder: (context) => ChatPage(
           otherUser: user,
           chat: Chat(
             id: null,
@@ -29,9 +29,6 @@ class MatchTile extends StatelessWidget {
             type: ChatType.newMatch,
           ),
         ),
-        transitionsBuilder: (context, animation1, animation2, child) {
-          return FadeTransition(opacity: animation1, child: child);
-        },
       ),
     );
   }

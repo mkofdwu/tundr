@@ -1,7 +1,9 @@
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/constants/features.dart';
 import 'package:tundr/models/personal_info_field.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/repositories/user.dart';
@@ -12,10 +14,12 @@ import 'package:tundr/pages/settings/confirm_delete_account.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/gender.dart';
 import 'package:tundr/services/notifications_service.dart';
+import 'package:tundr/utils/show_my_question_dialog.dart';
 import 'package:tundr/widgets/buttons/light_tile.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/checkboxes/simple.dart';
 import 'package:tundr/widgets/radio_groups/round.dart';
+import 'package:tundr/widgets/rebuilder.dart';
 import 'package:tundr/widgets/sliders/simple_range.dart';
 import 'widgets/separate_page_setting_field.dart';
 import 'widgets/setting_field.dart';
@@ -45,23 +49,11 @@ class _MainSettingsPageState extends State<MainSettingsPage> {
   }
 
   void _confirmLogout() async {
-    final signOut = await showDialog(
+    final logout = await showMyQuestionDialog(
       context: context,
-      child: AlertDialog(
-        title: Text('Are you sure you would like to logout?'),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('OK'),
-            onPressed: () => Navigator.pop(context, true),
-          ),
-          FlatButton(
-            child: Text('CANCEL'),
-            onPressed: () => Navigator.pop(context, false),
-          ),
-        ],
-      ),
+      title: 'Are you sure you would like to logout?',
     );
-    if (signOut) {
+    if (logout) {
       // unsubscribe from notifications for this user
       await NotificationsService.removeToken(
         Provider.of<User>(context, listen: false).profile.uid,
@@ -69,7 +61,7 @@ class _MainSettingsPageState extends State<MainSettingsPage> {
       );
       await FirebaseMessaging().deleteInstanceID();
       await auth.FirebaseAuth.instance.signOut();
-      Navigator.popUntil(context, (route) => route.isFirst);
+      Rebuilder.rebuild(context);
     }
   }
 
@@ -264,6 +256,14 @@ class _MainSettingsPageState extends State<MainSettingsPage> {
                   settings.readReceipts = value;
                   Provider.of<User>(context, listen: false)
                       .writeField('settings', UserPrivateInfo);
+                },
+              ),
+              SizedBox(height: 20),
+              SeparatePageSettingField(
+                title: 'Take a tour',
+                onNextPage: () async {
+                  await FeatureDiscovery.clearPreferences(context, features);
+                  Rebuilder.rebuild(context);
                 },
               ),
               SizedBox(height: 20),

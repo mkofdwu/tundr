@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:tundr/constants/my_palette.dart';
@@ -12,20 +14,20 @@ class PersonalInfoProfilePage extends StatefulWidget {
 }
 
 class _PersonalInfoProfilePageState extends State<PersonalInfoProfilePage> {
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController =
+      ScrollController(initialScrollOffset: 1);
   bool _scrolledToTopOnce = true;
 
   @override
   void initState() {
     super.initState();
-    // TODO FIXME this is not working
     _scrollController.addListener(() {
       if (_scrollController.offset == 0) {
         if (_scrolledToTopOnce) {
           Navigator.pop(context);
         } else {
           _scrolledToTopOnce = true;
-          _scrollController.jumpTo(1);
+          Timer(Duration(milliseconds: 1), () => _scrollController.jumpTo(1));
         }
       } else if (_scrollController.position.userScrollDirection ==
           ScrollDirection.forward) {
@@ -48,18 +50,16 @@ class _PersonalInfoProfilePageState extends State<PersonalInfoProfilePage> {
         controller: _scrollController,
         padding: const EdgeInsets.only(
           left: 30,
-          top: 1,
           right: 30,
         ),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height,
-          ),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height + 1,
           child: SafeArea(
             child: Column(
               children: <Widget>[
                 TileIconButton(
                   icon: Icons.close,
+                  iconSize: 30,
                   onPressed: () {
                     Navigator.popUntil(
                       context,
@@ -68,13 +68,13 @@ class _PersonalInfoProfilePageState extends State<PersonalInfoProfilePage> {
                     Navigator.pop(context);
                   },
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 Column(
                   children:
                       List<Widget>.from(profile.personalInfo.keys.map((name) {
                     final dynamic value = profile.personalInfo[name];
-                    assert(value != null);
-                    if ((value is String || value is List) && value.isEmpty) {
+                    if (value == null ||
+                        ((value is String || value is List) && value.isEmpty)) {
                       return SizedBox.shrink();
                     }
                     return Padding(
@@ -104,11 +104,6 @@ class _PersonalInfoProfilePageState extends State<PersonalInfoProfilePage> {
                       ),
                     );
                   })),
-                ),
-                SizedBox(height: 30),
-                Container(
-                  width: 100,
-                  height: 5,
                 ),
                 SizedBox(height: 30),
                 profile.interests.isEmpty

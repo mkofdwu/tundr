@@ -27,31 +27,25 @@ class PersonalInfoFieldButton extends StatelessWidget {
         PersonalInfoField.fromMap(fieldName, personalInfoFields[fieldName]);
     onChanged(await Navigator.push(
       context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) {
-          switch (field.type) {
-            case PersonalInfoType.numInput:
-              return NumberFieldPage(field: field, value: value);
-            case PersonalInfoType.textInput:
-              return TextFieldPage(field: field, value: value);
-            case PersonalInfoType.slider:
-              return SliderFieldPage(field: field, value: value);
-            case PersonalInfoType.radioGroup:
-              return RadioGroupFieldPage(field: field, value: value);
-            case PersonalInfoType.textList:
-              return TextListFieldPage(
-                field: field,
-                value: value == null ? null : List<String>.from(value),
-              );
-            default:
-              throw Exception('Invalid personal info type: ${field.type}');
-          }
-        },
-        transitionsBuilder: (context, animation1, animation2, child) {
-          return FadeTransition(
-              opacity: animation1, child: child); // DESIGN: transition
-        },
-      ),
+      MaterialPageRoute(builder: (context) {
+        switch (field.type) {
+          case PersonalInfoType.numInput:
+            return NumberFieldPage(field: field, value: value);
+          case PersonalInfoType.textInput:
+            return TextFieldPage(field: field, value: value);
+          case PersonalInfoType.slider:
+            return SliderFieldPage(field: field, value: value);
+          case PersonalInfoType.radioGroup:
+            return RadioGroupFieldPage(field: field, value: value);
+          case PersonalInfoType.textList:
+            return TextListFieldPage(
+              field: field,
+              value: value == null ? null : List<String>.from(value),
+            );
+          default:
+            throw Exception('Invalid personal info type: ${field.type}');
+        }
+      }),
     ));
   }
 
