@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/message.dart';
@@ -12,7 +13,7 @@ class ReferencedMessageTile extends StatelessWidget {
   ReferencedMessageTile({
     Key key,
     @required this.message,
-    this.borderRadius = 10,
+    this.borderRadius = 6,
   }) : super(key: key);
 
   @override
@@ -21,16 +22,14 @@ class ReferencedMessageTile extends StatelessWidget {
       decoration: fromTheme(
         context,
         dark: BoxDecoration(
-          color: MyPalette.grey,
-          boxShadow: [MyPalette.secondaryShadow],
+          color: MyPalette.white,
         ),
         light: BoxDecoration(
-          color: MyPalette.grey,
+          color: MyPalette.black,
           borderRadius: BorderRadius.circular(borderRadius),
-          boxShadow: [MyPalette.secondaryShadow],
         ),
       ),
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
@@ -39,42 +38,43 @@ class ReferencedMessageTile extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: SizedBox(
-                    width: 20,
-                    child: Image.asset('assets/images/open-apostrophe.png'),
+                Text(
+                  '"',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 40,
                   ),
                 ),
+                SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     message.text,
                     style: TextStyle(
-                      color: MyPalette.black,
+                      color: Theme.of(context).primaryColor,
                       fontSize: 20,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SizedBox(
-                    width: 20,
-                    child: Image.asset('assets/images/close-apostrophe.png'),
+                Text(
+                  '"',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 40,
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 5),
+          SizedBox(height: 8),
           Text(
             message.sender.uid ==
                     Provider.of<User>(context, listen: false).profile.uid
                 ? '- You'
                 : '- ${message.sender.name}',
             style: TextStyle(
-              color: MyPalette.black,
-              fontSize: 12,
+              color: Theme.of(context).primaryColor,
+              fontSize: 14,
               fontStyle: FontStyle.italic,
             ),
           )

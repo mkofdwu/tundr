@@ -40,26 +40,21 @@ class _MostPopularPageState extends State<MostPopularPage> {
       return;
     }
 
-    // average popularity score is always 100
-    var devSqSum = 0;
-    sortedUsers
-        .forEach((user) => devSqSum += pow(user.popularityScore - 100, 2));
-    final std = sqrt(devSqSum / sortedUsers.length);
+    var totalArea = 0;
+    for (final user in sortedUsers) {
+      totalArea += pow(user.popularityScore, 2);
+    }
+    final availableArea = widget.width * widget.height;
+    // 0.4 to give a lot of breathing space, size is the length so it needs to be rooted
+    final sizeFactor = pow((availableArea * 0.4) / totalArea, 0.5);
 
-    final tileSize = std / 100;
-
-    final highestScore = sortedUsers.first.popularityScore;
     final tiles = <Rect>[];
     final random = Random();
     if (mounted) {
       setState(() => _positionedProfileImages = List<Widget>.from(
             sortedUsers.map(
               (popUser) {
-                final size = popUser.popularityScore /
-                    highestScore *
-                    min(widget.width, widget.height) *
-                    0.5; // * tileSize;
-                // TODO: FIXME change tileSize
+                final size = popUser.popularityScore * sizeFactor;
 
                 var tile = Rect.fromLTWH(
                   random.nextDouble() * (widget.width - size),
@@ -69,7 +64,7 @@ class _MostPopularPageState extends State<MostPopularPage> {
                 );
                 var attempts = 0;
                 while (_overlapsWithAny(rect: tile, otherRects: tiles) &&
-                    attempts < 100) {
+                    attempts < 500) {
                   tile = Rect.fromLTWH(
                     random.nextDouble() * (widget.width - size),
                     random.nextDouble() * (widget.height - size),

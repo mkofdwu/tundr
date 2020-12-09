@@ -16,13 +16,11 @@ class ChatsService {
     return chatsRef
         .doc(chatId)
         .collection('messages')
-        .orderBy('sentTimestamp', descending: true)
+        .orderBy('sentOn', descending: true)
         .limit(n)
         .snapshots()
-        .asyncMap((querySnapshot) {
-      return Future.wait<Message>(
-          querySnapshot.docs.map((doc) => Message.fromDoc(doc)));
-    });
+        .asyncMap((querySnapshot) =>
+            Future.wait(querySnapshot.docs.map((doc) => Message.fromDoc(doc))));
   }
 
   static Future<String> sendMessage(String chatId, Message message) async {

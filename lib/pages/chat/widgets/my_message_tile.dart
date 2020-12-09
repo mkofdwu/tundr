@@ -10,7 +10,7 @@ import 'package:tundr/utils/show_options_dialog.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'referenced_message_tile.dart';
 
-class OwnMessageTile extends StatelessWidget {
+class MyMessageTile extends StatelessWidget {
   final String chatId;
   final String otherUserName;
   final Message message;
@@ -18,7 +18,7 @@ class OwnMessageTile extends StatelessWidget {
   final Function onReferenceMessage;
   final Function onDeleteMessage;
 
-  const OwnMessageTile({
+  const MyMessageTile({
     Key key,
     @required this.chatId,
     @required this.otherUserName,
@@ -74,25 +74,25 @@ class OwnMessageTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 if (message.referencedMessage != null)
-                  GestureDetector(
-                    child: ReferencedMessageTile(
-                      message: message.referencedMessage,
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: GestureDetector(
+                      child: ReferencedMessageTile(
+                        message: message.referencedMessage,
+                      ),
+                      onTap: onViewReferencedMessage,
                     ),
-                    onTap: onViewReferencedMessage,
                   ),
                 if (message.media != null)
                   Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                     child: GestureDetector(
                       child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [MyPalette.secondaryShadow],
-                        ),
                         child: ClipRRect(
                           borderRadius: fromTheme(
                             context,
                             dark: BorderRadius.zero,
-                            light: BorderRadius.circular(10),
+                            light: BorderRadius.circular(6),
                           ),
                           child: MediaThumbnail(message.media),
                         ),
@@ -106,7 +106,7 @@ class OwnMessageTile extends StatelessWidget {
                     message.text,
                     style: TextStyle(
                       color: MyPalette.black,
-                      fontSize: 14,
+                      fontSize: 16,
                     ),
                   ),
                 ),
@@ -124,10 +124,10 @@ class OwnMessageTile extends StatelessWidget {
                   fontSize: 12,
                 ),
               ),
-              SizedBox(width: 5),
+              SizedBox(width: 3),
               Icon(
-                // DESIGN: find another icon
                 Icons.done,
+                size: 16,
                 color:
                     message.readOn == null ? MyPalette.grey : MyPalette.green,
               ),

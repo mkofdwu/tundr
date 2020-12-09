@@ -7,7 +7,7 @@ class UserStatus {
   factory UserStatus.fromMap(Map<String, dynamic> map) {
     return UserStatus(
       online: map['online'],
-      lastSeen: map['lastSeen'].toDate(),
+      lastSeen: map['lastSeen']?.toDate(),
     );
   }
 }

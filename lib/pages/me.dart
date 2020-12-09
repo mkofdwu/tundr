@@ -147,7 +147,11 @@ class _MePageState extends State<MePage> {
           ),
           Expanded(
             child: Container(
-              transform: Matrix4.translationValues(0, -30, 0),
+              transform: fromTheme(
+                context,
+                dark: Matrix4.identity(),
+                light: Matrix4.translationValues(0, -30, 0),
+              ),
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
                 borderRadius: fromTheme(

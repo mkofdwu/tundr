@@ -51,6 +51,10 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   Future<void> _loadSuggestionProfiles(_) async {
+    if (!mounted) {
+      // when moving across the navigation tabs this page may be loaded
+      return;
+    }
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     final suggestions = Map<String, bool>.from(
         privateInfo.respondedSuggestions); // create a copy
@@ -131,7 +135,7 @@ class _SwipingPageState extends State<SwipingPage> {
         _suggestionWithProfiles[_i].profile.uid,
       );
     }
-    _profileStreamController.addError('undo');
+    _profileStreamController.addError(_suggestionWithProfiles[_i]);
   }
 
   void _like() async {

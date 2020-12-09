@@ -17,8 +17,8 @@ import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 
-import 'widgets/other_user_message_tile.dart';
-import 'widgets/own_message_tile.dart';
+import 'widgets/other_message_tile.dart';
+import 'widgets/my_message_tile.dart';
 import 'widgets/unsent_message_tile.dart';
 
 class ChatPage extends StatefulWidget {
@@ -83,6 +83,7 @@ class _ChatPageState extends State<ChatPage> {
     if (_media != null) {
       _media.url =
           await StorageService.uploadMedia(uid: profile.uid, media: _media);
+      _media.isLocalFile = false;
     }
 
     final message = Message(
@@ -127,15 +128,124 @@ class _ChatPageState extends State<ChatPage> {
       setState(() {
         widget.chat.type = ChatType.normal;
         _unsentMessages.removeAt(unsentMessageIndex);
+
+        _media = null;
+        _referencedMessage = null;
       });
     }
   }
+
+  Widget _buildTopBar() => SizedBox(
+        height: 50,
+        child: Row(
+          children: <Widget>[
+            TileIconButton(
+              icon: Icons.arrow_back,
+              onPressed: () => Navigator.pop(context),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: GestureDetector(
+                child: Text(
+                  widget.chat.otherProfile.name,
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () async => Navigator.pushNamed(
+                  context,
+                  '/profile',
+                  arguments: widget.chat.otherProfile,
+                ),
+              ),
+            ),
+            TileIconButton(
+              icon: Icons.more_vert,
+              onPressed: () => setState(() => _showChatOptions = true),
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildMessagesList() => StreamBuilder<List<Message>>(
+        stream: ChatsService.messagesStream(
+            widget.chat.id, _pages * messagesPerPage),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return SizedBox.shrink();
+          final messages = snapshot.data;
+          return NotificationListener(
+            onNotification: (ScrollNotification notification) {
+              if (notification is ScrollStartNotification &&
+                  _scrollController.position.extentBefore == 0) {
+                setState(() => _pages++);
+              }
+              return false;
+            },
+            child: ListView.builder(
+              reverse: true,
+              controller: _scrollController,
+              padding: EdgeInsets.only(
+                top: 50,
+                bottom: 70.0 +
+                    (_media == null ? 0 : 220) +
+                    (_referencedMessage == null ? 0 : 110),
+              ),
+              itemCount: _unsentMessages.length + messages.length,
+              itemBuilder: (context, i) {
+                if (i < _unsentMessages.length) {
+                  return UnsentMessageTile(
+                    chatId: widget.chat.id,
+                    otherUserName: widget.chat.otherProfile.name,
+                    message: _unsentMessages[_unsentMessages.length - i - 1],
+                  );
+                }
+                final messageIndex = i - _unsentMessages.length;
+                final message = messages[messageIndex];
+                final fromMe = message.sender.uid ==
+                    Provider.of<User>(context, listen: false).profile.uid;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
+                  child: Align(
+                    alignment:
+                        fromMe ? Alignment.centerRight : Alignment.centerLeft,
+                    child: fromMe
+                        ? MyMessageTile(
+                            chatId: widget.chat.id,
+                            otherUserName: widget.chat.otherProfile.name,
+                            message: message,
+                            onViewReferencedMessage: () =>
+                                _viewReferencedMessage(messageIndex),
+                            onReferenceMessage: () =>
+                                setState(() => _referencedMessage = message),
+                            onDeleteMessage: () => _deleteMessage(message.id),
+                          )
+                        : OtherMessageTile(
+                            chatId: widget.chat.id,
+                            otherUserName: widget.chat.otherProfile.name,
+                            profileImageUrl:
+                                widget.chat.otherProfile.profileImageUrl,
+                            message: message,
+                            viewReferencedMessage: () =>
+                                _viewReferencedMessage(messageIndex),
+                            onReferenceMessage: () =>
+                                setState(() => _referencedMessage = message),
+                            onDeleteMessage: () => _deleteMessage(message.id),
+                          ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => setState(() => _showChatOptions = false),
       child: Material(
+        // color: Color.fromRGBO(240, 240, 240, 1),
         child: Padding(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -152,88 +262,7 @@ class _ChatPageState extends State<ChatPage> {
                   child: getNetworkImage(widget.chat.wallpaperUrl),
                 ),
               if (widget.chat.type != ChatType.nonExistent)
-                StreamBuilder<List<Message>>(
-                  stream: ChatsService.messagesStream(
-                      widget.chat.id, _pages * messagesPerPage),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) return SizedBox.shrink();
-                    final messages = snapshot.data;
-                    return NotificationListener(
-                      onNotification: (ScrollNotification notification) {
-                        if (notification is ScrollStartNotification &&
-                            _scrollController.position.extentBefore == 0) {
-                          setState(() => _pages++);
-                        }
-                        return false;
-                      },
-                      child: ListView.builder(
-                        reverse: true,
-                        controller: _scrollController,
-                        padding: EdgeInsets.only(
-                          top: 50,
-                          bottom: 70.0 +
-                              (_media == null ? 0 : 220) +
-                              (_referencedMessage == null ? 0 : 110),
-                        ),
-                        itemCount: _unsentMessages.length + messages.length,
-                        itemBuilder: (context, i) {
-                          if (i < _unsentMessages.length) {
-                            return UnsentMessageTile(
-                              chatId: widget.chat.id,
-                              otherUserName: widget.chat.otherProfile.name,
-                              message: _unsentMessages[
-                                  _unsentMessages.length - i - 1],
-                            );
-                          }
-                          final messageIndex = i - _unsentMessages.length;
-                          final message = messages[messageIndex];
-                          final fromMe = message.sender.uid ==
-                              Provider.of<User>(context, listen: false)
-                                  .profile
-                                  .uid;
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 10,
-                            ),
-                            child: Align(
-                              alignment: fromMe
-                                  ? Alignment.centerRight
-                                  : Alignment.centerLeft,
-                              child: fromMe
-                                  ? OwnMessageTile(
-                                      chatId: widget.chat.id,
-                                      otherUserName:
-                                          widget.chat.otherProfile.name,
-                                      message: message,
-                                      onViewReferencedMessage: () =>
-                                          _viewReferencedMessage(messageIndex),
-                                      onReferenceMessage: () => setState(
-                                          () => _referencedMessage = message),
-                                      onDeleteMessage: () =>
-                                          _deleteMessage(message.id),
-                                    )
-                                  : OtherUserMessageTile(
-                                      chatId: widget.chat.id,
-                                      otherUserName:
-                                          widget.chat.otherProfile.name,
-                                      profileImageUrl: widget
-                                          .chat.otherProfile.profileImageUrl,
-                                      message: message,
-                                      viewReferencedMessage: () =>
-                                          _viewReferencedMessage(messageIndex),
-                                      onReferenceMessage: () => setState(
-                                          () => _referencedMessage = message),
-                                      onDeleteMessage: () =>
-                                          _deleteMessage(message.id),
-                                    ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
+                _buildMessagesList(),
               Container(
                 height: 120,
                 decoration: BoxDecoration(
@@ -245,36 +274,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               SafeArea(
-                child: SizedBox(
-                  height: 50,
-                  child: Row(
-                    children: <Widget>[
-                      TileIconButton(
-                        icon: Icons.arrow_back,
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: GestureDetector(
-                          child: Text(
-                            widget.chat.otherProfile.name,
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          onTap: () async => Navigator.pushNamed(
-                            context,
-                            '/profile',
-                            arguments: widget.chat.otherProfile,
-                          ),
-                        ),
-                      ),
-                      TileIconButton(
-                        icon: Icons.more_vert,
-                        onPressed: () =>
-                            setState(() => _showChatOptions = true),
-                      ),
-                    ],
-                  ),
-                ),
+                child: _buildTopBar(),
               ),
               Positioned(
                 bottom: 0,

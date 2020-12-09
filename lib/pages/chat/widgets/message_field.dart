@@ -102,11 +102,11 @@ class _MessageFieldState extends State<MessageField> {
         height: 200,
         margin: const EdgeInsets.only(bottom: 20),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: const [MyPalette.primaryShadow],
         ), // FUTURE: DESIGN
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(20),
           child: MediaThumbnail(widget.media),
         ),
       );
@@ -186,13 +186,17 @@ class _MessageFieldState extends State<MessageField> {
               children: <Widget>[
                 if (widget.referencedMessage != null)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(top: 5, bottom: 5),
                     child: ReferencedMessageTile(
                       message: widget.referencedMessage,
-                      borderRadius: 25,
+                      borderRadius: 20,
                     ),
                   ),
-                if (widget.media != null) _buildMediaTileLight(),
+                if (widget.media != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: _buildMediaTileLight(),
+                  ),
                 Row(
                   children: <Widget>[
                     if (widget.media == null)
@@ -209,6 +213,7 @@ class _MessageFieldState extends State<MessageField> {
                             SimpleIconButton(
                               // DESIGN: replace with a better button in the future
                               icon: Icons.photo_camera,
+                              activeColor: MyPalette.black.withOpacity(0.8),
                               onPressed: _selectImage,
                             ),
                             SizedBox(width: 10),

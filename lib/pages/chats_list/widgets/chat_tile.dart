@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -14,10 +13,10 @@ import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/format_date.dart';
+import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
-import 'package:tundr/widgets/theme_builder.dart';
 
-class ChatTile extends StatelessWidget {
+class ChatTile extends StatefulWidget {
   final Chat chat;
 
   ChatTile({
@@ -25,46 +24,186 @@ class ChatTile extends StatelessWidget {
     @required this.chat,
   }) : super(key: key);
 
-  void _openChat(BuildContext context) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ChatPage(chat: chat),
-      ),
+  @override
+  _ChatTileState createState() => _ChatTileState();
+}
+
+class _ChatTileState extends State<ChatTile> {
+  bool _pressed = false;
+
+  void _openChat(BuildContext context) => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatPage(chat: widget.chat),
+        ),
+      );
+
+  Widget _buildMessagesPreview() {
+    final uid = Provider.of<User>(context, listen: false).profile.uid;
+    return StreamBuilder<List<Message>>(
+      stream: ChatsService.messagesStream(widget.chat.id, 3),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return SizedBox.shrink();
+        }
+        final messages = snapshot.data;
+        return Column(
+          children: List<Widget>.from(
+            messages.reversed.map((message) => Align(
+                  alignment: message.sender.uid == uid
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 2),
+                    child: Text(
+                      message.text,
+                      textAlign: message.sender.uid == uid
+                          ? TextAlign.right
+                          : TextAlign.left,
+                      style: TextStyle(color: MyPalette.white),
+                    ),
+                  ),
+                )),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildDark(context) => GestureDetector(
-        child: FutureBuilder<bool>(
-          future: UsersService.isBlockedBy(chat.otherProfile.uid),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return SizedBox.shrink();
-            final blocked = snapshot.data;
-            return Stack(
+  Widget _buildNameAndStatus() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            widget.chat.otherProfile.name,
+            style: TextStyle(
+              color: MyPalette.white,
+              fontSize: 24,
+            ),
+          ),
+          SizedBox(height: 3),
+          StreamBuilder<UserStatus>(
+              stream: UsersService.getUserStatusStream(
+                  widget.chat.otherProfile.uid),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return SizedBox.shrink();
+                }
+                final status = snapshot.data;
+                return Text(
+                  status.online ? 'online' : formatDate(status.lastSeen),
+                  style: TextStyle(color: MyPalette.white),
+                );
+              }),
+        ],
+      );
+
+  List<Widget> _radialShadows() => [
+        Positioned(
+          left: -50,
+          bottom: -70,
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                colors: [
+                  MyPalette.black,
+                  MyPalette.transparentBlack,
+                ],
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: -50,
+          right: -100,
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                colors: [
+                  MyPalette.black,
+                  MyPalette.transparentBlack,
+                ],
+              ),
+            ),
+          ),
+        ),
+      ];
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: UsersService.isBlockedBy(widget.chat.otherProfile.uid),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container(
+            width: 150,
+            height: 250,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.4),
+              borderRadius: fromTheme(context,
+                  dark: BorderRadius.zero, light: BorderRadius.circular(20)),
+            ),
+          );
+        }
+        final blocked = snapshot.data;
+        return GestureDetector(
+          onTapDown: (_) => setState(() => _pressed = true),
+          onTapUp: (_) {
+            setState(() => _pressed = false);
+            _openChat(context);
+          },
+          onTapCancel: () => setState(() => _pressed = false),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 100),
+            width: 150,
+            height: 250,
+            decoration: BoxDecoration(
+              boxShadow: fromTheme(
+                context,
+                dark: [],
+                light: [
+                  _pressed ? MyPalette.primaryShadow : MyPalette.secondaryShadow
+                ],
+              ),
+              borderRadius: fromTheme(
+                context,
+                dark: BorderRadius.zero,
+                light: BorderRadius.circular(20),
+              ),
+              border: fromTheme(
+                context,
+                dark: Border.all(color: MyPalette.white, width: 2),
+                light: null,
+              ),
+            ),
+            clipBehavior: Clip.antiAlias,
+            transform: fromTheme(
+              context,
+              dark: null,
+              light: _pressed
+                  ? Matrix4.translationValues(0, 6, 0)
+                  : Matrix4.identity(),
+            ),
+            child: Stack(
               children: <Widget>[
-                    Container(
-                      width: 150,
-                      height: 250,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: MyPalette.white),
-                        image: DecorationImage(
-                          image: CachedNetworkImageProvider(
-                              chat.otherProfile.profileImageUrl),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Container(
-                        color: MyPalette.black.withOpacity(0.7),
-                      ),
-                    ),
+                    widget.chat.otherProfile.profileImageUrl == null
+                        ? null
+                        : getNetworkImage(
+                            widget.chat.otherProfile.profileImageUrl,
+                            width: 150,
+                            height: 250,
+                          ),
                   ] +
                   (blocked
-                      ? <Widget>[
+                      ? [
                           Container(
-                            color: MyPalette.black.withOpacity(0.8),
+                            color: MyPalette.black.withOpacity(0.6),
                           ),
                           Positioned.fill(
-                            top: 20,
+                            top: 24,
                             child: Text(
                               'Blocked',
                               textAlign: TextAlign.center,
@@ -75,294 +214,50 @@ class ChatTile extends StatelessWidget {
                             ),
                           ),
                           Positioned.fill(
-                            bottom: 20,
+                            bottom: 24,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 Icon(Icons.delete,
                                     color: MyPalette.red, size: 30),
-                                SizedBox(height: 3),
+                                SizedBox(height: 5),
                                 Text(
                                   'Delete',
                                   style: TextStyle(
-                                    color: MyPalette.red,
-                                    fontSize: 16,
-                                  ),
+                                      color: MyPalette.red, fontSize: 14),
                                 ),
                               ],
                             ),
                           ),
                         ]
-                      : <Widget>[
-                          Positioned(
-                            left: 10,
-                            top: 10,
-                            right: 10,
-                            child: StreamBuilder<List<Message>>(
-                              stream: ChatsService.messagesStream(chat.id, 3),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) return SizedBox.shrink();
-                                final messages = snapshot.data;
-                                return Column(
-                                  children: List<Widget>.from(
-                                    messages.reversed.map(
-                                      (message) {
-                                        final fromMe = message.sender.uid ==
-                                            Provider.of<User>(context,
-                                                    listen: false)
-                                                .profile
-                                                .uid;
-                                        return Align(
-                                          alignment: fromMe
-                                              ? Alignment.centerRight
-                                              : Alignment.centerLeft,
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 2),
-                                            child: Text(
-                                              message.text,
-                                              textAlign: fromMe
-                                                  ? TextAlign.right
-                                                  : TextAlign.left,
-                                              style: TextStyle(
-                                                color: MyPalette.white,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          Positioned(
-                            left: 15,
-                            bottom: 15,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  chat.otherProfile.name,
-                                  style: TextStyle(
-                                    color: MyPalette.white,
-                                    fontSize: 30,
-                                  ),
-                                ),
-                                SizedBox(height: 3),
-                                StreamBuilder<UserStatus>(
-                                  stream: UsersService.getUserStatusStream(
-                                      chat.otherProfile.uid),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return SizedBox.shrink();
-                                    }
-                                    final status = snapshot.data;
-                                    return Text(
-                                      status.online
-                                          ? 'online'
-                                          : formatDate(status.lastSeen),
-                                      style: TextStyle(
-                                        color: MyPalette.white,
-                                        fontSize: 16,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ]),
-            );
-          },
-        ),
-        onTap: () => _openChat(context),
-      );
-
-  Widget _buildLight(context) => GestureDetector(
-        child: FutureBuilder<bool>(
-          future: UsersService.isBlockedBy(chat.otherProfile.uid),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return SizedBox.shrink();
-            final blocked = snapshot.data;
-            return Container(
-              decoration: BoxDecoration(boxShadow: [MyPalette.secondaryShadow]),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Stack(
-                  children: <Widget>[
-                        Container(
-                          width: 150,
-                          height: 250,
-                          color: MyPalette.black,
-                          child: chat.otherProfile.profileImageUrl == null
-                              ? null
-                              : getNetworkImage(
-                                  chat.otherProfile.profileImageUrl),
-                        ),
-                        Positioned(
-                          left: -50,
-                          bottom: -70,
-                          child: Container(
-                            width: 200,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              gradient: RadialGradient(
-                                colors: [
-                                  MyPalette.black,
-                                  MyPalette.transparentBlack,
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: -50,
-                          right: -100,
-                          child: Container(
-                            width: 200,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              gradient: RadialGradient(
-                                colors: [
-                                  MyPalette.black,
-                                  MyPalette.transparentBlack,
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ] +
-                      (blocked
-                          ? <Widget>[
+                      : fromTheme(
+                            context,
+                            dark: <Widget>[
                               Container(
-                                color: MyPalette.black.withOpacity(0.8),
-                              ),
-                              Positioned.fill(
-                                top: 20,
-                                child: Text(
-                                  'Blocked',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: MyPalette.white,
-                                    fontSize: 24,
-                                  ),
+                                color: MyPalette.black.withOpacity(
+                                  _pressed ? 0.8 : 0.6,
                                 ),
                               ),
-                              Positioned.fill(
-                                bottom: 20,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    Icon(Icons.delete,
-                                        color: MyPalette.red, size: 30),
-                                    SizedBox(height: 3),
-                                    Text(
-                                      'Delete',
-                                      style: TextStyle(
-                                        color: MyPalette.red,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ]
-                          : <Widget>[
-                              Positioned(
-                                left: 10,
-                                top: 10,
-                                right: 10,
-                                child: StreamBuilder<List<Message>>(
-                                  stream: ChatsService.messagesStream(
-                                      chat.otherProfile.uid, 3),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return SizedBox.shrink();
-                                    }
-                                    final messages = snapshot.data;
-                                    return Column(
-                                      children: List<Widget>.from(
-                                          messages.reversed.map(
-                                        (message) {
-                                          final fromMe = message.sender.uid ==
-                                              Provider.of<User>(context,
-                                                      listen: false)
-                                                  .profile
-                                                  .uid;
-                                          return Align(
-                                            alignment: fromMe
-                                                ? Alignment.centerRight
-                                                : Alignment.centerLeft,
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 2),
-                                              child: Text(
-                                                message.text,
-                                                style: TextStyle(
-                                                  color: MyPalette.white,
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      )),
-                                    );
-                                  },
-                                ),
-                              ),
-                              Positioned(
-                                left: 15,
-                                bottom: 15,
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      chat.otherProfile.name,
-                                      style: TextStyle(
-                                        color: MyPalette.white,
-                                        fontSize: 30,
-                                      ),
-                                    ),
-                                    SizedBox(height: 3),
-                                    StreamBuilder<UserStatus>(
-                                        stream:
-                                            UsersService.getUserStatusStream(
-                                                chat.otherProfile.uid),
-                                        builder: (context, snapshot) {
-                                          if (!snapshot.hasData) {
-                                            return SizedBox.shrink();
-                                          }
-                                          final status = snapshot.data;
-                                          return Text(
-                                            status.online
-                                                ? 'online'
-                                                : formatDate(status.lastSeen),
-                                            style: TextStyle(
-                                              color: MyPalette.white,
-                                              fontSize: 16,
-                                            ),
-                                          );
-                                        }),
-                                  ],
-                                ),
-                              ),
-                            ]),
-                ),
-              ),
-            );
-          },
-        ),
-        onTap: () => _openChat(context),
-      );
-
-  @override
-  Widget build(BuildContext context) {
-    return ThemeBuilder(
-      buildDark: () => _buildDark(context),
-      buildLight: () => _buildLight(context),
+                            ],
+                            light: _radialShadows(),
+                          ) +
+                          [
+                            Positioned(
+                              left: 10,
+                              top: 10,
+                              right: 10,
+                              child: _buildMessagesPreview(),
+                            ),
+                            Positioned(
+                              left: 20,
+                              bottom: 20,
+                              child: _buildNameAndStatus(),
+                            ),
+                          ]),
+            ),
+          ),
+        );
+      },
     );
   }
 }

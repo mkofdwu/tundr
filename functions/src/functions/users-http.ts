@@ -39,3 +39,17 @@ export const getMostPopular = functions.https.onCall(
     return { result: popularUsers };
   }
 );
+
+export const isBlockedBy = functions.https.onCall(async (data, context) => {
+  const uid = context.auth?.uid;
+  const otherUid = data.otherUid;
+  if (uid == null || otherUid == null)
+    throw 'user is not authenticated or did not supply otherUid';
+  const otherPrivateInfo = (
+    await usersPrivateInfoRef.doc(otherUid).get()
+  ).data();
+  if (otherPrivateInfo == null) throw "could not get other user's private info";
+  return {
+    result: otherPrivateInfo['blocked'].includes(uid),
+  };
+});

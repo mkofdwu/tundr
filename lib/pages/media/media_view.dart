@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/models/media.dart';
-import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/widgets/buttons/tile_icon.dart';
+import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/pages/media/widgets/media_viewer.dart';
 
 class MediaViewPage extends StatelessWidget {
@@ -13,28 +12,8 @@ class MediaViewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Center(child: MediaViewer(media: media)),
-        Positioned(
-          left: -150,
-          top: -150,
-          child: Container(
-            width: 300,
-            height: 300,
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                colors: [
-                  MyPalette.black,
-                  MyPalette.transparentBlack,
-                ],
-              ),
-            ),
-          ),
-        ),
-        TileIconButton(
-          icon: Icons.arrow_back,
-          iconColor: MyPalette.white,
-          onPressed: () => Navigator.pop(context),
-        ),
+        MediaViewer(media: media),
+        MyBackButton(),
       ],
     );
   }

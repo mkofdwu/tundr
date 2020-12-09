@@ -136,7 +136,8 @@ export const readOtherUsersMessages = functions.https.onCall(
     for (const doc of messageDocs) {
       await doc.ref.update({ readOn: admin.firestore.Timestamp.now() });
     }
-    // // PAID using the != filter operator requires the firebase blaze plan (upgrading to node 10, es2018 & firebase-admin 9)
+    // PAID
+    // // using the != filter operator requires the firebase blaze plan (upgrading to node 10, es2018 & firebase-admin 9)
     // const uid = context.auth?.uid;
     // const chatId = data.chatId;
     // if (uid == null || chatId == null) return;

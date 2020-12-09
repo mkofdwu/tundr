@@ -40,11 +40,13 @@ class Message {
           : Media(
               type: MediaType.values[map['mediaType']],
               url: map['mediaUrl'],
+              isLocalFile: false,
             ),
-      referencedMessage:
-          await ChatsService.getMessage(chatId, map['referencedMessageId']),
+      referencedMessage: map['referencedMessageId'] == null
+          ? null
+          : await ChatsService.getMessage(chatId, map['referencedMessageId']),
       sentOn: map['sentOn'].toDate(),
-      readOn: map['readOn'].toDate(),
+      readOn: map['readOn']?.toDate(),
     );
   }
 

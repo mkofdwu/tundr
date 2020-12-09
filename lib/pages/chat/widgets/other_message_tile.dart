@@ -10,7 +10,7 @@ import 'package:tundr/utils/show_options_dialog.dart';
 import 'referenced_message_tile.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 
-class OtherUserMessageTile extends StatelessWidget {
+class OtherMessageTile extends StatelessWidget {
   final String chatId;
   final String otherUserName;
   final String profileImageUrl;
@@ -19,7 +19,7 @@ class OtherUserMessageTile extends StatelessWidget {
   final Function onReferenceMessage;
   final Function onDeleteMessage;
 
-  OtherUserMessageTile({
+  OtherMessageTile({
     Key key,
     @required this.chatId,
     @required this.otherUserName,

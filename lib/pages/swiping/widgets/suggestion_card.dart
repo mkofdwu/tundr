@@ -130,11 +130,10 @@ class SuggestionCardState extends State<SuggestionCard>
       });
       _fadeInController.forward();
     }, onError: (error) {
-      if (error == 'undo') {
-        if (_likeController.isCompleted) _likeController.reverse();
-        if (_nopeController.isCompleted) _nopeController.reverse();
-        _reset();
-      }
+      // undo to this profile
+      setState(() => _profile = error);
+      // TODO FIXME
+      _reset();
     });
   }
 
