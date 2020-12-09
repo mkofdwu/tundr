@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 
-import generateSuggestions from '../algorithms/generate-suggestions';
+import makeMatches from '../algorithms/matchmaker';
 import {
   userProfilesRef,
   usersAlgorithmDataRef,
@@ -34,7 +34,7 @@ export default functions.firestore
     console.log('Users:');
     console.log(users);
 
-    const uidToSuggestions = generateSuggestions(users);
+    const uidToSuggestions = makeMatches(users);
 
     console.log('Generated suggestions:');
     console.log(uidToSuggestions);

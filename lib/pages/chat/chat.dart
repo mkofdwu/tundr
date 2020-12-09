@@ -18,6 +18,7 @@ import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
+import 'package:tundr/utils/show_question_dialog.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/popup_menus/menu_divider.dart';
 import 'package:tundr/widgets/popup_menus/menu_option.dart';
@@ -57,10 +58,10 @@ class _ChatPageState extends State<ChatPage> {
     WidgetsBinding.instance.addPostFrameCallback((duration) async {
       if (widget.chat.type != ChatType.nonExistent &&
           await ChatsService.checkReadReceipts(widget.otherUser.uid)) {
-        // does this take too much time?
-        // FUTURE: TEST: send read receipts in real time
-        await ChatsService.updateChatMessagesRead(
-            widget.chat.uid, widget.otherUser.uid);
+        await ChatsService.readOtherUsersMessages(
+          widget.otherUser.uid,
+          widget.chat.id,
+        );
         if (mounted) {
           await ChatsService.updateChatDetails(
             Provider.of<User>(context, listen: false).profile.uid,
@@ -77,7 +78,6 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _deleteMessage(String messageId) {
-    // FUTURE: ask if delete for self or delete for everyone
     ChatsService.deleteMessage(
       chatId: widget.chat.id,
       messageId: messageId,
@@ -110,7 +110,6 @@ class _ChatPageState extends State<ChatPage> {
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     if (widget.chat.type == ChatType.nonExistent) {
       widget.chat.id = await ChatsService.startConversation(
-        profile.uid,
         widget.otherUser.uid,
         message,
       );
@@ -142,17 +141,26 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _blockAndDeleteChat() async {
-    Provider.of<User>(context, listen: false)
-        .privateInfo
-        .blocked
-        .add(widget.otherUser.uid);
-    await Provider.of<User>(context, listen: false)
-        .writeField('blocked', UserPrivateInfo);
-    await ChatsService.deleteChat(
-      Provider.of<User>(context, listen: false).profile.uid,
-      widget.chat.id,
+    setState(() => _showChatOptions = false);
+    final confirm = await showQuestionDialog(
+      context: context,
+      title: 'Block and delete chat?',
+      content:
+          'You can unblock ${widget.otherUser.name} later if you want, but this chat cannot be retrieved',
     );
-    Navigator.pop(context);
+    if (confirm) {
+      Provider.of<User>(context, listen: false)
+          .privateInfo
+          .blocked
+          .add(widget.otherUser.uid);
+      await Provider.of<User>(context, listen: false)
+          .writeField('blocked', UserPrivateInfo);
+      await ChatsService.deleteChat(
+        Provider.of<User>(context, listen: false).profile.uid,
+        widget.chat.id,
+      );
+      Navigator.pop(context);
+    }
   }
 
   void _changeWallpaper() async {
@@ -360,31 +368,33 @@ class _ChatPageState extends State<ChatPage> {
                 Positioned(
                   top: 10,
                   right: 10,
-                  child: PopupMenu(
-                    children: <Widget>[
-                      MenuOption(
-                        text: 'Wallpaper',
-                        onPressed: _changeWallpaper,
-                      ),
-                      if (widget.chat.type == ChatType.normal ||
-                          widget.chat.type == ChatType.starred)
-                        MenuDivider(),
-                      if (widget.chat.type == ChatType.normal)
+                  child: SafeArea(
+                    child: PopupMenu(
+                      children: <Widget>[
                         MenuOption(
-                          text: 'Star chat',
-                          onPressed: _starChat,
-                        )
-                      else if (widget.chat.type == ChatType.starred)
-                        MenuOption(
-                          text: 'Unstar chat',
-                          onPressed: _unstarChat,
+                          text: 'Wallpaper',
+                          onPressed: _changeWallpaper,
                         ),
-                      MenuDivider(),
-                      MenuOption(
-                        text: 'Block and delete chat',
-                        onPressed: _blockAndDeleteChat,
-                      ),
-                    ],
+                        if (widget.chat.type == ChatType.normal ||
+                            widget.chat.type == ChatType.starred)
+                          MenuDivider(),
+                        if (widget.chat.type == ChatType.normal)
+                          MenuOption(
+                            text: 'Star chat',
+                            onPressed: _starChat,
+                          )
+                        else if (widget.chat.type == ChatType.starred)
+                          MenuOption(
+                            text: 'Unstar chat',
+                            onPressed: _unstarChat,
+                          ),
+                        MenuDivider(),
+                        MenuOption(
+                          text: 'Block and delete chat',
+                          onPressed: _blockAndDeleteChat,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
             ],

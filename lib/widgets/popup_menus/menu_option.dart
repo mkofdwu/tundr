@@ -13,23 +13,15 @@ class MenuOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: SizedBox(
-        height: 40,
-        child: FlatButton(
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              text,
-              style: TextStyle(
-                color: MyPalette.black,
-                fontSize: 20,
-              ),
-            ),
-          ),
-          onPressed: onPressed,
+    return Material(
+      child: InkWell(
+        child: Container(
+          height: 50,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          alignment: Alignment.centerRight,
+          child: Text(text, style: TextStyle(fontSize: 18)),
         ),
+        onTap: onPressed,
       ),
     );
   }

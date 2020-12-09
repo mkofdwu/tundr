@@ -76,14 +76,11 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                             child: getNetworkImage(user.profileImageUrl),
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 20),
                         Expanded(
                           child: Text(
                             user.name,
-                            style: TextStyle(
-                              color: MyPalette.white,
-                              fontSize: 20,
-                            ),
+                            style: TextStyle(fontSize: 20),
                           ),
                         ),
                         FlatTileButton(

@@ -9,14 +9,23 @@ import 'package:tundr/pages/chat/chat.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/chat_type.dart';
 
-class ItsAMatchPage extends StatelessWidget {
+class ItsAMatchPage extends StatefulWidget {
   // FUTURE: create enum `MatchAction` with undo, saySomething, continue, which is popped back to swipingpage which performs the action
-  final UserProfile user;
+  final UserProfile profile;
 
   ItsAMatchPage({
     Key key,
-    @required this.user,
+    @required this.profile,
   }) : super(key: key);
+
+  @override
+  _ItsAMatchPageState createState() => _ItsAMatchPageState();
+}
+
+class _ItsAMatchPageState extends State<ItsAMatchPage> {
+  bool _saySomethingPressed = false;
+  bool _undoPressed = false;
+  bool _continuePressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +37,7 @@ class ItsAMatchPage extends StatelessWidget {
         children: <Widget>[
           SizedBox.expand(
             child: CachedNetworkImage(
-              imageUrl: user.profileImageUrl,
+              imageUrl: widget.profile.profileImageUrl,
               fit: BoxFit.cover,
             ),
           ),
@@ -96,25 +105,32 @@ class ItsAMatchPage extends StatelessWidget {
             width: width * 217 / 414,
             height: height * 46 / 736,
             child: GestureDetector(
-              child: Container(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOut,
                 color: MyPalette.gold,
                 padding: const EdgeInsets.only(left: 26, bottom: 10),
                 alignment: Alignment.bottomLeft,
+                transform: _saySomethingPressed
+                    ? Matrix4.translationValues(-14, 0, 0)
+                    : Matrix4.identity(),
                 child: Text(
                   'Say something...',
                   style: TextStyle(fontSize: 18, color: MyPalette.white),
                 ),
               ),
-              onTap: () {
+              onTapDown: (_) => setState(() => _saySomethingPressed = true),
+              onTapUp: (_) {
+                setState(() => _saySomethingPressed = false);
                 Navigator.pop(context, false);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ChatPage(
-                      otherUser: user,
+                      otherUser: widget.profile,
                       chat: Chat(
                         id: null,
-                        uid: user.uid,
+                        uid: widget.profile.uid,
                         wallpaperUrl: '',
                         lastRead: null,
                         type: ChatType.newMatch,
@@ -123,6 +139,7 @@ class ItsAMatchPage extends StatelessWidget {
                   ),
                 );
               },
+              onTapCancel: () => setState(() => _saySomethingPressed = false),
             ),
           ),
           Positioned(
@@ -148,15 +165,29 @@ class ItsAMatchPage extends StatelessWidget {
             width: width * 114 / 414,
             height: height * 39 / 736,
             child: GestureDetector(
-              child: Container(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOut,
                 color: MyPalette.white,
                 padding: const EdgeInsets.only(top: 14, left: 36),
+                transform: _undoPressed
+                    ? Matrix4.translationValues(-10, 0, 0)
+                    : Matrix4.identity(),
                 child: Text(
                   'Undo',
-                  style: TextStyle(fontSize: 14, color: MyPalette.black),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: MyPalette.black,
+                  ),
                 ),
               ),
-              onTap: () => Navigator.pop(context, true),
+              onTapDown: (_) => setState(() => _undoPressed = true),
+              onTapUp: (_) {
+                setState(() => _undoPressed = false);
+                Navigator.pop(context, true);
+              },
+              onTapCancel: () => setState(() => _undoPressed = false),
             ),
           ),
           Positioned(
@@ -178,16 +209,26 @@ class ItsAMatchPage extends StatelessWidget {
             width: width * 134 / 414,
             height: height * 35 / 736,
             child: GestureDetector(
-              child: Container(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOut,
                 color: MyPalette.black,
                 padding: const EdgeInsets.only(right: 20, bottom: 8),
                 alignment: Alignment.bottomRight,
+                transform: _continuePressed
+                    ? Matrix4.translationValues(10, 0, 0)
+                    : Matrix4.identity(),
                 child: Text(
                   'Continue',
                   style: TextStyle(fontSize: 16, color: MyPalette.white),
                 ),
               ),
-              onTap: () => Navigator.pop(context, false),
+              onTapDown: (_) => setState(() => _continuePressed = true),
+              onTapUp: (_) {
+                setState(() => _continuePressed = false);
+                Navigator.pop(context, false);
+              },
+              onTapCancel: () => setState(() => _continuePressed = false),
             ),
           ),
           Positioned(

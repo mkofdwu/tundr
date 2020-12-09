@@ -4,4 +4,6 @@ import updatePopularityScore from './functions/update-popularity-score';
 
 export { onMessage, generateDailySuggestions, updatePopularityScore };
 
-export * from './functions/http';
+export * from './functions/users-http';
+export * from './functions/chats-http';
+export * from './functions/suggestions-http';

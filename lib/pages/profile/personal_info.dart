@@ -52,8 +52,10 @@ class _PersonalInfoProfilePageState extends State<PersonalInfoProfilePage> {
           left: 30,
           right: 30,
         ),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height + 1,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height + 1,
+          ),
           child: SafeArea(
             child: Column(
               children: <Widget>[

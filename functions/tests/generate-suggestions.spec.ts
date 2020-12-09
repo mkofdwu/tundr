@@ -1,9 +1,12 @@
-import generateSuggestions from '../src/algorithms/generate-suggestions';
-import allUsers from './fixtures/user-algorithm-details';
+import makeMatches from '../src/algorithms/matchmaker';
+import allUsers1 from './fixtures/user-algorithm-details/set-1';
+import allUsers2 from './fixtures/user-algorithm-details/set-2';
 
 test('Generate suggestions algorithm', () => {
-  const res: Map<string, Array<string>> = generateSuggestions(allUsers);
-  console.log(res);
+  const res1: Map<string, Array<string>> = makeMatches(allUsers1);
+  console.log(res1);
+  const res2 = makeMatches(allUsers2);
+  console.log(res2);
   // for (const userSuggestions of res.values()) {
   //   expect(userSuggestions.length).toBeLessThanOrEqual(10); // equal to N, the max number of suggestions generated for each person
   // }

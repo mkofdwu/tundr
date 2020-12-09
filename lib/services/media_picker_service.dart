@@ -9,7 +9,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/enums/media_type.dart';
-import 'package:tundr/utils/show_my_error_dialog.dart';
+import 'package:tundr/utils/show_error_dialog.dart';
 
 class MediaPickerService {
   static Future<Media> pickMedia({
@@ -38,7 +38,7 @@ class MediaPickerService {
       }
     } on PlatformException catch (error) {
       print(error.message);
-      await showMyErrorDialog(
+      await showErrorDialog(
         context: context,
         title:
             "We can't access your ${source == ImageSource.camera ? 'camera' : 'gallery'}",

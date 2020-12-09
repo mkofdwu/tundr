@@ -52,10 +52,9 @@ class Message {
     return {
       'senderUid': sender.uid,
       'text': text,
-      'mediaType':
-          media.type == null ? null : MediaType.values.indexOf(media.type),
-      'mediaUrl': media.url,
-      'referencedMessageId': referencedMessage.id,
+      'mediaType': media == null ? null : MediaType.values.indexOf(media.type),
+      'mediaUrl': media?.url,
+      'referencedMessageId': referencedMessage?.id,
       'readOn': readOn == null ? null : Timestamp.fromDate(readOn),
       'sentOn': Timestamp.fromDate(sentOn),
     };

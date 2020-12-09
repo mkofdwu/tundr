@@ -107,17 +107,20 @@ class _WelcomePageState extends State<WelcomePage> {
                 right: 0,
                 child: GestureDetector(
                   key: ValueKey('loginBtn'),
-                  child: Container(
-                    width: _loginBtnPressed
-                        ? width * 190 / 375
-                        : width * 184 / 375,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeOut,
+                    width: width * 184 / 375,
                     height: height * 63 / 812,
                     color: MyPalette.black,
-                    alignment: Alignment.bottomRight,
                     padding: const EdgeInsets.only(
                       right: 21,
                       bottom: 10,
                     ),
+                    alignment: Alignment.bottomRight,
+                    transform: _loginBtnPressed
+                        ? Matrix4.translationValues(10, 0, 0)
+                        : Matrix4.identity(),
                     child: Text(
                       'Login',
                       style: TextStyle(
@@ -126,12 +129,12 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ),
                   ),
-                  onTapDown: (_details) =>
-                      setState(() => _loginBtnPressed = true),
-                  onTapUp: (_details) {
+                  onTapDown: (_) => setState(() => _loginBtnPressed = true),
+                  onTapUp: (_) {
                     setState(() => _loginBtnPressed = false);
                     Navigator.pushNamed(context, '/login');
                   },
+                  onTapCancel: () => setState(() => _loginBtnPressed = false),
                 ),
               ),
               Positioned(
@@ -148,12 +151,16 @@ class _WelcomePageState extends State<WelcomePage> {
                 right: 0,
                 child: GestureDetector(
                   key: ValueKey('registerBtn'),
-                  child: Container(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
                     width: width * 132 / 375,
                     height: height * 38 / 812,
                     color: MyPalette.gold,
                     padding: const EdgeInsets.only(bottom: 5, right: 10),
                     alignment: Alignment.bottomRight,
+                    transform: _registerBtnPressed
+                        ? Matrix4.translationValues(10, 0, 0)
+                        : Matrix4.identity(),
                     child: Text(
                       'Register',
                       style: TextStyle(
@@ -162,12 +169,13 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ),
                   ),
-                  onTapDown: (_details) =>
-                      setState(() => _registerBtnPressed = true),
-                  onTapUp: (_details) {
+                  onTapDown: (_) => setState(() => _registerBtnPressed = true),
+                  onTapUp: (_) {
                     setState(() => _registerBtnPressed = false);
                     Navigator.pushNamed(context, '/register');
                   },
+                  onTapCancel: () =>
+                      setState(() => _registerBtnPressed = false),
                 ),
               ),
               Positioned(

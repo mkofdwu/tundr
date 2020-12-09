@@ -14,7 +14,7 @@ import 'package:tundr/pages/settings/confirm_delete_account.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/gender.dart';
 import 'package:tundr/services/notifications_service.dart';
-import 'package:tundr/utils/show_my_question_dialog.dart';
+import 'package:tundr/utils/show_question_dialog.dart';
 import 'package:tundr/widgets/buttons/light_tile.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/checkboxes/simple.dart';
@@ -49,7 +49,7 @@ class _MainSettingsPageState extends State<MainSettingsPage> {
   }
 
   void _confirmLogout() async {
-    final logout = await showMyQuestionDialog(
+    final logout = await showQuestionDialog(
       context: context,
       title: 'Are you sure you would like to logout?',
     );
@@ -269,7 +269,6 @@ class _MainSettingsPageState extends State<MainSettingsPage> {
               SizedBox(height: 20),
               Provider.of<ThemeManager>(context).theme == ThemeMode.dark
                   ? GestureDetector(
-                      // FUTURE: make this work for other themes, refractor to darktilebutton
                       child: Container(
                         width: double.infinity,
                         height: 70,
@@ -315,7 +314,6 @@ class _MainSettingsPageState extends State<MainSettingsPage> {
                     ),
               SizedBox(height: 20),
               FlatButton(
-                // FUTURE: replace with flatdarktilebutton
                 key: ValueKey('logoutBtn'),
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 14),

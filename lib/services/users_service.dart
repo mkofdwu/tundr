@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:tundr/constants/deleted_user.dart';
 import 'package:tundr/constants/firebase_ref.dart';
 import 'package:tundr/models/popular_user.dart';
@@ -8,15 +7,7 @@ import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/models/user_status.dart';
 import 'package:tundr/repositories/user.dart';
-
-Future<T> callHttpsFunction<T>(String functionName,
-    [dynamic parameters]) async {
-  final result = await FirebaseFunctions.instance
-      .httpsCallable(functionName)
-      .call(parameters);
-  // if there is only a single value returned it will be in a field named 'result'
-  return result.data['result'] as T;
-}
+import 'package:tundr/utils/call_https_function.dart';
 
 class UsersService {
   static Future<UserProfile> getUserProfile(

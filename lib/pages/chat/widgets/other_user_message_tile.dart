@@ -6,7 +6,7 @@ import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/message_option.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
-import 'package:tundr/utils/show_my_options_dialog.dart';
+import 'package:tundr/utils/show_options_dialog.dart';
 import 'referenced_message_tile.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 
@@ -31,7 +31,7 @@ class OtherUserMessageTile extends StatelessWidget {
   }) : super(key: key);
 
   Future<void> _selectOption(BuildContext context) async {
-    final option = await showMyOptionsDialog(
+    final option = await showOptionsDialog(
       context: context,
       title: '',
       options: {'Reply to message': MessageOption.referenceMessage},

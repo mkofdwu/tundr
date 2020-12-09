@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-Future<T> showMyOptionsDialog<T>({
+Future<T> showOptionsDialog<T>({
   @required BuildContext context,
   @required String title,
   @required Map<String, T> options,
 }) =>
     showDialog(
       context: context,
-      child: SimpleDialog(
+      builder: (context) => SimpleDialog(
         title: Text(title),
         children: options
             .map((option, value) => MapEntry(

@@ -6,7 +6,7 @@ import 'package:tundr/pages/loading.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/pages/setup/name.dart';
 import 'package:tundr/services/users_service.dart';
-import 'package:tundr/widgets/buttons/dark_stadium.dart';
+import 'package:tundr/widgets/buttons/round.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/tile.dart';
 
@@ -251,9 +251,11 @@ class _RegisterPageState extends State<RegisterPage> {
               Positioned(
                 right: 50,
                 bottom: 100,
-                child: DarkStadiumButton(
+                child: MyRoundButton(
+                  width: 100,
+                  height: 50,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
                         'Setup',
@@ -262,10 +264,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           fontSize: 16,
                         ),
                       ),
+                      SizedBox(width: 4),
                       Icon(
                         Icons.arrow_forward_ios,
                         color: MyPalette.white,
-                        size: 20,
+                        size: 16,
                       ),
                     ],
                   ),

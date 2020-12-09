@@ -5,8 +5,8 @@ import 'package:tundr/pages/media/edit_extra_media.dart';
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
-import 'package:tundr/utils/show_my_options_dialog.dart';
-import 'package:tundr/utils/show_my_question_dialog.dart';
+import 'package:tundr/utils/show_options_dialog.dart';
+import 'package:tundr/utils/show_question_dialog.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'package:tundr/widgets/theme_builder.dart';
 
@@ -26,7 +26,7 @@ class ExtraMediaEditTile extends StatelessWidget {
 
   void _editMedia(BuildContext context) async {
     if (media == null) {
-      final mediaType = await showMyOptionsDialog(
+      final mediaType = await showOptionsDialog(
         context: context,
         title: 'Take an image or a video?',
         options: {
@@ -35,7 +35,7 @@ class ExtraMediaEditTile extends StatelessWidget {
         },
       );
       if (mediaType == null) return;
-      final source = await showMyOptionsDialog(
+      final source = await showOptionsDialog(
         context: context,
         title: 'Select a source',
         options: {
@@ -66,7 +66,7 @@ class ExtraMediaEditTile extends StatelessWidget {
 
   void _confirmRemoveImage(BuildContext context) async {
     // temporary fix FUTURE: improve
-    final confirm = await showMyQuestionDialog(
+    final confirm = await showQuestionDialog(
       context: context,
       title: 'Are you sure you would like to remove this image?',
     );

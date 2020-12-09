@@ -5,7 +5,7 @@ import 'package:tundr/repositories/registration_info.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/auth_service.dart';
-import 'package:tundr/utils/show_my_error_dialog.dart';
+import 'package:tundr/utils/show_error_dialog.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/rebuilder.dart';
 import 'package:tundr/widgets/textfields/digit.dart';
@@ -33,7 +33,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
       if (success) {
         Rebuilder.rebuild(context);
       } else {
-        await showMyErrorDialog(
+        await showErrorDialog(
           context: context,
           title: 'User could not be created',
         );

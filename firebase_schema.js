@@ -46,7 +46,7 @@ const users_private_info = Collection({
       chatId: {
         uid: 'userId', // other user
         wallpaperUrl: String, // url
-        lastReadTimestamp: Timestamp,
+        lastRead: Timestamp,
         type: Integer,
       },
     }),

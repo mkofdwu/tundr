@@ -11,7 +11,7 @@ import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
-import 'package:tundr/utils/show_my_options_dialog.dart';
+import 'package:tundr/utils/show_options_dialog.dart';
 import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/simple_icon.dart';
 import 'package:tundr/widgets/verified_badge.dart';
@@ -87,11 +87,14 @@ class _MePageState extends State<MePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               _editingName
-                                  ? EditableText(
+                                  ? TextField(
                                       controller: _nameController,
                                       focusNode: _nameFocusNode,
                                       cursorColor: MyPalette.white,
-                                      backgroundCursorColor: MyPalette.white,
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.zero,
+                                        border: InputBorder.none,
+                                      ),
                                       style: TextStyle(
                                         color: MyPalette.white,
                                         fontSize: 30,
@@ -248,7 +251,7 @@ class _MePageState extends State<MePage> {
 
   void _editName() {
     setState(() => _editingName = true);
-    FocusScope.of(context).requestFocus(_nameFocusNode);
+    _nameFocusNode.requestFocus();
   }
 
   void _changeName() {
@@ -258,7 +261,7 @@ class _MePageState extends State<MePage> {
   }
 
   void _changeProfilePic() async {
-    final source = await showMyOptionsDialog(
+    final source = await showOptionsDialog(
       context: context,
       title: 'Change profile picture',
       options: {

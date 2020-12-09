@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/utils/show_my_alert_dialog.dart';
+import 'package:tundr/utils/show_info_dialog.dart';
+import 'package:tundr/widgets/buttons/round.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/tile.dart';
 
@@ -22,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
     if (error == null) {
       Navigator.pop(context);
     } else {
-      await showMyAlertDialog(
+      await showInfoDialog(
         context: context,
         title: 'Error signing in',
         content: error,
@@ -106,23 +107,11 @@ class _LoginPageState extends State<LoginPage> {
         Positioned(
           right: 50,
           bottom: 100,
-          child: GestureDetector(
+          child: MyRoundButton(
             key: ValueKey('loginSubmitBtn'),
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: MyPalette.black,
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [MyPalette.secondaryShadow],
-              ),
-              child: Center(
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  color: MyPalette.white,
-                ),
-              ),
-            ),
+            width: 60,
+            height: 60,
+            child: Icon(Icons.arrow_forward_ios, color: MyPalette.white),
             onTap: _signIn,
           ),
         ),

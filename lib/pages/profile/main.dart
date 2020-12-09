@@ -12,7 +12,7 @@ import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/buttons/back.dart';
-import 'package:tundr/widgets/buttons/dark_tile.dart';
+import 'package:tundr/widgets/buttons/text.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
@@ -108,21 +108,26 @@ class _MainProfilePageState extends State<MainProfilePage> {
                     final chat = snapshot.data[1];
 
                     if (iBlockedUser) {
-                      return DarkTileButton(
-                        child: Text(
-                          'Unblock',
-                          style: TextStyle(fontSize: 16),
+                      return SizedBox(
+                        height: 50,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: MyTextButton(
+                              text: 'Unblock',
+                              onTap: () async {
+                                Provider.of<User>(context, listen: false)
+                                    .privateInfo
+                                    .blocked
+                                    .remove(otherProfile.uid);
+                                await Provider.of<User>(context, listen: false)
+                                    .writeField('blocked', UserPrivateInfo);
+                                setState(() {});
+                              },
+                            ),
+                          ),
                         ),
-                        color: MyPalette.red,
-                        onTap: () async {
-                          Provider.of<User>(context, listen: false)
-                              .privateInfo
-                              .blocked
-                              .remove(otherProfile.uid);
-                          await Provider.of<User>(context, listen: false)
-                              .writeField('blocked', UserPrivateInfo);
-                          setState(() {});
-                        },
                       );
                     }
                     if (canTalk) {

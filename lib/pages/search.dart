@@ -73,6 +73,11 @@ class _SearchPageState extends State<SearchPage> {
                 final uid =
                     Provider.of<User>(context, listen: false).profile.uid;
                 return SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context)
+                        .viewInsets
+                        .bottom, // account for keyboard
+                  ),
                   child: Column(
                     children: List<Widget>.from(
                       snapshot.data.map((otherUser) {

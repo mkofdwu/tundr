@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/utils/from_theme.dart';
 
@@ -10,21 +10,21 @@ class PopupMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: 150,
       decoration: BoxDecoration(
-        color: MyPalette.white,
+        color: Theme.of(context).colorScheme.primary,
         boxShadow: [MyPalette.secondaryShadow],
         borderRadius: fromTheme(
           context,
           dark: BorderRadius.zero,
-          light: BorderRadius.circular(20),
+          light: BorderRadius.circular(15),
         ),
       ),
-      padding: EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: children,
+      clipBehavior: Clip.antiAlias,
+      child: IntrinsicWidth(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: children,
+        ),
       ),
     );
   }

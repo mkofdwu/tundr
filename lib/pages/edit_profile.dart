@@ -2,7 +2,6 @@ import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/pages/interests/edit_interests.dart';
 import 'package:tundr/pages/interests/widgets/interests_wrap.dart';
@@ -66,9 +65,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
-        FeatureDiscovery.discoverFeatures(
-            context, <String>['preview_profile']));
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      FeatureDiscovery.discoverFeatures(context, <String>['preview_profile']);
+    });
   }
 
   @override

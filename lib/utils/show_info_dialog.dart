@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-Future<void> showMyAlertDialog({
+Future<void> showInfoDialog({
   @required BuildContext context,
   @required String title,
   String content,
 }) =>
     showDialog(
       context: context,
-      child: AlertDialog(
+      builder: (context) => AlertDialog(
         title: Text(title),
-        content: Text(content ?? ''),
+        content: content == null ? null : Text(content),
         actions: [
           FlatButton(
-            child: Text('Close'),
+            child: Text('CLOSE'),
             textColor: Theme.of(context).colorScheme.onPrimary,
             onPressed: () => Navigator.pop(context),
           ),

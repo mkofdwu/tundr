@@ -14,7 +14,8 @@ class ExtraMediaProfilePage extends StatefulWidget {
 }
 
 class _ExtraMediaProfilePageState extends State<ExtraMediaProfilePage> {
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController =
+      ScrollController(initialScrollOffset: 1);
 
   @override
   void initState() {
@@ -51,26 +52,30 @@ class _ExtraMediaProfilePageState extends State<ExtraMediaProfilePage> {
     return Material(
       child: Stack(
         children: <Widget>[
-          ListView.builder(
-            padding: const EdgeInsets.symmetric(
-                vertical: 1), // to scroll up and down
+          SingleChildScrollView(
             controller: _scrollController,
-            itemCount: 10,
-            itemBuilder: (context, i) {
-              if (i == 9) return SizedBox(height: 200);
-              if (profile.extraMedia[i] == null) {
-                return SizedBox.shrink();
-              }
-              return MediaThumbnail(profile.extraMedia[i]);
-            },
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height + 2),
+              child: Column(
+                children: profile.extraMedia
+                    .map((media) => media == null
+                        ? SizedBox.shrink()
+                        : MediaThumbnail(media))
+                    .toList(),
+              ),
+            ),
           ),
-          TileIconButton(
-            icon: Icons.close,
-            onPressed: () {
-              Navigator.popUntil(
-                  context, (route) => route.settings.name == '/profile');
-              Navigator.pop(context);
-            },
+          SafeArea(
+            child: TileIconButton(
+              icon: Icons.close,
+              iconColor: MyPalette.white,
+              onPressed: () {
+                Navigator.popUntil(
+                    context, (route) => route.settings.name == '/profile');
+                Navigator.pop(context);
+              },
+            ),
           ),
           Positioned(
             bottom: 0,

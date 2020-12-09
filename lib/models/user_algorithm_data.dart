@@ -44,7 +44,7 @@ class UserAlgorithmData {
   }
 
   factory UserAlgorithmData.register(RegistrationInfo info) {
-    final age = DateTime.now().difference(info.birthday).inDays ~/ 365;
+    final age = DateTime.now().difference(info.birthday).inDays ~/ 365.25;
     return UserAlgorithmData(
       asleep: false,
       showMeBoys: info.gender == Gender.female,

@@ -1,27 +1,20 @@
 // requests concerning generated suggestions, (which suggestions to list), etc
 
-import 'package:cloud_functions/cloud_functions.dart';
+import 'package:tundr/utils/call_https_function.dart';
 
 class SuggestionsService {
   static Future<void> respondToSuggestion({
     String toUid,
     bool liked,
-  }) async {
-    await FirebaseFunctions.instance
-        .httpsCallable('respondToSuggestion')
-        .call({'otherUid': toUid, 'liked': liked});
-  }
+  }) =>
+      callHttpsFunction(
+          'respondToSuggestion', {'otherUid': toUid, 'liked': liked});
 
   static Future<void> undoSuggestionResponse(
-      String userId, String suggestionUserUid) async {
-    await FirebaseFunctions.instance
-        .httpsCallable('undoSuggestionResponse')
-        .call({'otherUid': suggestionUserUid});
-  }
+          String userId, String suggestionUserUid) =>
+      callHttpsFunction(
+          'undoSuggestionResponse', {'otherUid': suggestionUserUid});
 
-  static Future<void> matchWith(String otherUid) async {
-    await FirebaseFunctions.instance
-        .httpsCallable('matchWith')
-        .call({'otherUid': otherUid});
-  }
+  static Future<void> matchWith(String otherUid) =>
+      callHttpsFunction('matchWith', {'otherUid': otherUid});
 }

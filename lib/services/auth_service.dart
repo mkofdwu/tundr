@@ -6,6 +6,7 @@ import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/services/storage_service.dart';
+import 'package:tundr/utils/call_https_function.dart';
 
 class AuthService {
   static Stream<User> currentUserStream() =>
@@ -109,6 +110,8 @@ class AuthService {
           'lastSeen': null,
         });
         await result.user.updatePhoneNumber(phoneCredential);
+        // get suggestions for new user
+        await callHttpsFunction('generateSuggestionsForNewUser');
         return true;
       }
     } on PlatformException catch (exception) {

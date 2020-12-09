@@ -7,27 +7,10 @@
 import { interestsToGroupNo, numInterestGroups } from '../constants';
 import { FilterMethod } from '../enums/filter-method';
 import Filter from '../models/filter';
-import pearsonCorrelation from '../utils/pearson-correlation';
 import transposeArray from '../utils/transpose-array';
+import numberOfSimilarInterests from '../utils/num-similar-interests';
 
 const N = 10; // maximum amount of suggestions generated per day for each user
-
-const numberOfSimilarInterests = (a: Array<number>, b: Array<number>) => {
-  if (a.length != b.length) {
-    throw (
-      'Interest vectors do not have the same length (' +
-      a.length +
-      ' and ' +
-      b.length +
-      ')'
-    );
-  }
-  let num = 0;
-  for (let i = 0; i < a.length; ++i) {
-    num += Math.min(a[i], b[i]);
-  }
-  return num;
-};
 
 const valuePassesFilter = (value: any, filter: Filter) => {
   switch (filter.name) {
@@ -115,10 +98,10 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
 
   for (const user of allUsers) {
     const interestsVector: Array<number> = new Array(numInterestGroups).fill(0);
-    user.interests.forEach((interest: string) => {
+    for (const interest of user.interests) {
       const groupNo = interestsToGroupNo[interest];
       ++interestsVector[groupNo];
-    });
+    }
     usersInterestsVectors.set(user.uid, interestsVector);
   }
 
@@ -147,7 +130,11 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
         if (otherInterestsVector == null)
           throw new Error('could not get interests for user: ' + otherUser.uid);
 
-        const similarityScore = pearsonCorrelation(
+        // const similarityScore = pearsonCorrelation(
+        //   interestsVector,
+        //   otherInterestsVector
+        // );
+        const similarityScore = numberOfSimilarInterests(
           interestsVector,
           otherInterestsVector
         );
@@ -229,6 +216,7 @@ export default (allUsers: Iterable<FirebaseFirestore.DocumentData>) => {
 
   addTopNSuggestions(males, females, maleToFemaleSimilaritiesMatrix);
   addTopNSuggestions(
+    // TODO FIXME maybe this may not need to be called, just use the suggestions generated from the above call (since the similarity is the same, so only half the table needs to be used)
     females,
     males,
     transposeArray(maleToFemaleSimilaritiesMatrix)

@@ -5,7 +5,7 @@ import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/services/media_picker_service.dart';
-import 'package:tundr/utils/show_my_options_dialog.dart';
+import 'package:tundr/utils/show_options_dialog.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'package:tundr/widgets/theme_builder.dart';
@@ -42,7 +42,7 @@ class _MessageFieldState extends State<MessageField> {
   void _selectImage() async {
     // FUTURE: this and the function below are just temporary fixes, find a better solution / dialog in the future
 
-    final source = await showMyOptionsDialog(
+    final source = await showOptionsDialog(
       context: context,
       title: 'Select image source',
       options: {
@@ -61,7 +61,7 @@ class _MessageFieldState extends State<MessageField> {
   }
 
   void _selectVideo() async {
-    final source = await showMyOptionsDialog(
+    final source = await showOptionsDialog(
       context: context,
       title: 'Select image source',
       options: {
@@ -131,14 +131,16 @@ class _MessageFieldState extends State<MessageField> {
                           SimpleIconButton(
                             // DESIGN: replace with a better button in the future
                             icon: Icons.photo_camera,
+                            size: 30,
                             onPressed: _selectImage,
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: 14),
                           SimpleIconButton(
                             icon: Icons.videocam,
+                            size: 30,
                             onPressed: _selectVideo,
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: 14),
                           Container(
                             width: 2,
                             height: 50,

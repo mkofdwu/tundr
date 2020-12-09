@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-Future<bool> showMyQuestionDialog({
+Future<bool> showQuestionDialog({
   @required BuildContext context,
   @required String title,
   String content,
 }) async =>
     (await showDialog(
       context: context,
-      child: AlertDialog(
+      builder: (context) => AlertDialog(
         title: Text(title),
-        content: Text(content ?? ''),
+        content: content == null ? null : Text(content),
         actions: <Widget>[
           FlatButton(
             child: Text('OK'),

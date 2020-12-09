@@ -4,6 +4,7 @@ import 'package:tundr/constants/firebase_ref.dart';
 import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/message.dart';
+import 'package:tundr/utils/call_https_function.dart';
 
 class ChatsService {
   static DocumentReference _userChatRef(String uid, String chatId) {
@@ -44,13 +45,14 @@ class ChatsService {
         await chatsRef.doc(chatId).collection('messages').doc(messageId).get());
   }
 
-  static Future<String> startConversation(
-      String uid, String otherUid, Message message) async {
-    final result = await FirebaseFunctions.instance
-        .httpsCallable('startConversation')
-        .call({'otherUid': otherUid, 'message': message.toMap()});
-    return result.data;
-  }
+  static Future<String> startConversation(String otherUid, Message message) =>
+      callHttpsFunction<String>('startConversation', {
+        'otherUid': otherUid,
+        'message': {
+          ...message.toMap(),
+          'sentOn': null, // will be determined to the server
+        },
+      });
 
   static Future<void> deleteChat(String uid, String chatId) async {
     await chatsRef.doc(chatId).update({
@@ -61,7 +63,8 @@ class ChatsService {
     //     .isEmpty) {
     //   await chatsRef.doc(chatId).delete();
     // }
-    await _userChatRef(uid, chatId).delete();
+    final userChatRef = _userChatRef(uid, chatId);
+    if (userChatRef.path.isNotEmpty) await userChatRef.delete();
   }
 
   static Future<Chat> getChatFromUid(String uid, String otherUid) async {
@@ -89,26 +92,15 @@ class ChatsService {
     return _userChatRef(uid, chatId).update(details);
   }
 
-  static Future<void> updateChatMessagesRead(
-      String chatId, String otherUid) async {
-    return Future.wait((await chatsRef
-            .doc(chatId)
-            .collection('messages')
-            .where('senderUid', isEqualTo: otherUid)
-            .where('readTimestamp', isNull: true)
-            .get())
-        .docs
-        .map(
-            (doc) => doc.reference.update({'readTimestamp': Timestamp.now()})));
-  }
+  static Future<void> readOtherUsersMessages(String otherUid, String chatId) =>
+      callHttpsFunction(
+        'readOtherUsersMessages',
+        {'otherUid': otherUid, 'chatId': chatId},
+      );
 
   // using http calls to firebase cloud functions
 
-  static Future<bool> checkReadReceipts(String otherUid) async {
-    final callable =
-        FirebaseFunctions.instance.httpsCallable('checkReadReceipts');
-    final result = await callable.call({otherUid: otherUid});
-    return result
-        .data; // true or false depending on whether both users consent to read receipts
-  }
+  // true or false depending on whether both users consent to read receipts
+  static Future<bool> checkReadReceipts(String otherUid) =>
+      callHttpsFunction<bool>('checkReadReceipts', {'otherUid': otherUid});
 }

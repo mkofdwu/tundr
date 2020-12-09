@@ -1,28 +1,11 @@
-// http calls from the flutter app
-// all responses must be valid JSON, so all return values must be in the format {result: ...}
-// which will be understood by the client
-
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import {
   chatsRef,
-  fcm,
   userProfilesRef,
   usersAlgorithmDataRef,
   usersPrivateInfoRef,
 } from '../constants';
-
-export const phoneNumberExists = functions.https.onCall(
-  async (data, _context) => {
-    const privateInfoDocs = await usersPrivateInfoRef
-      .where('phoneNumber', '==', data.phoneNumber)
-      .limit(1)
-      .get();
-    return {
-      result: privateInfoDocs.docs.length > 0,
-    };
-  }
-);
 
 export const checkReadReceipts = functions.https.onCall(
   async (data, context) => {
@@ -40,29 +23,6 @@ export const checkReadReceipts = functions.https.onCall(
         userPrivateInfo.settings.readReceipts &&
         otherUserPrivateInfo.settings.readReceipts,
     };
-  }
-);
-
-const N_MOST_POPULAR = 10;
-
-export const getMostPopular = functions.https.onCall(
-  async (_data, _context) => {
-    const userPrivateInfoDocs = (
-      await usersPrivateInfoRef
-        .where('settings.showInMostPopular', '==', true)
-        .orderBy('popularityScore', 'desc')
-        .limit(N_MOST_POPULAR)
-        .get()
-    ).docs;
-    const popularUsers = [];
-    for (const privateInfoDoc of userPrivateInfoDocs) {
-      const uid = privateInfoDoc.id;
-      popularUsers.push({
-        profile: (await userProfilesRef.doc(uid).get()).data(),
-        popularityScore: privateInfoDoc.data().popularityScore,
-      });
-    }
-    return { result: popularUsers };
   }
 );
 
@@ -140,8 +100,8 @@ export const startConversation = functions.https.onCall(
     });
     chatDoc.collection('messages').add({
       senderUid: uid,
-      sentTimestamp: admin.firestore.Timestamp.now(),
-      readTimestamp: null,
+      sentOn: admin.firestore.Timestamp.now(),
+      readOn: null,
       referencedMessageId: null,
       text: data.message.text,
       mediaType: data.message.mediaType,
@@ -150,7 +110,7 @@ export const startConversation = functions.https.onCall(
     await usersPrivateInfoRef.doc(uid).collection('chats').doc(chatDoc.id).set({
       uid: data.otherUid,
       wallpaperUrl: '',
-      lastReadTimestamp: admin.firestore.Timestamp.now(),
+      lastRead: admin.firestore.Timestamp.now(),
       type: 1,
     });
     await usersPrivateInfoRef.doc(data.otherUid).update({
@@ -160,80 +120,36 @@ export const startConversation = functions.https.onCall(
   }
 );
 
-export const respondToSuggestion = functions.https.onCall(
+export const readOtherUsersMessages = functions.https.onCall(
   async (data, context) => {
-    const uid = context.auth?.uid;
     const otherUid = data.otherUid;
-    const liked = data.liked;
-    if (uid == null || otherUid == null || typeof liked !== 'boolean') return;
-    await usersPrivateInfoRef
-      .doc(otherUid)
-      .set({ respondedSuggestions: { [uid]: liked } }, { merge: true });
+    const chatId = data.chatId;
+    if (otherUid == null || chatId == null) return;
+    const messageDocs = (
+      await chatsRef
+        .doc(chatId)
+        .collection('messages')
+        .where('senderUid', '==', otherUid)
+        .where('readOn', '==', null)
+        .get()
+    ).docs;
+    for (const doc of messageDocs) {
+      await doc.ref.update({ readOn: admin.firestore.Timestamp.now() });
+    }
+    // // PAID using the != filter operator requires the firebase blaze plan (upgrading to node 10, es2018 & firebase-admin 9)
+    // const uid = context.auth?.uid;
+    // const chatId = data.chatId;
+    // if (uid == null || chatId == null) return;
+    // const messageDocs = (
+    //   await chatsRef
+    //     .doc(chatId)
+    //     .collection('messages')
+    //     .where('senderUid', '!=', uid)
+    //     .where('readOn', '==', null)
+    //     .get()
+    // ).docs;
+    // for (const doc of messageDocs) {
+    //   await doc.ref.update({ readOn: admin.firestore.Timestamp.now() });
+    // }
   }
 );
-
-export const undoSuggestionResponse = functions.https.onCall(
-  async (data, context) => {
-    const uid = context.auth?.uid;
-    const otherUid = data.otherUid;
-    if (uid == null || otherUid == null) return;
-    await usersPrivateInfoRef.doc(otherUid).set(
-      {
-        respondedSuggestions: { [uid]: admin.firestore.FieldValue.delete() },
-      },
-      { merge: true }
-    );
-  }
-);
-
-export const matchWith = functions.https.onCall(async (data, context) => {
-  const uid = context.auth?.uid;
-  const otherUid = data.otherUid;
-  if (uid == null || otherUid == null) return;
-
-  // check if both users have indeed liked each other
-  const privateInfo = (await usersPrivateInfoRef.doc(uid).get()).data();
-  const otherPrivateInfo = (
-    await usersPrivateInfoRef.doc(otherUid).get()
-  ).data();
-  if (privateInfo == null || otherPrivateInfo == null) return;
-  if (
-    // both should be true (suggestionsGoneThrough is a map in the format {uid: liked})
-    !privateInfo['suggestionsGoneThrough'][otherUid] ||
-    !otherPrivateInfo['suggestionsGoneThrough'][uid]
-  )
-    return;
-
-  // save matches
-  await usersPrivateInfoRef.doc(uid).update({
-    matches: admin.firestore.FieldValue.arrayUnion(otherUid),
-  });
-  await usersPrivateInfoRef.doc(otherUid).update({
-    matches: admin.firestore.FieldValue.arrayUnion(uid),
-  });
-
-  // send notification to other user (if he / she so desires)
-  if (otherPrivateInfo['settings']['newMatchNotification']) {
-    const tokens: string[] = (
-      await usersPrivateInfoRef.doc(otherUid).collection('tokens').get()
-    ).docs.map((doc) => doc.id);
-    const userProfile = (await userProfilesRef.doc(uid).get()).data();
-    if (userProfile == null)
-      throw `user with uid ${uid} initiated match but seems to have disappeared`;
-    const matchName: string = userProfile['name'];
-    if (matchName == null) throw 'user exists but data() returned undefined';
-    const payload: admin.messaging.MessagingPayload = {
-      notification: {
-        title: 'Congratulations!',
-        body: `${matchName} liked you too!`,
-        clickAction: 'FLUTTER_NOTIFICATION_CLICK',
-      },
-      data: {
-        type: 'newMatch',
-        uid: uid,
-      },
-    };
-    return fcm.sendToDevice(tokens, payload);
-  }
-  return;
-});

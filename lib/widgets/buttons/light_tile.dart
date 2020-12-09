@@ -23,19 +23,24 @@ class _LightTileButtonState extends State<LightTileButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Container(
-        margin: const EdgeInsets.all(10),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
         width: double.infinity,
+        margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.all(20),
+        transform:
+            _pressed ? Matrix4.translationValues(0, 4, 0) : Matrix4.identity(),
         decoration: BoxDecoration(
           color: widget.color,
-          boxShadow: _pressed ? null : [MyPalette.primaryShadow],
+          boxShadow: [
+            _pressed ? MyPalette.primaryShadow : MyPalette.secondaryShadow
+          ],
           borderRadius: BorderRadius.circular(10),
         ),
         child: widget.child,
       ),
-      onTapDown: (TapDownDetails details) => setState(() => _pressed = true),
-      onTapUp: (TapUpDetails details) {
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) {
         setState(() => _pressed = false);
         widget.onTap();
       },

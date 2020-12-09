@@ -68,7 +68,7 @@ class UserProfile {
     );
   }
 
-  int get ageInYears => DateTime.now().difference(birthday).inDays ~/ 365;
+  int get ageInYears => DateTime.now().difference(birthday).inDays ~/ 365.25;
 
   @override
   String toString() => 'User(uid: $uid, username: $username)';

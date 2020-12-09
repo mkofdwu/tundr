@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/pages/setup/phone_number.dart';
 import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/interests/widgets/interests_browser.dart';
-import 'package:tundr/utils/show_my_alert_dialog.dart';
+import 'package:tundr/utils/show_info_dialog.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
@@ -59,7 +59,7 @@ class _SetupInterestsPageState extends State<SetupInterestsPage> {
   void _nextPage() {
     if (Provider.of<RegistrationInfo>(context, listen: false).interests.length <
         _minInterests) {
-      showMyAlertDialog(
+      showInfoDialog(
         context: context,
         title: 'Insufficient interests',
         content:

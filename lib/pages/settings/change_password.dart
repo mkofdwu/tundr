@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/utils/show_my_alert_dialog.dart';
+import 'package:tundr/utils/show_info_dialog.dart';
 import 'package:tundr/widgets/buttons/back.dart';
+import 'package:tundr/widgets/buttons/round.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/underline.dart';
 
@@ -43,7 +44,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       if (incorrect) {
         setState(() => _incorrect = true);
       } else {
-        await showMyAlertDialog(
+        await showInfoDialog(
           context: context,
           title: 'Your password has been successfully updated.',
         ).then((_) => Navigator.pop(context));
@@ -62,12 +63,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           width: width * 200 / 375,
           child: Text(
             'Change password',
-            style: Theme.of(context).textTheme.headline3,
+            style: TextStyle(fontSize: 40),
           ),
         ),
         Positioned(
-          top: height * 400 / 812,
-          right: 20,
+          top: height * 380 / 812,
+          right: 50,
           width: width * 200 / 375,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -80,14 +81,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 hintText: 'Current password',
                 obscureText: true,
               ),
-              SizedBox(height: 10),
               UnderlineTextField(
                 controller: _newPasswordController,
                 color: _passwordsDoNotMatch ? MyPalette.red : null,
                 hintText: 'New password',
                 obscureText: true,
               ),
-              SizedBox(height: 10),
               UnderlineTextField(
                 controller: _confirmNewPasswordController,
                 color: _passwordsDoNotMatch ? MyPalette.red : null,
@@ -96,20 +95,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 moveFocus: false,
                 onEditingComplete: () => FocusScope.of(context).unfocus(),
               ),
-              SizedBox(height: 30),
-              GestureDetector(
-                onTap: _changePassword,
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: MyPalette.gold,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [MyPalette.secondaryShadow],
-                  ),
-                  child: Icon(Icons.arrow_forward_ios,
-                      color: Theme.of(context).primaryColor),
+              SizedBox(height: 50),
+              MyRoundButton(
+                width: 50,
+                height: 50,
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context).primaryColor,
                 ),
+                backgroundColor: MyPalette.gold,
+                onTap: _changePassword,
               ),
             ],
           ),

@@ -63,7 +63,7 @@ class _SwipingPageState extends State<SwipingPage> {
       ));
     }
     _addProfileToStream();
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   void _addProfileToStream() {
@@ -81,6 +81,8 @@ class _SwipingPageState extends State<SwipingPage> {
       _i++;
       _canUndo = true;
     });
+
+    _addProfileToStream(); // to show the next card as soon as possible
 
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     if (likedUser) privateInfo.numRightSwiped++;
@@ -101,11 +103,10 @@ class _SwipingPageState extends State<SwipingPage> {
       ],
       UserPrivateInfo,
     );
-
-    _addProfileToStream();
   }
 
   void _nope() async {
+    if (_i >= _suggestionWithProfiles.length) return;
     final otherUid = _suggestionWithProfiles[_i].profile.uid;
     if (_suggestionWithProfiles[_i].wasLiked == null) {
       await SuggestionsService.respondToSuggestion(
@@ -133,6 +134,7 @@ class _SwipingPageState extends State<SwipingPage> {
   }
 
   void _like() async {
+    if (_i >= _suggestionWithProfiles.length) return;
     final suggestionWithProfile = _suggestionWithProfiles[_i];
     final otherUid = suggestionWithProfile.profile.uid;
 
@@ -144,7 +146,7 @@ class _SwipingPageState extends State<SwipingPage> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              ItsAMatchPage(user: suggestionWithProfile.profile),
+              ItsAMatchPage(profile: suggestionWithProfile.profile),
         ),
       );
       if (undo) return;
