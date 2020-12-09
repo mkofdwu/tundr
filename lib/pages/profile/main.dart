@@ -93,8 +93,8 @@ class _MainProfilePageState extends State<MainProfilePage> {
                 child: FutureBuilder(
                   future: Future.wait([
                     UsersService.canTalkTo(otherProfile.uid),
-                    ChatsService.getChatFromUid(
-                        myProfile.uid, otherProfile.uid),
+                    ChatsService.getChatFromProfile(
+                        myProfile.uid, otherProfile),
                   ]),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) return SizedBox.shrink();
@@ -138,8 +138,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                           return Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  ChatPage(otherUser: otherProfile, chat: chat),
+                              builder: (context) => ChatPage(chat: chat),
                             ),
                           );
                         },

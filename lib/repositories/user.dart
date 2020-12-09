@@ -71,6 +71,7 @@ class User {
         .doc(profile.uid)
         .collection('chats')
         .snapshots()
-        .map((chatDocs) => chatDocs.docs.map((doc) => Chat.fromDoc(doc)));
+        .asyncMap((chatDocs) =>
+            Future.wait(chatDocs.docs.map((doc) => Chat.fromDoc(doc))));
   }
 }

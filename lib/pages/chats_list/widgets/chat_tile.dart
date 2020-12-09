@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/models/user_status.dart';
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/pages/chat/chat.dart';
@@ -27,25 +26,20 @@ class ChatTile extends StatelessWidget {
   }) : super(key: key);
 
   void _openChat(BuildContext context) async {
-    final user = await UsersService.getUserProfile(chat.uid);
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ChatPage(otherUser: user, chat: chat),
+        builder: (context) => ChatPage(chat: chat),
       ),
     );
   }
 
   Widget _buildDark(context) => GestureDetector(
-        child: FutureBuilder(
-          future: Future.wait([
-            UsersService.getUserProfile(chat.uid),
-            UsersService.isBlockedBy(chat.uid),
-          ]),
+        child: FutureBuilder<bool>(
+          future: UsersService.isBlockedBy(chat.otherProfile.uid),
           builder: (context, snapshot) {
             if (!snapshot.hasData) return SizedBox.shrink();
-            final UserProfile user = snapshot.data[0];
-            final bool blocked = snapshot.data[1];
+            final blocked = snapshot.data;
             return Stack(
               children: <Widget>[
                     Container(
@@ -54,8 +48,8 @@ class ChatTile extends StatelessWidget {
                       decoration: BoxDecoration(
                         border: Border.all(color: MyPalette.white),
                         image: DecorationImage(
-                          image:
-                              CachedNetworkImageProvider(user.profileImageUrl),
+                          image: CachedNetworkImageProvider(
+                              chat.otherProfile.profileImageUrl),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -151,7 +145,7 @@ class ChatTile extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  user.name,
+                                  chat.otherProfile.name,
                                   style: TextStyle(
                                     color: MyPalette.white,
                                     fontSize: 30,
@@ -160,7 +154,7 @@ class ChatTile extends StatelessWidget {
                                 SizedBox(height: 3),
                                 StreamBuilder<UserStatus>(
                                   stream: UsersService.getUserStatusStream(
-                                      user.uid),
+                                      chat.otherProfile.uid),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return SizedBox.shrink();
@@ -188,15 +182,11 @@ class ChatTile extends StatelessWidget {
       );
 
   Widget _buildLight(context) => GestureDetector(
-        child: FutureBuilder(
-          future: Future.wait([
-            UsersService.getUserProfile(chat.uid),
-            UsersService.isBlockedBy(chat.uid),
-          ]),
+        child: FutureBuilder<bool>(
+          future: UsersService.isBlockedBy(chat.otherProfile.uid),
           builder: (context, snapshot) {
             if (!snapshot.hasData) return SizedBox.shrink();
-            final UserProfile user = snapshot.data[0];
-            final bool blocked = snapshot.data[1];
+            final blocked = snapshot.data;
             return Container(
               decoration: BoxDecoration(boxShadow: [MyPalette.secondaryShadow]),
               child: ClipRRect(
@@ -207,9 +197,10 @@ class ChatTile extends StatelessWidget {
                           width: 150,
                           height: 250,
                           color: MyPalette.black,
-                          child: user.profileImageUrl.isEmpty
+                          child: chat.otherProfile.profileImageUrl == null
                               ? null
-                              : getNetworkImage(user.profileImageUrl),
+                              : getNetworkImage(
+                                  chat.otherProfile.profileImageUrl),
                         ),
                         Positioned(
                           left: -50,
@@ -285,8 +276,8 @@ class ChatTile extends StatelessWidget {
                                 top: 10,
                                 right: 10,
                                 child: StreamBuilder<List<Message>>(
-                                  stream:
-                                      ChatsService.messagesStream(chat.uid, 3),
+                                  stream: ChatsService.messagesStream(
+                                      chat.otherProfile.uid, 3),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return SizedBox.shrink();
@@ -329,7 +320,7 @@ class ChatTile extends StatelessWidget {
                                 child: Column(
                                   children: <Widget>[
                                     Text(
-                                      user.name,
+                                      chat.otherProfile.name,
                                       style: TextStyle(
                                         color: MyPalette.white,
                                         fontSize: 30,
@@ -339,7 +330,7 @@ class ChatTile extends StatelessWidget {
                                     StreamBuilder<UserStatus>(
                                         stream:
                                             UsersService.getUserStatusStream(
-                                                user.uid),
+                                                chat.otherProfile.uid),
                                         builder: (context, snapshot) {
                                           if (!snapshot.hasData) {
                                             return SizedBox.shrink();

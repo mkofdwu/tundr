@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tundr/constants/deleted_user.dart';
 import 'package:tundr/constants/firebase_ref.dart';
 import 'package:tundr/models/popular_user.dart';
 import 'package:tundr/models/user_algorithm_data.dart';
@@ -17,7 +16,7 @@ class UsersService {
     final userDoc = await userProfilesRef.doc(uid).get();
     return userDoc.exists
         ? UserProfile.fromMap(userDoc.data())
-        : (returnDeletedUser ? deletedUserProfile : null);
+        : (returnDeletedUser ? UserProfile.deletedAccount() : null);
   }
 
   static Future<UserPrivateInfo> getUserPrivateInfo(String uid) async {

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:tundr/constants/firebase_ref.dart';
 import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/message.dart';
+import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/utils/call_https_function.dart';
 
 class ChatsService {
@@ -67,27 +67,28 @@ class ChatsService {
     if (userChatRef.path.isNotEmpty) await userChatRef.delete();
   }
 
-  static Future<Chat> getChatFromUid(String uid, String otherUid) async {
+  static Future<Chat> getChatFromProfile(
+      String uid, UserProfile otherProfile) async {
     final chatDocs = (await usersPrivateInfoRef
             .doc(uid)
             .collection('chats')
-            .where('uid', isEqualTo: otherUid)
+            .where('uid', isEqualTo: otherProfile.uid)
             .limit(1)
             .get())
         .docs;
     if (chatDocs.isEmpty) {
       return Chat(
         id: '',
-        uid: otherUid,
+        otherProfile: otherProfile,
         wallpaperUrl: '',
         lastRead: null,
         type: ChatType.nonExistent,
       );
     }
-    return Chat.fromDoc(chatDocs.first);
+    return await Chat.fromDoc(chatDocs.first);
   }
 
-  static Future<int> updateChatDetails(
+  static Future<void> updateChatDetails(
       String uid, String chatId, Map<String, dynamic> details) {
     return _userChatRef(uid, chatId).update(details);
   }

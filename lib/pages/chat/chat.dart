@@ -1,40 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/chat_type.dart';
-import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/models/user_private_info.dart';
-import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/pages/chat/widgets/message_field.dart';
+import 'package:tundr/pages/chat/widgets/popup_menu.dart';
 
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/chats_service.dart';
-import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
-import 'package:tundr/utils/show_question_dialog.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
-import 'package:tundr/widgets/popup_menus/menu_divider.dart';
-import 'package:tundr/widgets/popup_menus/menu_option.dart';
-import 'package:tundr/widgets/popup_menus/popup_menu.dart';
 
 import 'widgets/other_user_message_tile.dart';
 import 'widgets/own_message_tile.dart';
 import 'widgets/unsent_message_tile.dart';
 
 class ChatPage extends StatefulWidget {
-  final UserProfile otherUser;
   final Chat chat;
 
   ChatPage({
     Key key,
-    @required this.otherUser,
     @required this.chat,
   }) : super(key: key);
 
@@ -57,9 +48,9 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((duration) async {
       if (widget.chat.type != ChatType.nonExistent &&
-          await ChatsService.checkReadReceipts(widget.otherUser.uid)) {
+          await ChatsService.checkReadReceipts(widget.chat.otherProfile.uid)) {
         await ChatsService.readOtherUsersMessages(
-          widget.otherUser.uid,
+          widget.chat.otherProfile.uid,
           widget.chat.id,
         );
         if (mounted) {
@@ -110,7 +101,7 @@ class _ChatPageState extends State<ChatPage> {
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     if (widget.chat.type == ChatType.nonExistent) {
       widget.chat.id = await ChatsService.startConversation(
-        widget.otherUser.uid,
+        widget.chat.otherProfile.uid,
         message,
       );
     } else if (widget.chat.type == ChatType.newMatch) {
@@ -119,7 +110,7 @@ class _ChatPageState extends State<ChatPage> {
         widget.chat.id,
         {'type': 3},
       ); // normal
-      privateInfo.matches.remove(widget.otherUser.uid);
+      privateInfo.matches.remove(widget.chat.otherProfile.uid);
       await Provider.of<User>(context, listen: false)
           .writeField('matches', UserPrivateInfo);
     } else if (widget.chat.type == ChatType.unknown) {
@@ -138,62 +129,6 @@ class _ChatPageState extends State<ChatPage> {
         _unsentMessages.removeAt(unsentMessageIndex);
       });
     }
-  }
-
-  void _blockAndDeleteChat() async {
-    setState(() => _showChatOptions = false);
-    final confirm = await showQuestionDialog(
-      context: context,
-      title: 'Block and delete chat?',
-      content:
-          'You can unblock ${widget.otherUser.name} later if you want, but this chat cannot be retrieved',
-    );
-    if (confirm) {
-      Provider.of<User>(context, listen: false)
-          .privateInfo
-          .blocked
-          .add(widget.otherUser.uid);
-      await Provider.of<User>(context, listen: false)
-          .writeField('blocked', UserPrivateInfo);
-      await ChatsService.deleteChat(
-        Provider.of<User>(context, listen: false).profile.uid,
-        widget.chat.id,
-      );
-      Navigator.pop(context);
-    }
-  }
-
-  void _changeWallpaper() async {
-    setState(() => _showChatOptions = false);
-
-    final imageMedia = await MediaPickerService.pickMedia(
-      type: MediaType.image,
-      source: ImageSource.gallery,
-      context: context,
-    );
-
-    if (imageMedia == null) return;
-
-    final uid = Provider.of<User>(context, listen: false).profile.uid;
-    final wallpaperUrl = await StorageService.uploadMedia(
-      uid: uid,
-      media: imageMedia,
-    );
-    await ChatsService.updateChatDetails(
-      uid,
-      widget.chat.id,
-      {'wallpaperUrl': wallpaperUrl},
-    );
-  }
-
-  void _starChat() {
-    final uid = Provider.of<User>(context, listen: false).profile.uid;
-    ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 2});
-  }
-
-  void _unstarChat() {
-    final uid = Provider.of<User>(context, listen: false).profile.uid;
-    ChatsService.updateChatDetails(uid, widget.chat.id, {'type': 3});
   }
 
   @override
@@ -245,7 +180,7 @@ class _ChatPageState extends State<ChatPage> {
                           if (i < _unsentMessages.length) {
                             return UnsentMessageTile(
                               chatId: widget.chat.id,
-                              otherUserName: widget.otherUser.name,
+                              otherUserName: widget.chat.otherProfile.name,
                               message: _unsentMessages[
                                   _unsentMessages.length - i - 1],
                             );
@@ -268,7 +203,8 @@ class _ChatPageState extends State<ChatPage> {
                               child: fromMe
                                   ? OwnMessageTile(
                                       chatId: widget.chat.id,
-                                      otherUserName: widget.otherUser.name,
+                                      otherUserName:
+                                          widget.chat.otherProfile.name,
                                       message: message,
                                       onViewReferencedMessage: () =>
                                           _viewReferencedMessage(messageIndex),
@@ -279,9 +215,10 @@ class _ChatPageState extends State<ChatPage> {
                                     )
                                   : OtherUserMessageTile(
                                       chatId: widget.chat.id,
-                                      otherUserName: widget.otherUser.name,
-                                      profileImageUrl:
-                                          widget.otherUser.profileImageUrl,
+                                      otherUserName:
+                                          widget.chat.otherProfile.name,
+                                      profileImageUrl: widget
+                                          .chat.otherProfile.profileImageUrl,
                                       message: message,
                                       viewReferencedMessage: () =>
                                           _viewReferencedMessage(messageIndex),
@@ -320,13 +257,13 @@ class _ChatPageState extends State<ChatPage> {
                       Expanded(
                         child: GestureDetector(
                           child: Text(
-                            widget.otherUser.name,
+                            widget.chat.otherProfile.name,
                             style: TextStyle(fontSize: 20),
                           ),
                           onTap: () async => Navigator.pushNamed(
                             context,
                             '/profile',
-                            arguments: widget.otherUser,
+                            arguments: widget.chat.otherProfile,
                           ),
                         ),
                       ),
@@ -369,32 +306,7 @@ class _ChatPageState extends State<ChatPage> {
                   top: 10,
                   right: 10,
                   child: SafeArea(
-                    child: PopupMenu(
-                      children: <Widget>[
-                        MenuOption(
-                          text: 'Wallpaper',
-                          onPressed: _changeWallpaper,
-                        ),
-                        if (widget.chat.type == ChatType.normal ||
-                            widget.chat.type == ChatType.starred)
-                          MenuDivider(),
-                        if (widget.chat.type == ChatType.normal)
-                          MenuOption(
-                            text: 'Star chat',
-                            onPressed: _starChat,
-                          )
-                        else if (widget.chat.type == ChatType.starred)
-                          MenuOption(
-                            text: 'Unstar chat',
-                            onPressed: _unstarChat,
-                          ),
-                        MenuDivider(),
-                        MenuOption(
-                          text: 'Block and delete chat',
-                          onPressed: _blockAndDeleteChat,
-                        ),
-                      ],
-                    ),
+                    child: ChatPopupMenu(chat: widget.chat),
                   ),
                 ),
             ],

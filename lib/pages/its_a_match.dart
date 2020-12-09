@@ -10,7 +10,6 @@ import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/chat_type.dart';
 
 class ItsAMatchPage extends StatefulWidget {
-  // FUTURE: create enum `MatchAction` with undo, saySomething, continue, which is popped back to swipingpage which performs the action
   final UserProfile profile;
 
   ItsAMatchPage({
@@ -127,10 +126,9 @@ class _ItsAMatchPageState extends State<ItsAMatchPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ChatPage(
-                      otherUser: widget.profile,
                       chat: Chat(
                         id: null,
-                        uid: widget.profile.uid,
+                        otherProfile: widget.profile,
                         wallpaperUrl: '',
                         lastRead: null,
                         type: ChatType.newMatch,

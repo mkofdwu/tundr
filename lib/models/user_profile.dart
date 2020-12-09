@@ -68,6 +68,22 @@ class UserProfile {
     );
   }
 
+  factory UserProfile.deletedAccount() {
+    return UserProfile(
+      uid: 'deleted',
+      username: 'deleted',
+      name: 'Deleted',
+      gender: null,
+      profileImageUrl: null,
+      aboutMe: 'I have deleted my account',
+      birthday: DateTime(0, 0, 0),
+      interests: [],
+      customInterests: [],
+      extraMedia: List.filled(9, null),
+      personalInfo: {},
+    );
+  }
+
   int get ageInYears => DateTime.now().difference(birthday).inDays ~/ 365.25;
 
   @override

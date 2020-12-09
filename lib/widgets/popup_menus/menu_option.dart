@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/constants/my_palette.dart';
 
 class MenuOption extends StatelessWidget {
   final String text;
