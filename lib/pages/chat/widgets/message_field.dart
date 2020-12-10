@@ -5,6 +5,7 @@ import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/services/media_picker_service.dart';
+import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/show_options_dialog.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
@@ -16,12 +17,16 @@ import 'referenced_message_tile.dart';
 class MessageField extends StatefulWidget {
   final Media media;
   final Message referencedMessage;
+  final Function onRemoveMedia;
+  final Function onRemoveReferencedMessage;
   final Function(Media) onChangeMedia;
   final Function(String) onSendMessage;
 
   MessageField({
     @required this.media,
     @required this.referencedMessage,
+    @required this.onRemoveMedia,
+    @required this.onRemoveReferencedMessage,
     @required this.onChangeMedia,
     @required this.onSendMessage,
   });
@@ -111,148 +116,106 @@ class _MessageFieldState extends State<MessageField> {
         ),
       );
 
-  Widget _buildDark() => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (widget.referencedMessage != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: ReferencedMessageTile(
-                  message: widget.referencedMessage,
-                  borderRadius: 25,
-                ),
-              ),
-            if (widget.media != null) _buildMediaTileDark(),
-            Row(
-              children: (widget.media == null
-                      ? <Widget>[
-                          SimpleIconButton(
-                            // DESIGN: replace with a better button in the future
-                            icon: Icons.photo_camera,
-                            size: 30,
-                            onPressed: _selectImage,
-                          ),
-                          SizedBox(width: 14),
-                          SimpleIconButton(
-                            icon: Icons.videocam,
-                            size: 30,
-                            onPressed: _selectVideo,
-                          ),
-                          SizedBox(width: 14),
-                          Container(
-                            width: 2,
-                            height: 50,
-                            color: MyPalette.white,
-                          ),
-                        ]
-                      : <Widget>[]) +
-                  <Widget>[
-                    SizedBox(width: 20),
-                    Expanded(
-                      child: PlainTextField(
-                        controller: _textController,
-                        hintText: 'Say something',
-                        hintTextColor: MyPalette.gold,
-                        color: MyPalette.white,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    if (_textController.text.isNotEmpty)
-                      TileIconButton(
-                        icon: Icons.send,
-                        onPressed: _sendMessage,
-                      ),
-                  ],
-            ),
-          ],
-        ),
-      );
-
-  Widget _buildLight() => Padding(
-        padding: const EdgeInsets.all(15),
-        child: Container(
-          decoration: BoxDecoration(
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: fromTheme(
+          context,
+          dark: null,
+          light: BoxDecoration(
             color: MyPalette.gold,
             borderRadius: BorderRadius.circular(30),
             boxShadow: [MyPalette.primaryShadow],
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                if (widget.referencedMessage != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    child: ReferencedMessageTile(
-                      message: widget.referencedMessage,
-                      borderRadius: 20,
-                    ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            if (widget.referencedMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 5, bottom: 5),
+                child: Dismissible(
+                  key: Key('dismissible_referenced_message'),
+                  child: ReferencedMessageTile(
+                    message: widget.referencedMessage,
+                    borderRadius: 20,
                   ),
-                if (widget.media != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: _buildMediaTileLight(),
-                  ),
-                Row(
-                  children: <Widget>[
-                    if (widget.media == null)
-                      Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: MyPalette.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [MyPalette.primaryShadow],
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          children: <Widget>[
-                            SimpleIconButton(
-                              // DESIGN: replace with a better button in the future
-                              icon: Icons.photo_camera,
-                              activeColor: MyPalette.black.withOpacity(0.8),
-                              onPressed: _selectImage,
-                            ),
-                            SizedBox(width: 10),
-                            SimpleIconButton(
-                              icon: Icons.videocam,
-                              onPressed: _selectVideo,
-                            ),
-                          ],
-                        ),
-                      ),
-                    SizedBox(width: 20),
-                    Expanded(
-                      child: PlainTextField(
-                        controller: _textController,
-                        hintText: 'Say something',
-                        hintTextColor: MyPalette.white,
-                        color: MyPalette.white,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    if (_textController.text.isNotEmpty)
-                      TileIconButton(
-                        icon: Icons.send,
-                        iconColor: MyPalette.white,
-                        onPressed: _sendMessage,
-                      )
-                  ],
+                  onDismissed: (_) => widget.onRemoveReferencedMessage(),
                 ),
+              ),
+            if (widget.media != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Dismissible(
+                  key: Key('dismissible_media'),
+                  child: fromTheme(
+                    context,
+                    dark: _buildMediaTileDark(),
+                    light: _buildMediaTileLight(),
+                  ),
+                  onDismissed: (_) => widget.onRemoveMedia(),
+                ),
+              ),
+            Row(
+              children: <Widget>[
+                if (widget.media == null)
+                  Container(
+                    height: 40,
+                    decoration: fromTheme(
+                      context,
+                      dark: BoxDecoration(
+                        border: Border(
+                          right: BorderSide(width: 2, color: MyPalette.white),
+                        ),
+                      ),
+                      light: BoxDecoration(
+                        color: MyPalette.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [MyPalette.primaryShadow],
+                      ),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      children: <Widget>[
+                        SimpleIconButton(
+                          icon: Icons.photo_camera,
+                          activeColor: MyPalette.black.withOpacity(0.8),
+                          onPressed: _selectImage,
+                        ),
+                        SizedBox(width: 10),
+                        SimpleIconButton(
+                          icon: Icons.videocam,
+                          activeColor: MyPalette.black.withOpacity(0.8),
+                          onPressed: _selectVideo,
+                        ),
+                      ],
+                    ),
+                  ),
+                SizedBox(width: 20),
+                Expanded(
+                  child: PlainTextField(
+                    controller: _textController,
+                    hintText: 'Say something',
+                    hintTextColor: MyPalette.white,
+                    color: MyPalette.white,
+                  ),
+                ),
+                SizedBox(width: 10),
+                if (_textController.text.isNotEmpty)
+                  TileIconButton(
+                    icon: Icons.send,
+                    iconColor: MyPalette.white,
+                    onPressed: _sendMessage,
+                  )
               ],
             ),
-          ),
+          ],
         ),
-      );
-
-  @override
-  Widget build(BuildContext context) {
-    return ThemeBuilder(
-      buildDark: _buildDark,
-      buildLight: _buildLight,
+      ),
     );
   }
 }

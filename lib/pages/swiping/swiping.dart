@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/enums/chat_type.dart';
+import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
+import 'package:tundr/pages/chat/chat.dart';
 import 'package:tundr/pages/swiping/widgets/options_dark.dart';
 import 'package:tundr/pages/swiping/widgets/options_light.dart';
 import 'package:tundr/repositories/user.dart';
@@ -135,26 +138,31 @@ class _SwipingPageState extends State<SwipingPage> {
         _suggestionWithProfiles[_i].profile.uid,
       );
     }
-    _profileStreamController.addError(_suggestionWithProfiles[_i]);
+    _profileStreamController.addError(_suggestionWithProfiles[_i].profile);
   }
 
   void _like() async {
     if (_i >= _suggestionWithProfiles.length) return;
+
     final suggestionWithProfile = _suggestionWithProfiles[_i];
     final otherUid = suggestionWithProfile.profile.uid;
+    var saySomethingToMatch = false;
 
     if (suggestionWithProfile.wasLiked == null) {
       await SuggestionsService.respondToSuggestion(
-          toUid: otherUid, liked: true);
+        toUid: otherUid,
+        liked: true,
+      );
     } else if (suggestionWithProfile.wasLiked == true) {
-      final undo = await Navigator.push(
+      final matchAction = await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) =>
               ItsAMatchPage(profile: suggestionWithProfile.profile),
         ),
       );
-      if (undo) return;
+      if (matchAction == MatchAction.undo) return;
+      if (matchAction == MatchAction.saySomething) saySomethingToMatch = true;
       await SuggestionsService.matchWith(otherUid);
     }
 
@@ -163,6 +171,22 @@ class _SwipingPageState extends State<SwipingPage> {
       likedUser: true,
       isRespondedSuggestion: suggestionWithProfile.wasLiked != null,
     );
+    if (saySomethingToMatch) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatPage(
+            chat: Chat(
+              id: null,
+              otherProfile: suggestionWithProfile.profile,
+              wallpaperUrl: '',
+              lastRead: null,
+              type: ChatType.newMatch,
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   @override

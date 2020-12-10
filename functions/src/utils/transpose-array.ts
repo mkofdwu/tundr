@@ -1,2 +1,2 @@
-export default (arr: Array<Array<number>>) =>
-  arr.map((_, colIndex) => arr.map((row) => row[colIndex]));
+export default (array: Array<Array<number>>) =>
+  array[0].map((_, colIndex) => array.map((row) => row[colIndex]));

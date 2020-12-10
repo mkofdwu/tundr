@@ -96,10 +96,4 @@ class ChatsService {
         'readOtherUsersMessages',
         {'otherUid': otherUid, 'chatId': chatId},
       );
-
-  // using http calls to firebase cloud functions
-
-  // true or false depending on whether both users consent to read receipts
-  static Future<bool> checkReadReceipts(String otherUid) =>
-      callHttpsFunction<bool>('checkReadReceipts', {'otherUid': otherUid});
 }

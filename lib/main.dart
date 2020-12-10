@@ -58,6 +58,7 @@ class _TundrAppState extends State<TundrApp> {
   Future<void> _loadUser() async {
     await Firebase.initializeApp();
     AuthService.currentUserStream().listen((firebaseUser) async {
+      if (!mounted) return;
       setState(() => _loadingUser = true);
       if (firebaseUser == null) {
         setState(() => _loadingUser = false);

@@ -17,8 +17,7 @@ import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 
-import 'widgets/other_message_tile.dart';
-import 'widgets/my_message_tile.dart';
+import 'widgets/message_tile.dart';
 import 'widgets/unsent_message_tile.dart';
 
 class ChatPage extends StatefulWidget {
@@ -48,7 +47,7 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((duration) async {
       if (widget.chat.type != ChatType.nonExistent &&
-          await ChatsService.checkReadReceipts(widget.chat.otherProfile.uid)) {
+          widget.chat.type != ChatType.newMatch) {
         await ChatsService.readOtherUsersMessages(
           widget.chat.otherProfile.uid,
           widget.chat.id,
@@ -96,6 +95,8 @@ class _ChatPageState extends State<ChatPage> {
     );
 
     setState(() {
+      _media = null;
+      _referencedMessage = null;
       _unsentMessages.add(message);
     });
 
@@ -128,9 +129,6 @@ class _ChatPageState extends State<ChatPage> {
       setState(() {
         widget.chat.type = ChatType.normal;
         _unsentMessages.removeAt(unsentMessageIndex);
-
-        _media = null;
-        _referencedMessage = null;
       });
     }
   }
@@ -184,7 +182,7 @@ class _ChatPageState extends State<ChatPage> {
               controller: _scrollController,
               padding: EdgeInsets.only(
                 top: 50,
-                bottom: 70.0 +
+                bottom: 90.0 +
                     (_media == null ? 0 : 220) +
                     (_referencedMessage == null ? 0 : 110),
               ),
@@ -209,29 +207,15 @@ class _ChatPageState extends State<ChatPage> {
                   child: Align(
                     alignment:
                         fromMe ? Alignment.centerRight : Alignment.centerLeft,
-                    child: fromMe
-                        ? MyMessageTile(
-                            chatId: widget.chat.id,
-                            otherUserName: widget.chat.otherProfile.name,
-                            message: message,
-                            onViewReferencedMessage: () =>
-                                _viewReferencedMessage(messageIndex),
-                            onReferenceMessage: () =>
-                                setState(() => _referencedMessage = message),
-                            onDeleteMessage: () => _deleteMessage(message.id),
-                          )
-                        : OtherMessageTile(
-                            chatId: widget.chat.id,
-                            otherUserName: widget.chat.otherProfile.name,
-                            profileImageUrl:
-                                widget.chat.otherProfile.profileImageUrl,
-                            message: message,
-                            viewReferencedMessage: () =>
-                                _viewReferencedMessage(messageIndex),
-                            onReferenceMessage: () =>
-                                setState(() => _referencedMessage = message),
-                            onDeleteMessage: () => _deleteMessage(message.id),
-                          ),
+                    child: MessageTile(
+                      message: message,
+                      fromMe: fromMe,
+                      onViewReferencedMessage: () =>
+                          _viewReferencedMessage(messageIndex),
+                      onReferenceMessage: () =>
+                          setState(() => _referencedMessage = message),
+                      onDeleteMessage: () => _deleteMessage(message.id),
+                    ),
                   ),
                 );
               },
@@ -294,12 +278,19 @@ class _ChatPageState extends State<ChatPage> {
                 bottom: 0,
                 width: MediaQuery.of(context).size.width,
                 child: MessageField(
-                    media: _media,
-                    referencedMessage: _referencedMessage,
-                    onChangeMedia: (newMedia) {
-                      setState(() => _media = newMedia);
-                    },
-                    onSendMessage: _sendMessage),
+                  media: _media,
+                  referencedMessage: _referencedMessage,
+                  onRemoveMedia: () {
+                    setState(() => _media = null);
+                  },
+                  onRemoveReferencedMessage: () {
+                    setState(() => _referencedMessage = null);
+                  },
+                  onChangeMedia: (newMedia) {
+                    setState(() => _media = newMedia);
+                  },
+                  onSendMessage: _sendMessage,
+                ),
               ),
               if (_showChatOptions)
                 Positioned(

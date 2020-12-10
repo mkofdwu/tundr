@@ -132,7 +132,9 @@ class SuggestionCardState extends State<SuggestionCard>
     }, onError: (error) {
       // undo to this profile
       setState(() => _profile = error);
-      // TODO FIXME
+      _fadeInController.reset();
+      _likeController.reset();
+      _nopeController.reset();
       _reset();
     });
   }

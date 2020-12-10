@@ -9,6 +9,12 @@ import 'package:tundr/pages/chat/chat.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/chat_type.dart';
 
+enum MatchAction {
+  saySomething,
+  undo,
+  continue_,
+}
+
 class ItsAMatchPage extends StatefulWidget {
   final UserProfile profile;
 
@@ -87,7 +93,7 @@ class _ItsAMatchPageState extends State<ItsAMatchPage> {
                 ),
                 SizedBox(height: 14),
                 Text(
-                  'Donald liked you too!',
+                  '${widget.profile.name} liked you too!',
                   style: TextStyle(color: MyPalette.white, fontSize: 16),
                 ),
               ],
@@ -121,21 +127,7 @@ class _ItsAMatchPageState extends State<ItsAMatchPage> {
               onTapDown: (_) => setState(() => _saySomethingPressed = true),
               onTapUp: (_) {
                 setState(() => _saySomethingPressed = false);
-                Navigator.pop(context, false);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatPage(
-                      chat: Chat(
-                        id: null,
-                        otherProfile: widget.profile,
-                        wallpaperUrl: '',
-                        lastRead: null,
-                        type: ChatType.newMatch,
-                      ),
-                    ),
-                  ),
-                );
+                Navigator.pop(context, MatchAction.saySomething);
               },
               onTapCancel: () => setState(() => _saySomethingPressed = false),
             ),
@@ -183,7 +175,7 @@ class _ItsAMatchPageState extends State<ItsAMatchPage> {
               onTapDown: (_) => setState(() => _undoPressed = true),
               onTapUp: (_) {
                 setState(() => _undoPressed = false);
-                Navigator.pop(context, true);
+                Navigator.pop(context, MatchAction.undo);
               },
               onTapCancel: () => setState(() => _undoPressed = false),
             ),
@@ -224,7 +216,7 @@ class _ItsAMatchPageState extends State<ItsAMatchPage> {
               onTapDown: (_) => setState(() => _continuePressed = true),
               onTapUp: (_) {
                 setState(() => _continuePressed = false);
-                Navigator.pop(context, false);
+                Navigator.pop(context, MatchAction.continue_);
               },
               onTapCancel: () => setState(() => _continuePressed = false),
             ),
