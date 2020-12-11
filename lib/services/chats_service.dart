@@ -79,7 +79,7 @@ class ChatsService {
         id: '',
         otherProfile: otherProfile,
         wallpaperUrl: '',
-        lastRead: null,
+        lastReadMessageId: null,
         type: ChatType.nonExistent,
       );
     }
@@ -96,4 +96,18 @@ class ChatsService {
         'readOtherUsersMessages',
         {'otherUid': otherUid, 'chatId': chatId},
       );
+
+  static Future<void> updateLastReadMessageId(String uid, String chatId) async {
+    final lastReadMessageId = (await chatsRef
+            .doc(chatId)
+            .collection('messages')
+            .orderBy('sentOn', descending: true)
+            .limit(1)
+            .get())
+        .docs
+        .first
+        .id;
+    await updateChatDetails(
+        uid, chatId, {'lastReadMessageId': lastReadMessageId});
+  }
 }

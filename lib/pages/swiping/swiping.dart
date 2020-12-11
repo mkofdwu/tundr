@@ -180,7 +180,7 @@ class _SwipingPageState extends State<SwipingPage> {
               id: null,
               otherProfile: suggestionWithProfile.profile,
               wallpaperUrl: '',
-              lastRead: null,
+              lastReadMessageId: null,
               type: ChatType.newMatch,
             ),
           ),

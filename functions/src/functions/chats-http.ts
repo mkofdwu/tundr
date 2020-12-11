@@ -82,7 +82,7 @@ export const startConversation = functions.https.onCall(
     const chatDoc = await chatsRef.add({
       participants: [uid, otherUid],
     });
-    chatDoc.collection('messages').add({
+    await chatDoc.collection('messages').add({
       senderUid: uid,
       sentOn: admin.firestore.Timestamp.now(),
       readOn: null,
@@ -94,7 +94,7 @@ export const startConversation = functions.https.onCall(
     await usersPrivateInfoRef.doc(uid).collection('chats').doc(chatDoc.id).set({
       uid: otherUid,
       wallpaperUrl: '',
-      lastRead: admin.firestore.Timestamp.now(),
+      lastReadMessageId: null, // user is still in chat page
       type: 3, // chattype.normal
     });
     await usersPrivateInfoRef
@@ -104,7 +104,7 @@ export const startConversation = functions.https.onCall(
       .set({
         uid: uid,
         wallpaperUrl: '',
-        lastRead: admin.firestore.Timestamp.now(),
+        lastReadMessageId: null, // null means all messages have been read, no separator will be drawn
         type: 4, // chattype.unknown
       });
     return { result: chatDoc.id };

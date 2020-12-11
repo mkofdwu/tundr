@@ -17,6 +17,7 @@ import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
+import 'package:tundr/utils/show_info_dialog.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 
 import 'widgets/message_tile.dart';
@@ -44,6 +45,8 @@ class _ChatPageState extends State<ChatPage> {
   bool _showChatOptions = false;
   final List<Message> _unsentMessages = [];
 
+  final Map<String, GlobalKey> messageIdToGlobalKey = {};
+
   @override
   void initState() {
     super.initState();
@@ -54,20 +57,38 @@ class _ChatPageState extends State<ChatPage> {
           widget.chat.otherProfile.uid,
           widget.chat.id,
         );
-        if (mounted) {
-          await ChatsService.updateChatDetails(
-            Provider.of<User>(context, listen: false).profile.uid,
-            widget.chat.id,
-            {'lastRead': Timestamp.now()},
-          );
-        }
       }
-      FeatureDiscovery.discoverFeatures(context, <String>['message_tile']);
+      if (mounted) {
+        FeatureDiscovery.discoverFeatures(context, <String>['message_tile']);
+      }
     });
   }
 
-  void _viewReferencedMessage(i) {
-    // FUTURE: IMPLEMENT
+  @override
+  void deactivate() {
+    print('chat page deactivated');
+    ChatsService.updateLastReadMessageId(
+      Provider.of<User>(context, listen: false).profile.uid,
+      widget.chat.id,
+    );
+    super.deactivate();
+  }
+
+  void _viewReferencedMessage(messageId) {
+    if (messageIdToGlobalKey.containsKey(messageId)) {
+      Scrollable.ensureVisible(
+        messageIdToGlobalKey[messageId].currentContext,
+        duration: Duration(milliseconds: 400),
+        alignment: 0.8, // 80% from the bottom of the screen
+      );
+    } else {
+      showInfoDialog(
+        context: context,
+        title: 'Could not find message',
+        content:
+            "It's likely this message has not been loaded yet. Try scrolling to the top to view more messages.",
+      );
+    }
   }
 
   void _deleteMessage(String messageId) {
@@ -95,6 +116,7 @@ class _ChatPageState extends State<ChatPage> {
       _media = null;
       _referencedMessage = null;
       _unsentMessages.add(message);
+      widget.chat.lastReadMessageId = null;
     });
 
     if (message.media != null) {
@@ -191,7 +213,7 @@ class _ChatPageState extends State<ChatPage> {
                 top: 100,
                 bottom: 90.0 +
                     (_media == null ? 0 : 220) +
-                    (_referencedMessage == null ? 0 : 110),
+                    (_referencedMessage == null ? 0 : 160),
               ),
               itemCount: _unsentMessages.length + messages.length,
               itemBuilder: (context, i) {
@@ -204,44 +226,63 @@ class _ChatPageState extends State<ChatPage> {
                 final message = messages[messageIndex];
                 final fromMe = message.sender.uid ==
                     Provider.of<User>(context, listen: false).profile.uid;
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  child: Align(
-                    alignment:
-                        fromMe ? Alignment.centerRight : Alignment.centerLeft,
-                    child: DescribedFeatureOverlay(
-                      featureId: 'message_tile',
-                      tapTarget: SizedBox.shrink(),
-                      title: Text('Message options'),
-                      description: Text(
-                          'Long press on this message tile to delete or reply to it'),
-                      targetColor: MyPalette.white.withOpacity(0.8),
-                      backgroundColor: Theme.of(context).accentColor,
-                      child: MessageTile(
-                        message: message,
-                        fromMe: fromMe,
-                        onViewReferencedMessage: () {
-                          _viewReferencedMessage(messageIndex);
-                        },
-                        onReferenceMessage: () {
-                          setState(() => _referencedMessage = message);
-                          FeatureDiscovery.discoverFeatures(
-                              context, <String>['dismissible_reply']);
-                        },
-                        onDeleteMessage: () {
-                          _deleteMessage(message.id);
-                        },
+                assert(message.id != null);
+                messageIdToGlobalKey[message.id] = GlobalKey();
+
+                return Column(
+                  children: [
+                    Align(
+                      alignment:
+                          fromMe ? Alignment.centerRight : Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        child: DescribedFeatureOverlay(
+                          featureId: 'message_tile',
+                          tapTarget: SizedBox.shrink(),
+                          title: Text('Message options'),
+                          description: Text(
+                              'Long press on this message tile to delete or reply to it'),
+                          targetColor: MyPalette.white.withOpacity(0.8),
+                          backgroundColor: Theme.of(context).accentColor,
+                          child: MessageTile(
+                            key: messageIdToGlobalKey[
+                                message.id], // ValueKey(message.id),
+                            message: message,
+                            fromMe: fromMe,
+                            onViewReferencedMessage: () {
+                              _viewReferencedMessage(
+                                  message.referencedMessage.id);
+                            },
+                            onReferenceMessage: () {
+                              setState(() => _referencedMessage = message);
+                              FeatureDiscovery.discoverFeatures(
+                                  context, <String>['dismissible_reply']);
+                            },
+                            onDeleteMessage: () {
+                              _deleteMessage(message.id);
+                            },
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    if (message.id == widget.chat.lastReadMessageId && i > 0)
+                      _buildUnreadMessagesLabel(i),
+                  ],
                 );
               },
             ),
           );
         },
+      );
+
+  Widget _buildUnreadMessagesLabel(numUnreadMessages) => Container(
+        height: 40,
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.1),
+        child: Center(child: Text('$numUnreadMessages unread messages')),
       );
 
   @override

@@ -6,7 +6,7 @@ class UserPrivateInfo {
   String phoneNumber;
   List<String>
       popularityHistory; // list of (timestamp, score) pairs formatted as 'timestamp:score'
-  double popularityScore;
+  num popularityScore;
   UserSettings settings;
   List<String> dailyGeneratedSuggestions;
   Map<String, bool> respondedSuggestions;

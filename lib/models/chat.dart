@@ -7,14 +7,14 @@ class Chat {
   String id;
   UserProfile otherProfile;
   String wallpaperUrl;
-  DateTime lastRead;
+  String lastReadMessageId;
   ChatType type;
 
   Chat({
     this.id,
     this.otherProfile,
     this.wallpaperUrl,
-    this.lastRead,
+    this.lastReadMessageId,
     this.type,
   });
 
@@ -24,7 +24,7 @@ class Chat {
       id: doc.id,
       otherProfile: await UsersService.getUserProfile(data['uid']),
       wallpaperUrl: data['wallpaperUrl'],
-      lastRead: data['lastRead'].toDate(),
+      lastReadMessageId: data['lastReadMessageId'],
       type: ChatType.values[data['type']],
     );
   }

@@ -24,6 +24,7 @@ class ReferencedMessageTile extends StatelessWidget {
       decoration: fromTheme(
         context,
         dark: BoxDecoration(
+          color: MyPalette.white,
           border: Border.all(color: MyPalette.black, width: 1),
         ),
         light: BoxDecoration(

@@ -29,7 +29,7 @@ class _MatchTileState extends State<MatchTile> {
               id: null,
               otherProfile: profile,
               wallpaperUrl: '',
-              lastRead: null,
+              lastReadMessageId: null,
               type: ChatType.newMatch,
             ),
           ),
