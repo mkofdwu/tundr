@@ -87,7 +87,6 @@ class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
             ),
             SizedBox(height: 50),
             LightTileButton(
-              // FUTURE: change colour if setup done
               child: Text(
                 'About me',
                 style: TextStyle(color: MyPalette.black, fontSize: 20),

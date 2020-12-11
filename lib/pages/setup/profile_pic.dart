@@ -121,7 +121,6 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
       );
 
   Widget _buildImageAndReplacementOptions() {
-    // FUTURE: improve this
     final profilePic =
         Provider.of<RegistrationInfo>(context, listen: false).profilePic;
     return Column(

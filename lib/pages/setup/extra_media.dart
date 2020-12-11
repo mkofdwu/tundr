@@ -49,10 +49,8 @@ class _SetupExtraMediaPageState extends State<SetupExtraMediaPage> {
                 SizedBox(height: 50),
                 LayoutBuilder(
                   builder: (context, constraints) => ExtraMediaGrid(
-                    size: min(
-                        constraints.maxWidth,
-                        MediaQuery.of(context).size.height -
-                            170), // FIXME: FUTURE: how to get actual available height (by restricting height of column?)
+                    size: min(constraints.maxWidth,
+                        MediaQuery.of(context).size.height - 170),
                     extraMedia:
                         Provider.of<RegistrationInfo>(context, listen: false)
                             .extraMedia,

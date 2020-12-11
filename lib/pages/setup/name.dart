@@ -24,7 +24,6 @@ class _SetupNamePageState extends State<SetupNamePage> {
           pageBuilder: (context, animation1, animation2) => SetupBirthdayPage(),
           transitionsBuilder: (context, animation1, animation2, child) {
             return SlideTransition(
-              // FUTURE: curved animation (ease out)
               position: Tween<Offset>(
                 begin: Offset(0, 1),
                 end: Offset(0, 0),

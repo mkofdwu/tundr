@@ -16,7 +16,6 @@ class UnsentMessageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // FUTURE: improve on this design
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,

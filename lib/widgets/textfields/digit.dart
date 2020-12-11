@@ -9,8 +9,7 @@ class DigitEntry extends StatefulWidget {
   final List<int> validDigits;
   final bool autoFocus;
   final bool moveFocus;
-  final DigitEntryController
-      controller; // FUTURE: FIXME: come up with a better solution
+  final DigitEntryController controller;
   final Function(int) onChanged;
 
   DigitEntry({
@@ -32,7 +31,6 @@ class _DigitEntryState extends State<DigitEntry> {
   bool _containsDigit = false;
 
   _DigitEntryState(DigitEntryController digitEntryController) {
-    // FUTURE: FIXME: come up with a better solution
     if (digitEntryController != null) {
       digitEntryController.clear = clear;
       digitEntryController.setDigit = setDigit;

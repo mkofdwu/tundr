@@ -43,8 +43,7 @@ class _TileIconButtonState extends State<TileIconButton> {
               : widget.iconColor ?? Theme.of(context).colorScheme.onPrimary,
         ),
       ),
-      onTapDown: (TapDownDetails details) => setState(
-          () => _pressed = true), // FUTURE: animate fade / grow transition?
+      onTapDown: (TapDownDetails details) => setState(() => _pressed = true),
       onTapUp: (TapUpDetails details) {
         setState(() => _pressed = false);
         widget.onPressed();

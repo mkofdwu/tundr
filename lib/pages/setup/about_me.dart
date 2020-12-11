@@ -49,7 +49,7 @@ class _SetupAboutMePageState extends State<SetupAboutMePage> {
               Padding(
                 padding: EdgeInsets.only(left: 20, top: 10),
                 child: Text(
-                  'Write a short, interesting description about yourself\n(not more than 200 characters)', // FUTURE: change this text
+                  'Write a short, interesting description about yourself\n(not more than 200 characters)',
                   style: TextStyle(color: MyPalette.black, fontSize: 12),
                 ),
               ),

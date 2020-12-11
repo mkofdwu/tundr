@@ -12,7 +12,6 @@ class NotificationsSettingsPage extends StatelessWidget {
     final settings =
         Provider.of<User>(context, listen: false).privateInfo.settings;
     return Scaffold(
-      // FUTURE: DESIGN: make this nicer
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

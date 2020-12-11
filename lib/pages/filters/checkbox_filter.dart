@@ -17,7 +17,6 @@ class CheckboxFilterPage extends StatefulWidget {
 class _CheckboxFilterPageState extends State<CheckboxFilterPage> {
   @override
   void initState() {
-    // FUTURE: nicer solution?
     super.initState();
     widget.filter.options ??= [];
   }
@@ -59,8 +58,7 @@ class _CheckboxFilterPageState extends State<CheckboxFilterPage> {
                           ),
                           child: SimpleCheckbox(
                             text: option,
-                            value: widget.filter.options.contains(
-                                option), // FUTURE: or Map<String, bool>?
+                            value: widget.filter.options.contains(option),
                             onChanged: (value) {
                               if (value) {
                                 widget.filter.options.add(option);

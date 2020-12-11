@@ -90,9 +90,9 @@ class _MessageFieldState extends State<MessageField> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [MyPalette.primaryShadow],
-        ), // FUTURE: DESIGN
+        ),
         clipBehavior: Clip.antiAlias,
-        child: VideoThumbnail(media: widget.media),
+        child: MediaThumbnail(widget.media),
       );
 
   @override

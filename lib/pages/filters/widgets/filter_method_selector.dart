@@ -13,7 +13,6 @@ class FilterMethodSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // FUTURE: temporary fix, replace with better custom widget in the future
     return Theme(
       data: ThemeData(canvasColor: Theme.of(context).dialogBackgroundColor),
       child: DropdownButton<FilterMethod>(

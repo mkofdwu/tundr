@@ -12,7 +12,6 @@ import 'package:tundr/widgets/rebuilder.dart';
 import 'package:tundr/widgets/textfields/underline.dart';
 
 class ConfirmDeleteAccountPage extends StatelessWidget {
-  // FUTURE: fix this design
   final TextEditingController _passwordController = TextEditingController();
 
   void _deleteAccount(BuildContext context) async {

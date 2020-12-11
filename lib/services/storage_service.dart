@@ -21,7 +21,6 @@ class StorageService {
     String oldUrl,
     String prefix = '',
   }) async {
-    // FIXME: FUTURE: IMPROVE AND CLEAN UP
     // assert(media.url == null ? media.isInBytes : media.isLocalFile);
     assert(uid != null);
 
@@ -45,7 +44,7 @@ class StorageService {
             '${tempDir.path}/$id.jpg',
             quality: 70,
           );
-          storagePath = 'images/$uid/${prefix}_$id'; // FUTURE: improve this
+          storagePath = 'images/$uid/${prefix}_$id';
           break;
         case MediaType.video:
           compressedFile = File((await VideoCompress.compressVideo(

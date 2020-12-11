@@ -1,5 +1,3 @@
-// FUTURE: replace this with a huge list of manual options
-
 import 'package:flutter/material.dart';
 import 'package:tundr/models/personal_info_field.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';

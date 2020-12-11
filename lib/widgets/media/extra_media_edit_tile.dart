@@ -65,7 +65,6 @@ class ExtraMediaEditTile extends StatelessWidget {
   }
 
   void _confirmRemoveImage(BuildContext context) async {
-    // temporary fix FUTURE: improve
     final confirm = await showQuestionDialog(
       context: context,
       title: 'Are you sure you would like to remove this image?',

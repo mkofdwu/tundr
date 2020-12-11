@@ -16,7 +16,6 @@ class _SetupThemePageState extends State<SetupThemePage> {
     Provider.of<ThemeManager>(context, listen: false).theme = theme;
     await Provider.of<User>(context, listen: false)
         .updatePrivateInfo({'theme': theme == ThemeMode.dark ? 0 : 1});
-    // TODO FIXME setup extra info pages?
     Rebuilder.rebuild(context);
   }
 

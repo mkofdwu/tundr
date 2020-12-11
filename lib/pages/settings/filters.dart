@@ -13,8 +13,6 @@ import 'package:tundr/enums/personal_info_type.dart';
 import 'package:tundr/constants/personal_info_fields.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 
-// FUTURE: find a better way to organize filters
-
 class FiltersSettingsPage extends StatefulWidget {
   @override
   _FiltersSettingsPageState createState() => _FiltersSettingsPageState();
