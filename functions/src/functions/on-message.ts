@@ -37,6 +37,7 @@ export default functions.firestore
         ).docs.map((doc) => doc.id)
       );
     });
+    if (tokens.length == 0) return;
 
     const payload: admin.messaging.MessagingPayload = {
       notification: {
@@ -44,10 +45,10 @@ export default functions.firestore
         body: message.text,
         clickAction: 'FLUTTER_NOTIFICATION_CLICK',
       },
-      // data: {
-      //     type: "newMessage",
-      //     id: message.id
-      // }
+      data: {
+        type: 'newMessage',
+        id: context.params.chatId,
+      },
     };
     return fcm.sendToDevice(tokens, payload);
   });

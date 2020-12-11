@@ -91,11 +91,19 @@ class ChatsService {
     return _userChatRef(uid, chatId).update(details);
   }
 
-  static Future<void> readOtherUsersMessages(String otherUid, String chatId) =>
-      callHttpsFunction(
-        'readOtherUsersMessages',
-        {'otherUid': otherUid, 'chatId': chatId},
-      );
+  static Future<void> readOtherUsersMessages(
+      String otherUid, String chatId) async {
+    final unreadMessageDocs = (await chatsRef
+            .doc(chatId)
+            .collection('messages')
+            .where('senderUid', isEqualTo: otherUid)
+            .where('readOn', isNull: true)
+            .get())
+        .docs;
+    for (final doc in unreadMessageDocs) {
+      await doc.reference.update({'readOn': Timestamp.now()});
+    }
+  }
 
   static Future<void> updateLastReadMessageId(String uid, String chatId) async {
     final lastReadMessageId = (await chatsRef

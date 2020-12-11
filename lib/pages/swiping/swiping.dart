@@ -138,7 +138,8 @@ class _SwipingPageState extends State<SwipingPage> {
         _suggestionWithProfiles[_i].profile.uid,
       );
     }
-    _profileStreamController.addError(_suggestionWithProfiles[_i].profile);
+    _addProfileToStream();
+    // _profileStreamController.addError(_suggestionWithProfiles[_i].profile);
   }
 
   void _like() async {

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -53,10 +52,16 @@ class _ChatPageState extends State<ChatPage> {
     WidgetsBinding.instance.addPostFrameCallback((duration) async {
       if (widget.chat.type != ChatType.nonExistent &&
           widget.chat.type != ChatType.newMatch) {
-        await ChatsService.readOtherUsersMessages(
-          widget.chat.otherProfile.uid,
-          widget.chat.id,
-        );
+        if (Provider.of<User>(context, listen: false)
+            .privateInfo
+            .settings
+            .readReceipts) {
+          // only send read receipts if the user's settings allows
+          await ChatsService.readOtherUsersMessages(
+            widget.chat.otherProfile.uid,
+            widget.chat.id,
+          );
+        }
       }
       if (mounted) {
         FeatureDiscovery.discoverFeatures(context, <String>['message_tile']);
@@ -167,6 +172,7 @@ class _ChatPageState extends State<ChatPage> {
           children: <Widget>[
             TileIconButton(
               icon: Icons.arrow_back,
+              iconColor: MyPalette.white,
               onPressed: () => Navigator.pop(context),
             ),
             SizedBox(width: 10),
@@ -174,7 +180,7 @@ class _ChatPageState extends State<ChatPage> {
               child: GestureDetector(
                 child: Text(
                   widget.chat.otherProfile.name,
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 20, color: MyPalette.white),
                 ),
                 onTap: () async => Navigator.pushNamed(
                   context,
@@ -185,6 +191,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
             TileIconButton(
               icon: Icons.more_vert,
+              iconColor: MyPalette.white,
               onPressed: () => setState(() => _showChatOptions = true),
             ),
           ],
@@ -211,7 +218,7 @@ class _ChatPageState extends State<ChatPage> {
               controller: _scrollController,
               padding: EdgeInsets.only(
                 top: 100,
-                bottom: 90.0 +
+                bottom: 120.0 +
                     (_media == null ? 0 : 220) +
                     (_referencedMessage == null ? 0 : 160),
               ),
@@ -252,6 +259,10 @@ class _ChatPageState extends State<ChatPage> {
                                 message.id], // ValueKey(message.id),
                             message: message,
                             fromMe: fromMe,
+                            readReceipts: Provider.of<User>(context)
+                                .privateInfo
+                                .settings
+                                .readReceipts,
                             onViewReferencedMessage: () {
                               _viewReferencedMessage(
                                   message.referencedMessage.id);
@@ -308,7 +319,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               _buildMessagesList(),
               Container(
-                height: 120,
+                height: 140,
                 decoration: BoxDecoration(
                   gradient: fromTheme(
                     context,
@@ -323,7 +334,7 @@ class _ChatPageState extends State<ChatPage> {
               Positioned(
                 bottom: 0,
                 child: Container(
-                  height: _media == null ? 100 : 300,
+                  height: _media == null ? 140 : 300,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     gradient: fromTheme(
@@ -344,15 +355,19 @@ class _ChatPageState extends State<ChatPage> {
                       if (snapshot.hasData && snapshot.data) {
                         return Padding(
                           padding: const EdgeInsets.only(
-                            left: 60,
-                            right: 60,
-                            bottom: 40,
+                            left: 40,
+                            right: 40,
+                            bottom: 30,
                           ),
                           child: Text(
-                            'You so you can no longer send messages to this chat because ' +
+                            'You can no longer send messages to this chat because ' +
                                 widget.chat.otherProfile.name +
                                 ' blocked you.',
-                            style: TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: MyPalette.white,
+                            ),
                           ),
                         );
                       }

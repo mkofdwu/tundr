@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/utils/from_theme.dart';
-import 'package:tundr/widgets/loaders/loader.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'referenced_message_tile.dart';
 

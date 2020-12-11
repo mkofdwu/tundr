@@ -44,9 +44,64 @@ class _MainProfilePageState extends State<MainProfilePage> {
     Navigator.pushNamed(context, route, arguments: profile);
   }
 
+  Widget _buildUserAction(myProfile, otherProfile) => SafeArea(
+        child: Align(
+          alignment: Alignment.topRight,
+          child: Provider.of<User>(context, listen: false)
+                  .privateInfo
+                  .blocked
+                  .contains(otherProfile.uid)
+              ? SizedBox(
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: MyTextButton(
+                        text: 'Unblock',
+                        onTap: () async {
+                          Provider.of<User>(context, listen: false)
+                              .privateInfo
+                              .blocked
+                              .remove(otherProfile.uid);
+                          await Provider.of<User>(context, listen: false)
+                              .writeField('blocked', UserPrivateInfo);
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ),
+                )
+              : FutureBuilder(
+                  future: UsersService.canTalkTo(otherProfile.uid),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData || !snapshot.data) {
+                      return SizedBox.shrink();
+                    }
+                    return TileIconButton(
+                      icon: Icons.chat_bubble_outline,
+                      iconColor: MyPalette.white,
+                      onPressed: () async {
+                        final chat = await ChatsService.getChatFromProfile(
+                          myProfile.uid,
+                          otherProfile,
+                        );
+                        return Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatPage(chat: chat),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
-    final myProfile = Provider.of<User>(context, listen: false).profile;
+    final myProfile = Provider.of<User>(context).profile;
     final otherProfile =
         ModalRoute.of(context).settings.arguments as UserProfile;
     return ScrollDownPage(
@@ -87,65 +142,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
           ),
           MyBackButton(iconColor: MyPalette.white),
           if (otherProfile.uid != myProfile.uid)
-            SafeArea(
-              child: Align(
-                alignment: Alignment.topRight,
-                child: FutureBuilder(
-                  future: UsersService.canTalkTo(otherProfile.uid),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) return SizedBox.shrink();
-
-                    final iBlockedUser =
-                        Provider.of<User>(context, listen: false)
-                            .privateInfo
-                            .blocked
-                            .contains(otherProfile.uid);
-                    final canTalk = snapshot.data;
-
-                    if (iBlockedUser) {
-                      return SizedBox(
-                        height: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 20),
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: MyTextButton(
-                              text: 'Unblock',
-                              onTap: () async {
-                                Provider.of<User>(context, listen: false)
-                                    .privateInfo
-                                    .blocked
-                                    .remove(otherProfile.uid);
-                                await Provider.of<User>(context, listen: false)
-                                    .writeField('blocked', UserPrivateInfo);
-                                setState(() {});
-                              },
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                    if (canTalk) {
-                      return TileIconButton(
-                        icon: Icons.chat_bubble_outline,
-                        iconColor: MyPalette.white,
-                        onPressed: () async {
-                          final chat = await ChatsService.getChatFromProfile(
-                              myProfile.uid, otherProfile);
-                          return Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChatPage(chat: chat),
-                            ),
-                          );
-                        },
-                      );
-                    }
-                    return SizedBox.shrink();
-                  },
-                ),
-              ),
-            ),
+            _buildUserAction(myProfile, otherProfile),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(

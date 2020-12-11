@@ -14,6 +14,7 @@ import 'referenced_message_tile.dart';
 class MessageTile extends StatelessWidget {
   final Message message;
   final bool fromMe;
+  final bool readReceipts;
   final Function onViewReferencedMessage;
   final Function onReferenceMessage;
   final Function onDeleteMessage;
@@ -22,6 +23,7 @@ class MessageTile extends StatelessWidget {
     Key key,
     @required this.message,
     @required this.fromMe,
+    @required this.readReceipts,
     @required this.onViewReferencedMessage,
     @required this.onReferenceMessage,
     @required this.onDeleteMessage,
@@ -159,7 +161,8 @@ class MessageTile extends StatelessWidget {
                     Icon(
                       message.readOn == null ? Icons.done : Icons.done_all,
                       size: 16,
-                      color: message.readOn == null
+                      color: message.readOn == null ||
+                              !readReceipts // if the user disables read receipts they will also be unable to see
                           ? MyPalette.grey
                           : MyPalette.gold,
                     ),

@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 class MyPalette {
   // colors
   static const Color white = Color(0xFFFFFFFF);
-  static const Color grey = Color(0xFFBBBBBB);
+  static const Color grey = Color(0xFF999999);
   static const Color black = Color(0xFF000000);
   static const Color green = Color(0xFF014421);
   static const Color gold = Color(0xFFAC9227);

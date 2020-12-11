@@ -155,6 +155,7 @@ export const matchWith = functions.https.onCall(async (data, context) => {
     const tokens: string[] = (
       await usersPrivateInfoRef.doc(otherUid).collection('tokens').get()
     ).docs.map((doc) => doc.id);
+    if (tokens.length == 0) return;
     const userProfile = (await userProfilesRef.doc(uid).get()).data();
     if (userProfile == null)
       throw `user with uid ${uid} initiated match but seems to have disappeared`;

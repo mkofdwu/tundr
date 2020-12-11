@@ -2,12 +2,8 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/user_profile.dart';
-
-import 'package:tundr/pages/chat/chat.dart';
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/enums/chat_type.dart';
 
 enum MatchAction {
   saySomething,
