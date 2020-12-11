@@ -71,10 +71,10 @@ class MessageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // FUTURE: improve on this design
     return Row(
       mainAxisAlignment:
           fromMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (!fromMe) _buildOtherProfilePic(context),
@@ -87,7 +87,7 @@ class MessageTile extends StatelessWidget {
             children: <Widget>[
               Container(
                 constraints: BoxConstraints(maxWidth: 200),
-                padding: fromMe ? const EdgeInsets.all(10) : EdgeInsets.zero,
+                padding: fromMe ? const EdgeInsets.all(8) : EdgeInsets.zero,
                 decoration: fromMe
                     ? fromTheme(
                         context,
@@ -106,7 +106,7 @@ class MessageTile extends StatelessWidget {
                   children: <Widget>[
                     if (message.referencedMessage != null)
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 8),
                         child: GestureDetector(
                           child: ReferencedMessageTile(
                             message: message.referencedMessage,
@@ -116,7 +116,7 @@ class MessageTile extends StatelessWidget {
                       ),
                     if (message.media != null)
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 8),
                         child: GestureDetector(
                           child: Container(
                             child: ClipRRect(

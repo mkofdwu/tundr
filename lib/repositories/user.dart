@@ -38,9 +38,10 @@ class User {
   }
 
   Future<void> updateOnline(bool online) {
-    return userStatusesRef
-        .doc(profile.uid)
-        .update({'online': true, 'lastSeen': online ? null : Timestamp.now()});
+    return userStatusesRef.doc(profile.uid).update({
+      'online': online,
+      'lastSeen': online ? null : Timestamp.now(),
+    });
   }
 
   Future<void> writeField(String field, Type type) async {

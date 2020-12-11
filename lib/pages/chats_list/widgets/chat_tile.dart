@@ -61,6 +61,8 @@ class _ChatTileState extends State<ChatTile> {
                           ? TextAlign.right
                           : TextAlign.left,
                       style: TextStyle(color: MyPalette.white),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
                     ),
                   ),
                 )),
@@ -134,130 +136,81 @@ class _ChatTileState extends State<ChatTile> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: UsersService.isBlockedBy(widget.chat.otherProfile.uid),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Container(
-            width: 150,
-            height: 250,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.4),
-              borderRadius: fromTheme(context,
-                  dark: BorderRadius.zero, light: BorderRadius.circular(20)),
-            ),
-          );
-        }
-        final blocked = snapshot.data;
-        return GestureDetector(
-          onTapDown: (_) => setState(() => _pressed = true),
-          onTapUp: (_) {
-            setState(() => _pressed = false);
-            _openChat(context);
-          },
-          onTapCancel: () => setState(() => _pressed = false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 100),
-            width: 150,
-            height: 250,
-            decoration: BoxDecoration(
-              boxShadow: fromTheme(
-                context,
-                dark: [],
-                light: [
-                  _pressed ? MyPalette.primaryShadow : MyPalette.secondaryShadow
-                ],
-              ),
-              borderRadius: fromTheme(
-                context,
-                dark: BorderRadius.zero,
-                light: BorderRadius.circular(20),
-              ),
-              border: fromTheme(
-                context,
-                dark: Border.all(color: MyPalette.white, width: 2),
-                light: null,
-              ),
-            ),
-            clipBehavior: Clip.antiAlias,
-            transform: fromTheme(
-              context,
-              dark: null,
-              light: _pressed
-                  ? Matrix4.translationValues(0, 6, 0)
-                  : Matrix4.identity(),
-            ),
-            child: Stack(
-              children: <Widget>[
-                    widget.chat.otherProfile.profileImageUrl == null
-                        ? null
-                        : getNetworkImage(
-                            widget.chat.otherProfile.profileImageUrl,
-                            width: 150,
-                            height: 250,
-                          ),
-                  ] +
-                  (blocked
-                      ? [
-                          Container(
-                            color: MyPalette.black.withOpacity(0.6),
-                          ),
-                          Positioned.fill(
-                            top: 24,
-                            child: Text(
-                              'Blocked',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: MyPalette.white,
-                                fontSize: 24,
-                              ),
-                            ),
-                          ),
-                          Positioned.fill(
-                            bottom: 24,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Icon(Icons.delete,
-                                    color: MyPalette.red, size: 30),
-                                SizedBox(height: 5),
-                                Text(
-                                  'Delete',
-                                  style: TextStyle(
-                                      color: MyPalette.red, fontSize: 14),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ]
-                      : fromTheme(
-                            context,
-                            dark: <Widget>[
-                              Container(
-                                color: MyPalette.black.withOpacity(
-                                  _pressed ? 0.8 : 0.6,
-                                ),
-                              ),
-                            ],
-                            light: _radialShadows(),
-                          ) +
-                          [
-                            Positioned(
-                              left: 10,
-                              top: 10,
-                              right: 10,
-                              child: _buildMessagesPreview(),
-                            ),
-                            Positioned(
-                              left: 20,
-                              bottom: 20,
-                              child: _buildNameAndStatus(),
-                            ),
-                          ]),
-            ),
-          ),
-        );
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) {
+        setState(() => _pressed = false);
+        _openChat(context);
       },
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        width: 150,
+        height: 250,
+        decoration: BoxDecoration(
+          boxShadow: fromTheme(
+            context,
+            dark: [],
+            light: [
+              _pressed ? MyPalette.primaryShadow : MyPalette.secondaryShadow
+            ],
+          ),
+          borderRadius: fromTheme(
+            context,
+            dark: BorderRadius.zero,
+            light: BorderRadius.circular(20),
+          ),
+          border: fromTheme(
+            context,
+            dark: Border.all(color: MyPalette.white, width: 2),
+            light: null,
+          ),
+        ),
+        clipBehavior: Clip.antiAlias,
+        transform: fromTheme(
+          context,
+          dark: null,
+          light: _pressed
+              ? Matrix4.translationValues(0, 6, 0)
+              : Matrix4.identity(),
+        ),
+        child: Stack(
+          children: <Widget>[
+                widget.chat.otherProfile.profileImageUrl == null
+                    ? null
+                    : getNetworkImage(
+                        widget.chat.otherProfile.profileImageUrl,
+                        width: 150,
+                        height: 250,
+                      ),
+              ] +
+              fromTheme(
+                context,
+                dark: <Widget>[
+                  Container(
+                    color: MyPalette.black.withOpacity(
+                      _pressed ? 0.8 : 0.6,
+                    ),
+                  ),
+                ],
+                light: _radialShadows(),
+              ) +
+              [
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  right: 10,
+                  child: _buildMessagesPreview(),
+                ),
+                Positioned(
+                  left: 20,
+                  bottom: 20,
+                  right: 10,
+                  child: _buildNameAndStatus(),
+                ),
+              ],
+        ),
+      ),
     );
   }
 }

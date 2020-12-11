@@ -16,6 +16,7 @@ class ChatsListPage extends StatefulWidget {
 
 class _ChatsListPageState extends State<ChatsListPage> {
   Widget _buildMatchesList(List<String> matches) => SingleChildScrollView(
+        clipBehavior: Clip.none,
         scrollDirection: Axis.horizontal,
         child: Row(
           children: List<Widget>.from(
@@ -30,12 +31,13 @@ class _ChatsListPageState extends State<ChatsListPage> {
       );
 
   Widget _buildChatCategoryList(List<Chat> chats) => SingleChildScrollView(
+        clipBehavior: Clip.none,
         scrollDirection: Axis.horizontal,
         child: Row(
           children: List<Widget>.from(
             chats.map(
               (chat) => Padding(
-                padding: EdgeInsets.only(right: 10),
+                padding: EdgeInsets.only(right: 20),
                 child: ChatTile(chat: chat),
               ),
             ),
@@ -73,64 +75,74 @@ class _ChatsListPageState extends State<ChatsListPage> {
             final unknownChats = snapshot.data
                 .where((chat) => chat.type == ChatType.unknown)
                 .toList();
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 20),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[] +
-                          (user.privateInfo.matches.isEmpty
-                              ? []
-                              : [
-                                  Text(
-                                    'New matches',
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold),
+            return SingleChildScrollView(
+              clipBehavior: Clip.none,
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[] +
+                        (user.privateInfo.matches.isEmpty
+                            ? []
+                            : [
+                                Text(
+                                  'New matches',
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  SizedBox(height: 20),
-                                  _buildMatchesList(user.privateInfo.matches),
-                                  SizedBox(height: 30),
-                                ]) +
-                          (starredChats.isEmpty
-                              ? []
-                              : [
-                                  Text('Starred',
-                                      style: TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold)),
-                                  SizedBox(height: 20),
-                                  _buildChatCategoryList(starredChats),
-                                  SizedBox(height: 30),
-                                ]) +
-                          (normalChats.isEmpty
-                              ? []
-                              : [
-                                  Text('Messages',
-                                      style: TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold)),
-                                  SizedBox(height: 20),
-                                  _buildChatCategoryList(normalChats),
-                                  SizedBox(height: 30),
-                                ]) +
-                          (unknownChats.isEmpty
-                              ? []
-                              : [
-                                  Text('Unknown messages',
-                                      style: TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold)),
-                                  SizedBox(height: 20),
-                                  _buildChatCategoryList(unknownChats),
-                                ]),
-                    ),
-                  ],
-                ),
+                                ),
+                                SizedBox(height: 20),
+                                _buildMatchesList(user.privateInfo.matches),
+                                SizedBox(height: 30),
+                              ]) +
+                        (starredChats.isEmpty
+                            ? []
+                            : [
+                                Text(
+                                  'Starred',
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                _buildChatCategoryList(starredChats),
+                                SizedBox(height: 30),
+                              ]) +
+                        (normalChats.isEmpty
+                            ? []
+                            : [
+                                Text(
+                                  'Messages',
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                _buildChatCategoryList(normalChats),
+                                SizedBox(height: 30),
+                              ]) +
+                        (unknownChats.isEmpty
+                            ? []
+                            : [
+                                Text(
+                                  'Unknown messages',
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                _buildChatCategoryList(unknownChats),
+                                SizedBox(height: 30),
+                              ]),
+                  ),
+                ],
               ),
             );
           },

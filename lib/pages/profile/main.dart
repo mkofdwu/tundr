@@ -91,11 +91,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
               child: Align(
                 alignment: Alignment.topRight,
                 child: FutureBuilder(
-                  future: Future.wait([
-                    UsersService.canTalkTo(otherProfile.uid),
-                    ChatsService.getChatFromProfile(
-                        myProfile.uid, otherProfile),
-                  ]),
+                  future: UsersService.canTalkTo(otherProfile.uid),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) return SizedBox.shrink();
 
@@ -104,8 +100,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                             .privateInfo
                             .blocked
                             .contains(otherProfile.uid);
-                    final canTalk = snapshot.data[0];
-                    final chat = snapshot.data[1];
+                    final canTalk = snapshot.data;
 
                     if (iBlockedUser) {
                       return SizedBox(
@@ -134,7 +129,9 @@ class _MainProfilePageState extends State<MainProfilePage> {
                       return TileIconButton(
                         icon: Icons.chat_bubble_outline,
                         iconColor: MyPalette.white,
-                        onPressed: () {
+                        onPressed: () async {
+                          final chat = await ChatsService.getChatFromProfile(
+                              myProfile.uid, otherProfile);
                           return Navigator.push(
                             context,
                             MaterialPageRoute(

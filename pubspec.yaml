@@ -20,7 +20,8 @@ dependencies:
   image_cropper: ^1.1.2
   cached_network_image: ^2.0.0
   flutter_image_compress: ^0.6.3
-  flutter_video_compress: ^0.3.7+8
+  # flutter_video_compress: ^0.3.7+8
+  video_compress: ^2.1.1
   permission_handler: ^5.0.1+1
   intl: ^0.16.0
   uuid: ^2.0.4

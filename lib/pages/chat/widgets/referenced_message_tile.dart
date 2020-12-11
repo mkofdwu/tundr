@@ -8,11 +8,13 @@ import 'package:tundr/utils/from_theme.dart';
 
 class ReferencedMessageTile extends StatelessWidget {
   final Message message;
+  final double fontSize;
   final double borderRadius;
 
   ReferencedMessageTile({
     Key key,
     @required this.message,
+    this.fontSize = 12,
     this.borderRadius = 6,
   }) : super(key: key);
 
@@ -22,7 +24,7 @@ class ReferencedMessageTile extends StatelessWidget {
       decoration: fromTheme(
         context,
         dark: BoxDecoration(
-          color: MyPalette.white,
+          border: Border.all(color: MyPalette.black, width: 1),
         ),
         light: BoxDecoration(
           color: MyPalette.black,
@@ -33,40 +35,19 @@ class ReferencedMessageTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          SizedBox(
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '"',
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 40,
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    message.text,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 20,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Text(
-                  '"',
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 40,
-                  ),
-                ),
-              ],
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              message.text,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: fontSize,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 6,
             ),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 10),
           Text(
             message.sender.uid ==
                     Provider.of<User>(context, listen: false).profile.uid

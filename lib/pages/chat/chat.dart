@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/my_palette.dart';
@@ -13,6 +14,7 @@ import 'package:tundr/pages/chat/widgets/popup_menu.dart';
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/services/storage_service.dart';
+import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
@@ -60,6 +62,7 @@ class _ChatPageState extends State<ChatPage> {
           );
         }
       }
+      FeatureDiscovery.discoverFeatures(context, <String>['message_tile']);
     });
   }
 
@@ -79,12 +82,6 @@ class _ChatPageState extends State<ChatPage> {
     final unsentMessageIndex = _unsentMessages.length;
     final sentOn = DateTime.now();
 
-    if (_media != null) {
-      _media.url =
-          await StorageService.uploadMedia(uid: profile.uid, media: _media);
-      _media.isLocalFile = false;
-    }
-
     final message = Message(
       sender: profile,
       sentOn: sentOn,
@@ -99,6 +96,12 @@ class _ChatPageState extends State<ChatPage> {
       _referencedMessage = null;
       _unsentMessages.add(message);
     });
+
+    if (message.media != null) {
+      message.media.url = await StorageService.uploadMedia(
+          uid: profile.uid, media: message.media);
+      message.media.isLocalFile = false;
+    }
 
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     if (widget.chat.type == ChatType.nonExistent) {
@@ -123,7 +126,10 @@ class _ChatPageState extends State<ChatPage> {
       );
     }
 
-    await ChatsService.sendMessage(widget.chat.id, message);
+    if (widget.chat.type != ChatType.nonExistent) {
+      // when calling the startConversation http function a message is already created
+      await ChatsService.sendMessage(widget.chat.id, message);
+    }
 
     if (mounted) {
       setState(() {
@@ -164,11 +170,12 @@ class _ChatPageState extends State<ChatPage> {
       );
 
   Widget _buildMessagesList() => StreamBuilder<List<Message>>(
-        stream: ChatsService.messagesStream(
-            widget.chat.id, _pages * messagesPerPage),
+        stream: widget.chat.type == ChatType.nonExistent
+            ? null
+            : ChatsService.messagesStream(
+                widget.chat.id, _pages * messagesPerPage),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return SizedBox.shrink();
-          final messages = snapshot.data;
+          final messages = snapshot.data ?? [];
           return NotificationListener(
             onNotification: (ScrollNotification notification) {
               if (notification is ScrollStartNotification &&
@@ -181,7 +188,7 @@ class _ChatPageState extends State<ChatPage> {
               reverse: true,
               controller: _scrollController,
               padding: EdgeInsets.only(
-                top: 50,
+                top: 100,
                 bottom: 90.0 +
                     (_media == null ? 0 : 220) +
                     (_referencedMessage == null ? 0 : 110),
@@ -190,8 +197,6 @@ class _ChatPageState extends State<ChatPage> {
               itemBuilder: (context, i) {
                 if (i < _unsentMessages.length) {
                   return UnsentMessageTile(
-                    chatId: widget.chat.id,
-                    otherUserName: widget.chat.otherProfile.name,
                     message: _unsentMessages[_unsentMessages.length - i - 1],
                   );
                 }
@@ -207,14 +212,29 @@ class _ChatPageState extends State<ChatPage> {
                   child: Align(
                     alignment:
                         fromMe ? Alignment.centerRight : Alignment.centerLeft,
-                    child: MessageTile(
-                      message: message,
-                      fromMe: fromMe,
-                      onViewReferencedMessage: () =>
-                          _viewReferencedMessage(messageIndex),
-                      onReferenceMessage: () =>
-                          setState(() => _referencedMessage = message),
-                      onDeleteMessage: () => _deleteMessage(message.id),
+                    child: DescribedFeatureOverlay(
+                      featureId: 'message_tile',
+                      tapTarget: SizedBox.shrink(),
+                      title: Text('Message options'),
+                      description: Text(
+                          'Long press on this message tile to delete or reply to it'),
+                      targetColor: MyPalette.white.withOpacity(0.8),
+                      backgroundColor: Theme.of(context).accentColor,
+                      child: MessageTile(
+                        message: message,
+                        fromMe: fromMe,
+                        onViewReferencedMessage: () {
+                          _viewReferencedMessage(messageIndex);
+                        },
+                        onReferenceMessage: () {
+                          setState(() => _referencedMessage = message);
+                          FeatureDiscovery.discoverFeatures(
+                              context, <String>['dismissible_reply']);
+                        },
+                        onDeleteMessage: () {
+                          _deleteMessage(message.id);
+                        },
+                      ),
                     ),
                   ),
                 );
@@ -245,8 +265,7 @@ class _ChatPageState extends State<ChatPage> {
                 Positioned.fill(
                   child: getNetworkImage(widget.chat.wallpaperUrl),
                 ),
-              if (widget.chat.type != ChatType.nonExistent)
-                _buildMessagesList(),
+              _buildMessagesList(),
               Container(
                 height: 120,
                 decoration: BoxDecoration(
@@ -277,20 +296,40 @@ class _ChatPageState extends State<ChatPage> {
               Positioned(
                 bottom: 0,
                 width: MediaQuery.of(context).size.width,
-                child: MessageField(
-                  media: _media,
-                  referencedMessage: _referencedMessage,
-                  onRemoveMedia: () {
-                    setState(() => _media = null);
-                  },
-                  onRemoveReferencedMessage: () {
-                    setState(() => _referencedMessage = null);
-                  },
-                  onChangeMedia: (newMedia) {
-                    setState(() => _media = newMedia);
-                  },
-                  onSendMessage: _sendMessage,
-                ),
+                child: FutureBuilder<bool>(
+                    future:
+                        UsersService.isBlockedBy(widget.chat.otherProfile.uid),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            left: 60,
+                            right: 60,
+                            bottom: 40,
+                          ),
+                          child: Text(
+                            'You so you can no longer send messages to this chat because ' +
+                                widget.chat.otherProfile.name +
+                                ' blocked you.',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        );
+                      }
+                      return MessageField(
+                        media: _media,
+                        referencedMessage: _referencedMessage,
+                        onRemoveMedia: () {
+                          setState(() => _media = null);
+                        },
+                        onRemoveReferencedMessage: () {
+                          setState(() => _referencedMessage = null);
+                        },
+                        onChangeMedia: (newMedia) {
+                          setState(() => _media = newMedia);
+                        },
+                        onSendMessage: _sendMessage,
+                      );
+                    }),
               ),
               if (_showChatOptions)
                 Positioned(

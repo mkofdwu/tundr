@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/models/user_profile.dart';
 import 'dart:math';
 
@@ -179,14 +180,14 @@ class SuggestionCardState extends State<SuggestionCard>
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
-                                border: Border.all(color: Colors.greenAccent),
+                                border: Border.all(color: MyPalette.green),
                               ),
                               padding: const EdgeInsets.all(5),
                               child: Text(
                                 'LIKE',
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Colors.greenAccent,
+                                  color: MyPalette.green,
                                 ),
                               ),
                             ),
@@ -202,14 +203,14 @@ class SuggestionCardState extends State<SuggestionCard>
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
-                                border: Border.all(color: Colors.redAccent),
+                                border: Border.all(color: MyPalette.red),
                               ),
                               padding: const EdgeInsets.all(5),
                               child: Text(
                                 'NOPE',
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Colors.redAccent,
+                                  color: MyPalette.red,
                                 ),
                               ),
                             ),

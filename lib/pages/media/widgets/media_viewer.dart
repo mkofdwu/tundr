@@ -29,7 +29,7 @@ class MediaViewer extends StatelessWidget {
           ),
         );
       case MediaType.video:
-        return SimpleVideoPlayer(media: media);
+        return Center(child: SimpleVideoPlayer(media: media));
       default:
         throw Exception('Invalid media type: ${media.type}');
     }

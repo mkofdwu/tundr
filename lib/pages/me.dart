@@ -1,3 +1,4 @@
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -29,8 +30,12 @@ class _MePageState extends State<MePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((duration) => _nameController
-        .text = Provider.of<User>(context, listen: false).profile.name);
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
+      _nameController.text =
+          Provider.of<User>(context, listen: false).profile.name;
+      FeatureDiscovery.discoverFeatures(
+          context, <String>['popularity_history_chart']);
+    });
   }
 
   @override
@@ -163,66 +168,72 @@ class _MePageState extends State<MePage> {
                   ),
                 ),
               ),
-              child: privateInfo.popularityHistory.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Your popularity history will be shown here',
-                        style: TextStyle(
-                          color: MyPalette.grey,
-                          fontSize: 16,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 26, vertical: 20),
+                child: privateInfo.popularityHistory.length < 2
+                    ? Center(
+                        child: Text(
+                          'Your popularity history will be shown here',
+                          style: TextStyle(
+                            color: MyPalette.grey,
+                            fontSize: 18,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
-                    )
-                  : Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 26, vertical: 20),
-                      child: Stack(
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Center(
-                            child: LineChart(
-                              LineChartData(
-                                gridData: FlGridData(show: false),
-                                borderData: FlBorderData(show: false),
-                                titlesData: FlTitlesData(show: false),
-                                lineBarsData: [
-                                  LineChartBarData(
-                                    colors: [Theme.of(context).accentColor],
-                                    dotData: FlDotData(show: false),
-                                    spots: List<FlSpot>.from(privateInfo
-                                        .popularityHistory
-                                        .map((entryString) {
-                                      // each entry string is formatted as: `timestamp:score`
-                                      final entry = entryString.split(':');
-                                      return FlSpot(
-                                        double.parse(entry[0]),
-                                        double.parse(entry[1]),
-                                      );
-                                    })),
-                                  ),
-                                ],
-                              ),
+                          Text(
+                            'Popularity',
+                            style: TextStyle(
+                              color: MyPalette.gold,
+                              fontSize: 20,
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  'Popularity',
-                                  style: TextStyle(
-                                    color: MyPalette.gold,
-                                    fontSize: 20,
+                          SizedBox(height: 5),
+                          Text(privateInfo.popularityScore.toString()),
+                          SizedBox(height: 20),
+                          Expanded(
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: DescribedFeatureOverlay(
+                                featureId: 'popularity_history_chart',
+                                tapTarget: SizedBox.shrink(),
+                                title: Text('Popularity history chart'),
+                                description: Text(
+                                    "Your popularity score is updated every day. It's based on how many people swipe right on your profile, and the average is always kept at 100"),
+                                targetColor: MyPalette.white.withOpacity(0.8),
+                                backgroundColor: Theme.of(context).accentColor,
+                                child: LineChart(
+                                  LineChartData(
+                                    gridData: FlGridData(show: false),
+                                    borderData: FlBorderData(show: false),
+                                    titlesData: FlTitlesData(show: false),
+                                    lineBarsData: [
+                                      LineChartBarData(
+                                        colors: [Theme.of(context).accentColor],
+                                        dotData: FlDotData(show: false),
+                                        spots: List<FlSpot>.from(privateInfo
+                                            .popularityHistory
+                                            .map((entryString) {
+                                          // each entry string is formatted as: `timestamp:score`
+                                          final entry = entryString.split(':');
+                                          return FlSpot(
+                                            double.parse(entry[0]),
+                                            double.parse(entry[1]),
+                                          );
+                                        })),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                SizedBox(height: 8),
-                                Text(privateInfo.popularityScore.toString()),
-                              ],
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ),
+              ),
             ),
           ),
           Padding(

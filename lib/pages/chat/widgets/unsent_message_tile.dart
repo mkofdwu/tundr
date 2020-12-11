@@ -8,14 +8,10 @@ import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'referenced_message_tile.dart';
 
 class UnsentMessageTile extends StatelessWidget {
-  final String chatId;
-  final String otherUserName;
   final Message message;
 
   const UnsentMessageTile({
     Key key,
-    @required this.chatId,
-    @required this.otherUserName,
     @required this.message,
   }) : super(key: key);
 
@@ -84,7 +80,7 @@ class UnsentMessageTile extends StatelessWidget {
             SizedBox(
               width: 10,
               height: 10,
-              child: Loader(),
+              child: CircularProgressIndicator(strokeWidth: 1),
             ),
           ],
         ),

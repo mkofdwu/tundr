@@ -43,18 +43,24 @@ class _VideoThumbnailState extends State<VideoThumbnail> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Loader();
         }
-        return AspectRatio(
-          aspectRatio: _controller.value.aspectRatio,
-          child: Stack(
-            children: <Widget>[
-              Hero(
-                tag: widget.media.url,
-                child: VideoPlayer(_controller),
+        return Stack(
+          children: <Widget>[
+            Hero(
+              tag: widget.media.url,
+              child: SizedBox.expand(
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: _controller.value.size?.width ?? 0,
+                    height: _controller.value.size?.height ?? 0,
+                    child: VideoPlayer(_controller),
+                  ),
+                ),
               ),
-              Container(color: Color(0xA0000000)),
-              Center(child: Triangle()),
-            ],
-          ),
+            ),
+            Container(color: Color.fromRGBO(0, 0, 0, 0.6)),
+            Center(child: Triangle()),
+          ],
         );
       },
     );

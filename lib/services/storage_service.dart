@@ -5,13 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:flutter_video_compress/flutter_video_compress.dart';
+// import 'package:flutter_video_compress/flutter_video_compress.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/constants/numbers.dart';
 import 'package:uuid/uuid.dart';
 import 'package:tundr/constants/firebase_ref.dart';
 import 'package:http/http.dart';
+import 'package:video_compress/video_compress.dart';
 
 class FileTooLargeError implements Exception {}
 
@@ -49,9 +50,10 @@ class StorageService {
           storagePath = 'images/$uid/${prefix}_$id'; // FUTURE: improve this
           break;
         case MediaType.video:
-          compressedFile = File((await FlutterVideoCompress().compressVideo(
-                  media.url,
-                  quality: VideoQuality.MediumQuality))
+          compressedFile = File((await VideoCompress.compressVideo(
+            media.url,
+            quality: VideoQuality.MediumQuality,
+          ))
               .path);
           storagePath = 'videos/$uid/${prefix}_$id';
           break;
@@ -63,18 +65,19 @@ class StorageService {
           await storageRef.child(storagePath).putFile(compressedFile);
       return await storageTaskSnapshot.ref.getDownloadURL();
     } else {
-      final httpClient = Client();
-      final data = (await httpClient.get(media.url)).bodyBytes; // TODO: FIXME:
-      if (media.type == MediaType.image &&
-              data.elementSizeInBytes > maxImageSizeInBytes ||
-          media.type == MediaType.video &&
-              data.elementSizeInBytes > maxVideoSizeInBytes) {
-        throw FileTooLargeError();
-      }
+      throw 'Not supposed to upload files from the internet';
+      // final httpClient = Client();
+      // final data = (await httpClient.get(media.url)).bodyBytes;
+      // if (media.type == MediaType.image &&
+      //         data.elementSizeInBytes > maxImageSizeInBytes ||
+      //     media.type == MediaType.video &&
+      //         data.elementSizeInBytes > maxVideoSizeInBytes) {
+      //   throw FileTooLargeError();
+      // }
 
-      final storageTaskSnapshot =
-          await storageRef.child(storagePath).putData(data);
-      return await storageTaskSnapshot.ref.getDownloadURL();
+      // final storageTaskSnapshot =
+      //     await storageRef.child(storagePath).putData(data);
+      // return await storageTaskSnapshot.ref.getDownloadURL();
     }
   }
 

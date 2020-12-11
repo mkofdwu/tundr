@@ -10,11 +10,9 @@ export default (graph: Array<Array<number>>): number[] => {
     nodes.forEach((node) => (R[node][i] = value));
   });
 
-  console.log(R);
-
   let probabilityMatrix: number[] = Array(n).fill(1 / n);
   for (let i: number = 0; i < 99; i++) {
-    // FUTURE: this is a temporary solution, increase efficiency of matrix multiplication in the future.
+    // matrix multiplication
     let newProbabilityMatrix: number[] = Array(n);
     R.forEach((scores, i) => {
       let sum: number = 0;
@@ -25,8 +23,6 @@ export default (graph: Array<Array<number>>): number[] => {
     });
     probabilityMatrix = newProbabilityMatrix;
   }
-
-  console.log(probabilityMatrix);
 
   return probabilityMatrix;
 };

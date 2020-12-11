@@ -1,3 +1,4 @@
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tundr/constants/my_palette.dart';
@@ -9,7 +10,7 @@ import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/show_options_dialog.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
-import 'package:tundr/widgets/theme_builder.dart';
+import 'package:tundr/widgets/media/video_thumbnail.dart';
 import 'package:tundr/widgets/buttons/simple_icon.dart';
 import 'package:tundr/widgets/textfields/plain.dart';
 import 'referenced_message_tile.dart';
@@ -41,15 +42,13 @@ class _MessageFieldState extends State<MessageField> {
   @override
   void initState() {
     super.initState();
-    _textController.addListener(() => setState(() {})); // FUTURE: optimize this
+    _textController.addListener(() => setState(() {}));
   }
 
-  void _selectImage() async {
-    // FUTURE: this and the function below are just temporary fixes, find a better solution / dialog in the future
-
+  void _selectMedia(MediaType type) async {
     final source = await showOptionsDialog(
       context: context,
-      title: 'Select image source',
+      title: "Select ${type == MediaType.image ? 'image' : 'video'} source",
       options: {
         'Camera': ImageSource.camera,
         'Gallery': ImageSource.gallery,
@@ -57,31 +56,13 @@ class _MessageFieldState extends State<MessageField> {
     );
     if (source == null) return;
     final media = await MediaPickerService.pickMedia(
-      type: MediaType.image,
+      type: type,
       source: source,
       context: context,
     );
     if (media == null) return;
     widget.onChangeMedia(media);
-  }
-
-  void _selectVideo() async {
-    final source = await showOptionsDialog(
-      context: context,
-      title: 'Select image source',
-      options: {
-        'Camera': ImageSource.camera,
-        'Gallery': ImageSource.gallery,
-      },
-    );
-    if (source == null) return;
-    final media = await MediaPickerService.pickMedia(
-      type: MediaType.video,
-      source: source,
-      context: context,
-    );
-    if (media == null) return;
-    widget.onChangeMedia(media);
+    FeatureDiscovery.discoverFeatures(context, <String>['dismissible_media']);
   }
 
   void _sendMessage() {
@@ -110,10 +91,8 @@ class _MessageFieldState extends State<MessageField> {
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [MyPalette.primaryShadow],
         ), // FUTURE: DESIGN
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: MediaThumbnail(widget.media),
-        ),
+        clipBehavior: Clip.antiAlias,
+        child: VideoThumbnail(media: widget.media),
       );
 
   @override
@@ -138,26 +117,45 @@ class _MessageFieldState extends State<MessageField> {
             if (widget.referencedMessage != null)
               Padding(
                 padding: const EdgeInsets.only(top: 5, bottom: 5),
-                child: Dismissible(
-                  key: Key('dismissible_referenced_message'),
-                  child: ReferencedMessageTile(
-                    message: widget.referencedMessage,
-                    borderRadius: 20,
+                child: DescribedFeatureOverlay(
+                  featureId: 'dismissible_reply',
+                  tapTarget: SizedBox.shrink(),
+                  title: Text('Swipe to remove'),
+                  description:
+                      Text('To remove this reply simply swipe left or right'),
+                  targetColor: MyPalette.white.withOpacity(0.8),
+                  backgroundColor: Theme.of(context).accentColor,
+                  child: Dismissible(
+                    key: Key('dismissible_reply'),
+                    child: ReferencedMessageTile(
+                      message: widget.referencedMessage,
+                      fontSize: 20,
+                      borderRadius: 20,
+                    ),
+                    onDismissed: (_) => widget.onRemoveReferencedMessage(),
                   ),
-                  onDismissed: (_) => widget.onRemoveReferencedMessage(),
                 ),
               ),
             if (widget.media != null)
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: Dismissible(
-                  key: Key('dismissible_media'),
-                  child: fromTheme(
-                    context,
-                    dark: _buildMediaTileDark(),
-                    light: _buildMediaTileLight(),
+                child: DescribedFeatureOverlay(
+                  featureId: 'dismissible_media',
+                  tapTarget: SizedBox.shrink(),
+                  title: Text('Swipe to remove'),
+                  description: Text(
+                      'If you later decide to remove this image or video simply swipe left or right'),
+                  targetColor: MyPalette.white.withOpacity(0.8),
+                  backgroundColor: Theme.of(context).accentColor,
+                  child: Dismissible(
+                    key: Key('dismissible_media'),
+                    child: fromTheme(
+                      context,
+                      dark: _buildMediaTileDark(),
+                      light: _buildMediaTileLight(),
+                    ),
+                    onDismissed: (_) => widget.onRemoveMedia(),
                   ),
-                  onDismissed: (_) => widget.onRemoveMedia(),
                 ),
               ),
             Row(
@@ -184,13 +182,13 @@ class _MessageFieldState extends State<MessageField> {
                         SimpleIconButton(
                           icon: Icons.photo_camera,
                           activeColor: MyPalette.black.withOpacity(0.8),
-                          onPressed: _selectImage,
+                          onPressed: () => _selectMedia(MediaType.image),
                         ),
                         SizedBox(width: 10),
                         SimpleIconButton(
                           icon: Icons.videocam,
                           activeColor: MyPalette.black.withOpacity(0.8),
-                          onPressed: _selectVideo,
+                          onPressed: () => _selectMedia(MediaType.video),
                         ),
                       ],
                     ),

@@ -1,6 +1,7 @@
+import admin = require('firebase-admin');
 import * as functions from 'firebase-functions';
 
-import { db, usersPrivateInfoRef } from '../constants';
+import { usersPrivateInfoRef } from '../constants';
 import pageRank from '../utils/pagerank';
 
 export default functions.firestore
@@ -13,16 +14,15 @@ export default functions.firestore
     let userDocs = (await usersPrivateInfoRef.get()).docs;
     userDocs.forEach((userDoc) => users.push(userDoc.id));
     userDocs.forEach((userDoc) => {
-      let userLiked: number[] = [];
-      userDoc
-        .data()
-        ['suggestionsGoneThrough'].forEach((liked: boolean, uid: string) => {
-          if (liked) {
-            let userIndex: number = users.indexOf(uid);
-            if (userIndex != -1) userLiked.push(userIndex);
-            else console.log(`Invalid user: ${uid} liked by ${userDoc.id}`);
-          }
-        });
+      const suggestionsGoneThrough = userDoc.data()['suggestionsGoneThrough'];
+      const userLiked: number[] = [];
+      for (const uid of Object.keys(suggestionsGoneThrough)) {
+        if (suggestionsGoneThrough[uid]) {
+          let userIndex: number = users.indexOf(uid);
+          if (userIndex != -1) userLiked.push(userIndex);
+          else console.log(`Invalid user: ${uid} liked by ${userDoc.id}`);
+        }
+      }
       likedGraph.push(userLiked);
     });
 
@@ -31,18 +31,22 @@ export default functions.firestore
     let userPopularityScores: number[] = pageRank(likedGraph);
 
     if (userPopularityScores.length != users.length)
-      throw Error('pagerank returned a different amount of users');
+      throw 'pagerank returned a different amount of users';
 
     let averagePopularityScore: number =
       userPopularityScores.reduce((val1, val2) => val1 + val2) /
       userPopularityScores.length;
 
     for (let i: number = 0; i < users.length; i++) {
-      db.collection('users')
-        .doc(users[i])
-        .update({
-          popularityScore:
-            userPopularityScores[i] * (100 / averagePopularityScore),
-        });
+      const updatedScore =
+        userPopularityScores[i] * (100 / averagePopularityScore);
+      usersPrivateInfoRef.doc(users[i]).update({
+        popularityScore: updatedScore,
+        popularityHistory: admin.firestore.FieldValue.arrayUnion(
+          Date.now() + ':' + updatedScore
+        ),
+      });
     }
+
+    // NOTE: the average of all the scores generated should be 100 (with some margin of error)
   });

@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/widgets/loaders/loader.dart';
 import 'package:tundr/widgets/media/play_triangle.dart';
@@ -27,10 +29,9 @@ class _SimpleVideoPlayerState extends State<SimpleVideoPlayer> {
         ? VideoPlayerController.file(File(widget.media.url))
         : VideoPlayerController.network(widget.media.url);
     _controller.addListener(() {
+      setState(() {});
       if (_controller.value.position == _controller.value.duration) {
-        _controller
-            .seekTo(Duration.zero)
-            .then((_) => _controller.pause().then((_) => setState(() {})));
+        _controller.seekTo(Duration.zero).then((_) => _controller.pause());
       }
     });
     _initializeVideoController = _controller.initialize();
@@ -44,22 +45,25 @@ class _SimpleVideoPlayerState extends State<SimpleVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
+    final seconds = _controller.value.position.inSeconds;
+    final formattedTimestamp =
+        '${seconds ~/ 60}:' + (seconds % 60).toString().padLeft(2, '0');
     return FutureBuilder<void>(
       future: _initializeVideoController,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Loader();
         }
-        return AspectRatio(
-          aspectRatio: _controller.value.aspectRatio,
-          child: GestureDetector(
-            onTap: () => setState(() {
-              if (_controller.value.isPlaying) {
-                _controller.pause();
-              } else {
-                _controller.play();
-              }
-            }),
+        return GestureDetector(
+          onTap: () => setState(() {
+            if (_controller.value.isPlaying) {
+              _controller.pause();
+            } else {
+              _controller.play();
+            }
+          }),
+          child: AspectRatio(
+            aspectRatio: _controller.value.aspectRatio,
             child: Stack(
               children: <Widget>[
                 Hero(
@@ -67,11 +71,35 @@ class _SimpleVideoPlayerState extends State<SimpleVideoPlayer> {
                   child: VideoPlayer(_controller),
                 ),
                 if (!_controller.value.isPlaying)
-                  Container(color: Color(0x28FFFFFF)),
+                  Container(color: Color.fromRGBO(0, 0, 0, 0.6)),
                 if (_controller.value.isBuffering)
                   Center(child: Loader())
                 else if (!_controller.value.isPlaying)
                   Center(child: Triangle()),
+                Positioned(
+                  left: 20,
+                  right: 20,
+                  bottom: 40,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: VideoProgressIndicator(
+                          _controller,
+                          padding: EdgeInsets.zero,
+                          colors: VideoProgressColors(
+                            playedColor: MyPalette.gold,
+                          ),
+                          allowScrubbing: true,
+                        ),
+                      ),
+                      SizedBox(width: 14),
+                      Text(
+                        formattedTimestamp,
+                        style: TextStyle(color: MyPalette.white),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),

@@ -40,7 +40,7 @@ class _MostPopularPageState extends State<MostPopularPage> {
       return;
     }
 
-    var totalArea = 0;
+    var totalArea = 0.0;
     for (final user in sortedUsers) {
       totalArea += pow(user.popularityScore, 2);
     }
@@ -89,13 +89,13 @@ class _MostPopularPageState extends State<MostPopularPage> {
                                     color: MyPalette.white, width: 2),
                               )
                             : BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(size / 8),
                                 boxShadow: [MyPalette.secondaryShadow],
                               ),
                         child: ClipRRect(
                           borderRadius: themeManager.theme == ThemeMode.dark
                               ? BorderRadius.zero
-                              : BorderRadius.circular(20),
+                              : BorderRadius.circular(size / 8),
                           child: Hero(
                             tag: popUser.profile.profileImageUrl,
                             child: getNetworkImage(
