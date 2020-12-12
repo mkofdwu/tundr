@@ -14,7 +14,6 @@ class UserPrivateInfo {
   ThemeMode theme;
   int numRightSwiped;
   List<String> blocked;
-  List<String> matches;
 
   UserPrivateInfo({
     this.phoneNumber,
@@ -27,7 +26,6 @@ class UserPrivateInfo {
     this.theme,
     this.numRightSwiped,
     this.blocked,
-    this.matches,
   });
 
   factory UserPrivateInfo.fromMap(Map<String, dynamic> map) {
@@ -47,7 +45,6 @@ class UserPrivateInfo {
           : (map['theme'] == 0 ? ThemeMode.dark : ThemeMode.light),
       numRightSwiped: map['numRightSwiped'],
       blocked: List<String>.from(map['blocked']),
-      matches: List<String>.from(map['matches']),
     );
   }
 
@@ -63,7 +60,6 @@ class UserPrivateInfo {
       theme: null,
       numRightSwiped: 0,
       blocked: [],
-      matches: [],
     );
   }
 
@@ -79,7 +75,6 @@ class UserPrivateInfo {
       'theme': theme == null ? null : (theme == ThemeMode.dark ? 0 : 1),
       'numRightSwiped': numRightSwiped,
       'blocked': blocked,
-      'matches': matches,
     };
   }
 }

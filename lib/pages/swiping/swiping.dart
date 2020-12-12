@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:tundr/services/suggestions_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/from_theme.dart';
+import 'package:tundr/widgets/my_feature.dart';
 
 import 'widgets/suggestion_card.dart';
 
@@ -230,14 +231,12 @@ class _SwipingPageState extends State<SwipingPage> {
         else
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
-            child: DescribedFeatureOverlay(
+            child: MyFeature(
               featureId: 'suggestion_card',
               tapTarget: SizedBox.shrink(),
-              title: Text('View a profile'),
-              description: Text(
-                  'Click on the card to learn more about this person. Swipe right to like or left to dislike.'),
-              targetColor: MyPalette.white.withOpacity(0.8),
-              backgroundColor: Theme.of(context).accentColor,
+              title: 'View a profile',
+              description:
+                  'Click on the card to learn more about this person. Swipe right to like or left to dislike.',
               child: SuggestionCard(
                 width: width - 80,
                 height: height - 250,

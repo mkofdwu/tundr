@@ -50,7 +50,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
           child: Provider.of<User>(context, listen: false)
                   .privateInfo
                   .blocked
-                  .contains(otherProfile.uid)
+                  .contains(otherProfile.chat)
               ? SizedBox(
                   height: 50,
                   child: Padding(
@@ -63,7 +63,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                           Provider.of<User>(context, listen: false)
                               .privateInfo
                               .blocked
-                              .remove(otherProfile.uid);
+                              .remove(otherProfile.chat);
                           await Provider.of<User>(context, listen: false)
                               .writeField('blocked', UserPrivateInfo);
                           setState(() {});
@@ -73,7 +73,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                   ),
                 )
               : FutureBuilder(
-                  future: UsersService.canTalkTo(otherProfile.uid),
+                  future: UsersService.canTalkTo(otherProfile.chat),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || !snapshot.data) {
                       return SizedBox.shrink();
@@ -83,7 +83,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                       iconColor: MyPalette.white,
                       onPressed: () async {
                         final chat = await ChatsService.getChatFromProfile(
-                          myProfile.uid,
+                          myProfile.chat,
                           otherProfile,
                         );
                         return Navigator.push(

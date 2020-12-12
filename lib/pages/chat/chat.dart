@@ -18,6 +18,7 @@ import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/utils/show_info_dialog.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
+import 'package:tundr/widgets/my_feature.dart';
 
 import 'widgets/message_tile.dart';
 import 'widgets/unsent_message_tile.dart';
@@ -130,7 +131,6 @@ class _ChatPageState extends State<ChatPage> {
       message.media.isLocalFile = false;
     }
 
-    final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     if (widget.chat.type == ChatType.nonExistent) {
       widget.chat.id = await ChatsService.startConversation(
         widget.chat.otherProfile.uid,
@@ -142,9 +142,6 @@ class _ChatPageState extends State<ChatPage> {
         widget.chat.id,
         {'type': 3},
       ); // normal
-      privateInfo.matches.remove(widget.chat.otherProfile.uid);
-      await Provider.of<User>(context, listen: false)
-          .writeField('matches', UserPrivateInfo);
     } else if (widget.chat.type == ChatType.unknown) {
       await ChatsService.updateChatDetails(
         profile.uid,
@@ -199,7 +196,8 @@ class _ChatPageState extends State<ChatPage> {
       );
 
   Widget _buildMessagesList() => StreamBuilder<List<Message>>(
-        stream: widget.chat.type == ChatType.nonExistent
+        stream: widget.chat.type == ChatType.nonExistent ||
+                widget.chat.type == ChatType.newMatch
             ? null
             : ChatsService.messagesStream(
                 widget.chat.id, _pages * messagesPerPage),
@@ -246,14 +244,12 @@ class _ChatPageState extends State<ChatPage> {
                           horizontal: 20,
                           vertical: 10,
                         ),
-                        child: DescribedFeatureOverlay(
+                        child: MyFeature(
                           featureId: 'message_tile',
                           tapTarget: SizedBox.shrink(),
-                          title: Text('Message options'),
-                          description: Text(
-                              'Long press on this message tile to delete or reply to it'),
-                          targetColor: MyPalette.white.withOpacity(0.8),
-                          backgroundColor: Theme.of(context).accentColor,
+                          title: 'Message options',
+                          description:
+                              'Long press on this message tile to delete or reply to it',
                           child: MessageTile(
                             key: messageIdToGlobalKey[
                                 message.id], // ValueKey(message.id),

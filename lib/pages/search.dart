@@ -39,6 +39,7 @@ class _SearchPageState extends State<SearchPage> {
           onPressed: () => Navigator.pop(context),
         ),
         title: TextField(
+          key: ValueKey('searchTextField'),
           controller: _usernameController,
           autofocus: true,
           style: Theme.of(context).textTheme.headline6,
@@ -79,9 +80,10 @@ class _SearchPageState extends State<SearchPage> {
                         .bottom, // account for keyboard
                   ),
                   child: Column(
+                    key: ValueKey('searchResultsColumn'),
                     children: List<Widget>.from(
                       snapshot.data.map((otherUser) {
-                        if (otherUser.uid == uid) return SizedBox.shrink();
+                        if (otherUser.chat == uid) return SizedBox.shrink();
                         return Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 40, vertical: 20),

@@ -10,8 +10,8 @@ import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/show_options_dialog.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
-import 'package:tundr/widgets/media/video_thumbnail.dart';
 import 'package:tundr/widgets/buttons/simple_icon.dart';
+import 'package:tundr/widgets/my_feature.dart';
 import 'package:tundr/widgets/textfields/plain.dart';
 import 'referenced_message_tile.dart';
 
@@ -117,14 +117,12 @@ class _MessageFieldState extends State<MessageField> {
             if (widget.referencedMessage != null)
               Padding(
                 padding: const EdgeInsets.only(top: 5, bottom: 5),
-                child: DescribedFeatureOverlay(
+                child: MyFeature(
                   featureId: 'dismissible_reply',
                   tapTarget: SizedBox.shrink(),
-                  title: Text('Swipe to remove'),
+                  title: 'Swipe to remove',
                   description:
-                      Text('To remove this reply simply swipe left or right'),
-                  targetColor: MyPalette.white.withOpacity(0.8),
-                  backgroundColor: Theme.of(context).accentColor,
+                      'To remove this reply simply swipe left or right',
                   child: Dismissible(
                     key: Key('dismissible_reply'),
                     child: ReferencedMessageTile(
@@ -139,14 +137,12 @@ class _MessageFieldState extends State<MessageField> {
             if (widget.media != null)
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: DescribedFeatureOverlay(
+                child: MyFeature(
                   featureId: 'dismissible_media',
                   tapTarget: SizedBox.shrink(),
-                  title: Text('Swipe to remove'),
-                  description: Text(
-                      'If you later decide to remove this image or video simply swipe left or right'),
-                  targetColor: MyPalette.white.withOpacity(0.8),
-                  backgroundColor: Theme.of(context).accentColor,
+                  title: 'Swipe to remove',
+                  description:
+                      'If you later decide to remove this image or video simply swipe left or right',
                   child: Dismissible(
                     key: Key('dismissible_media'),
                     child: fromTheme(

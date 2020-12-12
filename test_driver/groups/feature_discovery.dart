@@ -14,11 +14,10 @@ void loginTests() {
     if (driver != null) await driver.close();
   });
 
-  test('Logs in with correct credentials', () async {
+  test('all features', () async {
     await loginWith(driver);
-  });
-
-  test('Logs out correctly', () async {
     await logoutWith(driver);
   });
+
+  test('app tour resets all features again', () async {});
 }

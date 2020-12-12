@@ -10,9 +10,9 @@ import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/theme_builder.dart';
 
 class MatchTile extends StatefulWidget {
-  final String uid;
+  final Chat chat;
 
-  MatchTile({Key key, @required this.uid}) : super(key: key);
+  MatchTile({Key key, @required this.chat}) : super(key: key);
 
   @override
   _MatchTileState createState() => _MatchTileState();
@@ -21,32 +21,23 @@ class MatchTile extends StatefulWidget {
 class _MatchTileState extends State<MatchTile> {
   bool _pressed = false;
 
-  void _openChat(context, profile) => Navigator.push(
+  void _openChat() => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ChatPage(
-            chat: Chat(
-              id: null,
-              otherProfile: profile,
-              wallpaperUrl: '',
-              lastReadMessageId: null,
-              type: ChatType.newMatch,
-            ),
-          ),
+          builder: (context) => ChatPage(chat: widget.chat),
         ),
       );
 
-  Widget _buildDark(context, profile) => Container(
+  Widget _buildDark() => Container(
         width: 100,
         height: 100,
         decoration: BoxDecoration(
           border: Border.all(color: MyPalette.white, width: 2),
         ),
-        child:
-            profile == null ? null : getNetworkImage(profile.profileImageUrl),
+        child: getNetworkImage(widget.chat.otherProfile.profileImageUrl),
       );
 
-  Widget _buildLight(context, profile) => AnimatedContainer(
+  Widget _buildLight() => AnimatedContainer(
         duration: const Duration(milliseconds: 100),
         width: 100,
         height: 100,
@@ -58,33 +49,25 @@ class _MatchTileState extends State<MatchTile> {
         ),
         transform:
             _pressed ? Matrix4.translationValues(0, 4, 0) : Matrix4.identity(),
-        child: profile == null
-            ? null
-            : ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: getNetworkImage(profile.profileImageUrl),
-              ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: getNetworkImage(widget.chat.otherProfile.profileImageUrl),
+        ),
       );
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<UserProfile>(
-      future: UsersService.getUserProfile(widget.uid),
-      builder: (context, snapshot) {
-        final profile = snapshot.data;
-        return GestureDetector(
-          child: ThemeBuilder(
-            buildDark: () => _buildDark(context, profile),
-            buildLight: () => _buildLight(context, profile),
-          ),
-          onTapDown: (_) => setState(() => _pressed = true),
-          onTapUp: (_) {
-            setState(() => _pressed = false);
-            _openChat(context, profile);
-          },
-          onTapCancel: () => setState(() => _pressed = false),
-        );
+    return GestureDetector(
+      child: ThemeBuilder(
+        buildDark: _buildDark,
+        buildLight: _buildLight,
+      ),
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) {
+        setState(() => _pressed = false);
+        _openChat();
       },
+      onTapCancel: () => setState(() => _pressed = false),
     );
   }
 }

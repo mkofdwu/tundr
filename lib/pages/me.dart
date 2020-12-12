@@ -15,6 +15,7 @@ import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/utils/show_options_dialog.dart';
 import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/simple_icon.dart';
+import 'package:tundr/widgets/my_feature.dart';
 import 'package:tundr/widgets/verified_badge.dart';
 
 class MePage extends StatefulWidget {
@@ -197,14 +198,12 @@ class _MePageState extends State<MePage> {
                           Expanded(
                             child: SizedBox(
                               width: double.infinity,
-                              child: DescribedFeatureOverlay(
+                              child: MyFeature(
                                 featureId: 'popularity_history_chart',
                                 tapTarget: SizedBox.shrink(),
-                                title: Text('Popularity history chart'),
-                                description: Text(
-                                    "Your popularity score is updated every day. It's based on how many people swipe right on your profile, and the average is always kept at 100"),
-                                targetColor: MyPalette.white.withOpacity(0.8),
-                                backgroundColor: Theme.of(context).accentColor,
+                                title: 'Popularity history chart',
+                                description:
+                                    "Your popularity score is updated every day. It's based on how many people swipe right on your profile, and the average is always kept at 100",
                                 child: LineChart(
                                   LineChartData(
                                     gridData: FlGridData(show: false),

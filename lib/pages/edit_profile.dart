@@ -10,6 +10,7 @@ import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/media/extra_media_grid.dart';
+import 'package:tundr/widgets/my_feature.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -86,14 +87,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
         title: Text('My profile'),
         actions: <Widget>[
-          DescribedFeatureOverlay(
+          MyFeature(
             featureId: 'preview_profile',
             tapTarget: Icon(Icons.remove_red_eye),
-            title: Text('Preview profile'),
-            description: Text(
-                'Click on this eye to learn how others will view your profile'),
-            targetColor: MyPalette.white.withOpacity(0.8),
-            backgroundColor: Theme.of(context).accentColor,
+            title: 'Preview profile',
+            description:
+                'Click on this eye to learn how others will view your profile',
             child: TileIconButton(
               icon: Icons.remove_red_eye, // DESIGN: find better icon
               onPressed: _previewProfile,

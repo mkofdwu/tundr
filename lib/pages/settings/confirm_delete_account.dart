@@ -4,6 +4,7 @@ import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/auth_service.dart';
 
 import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/utils/show_error_dialog.dart';
 import 'package:tundr/utils/show_info_dialog.dart';
 import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/flat_tile.dart';
@@ -29,7 +30,7 @@ class ConfirmDeleteAccountPage extends StatelessWidget {
         content: 'Your account has been deleted',
       );
     } else {
-      await showInfoDialog(
+      await showErrorDialog(
         context: context,
         title: 'Invalid password',
         content: 'Failed to delete your account',

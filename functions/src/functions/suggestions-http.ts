@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import {
+  chatsRef,
   fcm,
   interestsToGroupNo,
   numInterestGroups,
@@ -142,13 +143,26 @@ export const matchWith = functions.https.onCall(async (data, context) => {
   )
     return;
 
-  // save matches
-  await usersPrivateInfoRef.doc(uid).update({
-    matches: admin.firestore.FieldValue.arrayUnion(otherUid),
+  // save matches - create chats
+  const chatDoc = await chatsRef.add({
+    participants: [uid, otherUid],
   });
-  await usersPrivateInfoRef.doc(otherUid).update({
-    matches: admin.firestore.FieldValue.arrayUnion(uid),
+  await usersPrivateInfoRef.doc(uid).collection('chats').doc(chatDoc.id).set({
+    uid: otherUid,
+    wallpaperUrl: '',
+    lastReadMessageId: null,
+    type: 1, // chattype.newmatch
   });
+  await usersPrivateInfoRef
+    .doc(otherUid)
+    .collection('chats')
+    .doc(chatDoc.id)
+    .set({
+      uid: uid,
+      wallpaperUrl: '',
+      lastReadMessageId: null,
+      type: 1, // chattype.newmatch
+    });
 
   // send notification to other user (if he / she so desires)
   if (otherPrivateInfo['settings']['newMatchNotification']) {
@@ -163,7 +177,7 @@ export const matchWith = functions.https.onCall(async (data, context) => {
     if (matchName == null) throw 'user exists but data() returned undefined';
     const payload: admin.messaging.MessagingPayload = {
       notification: {
-        title: 'Congratulations!',
+        title: 'Congratulations',
         body: `${matchName} liked you too!`,
         clickAction: 'FLUTTER_NOTIFICATION_CLICK',
       },

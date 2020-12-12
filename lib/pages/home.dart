@@ -4,6 +4,7 @@ import 'package:tundr/pages/chats_list/chats_list.dart';
 import 'package:tundr/pages/most_popular.dart';
 import 'package:tundr/pages/swiping/swiping.dart';
 import 'package:tundr/constants/my_palette.dart';
+import 'package:tundr/widgets/my_feature.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -62,14 +63,12 @@ class _HomePageState extends State<HomePage>
               ),
               Tab(
                 key: ValueKey('mostPopularTab'),
-                child: DescribedFeatureOverlay(
+                child: MyFeature(
                   featureId: 'most_popular_tab',
                   tapTarget: const Icon(Icons.people),
-                  title: Text('Most popular people'),
-                  description: Text(
-                      'Here you can find a list of the most popular users on the app (based on swipes), with their popularity scores indicated by size.'),
-                  targetColor: MyPalette.white.withOpacity(0.8),
-                  backgroundColor: Theme.of(context).accentColor,
+                  title: 'Most popular people',
+                  description:
+                      'Here you can find a list of the most popular users on the app (based on swipes), with their popularity scores indicated by size.',
                   child: const Icon(Icons.people),
                 ),
               ),
@@ -79,14 +78,12 @@ class _HomePageState extends State<HomePage>
               ),
               Tab(
                 key: ValueKey('searchTab'),
-                child: DescribedFeatureOverlay(
+                child: MyFeature(
                   featureId: 'search_tab',
                   tapTarget: const Icon(Icons.search),
-                  title: Text('Find anyone'),
-                  description: Text(
-                      'Use this to search for anyone on the app, male or female, by their username.'),
-                  targetColor: MyPalette.white.withOpacity(0.8),
-                  backgroundColor: Theme.of(context).accentColor,
+                  title: 'Find anyone',
+                  description:
+                      'Use this to search for anyone on the app, male or female, by their username.',
                   child: Icon(Icons.search),
                 ),
               ),

@@ -15,15 +15,15 @@ class ChatsListPage extends StatefulWidget {
 }
 
 class _ChatsListPageState extends State<ChatsListPage> {
-  Widget _buildMatchesList(List<String> matches) => SingleChildScrollView(
+  Widget _buildMatchesList(List<Chat> matchChats) => SingleChildScrollView(
         clipBehavior: Clip.none,
         scrollDirection: Axis.horizontal,
         child: Row(
           children: List<Widget>.from(
-            matches.map(
+            matchChats.map(
               (uid) => Padding(
                 padding: EdgeInsets.only(right: 10),
-                child: MatchTile(uid: uid),
+                child: MatchTile(chat: uid),
               ),
             ),
           ),
@@ -66,6 +66,9 @@ class _ChatsListPageState extends State<ChatsListPage> {
                 ),
               );
             }
+            final newMatchChats = snapshot.data
+                .where((chat) => chat.type == ChatType.newMatch)
+                .toList();
             final starredChats = snapshot.data
                 .where((chat) => chat.type == ChatType.starred)
                 .toList();
@@ -85,7 +88,7 @@ class _ChatsListPageState extends State<ChatsListPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[] +
-                        (user.privateInfo.matches.isEmpty
+                        (newMatchChats.isEmpty
                             ? []
                             : [
                                 Text(
@@ -96,7 +99,7 @@ class _ChatsListPageState extends State<ChatsListPage> {
                                   ),
                                 ),
                                 SizedBox(height: 20),
-                                _buildMatchesList(user.privateInfo.matches),
+                                _buildMatchesList(newMatchChats),
                                 SizedBox(height: 30),
                               ]) +
                         (starredChats.isEmpty

@@ -4,6 +4,7 @@ Future<void> loginWith(
   driver, {
   String username = 'test',
   String password = '123456',
+  bool waitForHome = true,
 }) async {
   await driver.tap(find.byValueKey('loginBtn'));
   await driver.tap(find.byValueKey('usernameField'));
@@ -11,7 +12,7 @@ Future<void> loginWith(
   await driver.tap(find.byValueKey('passwordField'));
   await driver.enterText(password);
   await driver.tap(find.byValueKey('loginSubmitBtn'));
-  await driver.waitFor(find.byType('HomePage'));
+  if (waitForHome) await driver.waitFor(find.byType('HomePage'));
 }
 
 Future<void> logoutWith(driver) async {

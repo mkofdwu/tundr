@@ -1,19 +1,20 @@
 import 'package:test/test.dart';
 
-import 'pages/chat.dart';
-import 'pages/edit_filters.dart';
-import 'pages/edit_profile.dart';
-import 'pages/login.dart';
-import 'pages/most_popular.dart';
-import 'pages/seach_users.dart';
+import 'groups/chat.dart';
+import 'groups/edit_filters.dart';
+import 'groups/edit_profile.dart';
+import 'groups/login.dart';
+import 'groups/most_popular.dart';
+import 'groups/search_users.dart';
 
 void main() {
   group('Login', loginTests);
   // group('Registration', registrationTests);
   // group('Swiping page', swipingPageTests);
-  group('Most popular page', mostPopularTests);
+  // group('Most popular page', mostPopularTests);
+  // group('Feature discovery', featureDiscoveryTests);
   group('Search for users', searchUsersTests);
-  group('Edit profile', editProfileTests);
-  group('Edit filters', editFiltersTests);
-  group('Chats', chatTests);
+  // group('Edit profile', editProfileTests);
+  // group('Edit filters', editFiltersTests);
+  // group('Chats', chatTests);
 }
