@@ -40,13 +40,12 @@ const users_private_info = Collection({
     theme: Integer,
     numRightSwiped: Integer,
     blocked: ['userId'],
-    matches: ['userId'],
     chats: Collection({
       // contains both unknown and normal (and other types of) chats
       chatId: {
         uid: 'userId', // other user
         wallpaperUrl: String, // url
-        lastRead: Timestamp,
+        lastReadMessageId: 'messageId',
         type: Integer,
       },
     }),
