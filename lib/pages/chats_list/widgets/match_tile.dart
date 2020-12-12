@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/models/chat.dart';
-import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/pages/chat/chat.dart';
 
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/enums/chat_type.dart';
-import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/theme_builder.dart';
 

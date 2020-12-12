@@ -50,7 +50,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
           child: Provider.of<User>(context, listen: false)
                   .privateInfo
                   .blocked
-                  .contains(otherProfile.chat)
+                  .contains(otherProfile.uid)
               ? SizedBox(
                   height: 50,
                   child: Padding(

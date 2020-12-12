@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/enums/chat_type.dart';

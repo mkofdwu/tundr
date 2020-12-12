@@ -6,7 +6,6 @@ import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/pages/chat/widgets/message_field.dart';
 import 'package:tundr/pages/chat/widgets/popup_menu.dart';
 

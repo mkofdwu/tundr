@@ -33,7 +33,7 @@ class Triangle extends StatelessWidget {
     return CustomPaint(
       painter: TrianglePainter(color: MyPalette.white),
       child: Container(
-        width: size,
+        width: size * pow(0.75, 0.5),
         height: size,
       ),
     );

@@ -1,8 +1,6 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
-import '../utils/auth.dart';
-
 const NEW_USERNAME = 'username2';
 const NEW_PASSWORD = 'password2';
 
