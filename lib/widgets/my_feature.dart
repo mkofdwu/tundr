@@ -19,6 +19,8 @@ class MyFeature extends StatelessWidget {
       this.child})
       : super(key: key);
 
+  //static void discoverFeatures(BuildContext context, )
+
   @override
   Widget build(BuildContext context) {
     assert(features.contains(featureId));

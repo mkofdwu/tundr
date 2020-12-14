@@ -120,7 +120,9 @@ class MessageTile extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: GestureDetector(
-                          child: Container(
+                          child: SizedBox(
+                            width: 200,
+                            height: 260,
                             child: ClipRRect(
                               borderRadius: fromTheme(
                                 context,

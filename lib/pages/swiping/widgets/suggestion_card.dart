@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/models/user_profile.dart';
+import 'package:tundr/pages/swiping/card_animations_controller.dart';
 import 'dart:math';
 
 import 'package:tundr/widgets/profile_tile.dart';
@@ -8,7 +9,8 @@ import 'package:tundr/widgets/profile_tile.dart';
 class SuggestionCard extends StatefulWidget {
   final double width;
   final double height;
-  final Stream<UserProfile> profileStream;
+  final UserProfile profile;
+  final CardAnimationsController animationsController;
   final Function onLike;
   final Function onNope;
 
@@ -16,7 +18,8 @@ class SuggestionCard extends StatefulWidget {
     Key key,
     this.width,
     this.height,
-    @required this.profileStream,
+    @required this.profile,
+    @required this.animationsController,
     @required this.onLike,
     @required this.onNope,
   }) : super(key: key);
@@ -29,8 +32,6 @@ class SuggestionCardState extends State<SuggestionCard>
     with TickerProviderStateMixin {
   static const double dampingFactor = 0.2;
   static const int climax = 15; // angle at which nope / like is decided
-
-  UserProfile _profile;
 
   Offset _initialOffset;
   double _angle = 0;
@@ -53,6 +54,18 @@ class SuggestionCardState extends State<SuggestionCard>
   AnimationController _resetController;
   Tween _resetRotateTween;
   Animation _resetRotateAnimation;
+
+  void _fadeInNew() {
+    _fadeInController.reset();
+    _likeController.reset();
+    _nopeController.reset();
+    setState(() {
+      _angle = 0;
+      _goingToLike = false;
+      _goingToNope = false;
+    });
+    _fadeInController.forward();
+  }
 
   void _reset() {
     _resetRotateTween.begin = _angle;
@@ -119,25 +132,19 @@ class SuggestionCardState extends State<SuggestionCard>
     _resetRotateAnimation = _resetRotateTween.animate(_resetController);
 
     // fade in animation when new profile is loaded
-    widget.profileStream.listen((profile) {
-      setState(() => _profile = profile);
-      _fadeInController.reset();
-      _likeController.reset();
-      _nopeController.reset();
-      setState(() {
-        _angle = 0;
-        _goingToLike = false;
-        _goingToNope = false;
-      });
-      _fadeInController.forward();
-    }, onError: (error) {
-      // undo to this profile
-      setState(() => _profile = error);
-      _fadeInController.reset();
-      _likeController.reset();
-      _nopeController.reset();
-      _reset();
-    });
+    widget.animationsController
+        .setAnimationHandler(CardAnimation.fadeInNew, _fadeInNew);
+    widget.animationsController
+        .setAnimationHandler(CardAnimation.like, _onLike);
+    widget.animationsController
+        .setAnimationHandler(CardAnimation.nope, _onNope);
+    widget.animationsController.setAnimationHandler(
+        CardAnimation.undo, () {}); // no undo animation for now
+
+    if (widget.profile != null) {
+      // first card
+      _fadeInNew();
+    }
   }
 
   @override
@@ -170,7 +177,8 @@ class SuggestionCardState extends State<SuggestionCard>
               height: widget.height,
               child: Stack(
                 children: <Widget>[
-                  if (_profile != null) ProfileTile(profile: _profile),
+                  if (widget.profile != null)
+                    ProfileTile(profile: widget.profile),
                   _goingToLike
                       ? Positioned(
                           left: 50,
@@ -246,7 +254,7 @@ class SuggestionCardState extends State<SuggestionCard>
         onTap: () => Navigator.pushNamed(
           context,
           '/profile',
-          arguments: _profile,
+          arguments: widget.profile,
         ),
       ),
     );

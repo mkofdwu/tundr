@@ -50,5 +50,5 @@ export default functions.firestore
         id: context.params.chatId,
       },
     };
-    return fcm.sendToDevice(tokens, payload);
+    await fcm.sendToDevice(tokens, payload);
   });

@@ -15,6 +15,7 @@ class SuggestionsService {
       callHttpsFunction(
           'undoSuggestionResponse', {'otherUid': suggestionUserUid});
 
-  static Future<void> matchWith(String otherUid) =>
-      callHttpsFunction('matchWith', {'otherUid': otherUid});
+  // returns the chat id
+  static Future<String> matchWith(String otherUid) =>
+      callHttpsFunction<String>('matchWith', {'otherUid': otherUid});
 }

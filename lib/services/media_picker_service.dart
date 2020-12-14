@@ -23,8 +23,10 @@ class MediaPickerService {
         case MediaType.image:
           final imageFile = await ImagePicker().getImage(source: source);
           if (imageFile == null) return null;
-          final croppedImage =
-              await ImageCropper.cropImage(sourcePath: imageFile.path);
+          final croppedImage = await ImageCropper.cropImage(
+            sourcePath: imageFile.path,
+            androidUiSettings: AndroidUiSettings(),
+          );
           if (croppedImage == null) return null;
           mediaFile = croppedImage;
           break;

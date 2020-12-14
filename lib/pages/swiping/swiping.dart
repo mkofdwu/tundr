@@ -7,6 +7,7 @@ import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/pages/chat/chat.dart';
+import 'package:tundr/pages/swiping/card_animations_controller.dart';
 import 'package:tundr/pages/swiping/widgets/options_dark.dart';
 import 'package:tundr/pages/swiping/widgets/options_light.dart';
 import 'package:tundr/repositories/user.dart';
@@ -35,8 +36,8 @@ class SwipingPage extends StatefulWidget {
 }
 
 class _SwipingPageState extends State<SwipingPage> {
-  final StreamController<UserProfile> _profileStreamController =
-      StreamController();
+  final CardAnimationsController _cardAnimationsController =
+      CardAnimationsController();
   final List<SuggestionWithProfile> _suggestionWithProfiles = [];
   int _i = 0;
   bool _canUndo = false;
@@ -45,12 +46,6 @@ class _SwipingPageState extends State<SwipingPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(_loadSuggestionProfiles);
-  }
-
-  @override
-  void dispose() {
-    _profileStreamController.close();
-    super.dispose();
   }
 
   Future<void> _loadSuggestionProfiles(_) async {
@@ -70,14 +65,7 @@ class _SwipingPageState extends State<SwipingPage> {
         wasLiked: suggestions[uid],
       ));
     }
-    _addProfileToStream();
     if (mounted) setState(() {});
-  }
-
-  void _addProfileToStream() {
-    if (_i < _suggestionWithProfiles.length) {
-      _profileStreamController.add(_suggestionWithProfiles[_i].profile);
-    }
   }
 
   Future<void> _cleanUp(
@@ -90,7 +78,8 @@ class _SwipingPageState extends State<SwipingPage> {
       _canUndo = true;
     });
 
-    _addProfileToStream(); // to show the next card as soon as possible
+    // to show the next card as soon as possible
+    _cardAnimationsController.triggerAnimation(CardAnimation.fadeInNew);
 
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     if (likedUser) privateInfo.numRightSwiped++;
@@ -113,7 +102,7 @@ class _SwipingPageState extends State<SwipingPage> {
     );
   }
 
-  void _nope() async {
+  void _onNope() async {
     if (_i >= _suggestionWithProfiles.length) return;
     final otherUid = _suggestionWithProfiles[_i].profile.uid;
     if (_suggestionWithProfiles[_i].wasLiked == null) {
@@ -138,23 +127,22 @@ class _SwipingPageState extends State<SwipingPage> {
         _suggestionWithProfiles[_i].profile.uid,
       );
     }
-    _addProfileToStream();
-    // _profileStreamController.addError(_suggestionWithProfiles[_i].profile);
+    _cardAnimationsController.triggerAnimation(CardAnimation.undo);
   }
 
-  void _like() async {
+  void _onLike() async {
     if (_i >= _suggestionWithProfiles.length) return;
 
     final suggestionWithProfile = _suggestionWithProfiles[_i];
     final otherUid = suggestionWithProfile.profile.uid;
-    var saySomethingToMatch = false;
+    var matchChatId;
 
     if (suggestionWithProfile.wasLiked == null) {
       await SuggestionsService.respondToSuggestion(
         toUid: otherUid,
         liked: true,
       );
-    } else if (suggestionWithProfile.wasLiked == true) {
+    } else if (suggestionWithProfile.wasLiked) {
       final matchAction = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -163,8 +151,8 @@ class _SwipingPageState extends State<SwipingPage> {
         ),
       );
       if (matchAction == MatchAction.undo) return;
-      if (matchAction == MatchAction.saySomething) saySomethingToMatch = true;
-      await SuggestionsService.matchWith(otherUid);
+      final chatId = await SuggestionsService.matchWith(otherUid);
+      if (matchAction == MatchAction.saySomething) matchChatId = chatId;
     }
 
     await _cleanUp(
@@ -172,13 +160,14 @@ class _SwipingPageState extends State<SwipingPage> {
       likedUser: true,
       isRespondedSuggestion: suggestionWithProfile.wasLiked != null,
     );
-    if (saySomethingToMatch) {
+    if (suggestionWithProfile.wasLiked) setState(() => _canUndo = false);
+    if (matchChatId != null) {
       await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ChatPage(
             chat: Chat(
-              id: null,
+              id: matchChatId,
               otherProfile: suggestionWithProfile.profile,
               wallpaperUrl: '',
               lastReadMessageId: null,
@@ -239,9 +228,10 @@ class _SwipingPageState extends State<SwipingPage> {
               child: SuggestionCard(
                 width: width - 80,
                 height: height - 250,
-                profileStream: _profileStreamController.stream,
-                onLike: _like,
-                onNope: _nope,
+                profile: _suggestionWithProfiles[_i].profile,
+                animationsController: _cardAnimationsController,
+                onLike: _onLike,
+                onNope: _onNope,
               ),
             ),
           ),
@@ -251,14 +241,24 @@ class _SwipingPageState extends State<SwipingPage> {
             context,
             dark: SwipingOptionsDark(
               canUndo: _canUndo,
-              onLike: _like,
-              onNope: _nope,
+              onLike: () {
+                // when the animation is complete _onLike handler is called
+                _cardAnimationsController.triggerAnimation(CardAnimation.like);
+              },
+              onNope: () {
+                _cardAnimationsController.triggerAnimation(CardAnimation.nope);
+              },
               onUndo: _undo,
             ),
             light: SwipingOptionsLight(
               canUndo: _canUndo,
-              onLike: _like,
-              onNope: _nope,
+              onLike: () {
+                _cardAnimationsController.triggerAnimation(CardAnimation.like);
+              },
+              onNope: () {
+                // when the animation is complete _onNope handler is called
+                _cardAnimationsController.triggerAnimation(CardAnimation.nope);
+              },
               onUndo: _undo,
             ),
           ),

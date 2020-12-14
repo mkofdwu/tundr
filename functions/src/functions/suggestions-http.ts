@@ -128,20 +128,20 @@ export const undoSuggestionResponse = functions.https.onCall(
 export const matchWith = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
   const otherUid = data.otherUid;
-  if (uid == null || otherUid == null) return;
+  if (uid == null || otherUid == null) return { result: null };
 
   // check if both users have indeed liked each other
   const privateInfo = (await usersPrivateInfoRef.doc(uid).get()).data();
   const otherPrivateInfo = (
     await usersPrivateInfoRef.doc(otherUid).get()
   ).data();
-  if (privateInfo == null || otherPrivateInfo == null) return;
+  if (privateInfo == null || otherPrivateInfo == null) return { result: null };
   if (
     // both should be true (suggestionsGoneThrough is a map in the format {uid: liked})
     !privateInfo['suggestionsGoneThrough'][otherUid] ||
     !otherPrivateInfo['suggestionsGoneThrough'][uid]
   )
-    return;
+    return { result: null };
 
   // save matches - create chats
   const chatDoc = await chatsRef.add({
@@ -169,24 +169,26 @@ export const matchWith = functions.https.onCall(async (data, context) => {
     const tokens: string[] = (
       await usersPrivateInfoRef.doc(otherUid).collection('tokens').get()
     ).docs.map((doc) => doc.id);
-    if (tokens.length == 0) return;
-    const userProfile = (await userProfilesRef.doc(uid).get()).data();
-    if (userProfile == null)
-      throw `user with uid ${uid} initiated match but seems to have disappeared`;
-    const matchName: string = userProfile['name'];
-    if (matchName == null) throw 'user exists but data() returned undefined';
-    const payload: admin.messaging.MessagingPayload = {
-      notification: {
-        title: 'Congratulations',
-        body: `${matchName} liked you too!`,
-        clickAction: 'FLUTTER_NOTIFICATION_CLICK',
-      },
-      data: {
-        type: 'newMatch',
-        uid: uid,
-      },
-    };
-    return fcm.sendToDevice(tokens, payload);
+    if (tokens.length > 0) {
+      const userProfile = (await userProfilesRef.doc(uid).get()).data();
+      if (userProfile == null)
+        throw `user with uid ${uid} initiated match but seems to have disappeared`;
+      const matchName: string = userProfile['name'];
+      if (matchName == null) throw 'user exists but data() returned undefined';
+      const payload: admin.messaging.MessagingPayload = {
+        notification: {
+          title: 'Congratulations',
+          body: `${matchName} liked you too!`,
+          clickAction: 'FLUTTER_NOTIFICATION_CLICK',
+        },
+        data: {
+          type: 'newMatch',
+          uid: uid,
+        },
+      };
+      await fcm.sendToDevice(tokens, payload);
+    }
   }
-  return;
+
+  return { result: chatDoc.id };
 });
