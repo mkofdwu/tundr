@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/utils/from_theme.dart';
 
-class TileSwitch extends StatefulWidget {
+class MySwitch extends StatefulWidget {
   final bool selected;
   final Function(bool) onChanged;
 
-  TileSwitch({
+  MySwitch({
     Key key,
     @required this.selected,
     @required this.onChanged,
   }) : super(key: key);
 
   @override
-  _TileSwitchState createState() => _TileSwitchState();
+  _MySwitchState createState() => _MySwitchState();
 }
 
-class _TileSwitchState extends State<TileSwitch> {
+class _MySwitchState extends State<MySwitch> {
   bool _selected;
 
   @override

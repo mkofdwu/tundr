@@ -76,14 +76,10 @@ android {
         dev {
             dimension 'flavor-type'
             applicationId 'com.tundr.tundr_dev'
-            versionCode 1
-            versionName '1.0'
         }
         prod {
             dimension 'flavor-type'
             applicationId 'com.tundr.tundr'
-            versionCode 1
-            versionName '1.0'
         }
     }
 }

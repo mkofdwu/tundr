@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/constants/interests.dart';
-import 'package:tundr/widgets/tabbars/simple.dart';
+import 'package:tundr/widgets/simple_tab_bar.dart';
 import 'package:tundr/widgets/textfields/plain.dart';
 
 import 'add_custom_interest_chip.dart';

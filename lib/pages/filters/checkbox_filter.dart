@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/models/filter.dart';
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/widgets/buttons/back.dart';
-import 'package:tundr/widgets/checkboxes/simple.dart';
+import 'package:tundr/widgets/simple_checkbox.dart';
 
 class CheckboxFilterPage extends StatefulWidget {
   final Filter filter;

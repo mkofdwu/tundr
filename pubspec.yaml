@@ -1,7 +1,7 @@
 name: tundr
 description: tundr clean up removing support for web. Now only supports the android platform.
 
-version: 0.1.11+14
+version: 0.1.0+2
 
 environment:
   sdk: '>=2.2.2 <3.0.0'

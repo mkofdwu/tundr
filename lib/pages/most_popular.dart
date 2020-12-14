@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/pages/its_a_match.dart';
 import 'package:tundr/repositories/theme_manager.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/get_network_image.dart';
-import 'package:tundr/widgets/loaders/loader.dart';
+import 'package:tundr/widgets/my_loader.dart';
 
 class MostPopularPage extends StatefulWidget {
   final double width;
@@ -127,7 +126,7 @@ class _MostPopularPageState extends State<MostPopularPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_positionedProfileImages == null) return Center(child: Loader());
+    if (_positionedProfileImages == null) return Center(child: MyLoader());
     if (_positionedProfileImages.isEmpty) {
       return Center(
         child: Text(

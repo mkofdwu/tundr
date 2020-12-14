@@ -7,7 +7,7 @@ import 'package:tundr/pages/chats_list/widgets/chat_tile.dart';
 import 'package:tundr/pages/chats_list/widgets/match_tile.dart';
 import 'package:tundr/repositories/user.dart';
 
-import 'package:tundr/widgets/loaders/loader.dart';
+import 'package:tundr/widgets/my_loader.dart';
 
 class ChatsListPage extends StatefulWidget {
   @override
@@ -53,7 +53,7 @@ class _ChatsListPageState extends State<ChatsListPage> {
           stream: user.chatsStream(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: Loader());
+              return Center(child: MyLoader());
             }
             if (!snapshot.hasData || snapshot.data.isEmpty) {
               return Center(

@@ -13,6 +13,7 @@ import numberOfSimilarInterests from '../utils/num-similar-interests';
 const N = 10; // maximum amount of suggestions generated per day for each user
 
 const valuePassesFilter = (value: any, filter: Filter) => {
+  if (filter.options == null) return true; // no preference
   switch (filter.name) {
     case 'Height':
     case 'Personality':

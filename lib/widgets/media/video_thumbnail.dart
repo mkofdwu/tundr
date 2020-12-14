@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:tundr/models/media.dart';
-import 'package:tundr/widgets/loaders/loader.dart';
+import 'package:tundr/widgets/my_loader.dart';
 import 'package:tundr/widgets/media/play_triangle.dart';
 import 'package:video_player/video_player.dart';
 
@@ -41,7 +41,7 @@ class _VideoThumbnailState extends State<VideoThumbnail> {
       future: _initializeVideoController,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Loader();
+          return MyLoader();
         }
         return Stack(
           children: <Widget>[

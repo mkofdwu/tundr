@@ -6,7 +6,7 @@ import 'package:tundr/pages/setup/profile_pic.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
-import 'package:tundr/widgets/radio_groups/tile.dart';
+import 'package:tundr/widgets/tile_radio_group.dart';
 
 const Map<String, Gender> stringToGender = {
   'Male': Gender.male,

@@ -10,9 +10,7 @@ import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/utils/show_question_dialog.dart';
-import 'package:tundr/widgets/popup_menus/menu_divider.dart';
-import 'package:tundr/widgets/popup_menus/menu_option.dart';
-import 'package:tundr/widgets/popup_menus/popup_menu.dart';
+import 'package:tundr/widgets/popup_menu.dart';
 
 class ChatPopupMenu extends StatelessWidget {
   final Chat chat;

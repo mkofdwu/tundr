@@ -20,11 +20,15 @@ service cloud.firestore {
     match /user_statuses/{uid} {
     	allow read: if request.auth != null;
       allow write: if request.auth.uid == uid;
-    }
+    }    
     match /chats/{chatId} {
     	allow read, write: if request.auth.uid in resource.data.participants;
       match /messages/{messageId} {
-      	allow write: if request.auth.uid == resource.data.senderUid;
+      	// use get() to check that authenticated user is a participant (for now i don't have sufficient reads)
+      	allow read;
+        allow create: if request.auth.uid == request.resource.data.senderUid;
+        allow update: if request.auth.uid == resource.data.senderUid || request.resource.data.diff(resource.data).changedKeys().hasOnly(["readOn"]);
+      	allow delete: if request.auth.uid == resource.data.senderUid;
       }
     }
   }

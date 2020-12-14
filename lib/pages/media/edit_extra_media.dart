@@ -8,9 +8,7 @@ import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/show_options_dialog.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/pages/media/widgets/media_viewer.dart';
-import 'package:tundr/widgets/popup_menus/menu_divider.dart';
-import 'package:tundr/widgets/popup_menus/menu_option.dart';
-import 'package:tundr/widgets/popup_menus/popup_menu.dart';
+import 'package:tundr/widgets/popup_menu.dart';
 
 class EditExtraMediaPage extends StatefulWidget {
   final Media media;

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/models/media.dart';
-import 'package:tundr/widgets/loaders/loader.dart';
+import 'package:tundr/widgets/my_loader.dart';
 import 'package:tundr/widgets/media/play_triangle.dart';
 import 'package:video_player/video_player.dart';
 
@@ -52,7 +52,7 @@ class _SimpleVideoPlayerState extends State<SimpleVideoPlayer> {
       future: _initializeVideoController,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Loader();
+          return MyLoader();
         }
         return GestureDetector(
           onTap: () => setState(() {
@@ -73,7 +73,7 @@ class _SimpleVideoPlayerState extends State<SimpleVideoPlayer> {
                 if (!_controller.value.isPlaying)
                   Container(color: Color.fromRGBO(0, 0, 0, 0.6)),
                 if (_controller.value.isBuffering)
-                  Center(child: Loader())
+                  Center(child: MyLoader())
                 else if (!_controller.value.isPlaying)
                   Center(child: Triangle()),
                 Positioned(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/widgets/switches/tile.dart';
+import 'package:tundr/widgets/my_switch.dart';
 
 class SwitchSettingField extends StatelessWidget {
   final String title;
@@ -42,7 +42,7 @@ class SwitchSettingField extends StatelessWidget {
           ),
         ),
         SizedBox(width: 20),
-        TileSwitch(
+        MySwitch(
           selected: selected,
           onChanged: onChanged,
         ),

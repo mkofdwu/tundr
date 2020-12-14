@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tundr/widgets/loaders/loader.dart';
+import 'package:tundr/widgets/my_loader.dart';
 
 class LoadingPage extends StatelessWidget {
   final String label;
@@ -13,7 +13,7 @@ class LoadingPage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Loader(),
+            MyLoader(),
             if (label != null)
               Padding(
                 padding: const EdgeInsets.only(top: 20),
