@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 import '../utils/auth.dart';
+import '../utils/processes.dart';
 
 void loginTests() {
   FlutterDriver driver;
@@ -33,12 +32,7 @@ void loginTests() {
     );
     await driver.waitFor(find.byType('AlertDialog'));
     await driver.tap(find.text('CLOSE'));
-    // todo FIXME
-    await Process.run(
-      'adb',
-      <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
-      runInShell: true,
-    );
+    await back();
     await loginWith(
       driver,
       username: 'test',
@@ -47,10 +41,6 @@ void loginTests() {
     );
     await driver.waitFor(find.byType('AlertDialog'));
     await driver.tap(find.text('CLOSE'));
-    await Process.run(
-      'adb',
-      <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
-      runInShell: true,
-    );
+    await back();
   });
 }

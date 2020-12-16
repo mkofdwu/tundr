@@ -42,20 +42,19 @@ class _TextListFieldPageState extends State<TextListFieldPage> {
             ),
           ),
           Positioned(
-            left: width * 48 / 375,
-            top: height * 90 / 812,
+            left: width * 50 / 375,
+            top: height * 150 / 812,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   widget.field.name,
-                  style: TextStyle(fontSize: 60),
+                  style: TextStyle(fontSize: 50),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    widget.field.prompt,
-                    style: TextStyle(fontSize: 12),
-                  ),
+                SizedBox(height: 10),
+                Text(
+                  widget.field.prompt,
+                  style: TextStyle(fontSize: 16),
                 ),
               ],
             ),

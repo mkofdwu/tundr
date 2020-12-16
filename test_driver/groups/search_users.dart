@@ -22,10 +22,8 @@ void searchUsersTests() {
     await driver.tap(find.byValueKey('searchTab'));
     await driver.tap(find.byValueKey('searchTextField'));
     await driver.enterText('test');
-    await driver.tap(
-      find.descendant(
-          of: find.byValueKey('searchResultsColumn'),
-          matching: find.byType('ProfileTile')),
-    );
+    await driver.waitFor(find.text('test'));
+    await driver.waitFor(find.text('test2'));
+    await driver.waitFor(find.text('tester'));
   });
 }

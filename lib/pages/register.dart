@@ -141,6 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     SizedBox(height: 100),
                     TileTextField(
+                      key: ValueKey('usernameField'),
                       hintText: 'Username',
                       controller: _usernameController,
                     ),
@@ -197,6 +198,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         : SizedBox.shrink(),
                     SizedBox(height: 20),
                     TileTextField(
+                      key: ValueKey('passwordField'),
                       hintText: 'Password',
                       controller: _passwordController,
                       obscureText: true,
@@ -220,6 +222,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         : SizedBox.shrink(),
                     SizedBox(height: 20),
                     TileTextField(
+                      key: ValueKey('confirmPasswordField'),
                       hintText: 'Confirm password',
                       controller: _confirmPasswordController,
                       obscureText: true,

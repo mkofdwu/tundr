@@ -15,8 +15,8 @@ class _WelcomePageState extends State<WelcomePage> {
           left: 0,
           top: 63,
           child: Container(
-            width: 223,
-            height: 204,
+            width: 200,
+            height: 200,
             color: MyPalette.black,
           ),
         ),

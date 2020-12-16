@@ -41,6 +41,7 @@ class _SetupNamePageState extends State<SetupNamePage> {
     _nameController.text =
         Provider.of<RegistrationInfo>(context, listen: false).name;
     return ScrollDownPage(
+      key: ValueKey('setupNamePage'),
       onScrollDown: _nextPage,
       builder: (context, width, height) {
         return Stack(
@@ -61,7 +62,7 @@ class _SetupNamePageState extends State<SetupNamePage> {
               top: height * 400 / 812,
               width: width * 195 / 375,
               child: TileTextField(
-                key: ValueKey('nameInput'),
+                key: ValueKey('nameField'),
                 hintText: 'Name',
                 controller: _nameController,
                 moveFocus: false,

@@ -25,6 +25,18 @@
       "windows": {
         "program": "${workspaceRoot}/functions/node_modules/jest/bin/jest"
       }
+    },
+    {
+      "name": "tundr integration tests: launch app",
+      "request": "launch",
+      "type": "dart",
+      "program": "test_driver/app.dart"
+    },
+    {
+      "name": "tundr integration tests: launch driver",
+      "request": "launch",
+      "type": "dart",
+      "program": "test_driver/app_test.dart"
     }
   ]
 }
