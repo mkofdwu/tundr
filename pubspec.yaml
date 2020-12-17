@@ -53,9 +53,6 @@ flutter:
     - assets/images/
 
   fonts:
-    # - family: Helvetica Neue
-    #   fonts:
-    #     - asset: assets/fonts/HelveticaNeue.ttc
     - family: Liberation Sans
       fonts:
         - asset: assets/fonts/LiberationSans-Regular.ttf
