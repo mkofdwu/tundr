@@ -2,6 +2,6 @@
   "projects": {
     "default": "tundr-android-dev",
     "dev": "tundr-android-dev",
-    "prod": "tundr-android"
+    "prod": "tundr-689a7"
   }
 }
