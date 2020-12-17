@@ -10,10 +10,10 @@ class _WelcomePageState extends State<WelcomePage> {
   bool _loginBtnPressed = false;
   bool _registerBtnPressed = false;
 
-  List<Widget> _buildTitle() => <Widget>[
+  List<Widget> _buildTitle(double height) => <Widget>[
         Positioned(
           left: 0,
-          top: 63,
+          top: height * 63 / 736,
           child: Container(
             width: 200,
             height: 200,
@@ -21,8 +21,8 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
         ),
         Positioned(
-          left: 29,
-          top: 35,
+          left: 36,
+          top: height * 44 / 736,
           child: Container(
             width: 254,
             height: 142,
@@ -30,14 +30,14 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
         ),
         Positioned(
-          left: 25,
-          top: 30,
+          left: 36,
+          top: height * 40 / 736,
           width: 230,
           child: Image.asset('assets/images/logo-light.png'),
         ),
         Positioned(
-          left: 191,
-          top: 140,
+          left: 186,
+          top: height * 44 / 736 + 110,
           child: Text(
             'By Jia Jie',
             style: TextStyle(
@@ -55,7 +55,7 @@ class _WelcomePageState extends State<WelcomePage> {
     return Material(
       color: MyPalette.white,
       child: Stack(
-        children: _buildTitle() +
+        children: _buildTitle(height) +
             <Widget>[
               Positioned(
                 top: height * 0.441,
