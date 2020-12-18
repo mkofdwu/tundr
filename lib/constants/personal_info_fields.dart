@@ -43,8 +43,19 @@ const Map<String, Map<String, dynamic>> personalInfoFields = {
   },
   'Religion': {
     'type': 1,
-    'prompt': 'The name of your religion',
-    'options': null,
+    'prompt': 'Select your religion, or enter its name if it’s not listed',
+    'options': [
+      'Christianity',
+      'Islam',
+      'Atheist',
+      'Hinduism',
+      'Buddhism',
+      'Sikhism',
+      'Judaism',
+      'Taoism',
+      'Confucianism',
+      'Racism',
+    ],
   },
   'K-Pop': {
     'type': 2,

@@ -15,32 +15,6 @@ class SetupExtraInfoPage extends StatefulWidget {
 }
 
 class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
-  void _setupAboutMe() => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SetupAboutMePage()),
-        // PageRouteBuilder(
-        //   pageBuilder: (context, animation1, animation2) => SetupInterestsPage(),
-        //   transitionsBuilder: (context, animation1, animation2) {
-        //
-        //   }
-        // ),
-      );
-
-  void _setupExtraMedia() => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SetupExtraMediaPage()),
-      );
-
-  void _setupPersonalInfo() => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SetupPersonalInfoPage()),
-      );
-
-  void _setupInterests() => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SetupInterestsPage()),
-      );
-
   void _nextPage() {
     Navigator.push(
       context,
@@ -69,60 +43,54 @@ class _SetupExtraInfoPageState extends State<SetupExtraInfoPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              'Setup extra\ninfo?',
-              style: TextStyle(
-                color: MyPalette.black,
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'You can skip these steps, but they will probably\nincrease your chances of finding a match.',
-              style: TextStyle(
-                color: MyPalette.black,
-                fontSize: 12,
-              ),
-            ),
-            SizedBox(height: 50),
-            LightTileButton(
-              child: Text(
-                'About me',
-                style: TextStyle(color: MyPalette.black, fontSize: 20),
-              ),
-              onTap: _setupAboutMe,
-            ),
-            LightTileButton(
-              child: Text(
-                'Extra photos & videos',
-                style: TextStyle(color: MyPalette.black, fontSize: 20),
-              ),
-              onTap: _setupExtraMedia,
-            ),
-            LightTileButton(
-              child: Text(
-                'Personal info',
-                style: TextStyle(color: MyPalette.black, fontSize: 20),
-              ),
-              onTap: _setupPersonalInfo,
-            ),
-            LightTileButton(
-              child: Text(
-                'Interests',
-                style: TextStyle(color: MyPalette.black, fontSize: 20),
-              ),
-              onTap: _setupInterests,
-            ),
-            Spacer(),
-            Align(
-              alignment: Alignment.center,
-              child: ScrollDownArrow(
-                dark: false,
-                onNextPage: _nextPage,
-              ),
-            ),
-          ],
+                Text(
+                  'Setup extra\ninfo?',
+                  style: TextStyle(
+                    color: MyPalette.black,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'You can skip these steps, but they will probably\nincrease your chances of finding a match.',
+                  style: TextStyle(
+                    color: MyPalette.black,
+                    fontSize: 14,
+                  ),
+                ),
+                SizedBox(height: 50),
+              ] +
+              [
+                ['About me', SetupAboutMePage()],
+                ['Extra photos & videos', SetupExtraMediaPage()],
+                ['Personal info', SetupPersonalInfoPage()]
+              ]
+                  .map((labelAndPage) => LightTileButton(
+                        child: Text(
+                          labelAndPage[0],
+                          style: TextStyle(
+                            color: MyPalette.black,
+                            fontSize: 20,
+                          ),
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => labelAndPage[1]),
+                        ),
+                      ))
+                  .toList() +
+              [
+                Spacer(),
+                Align(
+                  alignment: Alignment.center,
+                  child: ScrollDownArrow(
+                    dark: false,
+                    onNextPage: _nextPage,
+                  ),
+                ),
+              ],
         ),
       ),
       onScrollDown: _nextPage,

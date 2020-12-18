@@ -82,6 +82,8 @@ void main() {
       await driver.tap(find.text('Computer Hardware'));
       await driver.tap(find.byType('ScrollDownArrow'));
 
+      // TODO FIXME: setup extra info page?
+
       await driver.waitFor(find.byType('SetupPhoneNumberPage'));
       await driver.tap(find.byType('TextField')); // phone number field
       await driver.enterText(
