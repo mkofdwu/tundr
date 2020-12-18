@@ -1,21 +1,21 @@
 import 'package:test/test.dart';
 
-import 'groups/chat.dart';
-import 'groups/edit_filters.dart';
-import 'groups/edit_profile.dart';
-import 'groups/login.dart';
-import 'groups/registration.dart';
-import 'groups/most_popular.dart';
-import 'groups/search_users.dart';
+import 'groups/chat.dart' as chat;
+import 'groups/edit_filters.dart' as edit_filters;
+import 'groups/edit_profile.dart' as edit_profile;
+import 'groups/login.dart' as login;
+import 'groups/registration.dart' as registration;
+import 'groups/most_popular.dart' as most_popular;
+import 'groups/search_users.dart' as search_users;
+import 'groups/swiping.dart' as swiping;
 
 void main() {
-  group('Login', loginTests);
-  group('Registration', registrationTests);
-  // group('Swiping page', swipingPageTests);
-  // group('Most popular page', mostPopularTests);
-  // group('Feature discovery', featureDiscoveryTests);
-  group('Search for users', searchUsersTests);
-  // group('Edit profile', editProfileTests);
-  // group('Edit filters', editFiltersTests);
-  // group('Chats', chatTests);
+  group('Login', login.main);
+  group('Registration', registration.main);
+  // group('Swiping page', swiping.main);
+  // group('Most popular page', most_popular.main);
+  group('Search for users', search_users.main);
+  // group('Edit profile', edit_profile.main);
+  // group('Edit filters', edit_filters.main);
+  // group('Chats', chat.main);
 }

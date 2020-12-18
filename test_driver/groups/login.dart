@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 import '../utils/auth.dart';
 import '../utils/processes.dart';
 
-void loginTests() {
+void main() {
   FlutterDriver driver;
 
   setUpAll(() async {
@@ -23,24 +23,27 @@ void loginTests() {
     await logoutWith(driver);
   });
 
+  Future<void> invalidLoginWith(
+      FlutterDriver driver, String username, String password) async {
+    await loginWith(
+      driver,
+      username: username,
+      password: password,
+      waitForHome: false,
+    );
+    await driver.waitFor(find.byType('AlertDialog'));
+    await driver.tap(find.text('CLOSE'));
+    await back();
+  }
+
   test('Shows error with incorrect credentials', () async {
-    await loginWith(
-      driver,
-      username: 'nonexistentuser',
-      password: '123456',
-      waitForHome: false,
-    );
-    await driver.waitFor(find.byType('AlertDialog'));
-    await driver.tap(find.text('CLOSE'));
-    await back();
-    await loginWith(
-      driver,
-      username: 'test',
-      password: 'wrongpw',
-      waitForHome: false,
-    );
-    await driver.waitFor(find.byType('AlertDialog'));
-    await driver.tap(find.text('CLOSE'));
-    await back();
+    await invalidLoginWith(driver, 'nonexistentuser', '123456');
+    await invalidLoginWith(driver, 'test', 'wrongpw');
+  });
+
+  test('Shows error with badly formatted credentials', () async {
+    await invalidLoginWith(driver, '', '');
+    await invalidLoginWith(driver, 'e\tu q\ntesting', '');
+    await invalidLoginWith(driver, '', 'a \n\r\tpw');
   });
 }

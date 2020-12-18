@@ -42,18 +42,18 @@ class _DigitEntryState extends State<DigitEntry> {
     super.initState();
     assert(widget.hintChar.length == 1);
     _controller.text = widget.hintChar;
-    _controller.addListener(() {
-      if (_controller.selection.baseOffset == 0) {
-        setState(() {
-          _controller.selection = TextSelection.collapsed(offset: 1);
-        });
-      }
-    });
+    // _controller.addListener(() {
+    //   if (_controller.selection.baseOffset == 0) {
+    //     setState(() {
+    //       _controller.selection = TextSelection.collapsed(offset: 1);
+    //     });
+    //   }
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 30,
       height: 50,
       child: TextField(
@@ -89,6 +89,8 @@ class _DigitEntryState extends State<DigitEntry> {
         enableInteractiveSelection: false,
         keyboardType: TextInputType.number,
         onChanged: (value) {
+          print('value changed');
+          print('|$value|');
           if (value.isEmpty) {
             // user pressed backspace either while it contained
             // hint text or while there was a digit in it,
@@ -99,20 +101,34 @@ class _DigitEntryState extends State<DigitEntry> {
             });
             FocusScope.of(context).previousFocus();
           } else {
-            final digitEntered = int.tryParse(value.substring(1));
-            if (digitEntered == null ||
-                !widget.validDigits.contains(digitEntered)) {
+            final cursorIndex = _controller.selection.baseOffset;
+
+            // ! integration test case
+            // ! cursorIndex is always set at -1 by flutter driver, and value only contains one digit
+            if (cursorIndex == -1 && value.length == 1) {
+              final digit = int.tryParse(value);
+              setState(() {
+                _controller.text = digit.toString();
+                _containsDigit = true;
+              });
+              widget.onChanged(digit);
+              if (widget.moveFocus) FocusScope.of(context).nextFocus();
+              return;
+            }
+
+            final charEntered = value.substring(cursorIndex - 1, cursorIndex);
+            final digit = int.tryParse(charEntered);
+            if (digit == null || !widget.validDigits.contains(digit)) {
               // not a valid integer / digit, rejected
               setState(() {
-                _controller.text = value.substring(0, 1);
-                _controller.selection = TextSelection.collapsed(offset: 1);
+                _controller.text = value.replaceAll(charEntered, '');
               });
             } else {
               setState(() {
-                _controller.text = digitEntered.toString();
+                _controller.text = digit.toString();
                 _containsDigit = true;
               });
-              widget.onChanged(digitEntered);
+              widget.onChanged(digit);
               if (widget.moveFocus) FocusScope.of(context).nextFocus();
             }
           }

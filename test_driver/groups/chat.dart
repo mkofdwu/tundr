@@ -3,7 +3,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 
 import '../utils/auth.dart';
 
-void chatTests() {
+void main() {
   FlutterDriver driver;
 
   setUpAll(() async {
@@ -17,5 +17,5 @@ void chatTests() {
     }
   });
 
-  test('', () async {});
+  test('Start conversation with unknown user', () async {});
 }

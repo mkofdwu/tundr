@@ -8,6 +8,7 @@
       "name": "tundr",
       "request": "launch",
       "type": "dart",
+      "program": "lib/main.dart",
       "args": [
         "--flavor",
         "dev"
@@ -30,7 +31,14 @@
       "name": "tundr integration tests: launch app",
       "request": "launch",
       "type": "dart",
-      "program": "test_driver/app.dart"
+      "program": "test_driver/app.dart",
+      "args": [
+        "--flavor",
+        "dev",
+        "--observatory-port",
+        "8888",
+        "--disable-service-auth-codes"
+      ]
     },
     {
       "name": "tundr integration tests: launch driver",

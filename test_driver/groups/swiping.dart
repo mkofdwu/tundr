@@ -3,7 +3,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 
 import '../utils/auth.dart';
 
-void swipingPageTests() {
+void main() {
   final card = find.byValueKey('card');
 
   FlutterDriver driver;

@@ -14,7 +14,7 @@ dependencies:
   firebase_auth: ^0.18.4
   firebase_storage: ^5.1.0
   firebase_messaging: ^7.0.3
-  cloud_firestore: ^0.14.3
+  cloud_firestore: ^0.14.4
   provider: ^4.3.2
   image_picker: ^0.6.2
   image_cropper: ^1.1.2
@@ -51,6 +51,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/test_images/
 
   fonts:
     - family: Liberation Sans

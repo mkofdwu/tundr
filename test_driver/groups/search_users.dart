@@ -3,7 +3,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 
 import '../utils/auth.dart';
 
-void searchUsersTests() {
+void main() {
   FlutterDriver driver;
 
   setUpAll(() async {
@@ -22,7 +22,8 @@ void searchUsersTests() {
     await driver.tap(find.byValueKey('searchTab'));
     await driver.tap(find.byValueKey('searchTextField'));
     await driver.enterText('test');
-    await driver.waitFor(find.text('test'));
+    await driver.waitForAbsent(
+        find.text('test')); // don't show the currently logged in user
     await driver.waitFor(find.text('test2'));
     await driver.waitFor(find.text('tester'));
   });

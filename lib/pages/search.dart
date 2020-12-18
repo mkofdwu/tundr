@@ -82,16 +82,16 @@ class _SearchPageState extends State<SearchPage> {
                   child: Column(
                     key: ValueKey('searchResultsColumn'),
                     children: List<Widget>.from(
-                      snapshot.data.map((otherUser) {
-                        if (otherUser.chat == uid) return SizedBox.shrink();
+                      snapshot.data.map((resultProfile) {
+                        if (resultProfile.uid == uid) return SizedBox.shrink();
                         return Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 40, vertical: 20),
                           child: SizedBox(
                             height: 200,
                             child: GestureDetector(
-                              child: ProfileTile(profile: otherUser),
-                              onTap: () => _openUser(otherUser),
+                              child: ProfileTile(profile: resultProfile),
+                              onTap: () => _openUser(resultProfile),
                             ),
                           ),
                         );
