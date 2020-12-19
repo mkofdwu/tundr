@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'groups/chat.dart' as chat;
+import 'groups/chat/chat.dart' as chat;
 import 'groups/edit_filters.dart' as edit_filters;
 import 'groups/edit_profile.dart' as edit_profile;
 import 'groups/login.dart' as login;

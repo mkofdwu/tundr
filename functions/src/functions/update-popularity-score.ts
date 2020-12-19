@@ -4,6 +4,9 @@ import * as functions from 'firebase-functions';
 import { usersPrivateInfoRef } from '../constants';
 import pageRank from '../utils/pagerank';
 
+const round2dp = (num: number) =>
+  Math.round((num + Number.EPSILON) * 100) / 100;
+
 export default functions.firestore
   .document(
     'thisdocdoesnotexist/{andwillneverbecreated}/butthisfunctionwillbecalledmanually/thequickbrownfoxjumpsoverthelazydog'
@@ -38,8 +41,9 @@ export default functions.firestore
       userPopularityScores.length;
 
     for (let i: number = 0; i < users.length; i++) {
-      const updatedScore =
-        userPopularityScores[i] * (100 / averagePopularityScore);
+      const updatedScore = round2dp(
+        userPopularityScores[i] * (100 / averagePopularityScore)
+      );
       usersPrivateInfoRef.doc(users[i]).update({
         popularityScore: updatedScore,
         popularityHistory: admin.firestore.FieldValue.arrayUnion(

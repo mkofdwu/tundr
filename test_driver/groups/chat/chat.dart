@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 
-import '../utils/auth.dart';
+import '../../utils/auth.dart';
 
 void main() {
   FlutterDriver driver;

@@ -73,14 +73,6 @@ class _SwipingPageState extends State<SwipingPage> {
     bool likedUser,
     bool isRespondedSuggestion,
   }) async {
-    setState(() {
-      _i++;
-      _canUndo = true;
-    });
-
-    // to show the next card as soon as possible
-    _cardAnimationsController.triggerAnimation(CardAnimation.fadeInNew);
-
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     if (likedUser) privateInfo.numRightSwiped++;
     if (isRespondedSuggestion) {
@@ -104,15 +96,25 @@ class _SwipingPageState extends State<SwipingPage> {
 
   void _onNope() async {
     if (_i >= _suggestionWithProfiles.length) return;
-    final otherUid = _suggestionWithProfiles[_i].profile.uid;
-    if (_suggestionWithProfiles[_i].wasLiked == null) {
+    final suggestionWithProfile = _suggestionWithProfiles[_i];
+    final otherUid = suggestionWithProfile.profile.uid;
+
+    // FIXME: place this at the end? it may cause race conditions if the user
+    // swipes / undos too quickly
+    setState(() {
+      _i++;
+      _canUndo = true;
+    });
+    _cardAnimationsController.triggerAnimation(CardAnimation.fadeInNew);
+
+    if (suggestionWithProfile.wasLiked == null) {
       await SuggestionsService.respondToSuggestion(
           toUid: otherUid, liked: false);
     }
     await _cleanUp(
       otherUid,
       likedUser: false,
-      isRespondedSuggestion: _suggestionWithProfiles[_i].wasLiked != null,
+      isRespondedSuggestion: suggestionWithProfile.wasLiked != null,
     );
   }
 
@@ -137,6 +139,14 @@ class _SwipingPageState extends State<SwipingPage> {
     final otherUid = suggestionWithProfile.profile.uid;
     var matchChatId;
 
+    // FIXME: place this at the end? it may cause race conditions if user swipes
+    // too fast or undos to quickly
+    setState(() {
+      _i++;
+      _canUndo = suggestionWithProfile.wasLiked != true;
+    });
+    _cardAnimationsController.triggerAnimation(CardAnimation.fadeInNew);
+
     if (suggestionWithProfile.wasLiked == null) {
       await SuggestionsService.respondToSuggestion(
         toUid: otherUid,
@@ -154,15 +164,11 @@ class _SwipingPageState extends State<SwipingPage> {
       final chatId = await SuggestionsService.matchWith(otherUid);
       if (matchAction == MatchAction.saySomething) matchChatId = chatId;
     }
-
     await _cleanUp(
       otherUid,
       likedUser: true,
       isRespondedSuggestion: suggestionWithProfile.wasLiked != null,
     );
-    if (suggestionWithProfile.wasLiked == true) {
-      setState(() => _canUndo = false);
-    }
     if (matchChatId != null) {
       await Navigator.push(
         context,

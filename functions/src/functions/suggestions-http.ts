@@ -128,6 +128,7 @@ export const undoSuggestionResponse = functions.https.onCall(
 export const matchWith = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
   const otherUid = data.otherUid;
+  console.log(`calling matchwith with ${uid} and ${otherUid}`);
   if (uid == null || otherUid == null) return { result: null };
 
   // check if both users have indeed liked each other
