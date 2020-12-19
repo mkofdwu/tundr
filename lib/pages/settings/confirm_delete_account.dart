@@ -6,7 +6,6 @@ import 'package:tundr/services/auth_service.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/utils/show_error_dialog.dart';
-import 'package:tundr/utils/show_info_dialog.dart';
 import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/buttons/flat_tile.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';

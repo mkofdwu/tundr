@@ -13,7 +13,8 @@ class SetupInterestsPage extends StatefulWidget {
 }
 
 class _SetupInterestsPageState extends State<SetupInterestsPage> {
-  final _minInterests = 10;
+  static const _minInterests = 10;
+  static const _maxInterests = 40;
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +58,21 @@ class _SetupInterestsPageState extends State<SetupInterestsPage> {
   }
 
   void _nextPage() {
-    if (Provider.of<RegistrationInfo>(context, listen: false).interests.length <
-        _minInterests) {
+    final numInterests =
+        Provider.of<RegistrationInfo>(context, listen: false).interests.length;
+    if (numInterests < _minInterests) {
       showInfoDialog(
         context: context,
         title: 'Insufficient interests',
         content:
-            'Please select at least 10 interests. This will be crucial when people are suggested to you.',
+            'Please select at least $_minInterests interests. This will be crucial when people are suggested to you.',
+      );
+    } else if (numInterests > _maxInterests) {
+      showInfoDialog(
+        context: context,
+        title: 'Too many interests selected',
+        content:
+            "Unfortunately, you can't select more than $_maxInterests interests.",
       );
     } else {
       Navigator.push(

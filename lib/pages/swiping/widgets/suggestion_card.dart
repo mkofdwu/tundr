@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/models/user_profile.dart';
-import 'package:tundr/pages/swiping/card_animations_controller.dart';
+import 'package:tundr/pages/swiping/controllers/card_animations_controller.dart';
 import 'dart:math';
 
 import 'package:tundr/widgets/profile_tile.dart';

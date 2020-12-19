@@ -4,13 +4,15 @@ import 'package:tundr/constants/my_palette.dart';
 class SettingField extends StatelessWidget {
   final String title;
   final Widget child;
-  final Function onEdit;
+  final Function onEditOrSubmit;
+  final bool isEditing;
 
   SettingField({
     Key key,
-    this.title,
-    this.child,
-    this.onEdit,
+    @required this.title,
+    @required this.child,
+    this.onEditOrSubmit,
+    this.isEditing,
   }) : super(key: key);
 
   @override
@@ -28,14 +30,14 @@ class SettingField extends StatelessWidget {
                 fontSize: 20,
               ),
             ),
-            onEdit == null
+            onEditOrSubmit == null
                 ? SizedBox.shrink()
                 : GestureDetector(
                     child: Icon(
-                      Icons.edit,
+                      isEditing ? Icons.done : Icons.edit,
                       color: MyPalette.gold,
                     ),
-                    onTap: onEdit,
+                    onTap: onEditOrSubmit,
                   ),
           ],
         ),

@@ -31,6 +31,4 @@ void main() {
   test('Delete extra media', () async {});
 
   test('Replace extra media', () async {});
-
-  // TODO: restart app to test?
 }

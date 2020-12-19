@@ -1,4 +1,3 @@
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/models/personal_info_field.dart';

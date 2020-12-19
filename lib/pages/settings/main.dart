@@ -4,16 +4,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/features.dart';
-import 'package:tundr/models/personal_info_field.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/repositories/user.dart';
 import 'package:tundr/repositories/theme_manager.dart';
-import 'package:tundr/pages/personal_info/text_field.dart';
 import 'package:tundr/pages/settings/confirm_delete_account.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/gender.dart';
 import 'package:tundr/services/notifications_service.dart';
+import 'package:tundr/utils/find_username_error.dart';
+import 'package:tundr/utils/show_error_dialog.dart';
 import 'package:tundr/utils/show_question_dialog.dart';
 import 'package:tundr/widgets/buttons/light_tile.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
@@ -31,21 +31,23 @@ class MainSettingsPage extends StatefulWidget {
 }
 
 class _MainSettingsPageState extends State<MainSettingsPage> {
-  void _changeUsername(String uid, String username) async {
-    final newUsername = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => TextFieldPage(
-          field: PersonalInfoField(
-            name: 'Username',
-            prompt: 'Enter a new username',
-          ),
-          value: username,
-        ),
-      ),
-    );
-    await Provider.of<User>(context, listen: false)
-        .updateProfile({'username': newUsername});
+  final _usernameController = TextEditingController();
+  bool _editingUsername = false;
+
+  void _changeUsername() async {
+    final error = await findUsernameError(_usernameController.text);
+    if (error == null) {
+      await auth.FirebaseAuth.instance.currentUser
+          .updateEmail(_usernameController.text + '@example.com');
+      await Provider.of<User>(context, listen: false)
+          .updateProfile({'username': _usernameController.text});
+    } else {
+      await showErrorDialog(
+        context: context,
+        title: 'Invalid username',
+        content: error,
+      );
+    }
   }
 
   void _confirmLogout() async {
@@ -71,13 +73,21 @@ class _MainSettingsPageState extends State<MainSettingsPage> {
       );
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
+      _usernameController.text =
+          Provider.of<User>(context, listen: false).profile.username;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final profile = Provider.of<User>(context, listen: false).profile;
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     final settings = privateInfo.settings;
     final algorithmData =
         Provider.of<User>(context, listen: false).algorithmData;
-    final uid = profile.uid;
     return Scaffold(
       appBar: AppBar(
         leading: TileIconButton(
@@ -100,13 +110,22 @@ class _MainSettingsPageState extends State<MainSettingsPage> {
               SizedBox(height: 20),
               SettingField(
                 title: 'Username',
-                child: Text(
-                  profile.username,
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-                onEdit: () => _changeUsername(uid, profile.username),
+                child: _editingUsername
+                    ? TextField(
+                        controller: _usernameController,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: EdgeInsets.zero,
+                          border: InputBorder.none,
+                        ),
+                        style: TextStyle(fontSize: 14),
+                      )
+                    : Text(profile.username, style: TextStyle(fontSize: 14)),
+                onEditOrSubmit: () {
+                  setState(() => _editingUsername = !_editingUsername);
+                  if (!_editingUsername) _changeUsername();
+                },
+                isEditing: _editingUsername,
               ),
               SizedBox(height: 20),
               SeparatePageSettingField(

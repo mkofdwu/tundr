@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/pages/setup/about_me.dart';
 import 'package:tundr/pages/setup/extra_media.dart';
-import 'package:tundr/pages/setup/interests.dart';
 import 'package:tundr/pages/setup/personal_info.dart';
 import 'package:tundr/pages/setup/phone_number.dart';
 import 'package:tundr/constants/my_palette.dart';

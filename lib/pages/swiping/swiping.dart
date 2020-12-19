@@ -7,7 +7,7 @@ import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/pages/chat/chat.dart';
-import 'package:tundr/pages/swiping/card_animations_controller.dart';
+import 'package:tundr/pages/swiping/controllers/card_animations_controller.dart';
 import 'package:tundr/pages/swiping/widgets/options_dark.dart';
 import 'package:tundr/pages/swiping/widgets/options_light.dart';
 import 'package:tundr/repositories/user.dart';
@@ -160,7 +160,9 @@ class _SwipingPageState extends State<SwipingPage> {
       likedUser: true,
       isRespondedSuggestion: suggestionWithProfile.wasLiked != null,
     );
-    if (suggestionWithProfile.wasLiked) setState(() => _canUndo = false);
+    if (suggestionWithProfile.wasLiked == true) {
+      setState(() => _canUndo = false);
+    }
     if (matchChatId != null) {
       await Navigator.push(
         context,

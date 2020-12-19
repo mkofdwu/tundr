@@ -140,8 +140,11 @@ export const matchWith = functions.https.onCall(async (data, context) => {
     // both should be true (suggestionsGoneThrough is a map in the format {uid: liked})
     !privateInfo['suggestionsGoneThrough'][otherUid] ||
     !otherPrivateInfo['suggestionsGoneThrough'][uid]
-  )
-    return { result: null };
+  ) {
+    throw 'failed to match, both users did not like each other';
+  }
+
+  console.log('creating chats for matched users');
 
   // save matches - create chats
   const chatDoc = await chatsRef.add({
@@ -164,8 +167,11 @@ export const matchWith = functions.https.onCall(async (data, context) => {
       type: 1, // chattype.newmatch
     });
 
+  console.log('done creating chats for both users');
+
   // send notification to other user (if he / she so desires)
   if (otherPrivateInfo['settings']['newMatchNotification']) {
+    console.log('User wants notification');
     const tokens: string[] = (
       await usersPrivateInfoRef.doc(otherUid).collection('tokens').get()
     ).docs.map((doc) => doc.id);
@@ -173,12 +179,11 @@ export const matchWith = functions.https.onCall(async (data, context) => {
       const userProfile = (await userProfilesRef.doc(uid).get()).data();
       if (userProfile == null)
         throw `user with uid ${uid} initiated match but seems to have disappeared`;
-      const matchName: string = userProfile['name'];
-      if (matchName == null) throw 'user exists but data() returned undefined';
+      console.log('Sending notification');
       const payload: admin.messaging.MessagingPayload = {
         notification: {
           title: 'Congratulations',
-          body: `${matchName} liked you too!`,
+          body: `${userProfile['name']} liked you too!`,
           clickAction: 'FLUTTER_NOTIFICATION_CLICK',
         },
         data: {
@@ -187,6 +192,7 @@ export const matchWith = functions.https.onCall(async (data, context) => {
         },
       };
       await fcm.sendToDevice(tokens, payload);
+      console.log('Notification sent');
     }
   }
 

@@ -6,6 +6,7 @@ import 'package:tundr/pages/loading.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/pages/setup/name.dart';
 import 'package:tundr/services/users_service.dart';
+import 'package:tundr/utils/find_username_error.dart';
 import 'package:tundr/widgets/buttons/round.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';
 import 'package:tundr/widgets/textfields/tile.dart';
@@ -21,9 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  bool _usernameContainsWhitespace = false;
-  bool _usernameLessThan4Chars = false;
-  bool _usernameAlreadyExists = false;
+  String _usernameError;
   bool _passwordLessThan6Chars = false;
   bool _passwordsDoNotMatch = false;
 
@@ -36,20 +35,15 @@ class _RegisterPageState extends State<RegisterPage> {
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    final usernameAlreadyExists =
-        await UsersService.usernameAlreadyExists(username);
+    final usernameError = await findUsernameError(username);
 
     setState(() {
-      _usernameContainsWhitespace = username.contains(RegExp(r'\s'));
-      _usernameLessThan4Chars = username.length < 4;
-      _usernameAlreadyExists = usernameAlreadyExists;
+      _usernameError = usernameError;
       _passwordLessThan6Chars = password.length < 6;
       _passwordsDoNotMatch = password != confirmPassword;
     });
 
-    if (!_usernameContainsWhitespace &&
-        !_usernameLessThan4Chars &&
-        !_usernameAlreadyExists &&
+    if (_usernameError == null &&
         !_passwordLessThan6Chars &&
         !_passwordsDoNotMatch) {
       Provider.of<RegistrationInfo>(context, listen: false).username = username;
@@ -145,57 +139,22 @@ class _RegisterPageState extends State<RegisterPage> {
                       hintText: 'Username',
                       controller: _usernameController,
                     ),
-                    _usernameContainsWhitespace
-                        ? Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: MyPalette.red,
-                              boxShadow: [MyPalette.primaryShadow],
-                            ),
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              'Your username cannot contain any spaces',
-                              style: TextStyle(
-                                color: MyPalette.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                    _usernameLessThan4Chars
-                        ? Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: MyPalette.red,
-                              boxShadow: [MyPalette.primaryShadow],
-                            ),
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              'Your username must be at least 4 characters long',
-                              style: TextStyle(
-                                color: MyPalette.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                    _usernameAlreadyExists
-                        ? Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: MyPalette.red,
-                              boxShadow: [MyPalette.primaryShadow],
-                            ),
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              'This username is already taken',
-                              style: TextStyle(
-                                color: MyPalette.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink(),
+                    if (_usernameError != null)
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: MyPalette.red,
+                          boxShadow: [MyPalette.primaryShadow],
+                        ),
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          _usernameError,
+                          style: TextStyle(
+                            color: MyPalette.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
                     SizedBox(height: 20),
                     TileTextField(
                       key: ValueKey('passwordField'),
