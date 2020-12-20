@@ -11,6 +11,10 @@ class ChatsService {
     return usersPrivateInfoRef.doc(uid).collection('chats').doc(chatId);
   }
 
+  static Future<Chat> getChat(String uid, String chatId) async {
+    return await Chat.fromDoc(await _userChatRef(uid, chatId).get());
+  }
+
   static Stream<List<Message>> messagesStream(String chatId, int n) {
     // stream of the last n messages
     return chatsRef

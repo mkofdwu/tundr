@@ -28,7 +28,7 @@ export default functions.firestore
 
     const tokens: string[] = [];
     for (const uid of participants) {
-      if (uid == message['senderUid']) return; // don't send the notification to the original sender
+      if (uid == message['senderUid']) continue; // don't send the notification to the original sender
       tokens.push(
         ...(
           await usersPrivateInfoRef.doc(uid).collection('tokens').get()
@@ -51,5 +51,6 @@ export default functions.firestore
         chatId: context.params.chatId,
       },
     };
+    console.log('sending to devices with tokens: ' + tokens);
     await fcm.sendToDevice(tokens, payload);
   });

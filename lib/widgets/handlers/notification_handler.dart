@@ -5,8 +5,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/pages/chat/chat.dart';
+import 'package:tundr/pages/its_a_match.dart';
 import 'package:tundr/repositories/user.dart';
+import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/services/notifications_service.dart';
+import 'package:tundr/services/users_service.dart';
+import 'package:tundr/utils/show_info_dialog.dart';
 
 class NotificationHandler extends StatefulWidget {
   final Widget child;
@@ -32,87 +37,39 @@ class _NotificationHandlerState extends State<NotificationHandler> {
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('MESSAGE RECEIVED: $message');
-        // switch (message['data']['type']) {
-        //   case 'newMatch':
-        //     _openItsAMatch(message['data']['uid']);
-        //     break;
-        //   case 'newMessage':
-        //     final String currentUid =
-        //         Provider.of<User>(context, listen: false).profile.uid;
-        //     final LocalDatabaseService localDatabaseService =
-        //         DatabaseService;
-
-        //     final Message userMessage = await DatabaseService.retrieveMessage(
-        //         currentUid, message['data']['id']);
-        //     localDatabaseService.saveMessage(userMessage);
-        //     DatabaseService.clearMessage(currentUid, userMessage.id);
-
-        //     if (await localDatabaseService.chatExists(userMessage.uid)) {
-        //       localDatabaseService.setChatUpdated(userMessage.uid);
-        //     } else {
-        //       localDatabaseService.saveUnknownChat(userMessage.uid);
-        //     }
-
-        //     break;
-        // }
+        // i've deemed the appropriate behaviour to do nothing
       },
       onResume: _handleNotificationClick,
       onLaunch: _handleNotificationClick,
     );
   }
 
-  // _match(String uid) async {
-  //   DatabaseService.saveMatch(uid);
-  //   final User user = await DatabaseService.getUser(uid);
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => ItsAMatchPage(user: user),
-  //     ),
-  //   );
-  // }
-
   Future<void> _handleNotificationClick(Map<String, dynamic> message) async {
     print('notification received: $message');
-    // switch (message['data']['type']) {
-    //   case 'newMatch':
-    //     _openItsAMatch(message['data']['uid']);
-    //     break;
-    //   case 'newMessage':
-    //     final String currentUid = Provider.of<User>(context, listen: false).profile.uid;
-    //     final LocalDatabaseService localDatabaseService =
-    //         DatabaseService;
-
-    //     final Message userMessage = await DatabaseService.retrieveMessage(
-    //         currentUid, message['data']['id']);
-    //     localDatabaseService.saveMessage(userMessage);
-    //     DatabaseService.clearMessage(currentUid, userMessage.id);
-
-    //     ChatType chatType;
-    //     if (await localDatabaseService.chatExists(userMessage.uid)) {
-    //       localDatabaseService.setChatUpdated(userMessage.uid);
-    //       chatType = await localDatabaseService.getChatType(userMessage.uid);
-    //     } else {
-    //       localDatabaseService.saveUnknownChat(userMessage.uid);
-    //       chatType = ChatType.unknown;
-    //     }
-
-    //     Navigator.push(
-    //       context,
-    //       PageRouteBuilder(
-    //         pageBuilder: (context, animation1, animation2) => ChatPage(
-    //           uid: message['data']['uid'],
-    //           chatType: chatType,
-    //         ),
-    //       ),
-    //     );
-    //     break;
-    // }
+    final messageType = message['data']['type'];
+    if (messageType == 'newMatch') {
+      final otherProfile =
+          await UsersService.getUserProfile(message['data']['uid']);
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ItsAMatchPage(profile: otherProfile),
+        ),
+      );
+    } else if (messageType == 'newMessage') {
+      final uid = Provider.of<User>(context, listen: false).profile.uid;
+      final chat = await ChatsService.getChat(uid, message['data']['chatId']);
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ChatPage(chat: chat)),
+      );
+    }
   }
 
   void _saveDeviceToken() async {
     final token = await _fcm.getToken();
     if (token != null) {
+      print('fcm token: ' + token);
       Provider.of<User>(context, listen: false).fcmToken = token;
       final uid = auth.FirebaseAuth.instance.currentUser.uid;
       await NotificationsService.saveToken(uid, token);

@@ -12,10 +12,10 @@ import 'groups/swiping.dart' as swiping;
 void main() {
   group('Login', login.main);
   group('Registration', registration.main);
-  // group('Swiping page', swiping.main);
-  // group('Most popular page', most_popular.main);
+  group('Swiping page', swiping.main);
+  group('Most popular page', most_popular.main);
   group('Search for users', search_users.main);
-  // group('Edit profile', edit_profile.main);
-  // group('Edit filters', edit_filters.main);
-  // group('Chats', chat.main);
+  group('Edit profile', edit_profile.main);
+  group('Edit filters', edit_filters.main);
+  group('Chats', chat.main);
 }

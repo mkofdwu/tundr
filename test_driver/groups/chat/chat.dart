@@ -13,6 +13,7 @@ void main() {
 
   tearDownAll(() async {
     if (driver != null) {
+      await logoutWith(driver);
       await driver.close();
     }
   });
