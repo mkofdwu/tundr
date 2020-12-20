@@ -11,6 +11,8 @@ import {
 export default functions.firestore
   .document('chats/{chatId}/messages/{messageId}')
   .onCreate(async (snapshot, context) => {
+    console.log('function invoked');
+
     const chat = (await chatsRef.doc(context.params.chatId).get()).data();
     if (chat == null)
       throw 'could not find chat of id: ' + context.params.chatId;
@@ -33,7 +35,10 @@ export default functions.firestore
         ).docs.map((doc) => doc.id)
       );
     }
-    if (tokens.length == 0) return;
+    if (tokens.length == 0) {
+      console.log('no tokens to send notification');
+      return;
+    }
 
     const payload: admin.messaging.MessagingPayload = {
       notification: {
