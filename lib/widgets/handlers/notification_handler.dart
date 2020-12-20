@@ -18,7 +18,7 @@ class NotificationHandler extends StatefulWidget {
 }
 
 class _NotificationHandlerState extends State<NotificationHandler> {
-  final FirebaseMessaging _fcm = FirebaseMessaging();
+  final _fcm = FirebaseMessaging();
 
   @override
   void initState() {
@@ -31,6 +31,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
     }
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
+        print('MESSAGE RECEIVED: $message');
         // switch (message['data']['type']) {
         //   case 'newMatch':
         //     _openItsAMatch(message['data']['uid']);
@@ -72,6 +73,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
   // }
 
   Future<void> _handleNotificationClick(Map<String, dynamic> message) async {
+    print('notification received: $message');
     // switch (message['data']['type']) {
     //   case 'newMatch':
     //     _openItsAMatch(message['data']['uid']);

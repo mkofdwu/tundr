@@ -41,6 +41,7 @@ class _MainSettingsPageState extends State<MainSettingsPage> {
           .updateEmail(_usernameController.text + '@example.com');
       await Provider.of<User>(context, listen: false)
           .updateProfile({'username': _usernameController.text});
+      setState(() {}); // reflect change on ui
     } else {
       await showErrorDialog(
         context: context,

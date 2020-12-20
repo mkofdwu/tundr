@@ -166,7 +166,6 @@ class _ChatTileState extends State<ChatTile> {
             light: null,
           ),
         ),
-        clipBehavior: Clip.antiAlias,
         transform: fromTheme(
           context,
           dark: null,
@@ -174,41 +173,48 @@ class _ChatTileState extends State<ChatTile> {
               ? Matrix4.translationValues(0, 6, 0)
               : Matrix4.identity(),
         ),
-        child: Stack(
-          children: <Widget>[
-                widget.chat.otherProfile.profileImageUrl == null
-                    ? null
-                    : getNetworkImage(
-                        widget.chat.otherProfile.profileImageUrl,
-                        width: 150,
-                        height: 250,
+        child: ClipRRect(
+          borderRadius: fromTheme(
+            context,
+            dark: BorderRadius.zero,
+            light: BorderRadius.circular(20),
+          ),
+          child: Stack(
+            children: <Widget>[
+                  widget.chat.otherProfile.profileImageUrl == null
+                      ? null
+                      : getNetworkImage(
+                          widget.chat.otherProfile.profileImageUrl,
+                          width: 150,
+                          height: 250,
+                        ),
+                ] +
+                fromTheme(
+                  context,
+                  dark: <Widget>[
+                    Container(
+                      color: MyPalette.black.withOpacity(
+                        _pressed ? 0.8 : 0.6,
                       ),
-              ] +
-              fromTheme(
-                context,
-                dark: <Widget>[
-                  Container(
-                    color: MyPalette.black.withOpacity(
-                      _pressed ? 0.8 : 0.6,
                     ),
+                  ],
+                  light: _radialShadows(),
+                ) +
+                [
+                  Positioned(
+                    left: 10,
+                    top: 10,
+                    right: 10,
+                    child: _buildMessagesPreview(),
+                  ),
+                  Positioned(
+                    left: 20,
+                    bottom: 20,
+                    right: 10,
+                    child: _buildNameAndStatus(),
                   ),
                 ],
-                light: _radialShadows(),
-              ) +
-              [
-                Positioned(
-                  left: 10,
-                  top: 10,
-                  right: 10,
-                  child: _buildMessagesPreview(),
-                ),
-                Positioned(
-                  left: 20,
-                  bottom: 20,
-                  right: 10,
-                  child: _buildNameAndStatus(),
-                ),
-              ],
+          ),
         ),
       ),
     );

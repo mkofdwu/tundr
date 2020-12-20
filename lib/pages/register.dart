@@ -5,7 +5,6 @@ import 'package:tundr/pages/loading.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/pages/setup/name.dart';
-import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/find_username_error.dart';
 import 'package:tundr/widgets/buttons/round.dart';
 import 'package:tundr/widgets/pages/stack_scroll.dart';

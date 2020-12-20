@@ -29,6 +29,7 @@ class MediaPickerService {
             androidUiSettings: AndroidUiSettings(
               activeControlsWidgetColor: MyPalette.gold,
             ),
+            // TODO FIXME: iOS UI settings
           );
           if (croppedImage == null) return null;
           mediaFile = croppedImage;
