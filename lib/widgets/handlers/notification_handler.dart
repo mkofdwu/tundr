@@ -11,7 +11,6 @@ import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/services/notifications_service.dart';
 import 'package:tundr/services/users_service.dart';
-import 'package:tundr/utils/show_info_dialog.dart';
 
 class NotificationHandler extends StatefulWidget {
   final Widget child;

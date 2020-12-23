@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/models/chat.dart';
+import 'package:tundr/models/user_algorithm_data.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/pages/chat/chat.dart';
@@ -80,17 +81,21 @@ class _SwipingPageState extends State<SwipingPage> {
     } else {
       privateInfo.dailyGeneratedSuggestions.remove(otherUid);
     }
-    privateInfo.suggestionsGoneThrough[otherUid] = likedUser;
-
     await Provider.of<User>(context, listen: false).writeFields(
       [
         'numRightSwiped',
         isRespondedSuggestion
             ? 'respondedSuggestions'
             : 'dailyGeneratedSuggestions',
-        'suggestionsGoneThrough'
       ],
       UserPrivateInfo,
+    );
+
+    Provider.of<User>(context).algorithmData.suggestionsGoneThrough[otherUid] =
+        likedUser;
+    await Provider.of<User>(context, listen: false).writeFields(
+      ['suggestionsGoneThrough'],
+      UserAlgorithmData,
     );
   }
 

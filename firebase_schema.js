@@ -36,7 +36,6 @@ const users_private_info = Collection({
     },
     dailyGeneratedSuggestions: ['userId'],
     respondedSuggestions: { String: Boolean },
-    suggestionsGoneThrough: { String: Boolean },
     theme: Integer,
     numRightSwiped: Integer,
     blocked: ['userId'],
@@ -61,6 +60,7 @@ const users_algorithm_data = Collection({
   otherFilters: {
     personalInfoField: { method: Integer, options: Object },
   },
+  suggestionsGoneThrough: { String: Boolean },
 });
 
 const user_statuses = Collection({

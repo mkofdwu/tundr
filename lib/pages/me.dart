@@ -119,11 +119,12 @@ class _MePageState extends State<MePage> {
                                                 fontSize: 30,
                                               ),
                                             ),
-                                            WidgetSpan(
-                                              child: VerifiedBadge(
-                                                color: MyPalette.white,
+                                            if (profile.verified)
+                                              WidgetSpan(
+                                                child: VerifiedBadge(
+                                                  color: MyPalette.white,
+                                                ),
                                               ),
-                                            ),
                                           ],
                                         ),
                                       ),

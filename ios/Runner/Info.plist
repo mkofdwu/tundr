@@ -41,5 +41,18 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<!-- image picker -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Select media from your gallery</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Take a photo or video with your camera</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Record audio from your microphone</string>
+	<!-- video player -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

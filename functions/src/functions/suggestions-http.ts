@@ -129,18 +129,19 @@ export const matchWith = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
   const otherUid = data.otherUid;
   console.log(`calling matchwith with ${uid} and ${otherUid}`);
-  if (uid == null || otherUid == null) return { result: null };
+  if (uid == null || otherUid == null) throw 'either uid was not supplied';
 
   // check if both users have indeed liked each other
-  const privateInfo = (await usersPrivateInfoRef.doc(uid).get()).data();
-  const otherPrivateInfo = (
-    await usersPrivateInfoRef.doc(otherUid).get()
+  const algorithmData = (await usersAlgorithmDataRef.doc(uid).get()).data();
+  const otherAlgorithmData = (
+    await usersAlgorithmDataRef.doc(otherUid).get()
   ).data();
-  if (privateInfo == null || otherPrivateInfo == null) return { result: null };
+  if (algorithmData == null || otherAlgorithmData == null)
+    throw 'could not get either user algorithm data';
   if (
     // both should be true (suggestionsGoneThrough is a map in the format {uid: liked})
-    !privateInfo['suggestionsGoneThrough'][otherUid] ||
-    !otherPrivateInfo['suggestionsGoneThrough'][uid]
+    !algorithmData['suggestionsGoneThrough'][otherUid] ||
+    !otherAlgorithmData['suggestionsGoneThrough'][uid]
   ) {
     throw 'failed to match, both users did not like each other';
   }
@@ -170,6 +171,11 @@ export const matchWith = functions.https.onCall(async (data, context) => {
 
   console.log('done creating chats for both users');
 
+  const otherPrivateInfo = (
+    await usersPrivateInfoRef.doc(otherUid).get()
+  ).data();
+  if (otherPrivateInfo == null)
+    throw 'could not get private info of uid: ' + otherUid;
   // send notification to other user (if he / she so desires)
   if (otherPrivateInfo['settings']['newMatchNotification']) {
     console.log('User wants notification');

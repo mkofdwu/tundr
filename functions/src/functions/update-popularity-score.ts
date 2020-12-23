@@ -1,7 +1,7 @@
 import admin = require('firebase-admin');
 import * as functions from 'firebase-functions';
 
-import { usersPrivateInfoRef } from '../constants';
+import { usersAlgorithmDataRef, usersPrivateInfoRef } from '../constants';
 import pageRank from '../utils/pagerank';
 
 const round2dp = (num: number) =>
@@ -12,39 +12,37 @@ export default functions.firestore
     'thisdocdoesnotexist/{andwillneverbecreated}/butthisfunctionwillbecalledmanually/thequickbrownfoxjumpsoverthelazydog'
   )
   .onCreate(async (snapshot, context) => {
-    let users: string[] = [];
+    let uids: string[] = [];
     let likedGraph: Array<Array<number>> = [];
-    let userDocs = (await usersPrivateInfoRef.get()).docs;
-    userDocs.forEach((userDoc) => users.push(userDoc.id));
-    userDocs.forEach((userDoc) => {
-      const suggestionsGoneThrough = userDoc.data()['suggestionsGoneThrough'];
+    let algorithmDataDocs = (await usersAlgorithmDataRef.get()).docs;
+    algorithmDataDocs.forEach((doc) => uids.push(doc.id));
+    algorithmDataDocs.forEach((doc) => {
+      const suggestionsGoneThrough = doc.data()['suggestionsGoneThrough'];
       const userLiked: number[] = [];
       for (const uid of Object.keys(suggestionsGoneThrough)) {
         if (suggestionsGoneThrough[uid]) {
-          let userIndex: number = users.indexOf(uid);
+          let userIndex: number = uids.indexOf(uid);
           if (userIndex != -1) userLiked.push(userIndex);
-          else console.log(`Invalid user: ${uid} liked by ${userDoc.id}`);
+          else console.log(`Invalid user: ${uid} liked by ${doc.id}`);
         }
       }
       likedGraph.push(userLiked);
     });
 
-    console.log(likedGraph);
-
     let userPopularityScores: number[] = pageRank(likedGraph);
 
-    if (userPopularityScores.length != users.length)
+    if (userPopularityScores.length != uids.length)
       throw 'pagerank returned a different amount of users';
 
     let averagePopularityScore: number =
       userPopularityScores.reduce((val1, val2) => val1 + val2) /
       userPopularityScores.length;
 
-    for (let i: number = 0; i < users.length; i++) {
+    for (let i: number = 0; i < uids.length; i++) {
       const updatedScore = round2dp(
         userPopularityScores[i] * (100 / averagePopularityScore)
       );
-      usersPrivateInfoRef.doc(users[i]).update({
+      usersPrivateInfoRef.doc(uids[i]).update({
         popularityScore: updatedScore,
         popularityHistory: admin.firestore.FieldValue.arrayUnion(
           Date.now() + ':' + updatedScore

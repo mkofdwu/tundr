@@ -10,7 +10,6 @@ class UserPrivateInfo {
   UserSettings settings;
   List<String> dailyGeneratedSuggestions;
   Map<String, bool> respondedSuggestions;
-  Map<String, bool> suggestionsGoneThrough; // uid: liked
   ThemeMode theme;
   int numRightSwiped;
   List<String> blocked;
@@ -22,7 +21,6 @@ class UserPrivateInfo {
     this.settings,
     this.dailyGeneratedSuggestions,
     this.respondedSuggestions,
-    this.suggestionsGoneThrough,
     this.theme,
     this.numRightSwiped,
     this.blocked,
@@ -37,8 +35,6 @@ class UserPrivateInfo {
       dailyGeneratedSuggestions:
           List<String>.from(map['dailyGeneratedSuggestions']),
       respondedSuggestions: Map<String, bool>.from(map['respondedSuggestions']),
-      suggestionsGoneThrough:
-          Map<String, bool>.from(map['suggestionsGoneThrough']),
       // only 2 themes, may have multiple accents in the future
       theme: map['theme'] == null
           ? null
@@ -56,7 +52,6 @@ class UserPrivateInfo {
       settings: UserSettings.register(),
       dailyGeneratedSuggestions: [],
       respondedSuggestions: {},
-      suggestionsGoneThrough: {},
       theme: null,
       numRightSwiped: 0,
       blocked: [],
@@ -71,7 +66,6 @@ class UserPrivateInfo {
       'settings': settings.toMap(),
       'dailyGeneratedSuggestions': dailyGeneratedSuggestions,
       'respondedSuggestions': respondedSuggestions,
-      'suggestionsGoneThrough': suggestionsGoneThrough,
       'theme': theme == null ? null : (theme == ThemeMode.dark ? 0 : 1),
       'numRightSwiped': numRightSwiped,
       'blocked': blocked,

@@ -12,6 +12,7 @@ class UserAlgorithmData {
   int ageRangeMin;
   int ageRangeMax;
   Map<String, Filter> otherFilters;
+  Map<String, bool> suggestionsGoneThrough; // uid: liked
 
   UserAlgorithmData({
     this.asleep,
@@ -20,6 +21,7 @@ class UserAlgorithmData {
     this.ageRangeMin,
     this.ageRangeMax,
     this.otherFilters,
+    this.suggestionsGoneThrough,
   });
 
   factory UserAlgorithmData.fromMap(Map<String, dynamic> map) {
@@ -40,6 +42,8 @@ class UserAlgorithmData {
       ageRangeMin: map['ageRangeMin'],
       ageRangeMax: map['ageRangeMax'],
       otherFilters: otherFilters,
+      suggestionsGoneThrough:
+          Map<String, bool>.from(map['suggestionsGoneThrough']),
     );
   }
 
@@ -52,6 +56,7 @@ class UserAlgorithmData {
       ageRangeMin: age - 1,
       ageRangeMax: age + 1,
       otherFilters: {},
+      suggestionsGoneThrough: {},
     );
   }
 
@@ -67,7 +72,8 @@ class UserAlgorithmData {
           'method': FilterMethod.values.indexOf(value.method),
           'options': value.options,
         });
-      })
+      }),
+      'suggestionsGoneThrough': suggestionsGoneThrough,
     };
   }
 }
