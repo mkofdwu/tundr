@@ -103,7 +103,7 @@ function randRange(min: number, max: number) {
   return Math.random() * (max - min) + min;
 }
 
-export default functions.firestore
+export const generateTestAccounts = functions.firestore
   .document('haoenutaoheusahoesuhoaeu/haoseunoaeua/aoeuatohuao/aoethutnsahous')
   .onCreate(async (_snapshot, _context) => {
     const num: number = 50;
@@ -184,5 +184,17 @@ export default functions.firestore
         online: false,
         lastSeen: admin.firestore.Timestamp.fromMillis(Date.now()),
       });
+    }
+  });
+
+export const deleteTestAccounts = functions.firestore
+  .document('haoenutaoheusahoesuhoaeu/haoseunoaeua/aoeuatohuao/aoethutnsahous')
+  .onCreate(async (_snapshot, _context) => {
+    const profileDocs = (await userProfilesRef.get()).docs;
+    for (const profileDoc of profileDocs) {
+      const name: string = profileDoc.data()['name'];
+      if (name.endsWith(' (test)')) {
+        await profileDoc.ref.delete();
+      }
     }
   });
