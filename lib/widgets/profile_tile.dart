@@ -80,7 +80,8 @@ class ProfileTile extends StatelessWidget {
                                 ),
                                 if (profile.verified)
                                   WidgetSpan(
-                                    child: VerifiedBadge(),
+                                    child:
+                                        VerifiedBadge(color: MyPalette.white),
                                   ),
                               ],
                             ),

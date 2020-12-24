@@ -7,5 +7,3 @@ export { onMessage, generateDailySuggestions, updatePopularityScore };
 export * from './functions/users-http';
 export * from './functions/chats-http';
 export * from './functions/suggestions-http';
-export * from './functions/migrations';
-export * from './functions/test-accounts';

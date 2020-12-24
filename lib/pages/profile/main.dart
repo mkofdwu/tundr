@@ -16,6 +16,7 @@ import 'package:tundr/widgets/buttons/text.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
+import 'package:tundr/widgets/verified_badge.dart';
 
 class MainProfilePage extends StatefulWidget {
   @override
@@ -154,9 +155,26 @@ class _MainProfilePageState extends State<MainProfilePage> {
                     tag: otherProfile.username,
                     child: Material(
                       color: Colors.transparent,
-                      child: Text(
-                        '${otherProfile.name}, ${otherProfile.ageInYears}',
-                        style: TextStyle(fontSize: 40, color: MyPalette.white),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:
+                                  '${otherProfile.name}, ${otherProfile.ageInYears}',
+                              style: TextStyle(
+                                color: MyPalette.white,
+                                fontSize: 40,
+                              ),
+                            ),
+                            if (otherProfile.verified)
+                              WidgetSpan(
+                                child: VerifiedBadge(
+                                  color: MyPalette.white,
+                                  size: 34,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

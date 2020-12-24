@@ -1,4 +1,17 @@
 const Map<String, Map<String, dynamic>> personalInfoFields = {
+  'School': {
+    'type': 1,
+    'prompt':
+        'Select your school, or if youre from somewhere else enter its name',
+    'options': [
+      'Raffles Girls School',
+      'Raffles Institution',
+      'Hwa Chong Institution',
+      'NUS High School',
+      'Nanyang Girls High',
+      'School of the Arts',
+    ],
+  },
   'Height': {
     'type': 0,
     'prompt': 'Enter your height in cm',
@@ -43,7 +56,7 @@ const Map<String, Map<String, dynamic>> personalInfoFields = {
   },
   'Religion': {
     'type': 1,
-    'prompt': 'Select your religion, or enter its name if it’s not listed',
+    'prompt': 'Select your religion, or enter its name if its not listed',
     'options': [
       'Christianity',
       'Islam',

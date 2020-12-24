@@ -237,6 +237,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                       ),
                       GestureDetector(
+                        key: ValueKey('editInterestsBtn'),
                         child:
                             Icon(Icons.edit, color: MyPalette.gold, size: 20),
                         onTap: _editInterests,

@@ -6,6 +6,7 @@ import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/show_options_dialog.dart';
+import 'package:tundr/utils/show_question_dialog.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/pages/media/widgets/media_viewer.dart';
 import 'package:tundr/widgets/popup_menu.dart';
@@ -34,6 +35,19 @@ class _EditExtraMediaPageState extends State<EditExtraMediaPage> {
   void initState() {
     super.initState();
     _media = widget.media;
+  }
+
+  void _confirmRemove() async {
+    final confirm = await showQuestionDialog(
+      context: context,
+      title:
+          'Remove this ${_media.type == MediaType.image ? "image" : "video"}?',
+      content: 'This action cannot be undone.',
+    );
+    if (confirm) {
+      widget.onRemove();
+      Navigator.pop(context);
+    }
   }
 
   void _replaceWithImage() async {
@@ -117,10 +131,7 @@ class _EditExtraMediaPageState extends State<EditExtraMediaPage> {
                     TileIconButton(
                       icon: Icons.delete,
                       iconBackgroundColor: MyPalette.red,
-                      onPressed: () {
-                        widget.onRemove();
-                        Navigator.pop(context);
-                      },
+                      onPressed: _confirmRemove,
                     ),
                     TileIconButton(
                       icon: Icons.more_vert,

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -125,19 +124,19 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
         Provider.of<RegistrationInfo>(context, listen: false).profilePic;
     return Column(
       children: <Widget>[
-        LayoutBuilder(
-          builder: (context, constraints) => Container(
-            width: constraints.maxWidth,
-            height: min(
-                constraints.maxWidth, MediaQuery.of(context).size.height - 350),
-            decoration: BoxDecoration(
-              color: MyPalette.white,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [MyPalette.secondaryShadow],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image.file(File(profilePic.url), fit: BoxFit.cover),
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) => Container(
+              width: constraints.maxWidth,
+              decoration: BoxDecoration(
+                color: MyPalette.white,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [MyPalette.secondaryShadow],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Image.file(File(profilePic.url), fit: BoxFit.cover),
+              ),
             ),
           ),
         ),
@@ -227,7 +226,7 @@ class _SetupProfilePicPageState extends State<SetupProfilePicPage> {
             ),
           ],
         ),
-        Spacer(),
+        SizedBox(height: 30),
         ScrollDownArrow(
           dark: false,
           onNextPage: _nextPage,

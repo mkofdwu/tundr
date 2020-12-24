@@ -84,7 +84,7 @@ class _ChatsListPageState extends State<ChatsListPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(height: 20),
+                  SizedBox(height: 24),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[] +
@@ -94,13 +94,13 @@ class _ChatsListPageState extends State<ChatsListPage> {
                                 Text(
                                   'New matches',
                                   style: TextStyle(
-                                    fontSize: 30,
+                                    fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(height: 20),
+                                SizedBox(height: 18),
                                 _buildMatchesList(newMatchChats),
-                                SizedBox(height: 30),
+                                SizedBox(height: 34),
                               ]) +
                         (starredChats.isEmpty
                             ? []
@@ -108,13 +108,13 @@ class _ChatsListPageState extends State<ChatsListPage> {
                                 Text(
                                   'Starred',
                                   style: TextStyle(
-                                    fontSize: 30,
+                                    fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(height: 20),
+                                SizedBox(height: 18),
                                 _buildChatCategoryList(starredChats),
-                                SizedBox(height: 30),
+                                SizedBox(height: 34),
                               ]) +
                         (normalChats.isEmpty
                             ? []
@@ -122,13 +122,13 @@ class _ChatsListPageState extends State<ChatsListPage> {
                                 Text(
                                   'Messages',
                                   style: TextStyle(
-                                    fontSize: 30,
+                                    fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(height: 20),
+                                SizedBox(height: 18),
                                 _buildChatCategoryList(normalChats),
-                                SizedBox(height: 30),
+                                SizedBox(height: 34),
                               ]) +
                         (unknownChats.isEmpty
                             ? []
@@ -136,13 +136,13 @@ class _ChatsListPageState extends State<ChatsListPage> {
                                 Text(
                                   'Unknown messages',
                                   style: TextStyle(
-                                    fontSize: 30,
+                                    fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(height: 20),
+                                SizedBox(height: 18),
                                 _buildChatCategoryList(unknownChats),
-                                SizedBox(height: 30),
+                                SizedBox(height: 34),
                               ]),
                   ),
                 ],
