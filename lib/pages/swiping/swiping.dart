@@ -91,8 +91,9 @@ class _SwipingPageState extends State<SwipingPage> {
       UserPrivateInfo,
     );
 
-    Provider.of<User>(context).algorithmData.suggestionsGoneThrough[otherUid] =
-        likedUser;
+    Provider.of<User>(context, listen: false)
+        .algorithmData
+        .suggestionsGoneThrough[otherUid] = likedUser;
     await Provider.of<User>(context, listen: false).writeFields(
       ['suggestionsGoneThrough'],
       UserAlgorithmData,

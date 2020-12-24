@@ -28,14 +28,13 @@ class AuthService {
   static Future<void> signOut() => FirebaseAuth.instance.signOut();
 
   static Future<void> deleteAccount(String uid) async {
-    return Future.wait([
-      FirebaseAuth.instance.currentUser.delete(),
-      // remove from cloud firestore
-      usersPrivateInfoRef.doc(uid).delete(),
-      usersAlgorithmDataRef.doc(uid).delete(),
-      userProfilesRef.doc(uid).delete(),
-      userStatusesRef.doc(uid).delete(),
-    ]);
+    // remove from cloud firestore first while still authenticated
+    await usersPrivateInfoRef.doc(uid).delete();
+    await usersAlgorithmDataRef.doc(uid).delete();
+    await userProfilesRef.doc(uid).delete();
+    await userStatusesRef.doc(uid).delete();
+    // after firestore is cleared then unauthenticate
+    await FirebaseAuth.instance.currentUser.delete();
   }
 
   static Future<bool> changePassword({
@@ -83,7 +82,7 @@ class AuthService {
     }
   }
 
-  static Future<bool> _createAccount({
+  static Future<bool> createAccount({
     RegistrationInfo info,
     AuthCredential phoneCredential,
   }) async {
@@ -110,6 +109,7 @@ class AuthService {
           'lastSeen': null,
         });
         await result.user.updatePhoneNumber(phoneCredential);
+        print(FirebaseAuth.instance.currentUser);
         // get suggestions for new user
         await callHttpsFunction('generateSuggestionsForNewUser');
         return true;
@@ -129,21 +129,26 @@ class AuthService {
         smsCode: verificationCode.join(),
       );
       if (credential != null) {
-        return _createAccount(info: info, phoneCredential: credential);
+        return createAccount(info: info, phoneCredential: credential);
       }
     }
     return false;
   }
 
-  static void sendSMS(RegistrationInfo info) {
+  static void sendSMS({
+    RegistrationInfo info,
+    Function(AuthCredential) onVerificationCompleted,
+    Function(FirebaseAuthException) onVerificationFailed,
+  }) {
     FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: info.phoneNumber,
       timeout: const Duration(seconds: 120),
       verificationCompleted: (AuthCredential credential) {
-        _createAccount(info: info, phoneCredential: credential);
+        onVerificationCompleted(credential);
       },
       verificationFailed: (FirebaseAuthException exception) {
         print('verification failed: ' + exception.message);
+        onVerificationFailed(exception);
       },
       codeSent: (String verificationId, int forceResendingToken) {
         info.smsVerificationId = verificationId;

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:tundr/widgets/pages/page.dart' as page;
 
+// ignore: must_be_immutable
 class ScrollDownPage extends StatelessWidget {
   final Color color;
   final bool canScrollUp;
   final bool canScrollDown;
   final Widget Function(BuildContext, double, double) builder;
   final Function onScrollDown;
+  bool _dragTriggeredFunctionOnce = false;
 
   ScrollDownPage({
     Key key,
@@ -26,11 +28,17 @@ class ScrollDownPage extends StatelessWidget {
         builder: builder,
       ),
       onVerticalDragUpdate: (details) {
-        if (details.delta.dy < -2 && canScrollDown) {
+        if (_dragTriggeredFunctionOnce) return;
+        if (details.delta.dy < -5 && canScrollDown) {
           onScrollDown();
-        } else if (details.delta.dy > 2 && canScrollUp) {
+          _dragTriggeredFunctionOnce = true;
+        } else if (details.delta.dy > 5 && canScrollUp) {
           Navigator.pop(context);
+          _dragTriggeredFunctionOnce = true;
         }
+      },
+      onVerticalDragStart: (details) {
+        _dragTriggeredFunctionOnce = false; // reset when first dragging
       },
     );
   }

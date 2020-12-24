@@ -20,16 +20,14 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   final List<int> _verificationCode = List<int>.filled(6, null);
 
   void _onSubmit() async {
-    if (!Provider.of<RegistrationInfo>(context, listen: false)
-        .isCreatingAccount) {
-      Provider.of<RegistrationInfo>(context, listen: false).isCreatingAccount =
-          true;
+    final info = Provider.of<RegistrationInfo>(context, listen: false);
+    if (!info.isCreatingAccount) {
+      info.isCreatingAccount = true;
       final success = await AuthService.verifyCodeAndCreateAccount(
-        Provider.of<RegistrationInfo>(context, listen: false),
+        info,
         _verificationCode,
       );
-      Provider.of<RegistrationInfo>(context, listen: false).isCreatingAccount =
-          false;
+      info.isCreatingAccount = false;
       if (success) {
         Rebuilder.rebuild(context);
       } else {
@@ -41,10 +39,43 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
     }
   }
 
+  void _sendSMS() => AuthService.sendSMS(
+        info: Provider.of<RegistrationInfo>(context, listen: false),
+        onVerificationCompleted: (credential) async {
+          final info = Provider.of<RegistrationInfo>(context, listen: false);
+          info.isCreatingAccount = true;
+          final success = await AuthService.createAccount(
+              info: info, phoneCredential: credential);
+          info.isCreatingAccount = false;
+          if (success) {
+            Rebuilder.rebuild(context);
+          } else {
+            await showErrorDialog(
+              context: context,
+              title: 'User could not be created',
+            );
+          }
+        },
+        onVerificationFailed: (exception) {
+          showErrorDialog(
+            context: context,
+            title: 'Failed to create account',
+            content: exception.message,
+          );
+        },
+      );
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _sendSMS();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Provider.of<RegistrationInfo>(context, listen: false)
-            .isCreatingAccount
+    return Provider.of<RegistrationInfo>(context).isCreatingAccount
         ? LoadingPage()
         : ScrollDownPage(
             builder: (context, width, height) => Stack(
@@ -105,9 +136,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                               style: TextStyle(
                                   color: MyPalette.gold, fontSize: 14),
                             ),
-                            onTap: () => AuthService.sendSMS(
-                                Provider.of<RegistrationInfo>(context,
-                                    listen: false)),
+                            onTap: _sendSMS,
                           ),
                         ],
                       ),

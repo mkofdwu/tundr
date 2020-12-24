@@ -5,7 +5,6 @@ import 'package:tundr/repositories/registration_info.dart';
 import 'package:tundr/pages/setup/phone_verification.dart';
 
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/services/auth_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/show_error_dialog.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
@@ -39,8 +38,6 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
       return;
     }
 
-    await AuthService.sendSMS(
-        Provider.of<RegistrationInfo>(context, listen: false));
     await Navigator.push(
       context,
       PageRouteBuilder(
@@ -63,10 +60,13 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
 
   @override
   Widget build(BuildContext context) {
-    return _loading
-        ? LoadingPage()
-        : ScrollDownPage(
-            builder: (context, width, height) => Stack(
+    return ScrollDownPage(
+      canScrollUp: !_loading,
+      canScrollDown: !_loading,
+      onScrollDown: _nextPage,
+      builder: (context, width, height) => _loading
+          ? LoadingPage()
+          : Stack(
               children: <Widget>[
                 ConstrainedBox(
                   constraints: BoxConstraints.expand(),
@@ -171,7 +171,6 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                 ),
               ],
             ),
-            onScrollDown: _nextPage,
-          );
+    );
   }
 }
