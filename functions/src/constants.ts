@@ -8,6 +8,7 @@ export const fcm = admin.messaging();
 export const userProfilesRef = db.collection('user_profiles');
 export const usersPrivateInfoRef = db.collection('users_private_info');
 export const usersAlgorithmDataRef = db.collection('users_algorithm_data');
+export const userStatusesRef = db.collection('user_statuses');
 export const chatsRef = db.collection('chats');
 
 export const numInterestGroups = 52;
@@ -510,3 +511,4 @@ export const interestsToGroupNo: Record<string, number> = {
   Sleeping: 51,
   Sex: 51,
 };
+export const interestsList = Object.keys(interestsToGroupNo);
