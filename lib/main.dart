@@ -184,6 +184,7 @@ class _TundrAppState extends State<TundrApp> {
     ),
     accentColor: MyPalette.gold,
     fontFamily: 'Liberation Sans',
+    cursorColor: MyPalette.white,
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: MyPalette.white,
     ),
@@ -215,6 +216,7 @@ class _TundrAppState extends State<TundrApp> {
     ),
     accentColor: MyPalette.gold,
     fontFamily: 'Liberation Sans',
+    cursorColor: MyPalette.black,
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: MyPalette.black,
     ),

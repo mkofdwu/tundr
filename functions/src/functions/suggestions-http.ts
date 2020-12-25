@@ -138,11 +138,8 @@ export const matchWith = functions.https.onCall(async (data, context) => {
   ).data();
   if (algorithmData == null || otherAlgorithmData == null)
     throw 'could not get either user algorithm data';
-  if (
-    // both should be true (suggestionsGoneThrough is a map in the format {uid: liked})
-    !algorithmData['suggestionsGoneThrough'][otherUid] ||
-    !otherAlgorithmData['suggestionsGoneThrough'][uid]
-  ) {
+  if (!otherAlgorithmData['suggestionsGoneThrough'][uid]) {
+    // verify that the other user also liked this user (note that the user invoking the function has not updated suggestionsGoneThrough yet)
     throw 'failed to match, both users did not like each other';
   }
 

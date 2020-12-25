@@ -64,7 +64,7 @@ class _MostPopularPageState extends State<MostPopularPage> {
                 );
                 var attempts = 0;
                 while (_overlapsWithAny(rect: tile, otherRects: tiles) &&
-                    attempts < 500) {
+                    attempts < 400) {
                   tile = Rect.fromLTWH(
                     random.nextDouble() * (widget.width - size),
                     random.nextDouble() * (widget.height - size),

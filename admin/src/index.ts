@@ -1,3 +1,7 @@
-import { migrateChatTyping } from './migrations';
+// import { migrateChatTyping } from './migrations';
 
-migrateChatTyping().then(() => console.log('DONE'));
+import { removeIncompleteUsers } from './migrations';
+
+// migrateChatTyping().then(() => console.log('DONE'));
+
+removeIncompleteUsers().then(() => console.log('DONE'));
