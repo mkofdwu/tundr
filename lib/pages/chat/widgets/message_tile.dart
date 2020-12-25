@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:tundr/models/message.dart';
+import 'package:tundr/pages/chat/widgets/reply_gesture.dart';
 import 'package:tundr/pages/media/media_view.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/message_option.dart';
@@ -11,7 +12,7 @@ import 'package:tundr/utils/show_options_dialog.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'referenced_message_tile.dart';
 
-class MessageTile extends StatelessWidget {
+class MessageTile extends StatefulWidget {
   final Message message;
   final bool fromMe;
   final bool readReceipts;
@@ -29,11 +30,16 @@ class MessageTile extends StatelessWidget {
     @required this.onDeleteMessage,
   }) : super(key: key);
 
-  Future<void> _selectOption(BuildContext context) async {
+  @override
+  _MessageTileState createState() => _MessageTileState();
+}
+
+class _MessageTileState extends State<MessageTile> {
+  Future<void> _showMessageOptions(BuildContext context) async {
     final option = await showOptionsDialog(
       context: context,
       title: '',
-      options: fromMe
+      options: widget.fromMe
           ? {
               'Reply to message': MessageOption.referenceMessage,
               'Delete message': MessageOption.deleteMessage,
@@ -41,16 +47,16 @@ class MessageTile extends StatelessWidget {
           : {'Reply to message': MessageOption.referenceMessage},
     );
     if (option == MessageOption.referenceMessage) {
-      onReferenceMessage();
+      widget.onReferenceMessage();
     } else if (option == MessageOption.deleteMessage) {
-      onDeleteMessage();
+      widget.onDeleteMessage();
     }
   }
 
   void _openMedia(BuildContext context) => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => MediaViewPage(media: message.media),
+          builder: (context) => MediaViewPage(media: widget.message.media),
         ),
       );
 
@@ -68,112 +74,120 @@ class MessageTile extends StatelessWidget {
           ),
         ),
         clipBehavior: Clip.antiAlias,
-        child: getNetworkImage(message.sender.profileImageUrl),
+        child: getNetworkImage(widget.message.sender.profileImageUrl),
       );
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment:
-          fromMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (!fromMe) _buildOtherProfilePic(context),
-        SizedBox(width: 14),
-        GestureDetector(
-          onLongPress: () => _selectOption(context),
-          child: Column(
-            crossAxisAlignment:
-                fromMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                constraints: BoxConstraints(maxWidth: 200),
-                padding: fromMe ? const EdgeInsets.all(8) : EdgeInsets.zero,
-                decoration: fromMe
-                    ? fromTheme(
-                        context,
-                        dark: BoxDecoration(color: MyPalette.white),
-                        light: BoxDecoration(
-                          color: MyPalette.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [MyPalette.primaryShadow],
-                        ),
-                      )
-                    : null,
-                child: Column(
-                  crossAxisAlignment: fromMe
-                      ? CrossAxisAlignment.end
-                      : CrossAxisAlignment.start,
-                  children: <Widget>[
-                    if (message.referencedMessage != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: GestureDetector(
-                          child: ReferencedMessageTile(
-                            message: message.referencedMessage,
+    return ReplyGesture(
+      accountForWidth: !widget.fromMe,
+      onReply: widget.onReferenceMessage,
+      child: Row(
+        mainAxisAlignment:
+            widget.fromMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!widget.fromMe) _buildOtherProfilePic(context),
+          SizedBox(width: 14),
+          GestureDetector(
+            onLongPress: () => _showMessageOptions(context),
+            child: Column(
+              crossAxisAlignment: widget.fromMe
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  constraints: BoxConstraints(maxWidth: 200),
+                  padding:
+                      widget.fromMe ? const EdgeInsets.all(8) : EdgeInsets.zero,
+                  decoration: widget.fromMe
+                      ? fromTheme(
+                          context,
+                          dark: BoxDecoration(color: MyPalette.white),
+                          light: BoxDecoration(
+                            color: MyPalette.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [MyPalette.primaryShadow],
                           ),
-                          onTap: onViewReferencedMessage,
-                        ),
-                      ),
-                    if (message.media != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: GestureDetector(
-                          child: SizedBox(
-                            width: 200,
-                            height: 260,
-                            child: ClipRRect(
-                              borderRadius: fromTheme(
-                                context,
-                                dark: BorderRadius.zero,
-                                light: BorderRadius.circular(6),
-                              ),
-                              child: MediaThumbnail(message.media),
+                        )
+                      : null,
+                  child: Column(
+                    crossAxisAlignment: widget.fromMe
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
+                    children: <Widget>[
+                      if (widget.message.referencedMessage != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: GestureDetector(
+                            child: ReferencedMessageTile(
+                              message: widget.message.referencedMessage,
                             ),
+                            onTap: widget.onViewReferencedMessage,
                           ),
-                          onTap: () => _openMedia(context),
+                        ),
+                      if (widget.message.media != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: GestureDetector(
+                            child: SizedBox(
+                              width: 200,
+                              height: 260,
+                              child: ClipRRect(
+                                borderRadius: fromTheme(
+                                  context,
+                                  dark: BorderRadius.zero,
+                                  light: BorderRadius.circular(6),
+                                ),
+                                child: MediaThumbnail(widget.message.media),
+                              ),
+                            ),
+                            onTap: () => _openMedia(context),
+                          ),
+                        ),
+                      Text(
+                        widget.message.text,
+                        style: TextStyle(
+                          color: widget.fromMe
+                              ? MyPalette.black
+                              : Theme.of(context).colorScheme.onPrimary,
+                          fontSize: 16,
                         ),
                       ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
                     Text(
-                      message.text,
+                      DateFormat.jm().format(widget.message.sentOn),
                       style: TextStyle(
-                        color: fromMe
-                            ? MyPalette.black
-                            : Theme.of(context).colorScheme.onPrimary,
-                        fontSize: 16,
+                        color: MyPalette.grey,
+                        fontSize: 12,
                       ),
                     ),
+                    SizedBox(width: 3),
+                    if (widget.fromMe)
+                      Icon(
+                        widget.message.readOn == null
+                            ? Icons.done
+                            : Icons.done_all,
+                        size: 16,
+                        color: widget.message.readOn == null ||
+                                !widget
+                                    .readReceipts // if the user disables read receipts they will also be unable to see
+                            ? MyPalette.grey
+                            : MyPalette.gold,
+                      ),
                   ],
                 ),
-              ),
-              SizedBox(height: 5),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    DateFormat.jm().format(message.sentOn),
-                    style: TextStyle(
-                      color: MyPalette.grey,
-                      fontSize: 12,
-                    ),
-                  ),
-                  SizedBox(width: 3),
-                  if (fromMe)
-                    Icon(
-                      message.readOn == null ? Icons.done : Icons.done_all,
-                      size: 16,
-                      color: message.readOn == null ||
-                              !readReceipts // if the user disables read receipts they will also be unable to see
-                          ? MyPalette.grey
-                          : MyPalette.gold,
-                    ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
