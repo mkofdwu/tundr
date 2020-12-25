@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,6 +24,8 @@ class MessageField extends StatefulWidget {
   final Function onRemoveReferencedMessage;
   final Function(Media) onChangeMedia;
   final Function(String) onSendMessage;
+  final Function onStartTyping;
+  final Function onStopTyping;
 
   MessageField({
     @required this.media,
@@ -30,6 +34,8 @@ class MessageField extends StatefulWidget {
     @required this.onRemoveReferencedMessage,
     @required this.onChangeMedia,
     @required this.onSendMessage,
+    @required this.onStartTyping,
+    @required this.onStopTyping,
   });
 
   @override
@@ -38,11 +44,24 @@ class MessageField extends StatefulWidget {
 
 class _MessageFieldState extends State<MessageField> {
   final TextEditingController _textController = TextEditingController();
+  bool _isTyping = false;
+  Timer _stopTypingTimer;
 
   @override
   void initState() {
     super.initState();
     _textController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    _stopTypingTimer?.cancel();
+    if (_isTyping) {
+      widget.onStopTyping();
+      _isTyping = false;
+    }
+    super.dispose();
   }
 
   void _selectMedia(MediaType type) async {
@@ -196,6 +215,23 @@ class _MessageFieldState extends State<MessageField> {
                     hintText: 'Say something',
                     hintTextColor: MyPalette.white,
                     color: MyPalette.white,
+                    onChanged: (_) {
+                      if (!_isTyping) {
+                        widget.onStartTyping();
+                        _isTyping = true;
+                      }
+
+                      _stopTypingTimer?.cancel();
+                      _stopTypingTimer = Timer(
+                        Duration(
+                          seconds: 3,
+                        ), // if not typing for 3 seconds the user is considered to have stopped typing
+                        () {
+                          widget.onStopTyping();
+                          _isTyping = false;
+                        },
+                      );
+                    },
                   ),
                 ),
                 SizedBox(width: 10),

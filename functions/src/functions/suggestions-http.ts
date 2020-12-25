@@ -151,6 +151,7 @@ export const matchWith = functions.https.onCall(async (data, context) => {
   // save matches - create chats
   const chatDoc = await chatsRef.add({
     participants: [uid, otherUid],
+    typing: [],
   });
   await usersPrivateInfoRef.doc(uid).collection('chats').doc(chatDoc.id).set({
     uid: otherUid,

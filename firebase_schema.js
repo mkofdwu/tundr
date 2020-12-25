@@ -73,6 +73,7 @@ const user_statuses = Collection({
 const chats = Collection({
   chatId: {
     participants: ['userId'],
+    typing: ['userId'],
     messages: [
       {
         senderUid: 'userId',

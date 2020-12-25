@@ -1,3 +1,3 @@
-import { generateTestAccounts } from './test-accounts';
+import { migrateChatTyping } from './migrations';
 
-generateTestAccounts();
+migrateChatTyping().then(() => console.log('DONE'));

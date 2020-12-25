@@ -6,6 +6,7 @@ import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/models/message.dart';
+import 'package:tundr/models/user_status.dart';
 import 'package:tundr/pages/chat/widgets/message_field.dart';
 import 'package:tundr/pages/chat/widgets/popup_menu.dart';
 
@@ -13,6 +14,7 @@ import 'package:tundr/repositories/user.dart';
 import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/services/users_service.dart';
+import 'package:tundr/utils/format_date.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/utils/show_info_dialog.dart';
@@ -162,6 +164,18 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+  Widget _buildUserStatusText() => StreamBuilder<UserStatus>(
+        stream: UsersService.getUserStatusStream(widget.chat.otherProfile.uid),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return SizedBox.shrink();
+          final status = snapshot.data;
+          return Text(
+            status.online ? 'online' : formatDate(status.lastSeen),
+            style: TextStyle(fontSize: 12, color: MyPalette.white),
+          );
+        },
+      );
+
   Widget _buildTopBar() => SizedBox(
         height: 50,
         child: Row(
@@ -174,9 +188,31 @@ class _ChatPageState extends State<ChatPage> {
             SizedBox(width: 10),
             Expanded(
               child: GestureDetector(
-                child: Text(
-                  widget.chat.otherProfile.name,
-                  style: TextStyle(fontSize: 20, color: MyPalette.white),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.chat.otherProfile.name,
+                      style: TextStyle(fontSize: 20, color: MyPalette.white),
+                    ),
+                    StreamBuilder<bool>(
+                      stream: ChatsService.otherUserIsTypingStream(widget.chat),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) return SizedBox.shrink();
+                        if (snapshot.data) {
+                          return Text(
+                            'typing',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: MyPalette.white,
+                            ),
+                          );
+                        }
+                        return _buildUserStatusText();
+                      },
+                    ),
+                  ],
                 ),
                 onTap: () async => Navigator.pushNamed(
                   context,
@@ -379,6 +415,16 @@ class _ChatPageState extends State<ChatPage> {
                           setState(() => _media = newMedia);
                         },
                         onSendMessage: _sendMessage,
+                        onStartTyping: () => ChatsService.toggleTyping(
+                          widget.chat.id,
+                          Provider.of<User>(context, listen: false).profile.uid,
+                          true,
+                        ),
+                        onStopTyping: () => ChatsService.toggleTyping(
+                          widget.chat.id,
+                          Provider.of<User>(context, listen: false).profile.uid,
+                          false,
+                        ),
                       );
                     }),
               ),

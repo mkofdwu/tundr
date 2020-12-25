@@ -125,4 +125,17 @@ class ChatsService {
       );
     }
   }
+
+  static Future<void> toggleTyping(String chatId, String uid, bool isTyping) =>
+      chatsRef.doc(chatId).update({
+        'typing': isTyping
+            ? FieldValue.arrayUnion([uid])
+            : FieldValue.arrayRemove([uid]),
+      });
+
+  static Stream<bool> otherUserIsTypingStream(Chat chat) {
+    return chatsRef.doc(chat.id).snapshots().map<bool>((chatDoc) {
+      return chatDoc.data()['typing'].contains(chat.otherProfile.uid);
+    });
+  }
 }

@@ -81,6 +81,7 @@ export const startConversation = functions.https.onCall(
     // create chat with participants & messages (add the first message)
     const chatDoc = await chatsRef.add({
       participants: [uid, otherUid],
+      typing: [],
     });
     await chatDoc.collection('messages').add({
       senderUid: uid,

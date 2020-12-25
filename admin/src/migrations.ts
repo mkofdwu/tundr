@@ -1,5 +1,9 @@
 import admin = require('firebase-admin');
-import { usersAlgorithmDataRef, usersPrivateInfoRef } from './constants';
+import {
+  chatsRef,
+  usersAlgorithmDataRef,
+  usersPrivateInfoRef,
+} from './constants';
 
 export const migrateUserChatLastRead = async () => {
   const privateInfoDocs = (await usersPrivateInfoRef.get()).docs;
@@ -26,6 +30,15 @@ export const migrateSuggestionsGoneThrough = async () => {
     });
     await usersAlgorithmDataRef.doc(privateInfoDoc.id).update({
       suggestionsGoneThrough,
+    });
+  }
+};
+
+export const migrateChatTyping = async () => {
+  const chatDocs = (await chatsRef.get()).docs;
+  for (const chatDoc of chatDocs) {
+    await chatDoc.ref.update({
+      typing: [],
     });
   }
 };

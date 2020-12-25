@@ -7,6 +7,7 @@ class PlainTextField extends StatelessWidget {
   final Color color;
   final double fontSize;
   final String fontFamily;
+  final Function(String) onChanged;
 
   PlainTextField({
     Key key,
@@ -16,6 +17,7 @@ class PlainTextField extends StatelessWidget {
     this.color,
     this.fontSize = 20,
     this.fontFamily,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -36,6 +38,7 @@ class PlainTextField extends StatelessWidget {
         ),
         border: InputBorder.none,
       ),
+      onChanged: onChanged,
     );
   }
 }
