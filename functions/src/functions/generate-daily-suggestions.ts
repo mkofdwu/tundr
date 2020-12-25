@@ -7,6 +7,8 @@ import {
   usersPrivateInfoRef,
 } from '../constants';
 
+// FIXME PAID: schedule this function to run at 12pm every day
+
 export default functions.firestore
   .document(
     'thisdocdoesnotexist/{andwillneverbecreated}/butthisfunctionwillbecalledmanually/thequickbrownfoxjumpsoverthelazydog'

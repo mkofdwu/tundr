@@ -1,7 +1,7 @@
 import admin = require('firebase-admin');
 
-import { usersAlgorithmDataRef, usersPrivateInfoRef } from './constants';
-import pageRank from './utils/pagerank';
+import { usersAlgorithmDataRef, usersPrivateInfoRef } from '../constants';
+import pageRank from '../utils/pagerank';
 
 const round2dp = (num: number) =>
   Math.round((num + Number.EPSILON) * 100) / 100;
