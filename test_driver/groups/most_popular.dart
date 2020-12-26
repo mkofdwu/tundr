@@ -1,5 +1,5 @@
-import 'package:test/test.dart';
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:test/test.dart';
 
 import '../utils/auth.dart';
 
@@ -13,9 +13,14 @@ void main() {
 
   tearDownAll(() async {
     if (driver != null) {
+      await logoutWith(driver);
       await driver.close();
     }
   });
 
-  test('', () async {});
+  test('Loads pictures within 7 seconds', () async {
+    await driver.tap(find.byValueKey('mostPopularTab'));
+    await driver.waitFor(find.byType('CachedNetworkImage'),
+        timeout: Duration(seconds: 7));
+  });
 }

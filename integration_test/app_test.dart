@@ -1,5 +1,5 @@
 import 'package:integration_test/integration_test.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import 'groups/chat/chat.dart' as chat;
 import 'groups/edit_filters.dart' as edit_filters;

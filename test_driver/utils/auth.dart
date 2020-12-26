@@ -1,7 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:test/test.dart';
+import 'package:tundr/pages/home.dart';
+import 'package:tundr/pages/welcome.dart';
 
 Future<void> loginWith(
-  driver, {
+  FlutterDriver driver, {
   String username = 'test',
   String password = '123456',
   bool waitForHome = true,
@@ -15,8 +19,8 @@ Future<void> loginWith(
   if (waitForHome) await driver.waitFor(find.byType('HomePage'));
 }
 
-Future<void> logoutWith(driver) async {
-  await driver.tap(find.byValueKey('dashboardTab'));
+Future<void> logoutWith(FlutterDriver driver) async {
+  await driver.tap(find.byValueKey('meTab'));
   await driver.tap(find.text('Settings'));
   await driver.scrollIntoView(find.text('Logout'));
   await driver.tap(find.text('Logout'));

@@ -50,11 +50,14 @@
         "--disable-service-auth-codes"
       ]
     },
-    {
-      "name": "tundr integration tests: launch driver",
-      "request": "launch",
-      "type": "dart",
-      "program": "test_driver/app_test.dart"
-    }
+    // {
+    //   "name": "tundr integration tests: launch driver",
+    //   "request": "launch",
+    //   "env": {
+    //     "VM_SERVICE_URL": "http://localhost:8888"
+    //   },
+    //   "type": "dart",
+    //   "program": "${file}" // "test_driver/app_test.dart"
+    // }
   ]
 }

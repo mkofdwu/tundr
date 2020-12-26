@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage>
             unselectedLabelColor: Theme.of(context).colorScheme.onPrimary,
             tabs: <Tab>[
               Tab(
-                key: ValueKey('dashboardTab'),
+                key: ValueKey('meTab'),
                 child: const Icon(Icons.person),
               ),
               Tab(

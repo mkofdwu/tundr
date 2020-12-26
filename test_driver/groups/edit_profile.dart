@@ -11,7 +11,7 @@ void main() {
     // should be at home page
     await loginWith(driver);
     await driver.waitFor(find.byType('HomePage'));
-    await driver.tap(find.byValueKey('dashboardTab'));
+    await driver.tap(find.byValueKey('meTab'));
     await driver.tap(find.text('Profile'));
     await driver.waitFor(find.byType('EditProfilePage'));
   });
@@ -43,8 +43,7 @@ void main() {
   test('Click personal info but dont change anything', () async {});
 
   test('Edit interests', () async {
-    await driver.scrollUntilVisible(
-        find.byType('EditProfilePage'), find.byValueKey('editInterestsBtn'));
+    await driver.scrollIntoView(find.byValueKey('editInterestsBtn'));
     await driver.tap(find.byValueKey('editInterestsBtn'));
     // at interestseditpage (browser)
     await driver.tap(find.text('Animals'));

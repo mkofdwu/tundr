@@ -108,7 +108,7 @@ void main() {
   });
 
   test('Delete account', () async {
-    await driver.tap(find.byValueKey('dashboardTab'));
+    await driver.tap(find.byValueKey('meTab'));
     await driver.tap(find.byValueKey('settingsBtn'));
     await driver.scrollIntoView(find.byValueKey('deleteAccountBtn'));
     await driver.tap(find.byValueKey('deleteAccountBtn'));

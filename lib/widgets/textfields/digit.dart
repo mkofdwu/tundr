@@ -104,7 +104,7 @@ class _DigitEntryState extends State<DigitEntry> {
             final cursorIndex = _controller.selection.baseOffset;
 
             // ! integration test case
-            // ! cursorIndex is always set at -1 by flutter driver, and value only contains one digit
+            // ! cursorIndex is always set at -1 by flutter tester, and value only contains one digit
             if (cursorIndex == -1 && value.length == 1) {
               final digit = int.tryParse(value);
               setState(() {

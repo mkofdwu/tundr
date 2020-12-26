@@ -93,19 +93,18 @@ class _FiltersSettingsPageState extends State<FiltersSettingsPage> {
                         GestureDetector(
                           child: Row(
                             children: <Widget>[
-                              filter.options == null // backwards compatibility?
-                                  ? SizedBox.shrink()
-                                  : ConstrainedBox(
-                                      constraints:
-                                          BoxConstraints(maxWidth: 100),
-                                      child: Text(
-                                        filter.options is List
-                                            ? filter.options.join(', ')
-                                            : filter.options.toString(),
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
+                              // backwards compatibility?
+                              if (filter.options != null)
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(maxWidth: 100),
+                                  child: Text(
+                                    filter.options is List
+                                        ? filter.options.join(', ')
+                                        : filter.options.toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
                               Icon(
                                 Icons.arrow_forward_ios,
                               ),
