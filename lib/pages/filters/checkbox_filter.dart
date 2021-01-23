@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/filter.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/models/user_algorithm_data.dart';
+import 'package:tundr/store/user.dart';
 import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/widgets/simple_checkbox.dart';
 
@@ -66,14 +67,12 @@ class _CheckboxFilterPageState extends State<CheckboxFilterPage> {
                                 widget.filter.options.remove(option);
                               }
                               Provider.of<User>(context, listen: false)
-                                  .updateAlgorithmData({
-                                'otherFilters': {
-                                  ...Provider.of<User>(context, listen: false)
                                       .algorithmData
-                                      .otherFilters,
-                                  widget.filter.field.name: widget.filter,
-                                }
-                              });
+                                      .otherFilters[widget.filter.field.name] =
+                                  widget.filter;
+                              Provider.of<User>(context, listen: false)
+                                  .writeField(
+                                      'otherFilters', UserAlgorithmData);
                             },
                           ),
                         ),

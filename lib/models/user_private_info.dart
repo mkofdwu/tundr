@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tundr/models/user_settings.dart';
-import 'package:tundr/repositories/registration_info.dart';
+import 'package:tundr/store/registration_info.dart';
 
 class UserPrivateInfo {
   String phoneNumber;

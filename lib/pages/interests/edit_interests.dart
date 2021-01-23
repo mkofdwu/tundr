@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/user_profile.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/store/user.dart';
 import 'package:tundr/widgets/buttons/back.dart';
 
 import 'package:tundr/pages/interests/widgets/interests_browser.dart';

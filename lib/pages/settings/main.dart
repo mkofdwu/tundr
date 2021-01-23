@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/features.dart';
 import 'package:tundr/models/user_private_info.dart';
-import 'package:tundr/repositories/user.dart';
-import 'package:tundr/repositories/theme_manager.dart';
+import 'package:tundr/store/user.dart';
+import 'package:tundr/store/theme_manager.dart';
 import 'package:tundr/pages/settings/confirm_delete_account.dart';
 
 import 'package:tundr/constants/my_palette.dart';

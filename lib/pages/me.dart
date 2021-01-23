@@ -1,10 +1,14 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/constants/numbers.dart';
+import 'package:tundr/store/user.dart';
 
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';

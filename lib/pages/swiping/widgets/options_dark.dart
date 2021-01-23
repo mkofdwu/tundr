@@ -36,6 +36,7 @@ class SwipingOptionsDark extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
+                    key: ValueKey('undoBtn'),
                     child: Icon(Icons.undo, size: 30),
                     onTap: onUndo,
                   ),

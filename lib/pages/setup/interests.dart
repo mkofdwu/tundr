@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/pages/setup/phone_number.dart';
-import 'package:tundr/repositories/registration_info.dart';
+import 'package:tundr/store/registration_info.dart';
 import 'package:tundr/pages/interests/widgets/interests_browser.dart';
 import 'package:tundr/utils/show_info_dialog.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';

@@ -3,14 +3,14 @@ import 'package:tundr/enums/filter_method.dart';
 import 'package:tundr/enums/gender.dart';
 import 'package:tundr/models/filter.dart';
 import 'package:tundr/models/personal_info_field.dart';
-import 'package:tundr/repositories/registration_info.dart';
+import 'package:tundr/store/registration_info.dart';
 
 class UserAlgorithmData {
   bool asleep;
   bool showMeBoys;
   bool showMeGirls;
-  int ageRangeMin;
-  int ageRangeMax;
+  num ageRangeMin;
+  num ageRangeMax;
   Map<String, Filter> otherFilters;
   Map<String, bool> suggestionsGoneThrough; // uid: liked
 

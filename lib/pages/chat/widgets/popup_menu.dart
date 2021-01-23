@@ -5,7 +5,7 @@ import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/user_private_info.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/store/user.dart';
 import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';

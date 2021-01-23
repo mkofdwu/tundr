@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/store/user.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/utils/from_theme.dart';
 

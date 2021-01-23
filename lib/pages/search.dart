@@ -4,7 +4,7 @@ import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/profile_tile.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/store/user.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {

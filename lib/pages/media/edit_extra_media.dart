@@ -129,6 +129,7 @@ class _EditExtraMediaPageState extends State<EditExtraMediaPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     TileIconButton(
+                      key: ValueKey('deleteBtn'),
                       icon: Icons.delete,
                       iconBackgroundColor: MyPalette.red,
                       onPressed: _confirmRemove,

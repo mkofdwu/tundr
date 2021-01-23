@@ -10,7 +10,7 @@ import 'package:tundr/models/user_status.dart';
 import 'package:tundr/pages/chat/widgets/message_field.dart';
 import 'package:tundr/pages/chat/widgets/popup_menu.dart';
 
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/store/user.dart';
 import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/services/users_service.dart';

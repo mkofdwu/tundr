@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/pages/setup/interests.dart';
-import 'package:tundr/repositories/registration_info.dart';
+import 'package:tundr/store/registration_info.dart';
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/enums/media_type.dart';

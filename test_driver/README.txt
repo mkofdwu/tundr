@@ -1,1 +1,0 @@
-the initial state of the testing database contains one user with the username `username1` and password `password1`. Any changes made by the tests are also reversed.

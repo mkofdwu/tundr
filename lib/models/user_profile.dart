@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tundr/enums/gender.dart';
 import 'package:tundr/models/media.dart';
-import 'package:tundr/repositories/registration_info.dart';
+import 'package:tundr/store/registration_info.dart';
 
 class UserProfile {
   String uid;

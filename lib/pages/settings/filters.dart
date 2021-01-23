@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/models/filter.dart';
 import 'package:tundr/models/personal_info_field.dart';
 import 'package:tundr/models/user_algorithm_data.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/store/user.dart';
 import 'package:tundr/pages/filters/checkbox_filter.dart';
 import 'package:tundr/pages/filters/range_slider_filter.dart';
 import 'package:tundr/pages/filters/text_list_filter.dart';
@@ -91,6 +91,7 @@ class _FiltersSettingsPageState extends State<FiltersSettingsPage> {
                           style: TextStyle(fontSize: 16),
                         ),
                         GestureDetector(
+                          key: ValueKey(fieldName),
                           child: Row(
                             children: <Widget>[
                               // backwards compatibility?

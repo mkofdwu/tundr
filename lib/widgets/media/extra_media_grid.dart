@@ -17,6 +17,7 @@ class ExtraMediaGrid extends StatelessWidget {
   }) : super(key: key);
 
   Widget _buildExtraMediaTile(i) => ExtraMediaEditTile(
+        key: ValueKey('extraMediaEditTile$i'),
         size: (size - 30) / 3,
         media: extraMedia[i],
         onChangeMedia: (media) => onChangeMedia(i, media),

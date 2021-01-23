@@ -2,26 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:tundr/main.dart' as app;
-
 import '../utils/auth.dart';
-// import '../utils/processes.dart';
+import '../utils/processes.dart';
 
 void main() {
-  setUpAll(() async {
-    IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  });
-
-  testWidgets('Logs in with correct credentials', (tester) async {
-    app.main();
-    await tester.pumpAndSettle();
-    await loginWith(tester);
-    await tester.pumpAndSettle();
-  });
-
-  testWidgets('Logs out correctly', (tester) async {
-    await logoutWith(tester);
-  });
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   Future<void> invalidLoginWith(
       WidgetTester tester, String username, String password) async {
@@ -31,9 +16,9 @@ void main() {
       password: password,
       waitForHome: false,
     );
-    expect(find.byType(AlertDialog), findsOneWidget);
+    await tester.waitFor(find.byType(AlertDialog));
     await tester.tap(find.text('CLOSE'));
-    await tester.pageBack(); // await back();
+    await back();
   }
 
   testWidgets('Shows error with incorrect credentials', (tester) async {
@@ -45,5 +30,9 @@ void main() {
     await invalidLoginWith(tester, '', '');
     await invalidLoginWith(tester, 'e\tu q\ntesting', '');
     await invalidLoginWith(tester, '', 'a \n\r\tpw');
+  });
+
+  testWidgets('Logs in with correct credentials', (tester) async {
+    await loginWith(tester);
   });
 }

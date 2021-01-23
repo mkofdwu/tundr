@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/registration_info.dart';
-import 'package:tundr/repositories/theme_manager.dart';
+import 'package:tundr/store/registration_info.dart';
+import 'package:tundr/store/theme_manager.dart';
 import 'package:tundr/constants/personal_info_fields.dart';
 import 'package:tundr/pages/personal_info/widgets/personal_info_field_button.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';

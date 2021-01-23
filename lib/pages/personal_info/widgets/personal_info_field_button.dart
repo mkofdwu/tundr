@@ -61,6 +61,7 @@ class PersonalInfoFieldButton extends StatelessWidget {
             style: TextStyle(fontSize: 16),
           ),
           GestureDetector(
+            key: ValueKey(fieldName),
             child: Row(
               children: <Widget>[
                 if (value != null)

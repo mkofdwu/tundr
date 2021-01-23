@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/repositories/user.dart';
-import 'package:tundr/repositories/theme_manager.dart';
+import 'package:tundr/store/user.dart';
+import 'package:tundr/store/theme_manager.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/widgets/rebuilder.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/pages/loading.dart';
-import 'package:tundr/repositories/registration_info.dart';
+import 'package:tundr/store/registration_info.dart';
 
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/auth_service.dart';

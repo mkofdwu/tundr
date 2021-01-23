@@ -5,7 +5,7 @@ import 'package:tundr/models/user_algorithm_data.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/models/user_status.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/store/user.dart';
 import 'package:tundr/utils/call_https_function.dart';
 
 class UsersService {

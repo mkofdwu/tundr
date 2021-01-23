@@ -6,7 +6,7 @@ import 'package:tundr/models/user_profile.dart';
 import 'package:tundr/pages/interests/edit_interests.dart';
 import 'package:tundr/pages/interests/widgets/interests_wrap.dart';
 import 'package:tundr/pages/personal_info/widgets/personal_info_list.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/store/user.dart';
 import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/media/extra_media_grid.dart';
@@ -94,6 +94,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             description:
                 'Click on this eye to learn how others will view your profile',
             child: TileIconButton(
+              key: ValueKey('previewProfileBtn'),
               icon: Icons.remove_red_eye, // DESIGN: find better icon
               onPressed: _previewProfile,
             ),

@@ -48,10 +48,16 @@ class _SimpleCheckboxState extends State<SimpleCheckbox> {
           ),
         ),
         SizedBox(width: 10),
-        Text(
-          widget.text,
-          style: TextStyle(
-            fontSize: 18,
+        GestureDetector(
+          onTap: () {
+            setState(() => _selected = !_selected);
+            widget.onChanged(_selected);
+          },
+          child: Text(
+            widget.text,
+            style: TextStyle(
+              fontSize: 18,
+            ),
           ),
         ),
       ],

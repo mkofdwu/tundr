@@ -169,7 +169,7 @@ export const generateTestAccounts = async (
     // people generated, just bi, so as to cater to everyone
     const isGay = Math.random() < 0.1;
 
-    const age = (Date.now() - birthday.getMilliseconds()) / 31536000000;
+    const age = Math.floor((Date.now() - birthday.getTime()) / 31536000000);
 
     await usersAlgorithmDataRef.doc(user.uid).set({
       asleep: false,
@@ -196,6 +196,9 @@ export const deleteTestAccounts = async () => {
     if (name.endsWith(' (test)')) {
       await admin.auth().deleteUser(profileDoc.id);
       await profileDoc.ref.delete();
+      await usersPrivateInfoRef.doc(profileDoc.id).delete();
+      await usersAlgorithmDataRef.doc(profileDoc.id).delete();
+      await userStatusesRef.doc(profileDoc.id).delete();
     }
   }
   console.log('done deleting accounts');

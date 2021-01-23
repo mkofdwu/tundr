@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/models/user_status.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/store/user.dart';
 import 'package:tundr/pages/chat/chat.dart';
 
 import 'package:tundr/constants/my_palette.dart';

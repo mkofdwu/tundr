@@ -70,7 +70,7 @@ class _RangeSliderFilterPageState extends State<RangeSliderFilterPage> {
               divisions: widget.filter.field.options - 1,
               values: _range,
               activeColor: MyPalette.gold,
-              inactiveColor: MyPalette.white,
+              inactiveColor: Theme.of(context).colorScheme.onPrimary,
               labels: RangeLabels(
                 _range.start.toString(),
                 _range.end.toString(),

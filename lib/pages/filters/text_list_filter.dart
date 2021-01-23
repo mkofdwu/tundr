@@ -28,6 +28,7 @@ class _TextListFilterPageState extends State<TextListFilterPage> {
         Positioned(
           left: width * 50 / 375,
           top: height * 150 / 812,
+          width: width / 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -41,9 +42,13 @@ class _TextListFilterPageState extends State<TextListFilterPage> {
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 20),
-              FilterMethodSelector(
-                defaultMethod: widget.filter.method,
-                onChanged: (method) => widget.filter.method = method,
+              Container(
+                width: width / 2,
+                child: FilterMethodSelector(
+                  defaultMethod: widget.filter.method,
+                  onChanged: (method) =>
+                      setState(() => widget.filter.method = method),
+                ),
               ),
             ],
           ),
@@ -69,16 +74,15 @@ class _TextListFilterPageState extends State<TextListFilterPage> {
                                           CrossAxisAlignment.end,
                                       children: <Widget>[
                                         Container(
-                                          width: text.length * 10,
+                                          width: text.length * 10.0,
                                           height: 5,
-                                          color: MyPalette.white,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                         ),
                                         Text(
                                           text,
-                                          style: TextStyle(
-                                            color: MyPalette.white,
-                                            fontSize: 20,
-                                          ),
+                                          style: TextStyle(fontSize: 20),
                                         ),
                                       ],
                                     ),

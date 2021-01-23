@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/store/user.dart';
 
 import 'package:tundr/pages/chat/chat.dart';
 
@@ -80,6 +80,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                       return SizedBox.shrink();
                     }
                     return TileIconButton(
+                      key: ValueKey('chatWithUserBtn'),
                       icon: Icons.chat_bubble_outline,
                       iconColor: MyPalette.white,
                       onPressed: () async {

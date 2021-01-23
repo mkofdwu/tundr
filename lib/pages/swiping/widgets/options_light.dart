@@ -41,6 +41,7 @@ class SwipingOptionsLight extends StatelessWidget {
             ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: GestureDetector(
+                  key: ValueKey('undoBtn'),
                   child: Container(
                     width: 50,
                     height: 50,

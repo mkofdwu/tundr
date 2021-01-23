@@ -11,7 +11,7 @@ import 'package:tundr/pages/chat/chat.dart';
 import 'package:tundr/pages/swiping/controllers/card_animations_controller.dart';
 import 'package:tundr/pages/swiping/widgets/options_dark.dart';
 import 'package:tundr/pages/swiping/widgets/options_light.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/store/user.dart';
 import 'package:tundr/pages/its_a_match.dart';
 
 import 'package:tundr/constants/my_palette.dart';
@@ -21,6 +21,7 @@ import 'package:tundr/services/suggestions_service.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/widgets/my_feature.dart';
+import 'package:tundr/widgets/my_loader.dart';
 
 import 'widgets/suggestion_card.dart';
 
@@ -39,6 +40,7 @@ class SwipingPage extends StatefulWidget {
 class _SwipingPageState extends State<SwipingPage> {
   final CardAnimationsController _cardAnimationsController =
       CardAnimationsController();
+  bool _loading = true;
   final List<SuggestionWithProfile> _suggestionWithProfiles = [];
   int _i = 0;
   bool _canUndo = false;
@@ -54,6 +56,7 @@ class _SwipingPageState extends State<SwipingPage> {
       // when moving across the navigation tabs this page may be loaded
       return;
     }
+    setState(() => _loading = true);
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
     final suggestions = Map<String, bool>.from(
         privateInfo.respondedSuggestions); // create a copy
@@ -66,7 +69,7 @@ class _SwipingPageState extends State<SwipingPage> {
         wasLiked: suggestions[uid],
       ));
     }
-    if (mounted) setState(() {});
+    if (mounted) setState(() => _loading = false);
   }
 
   Future<void> _cleanUp(
@@ -200,7 +203,13 @@ class _SwipingPageState extends State<SwipingPage> {
 
     return Column(
       children: <Widget>[
-        if (_i >= _suggestionWithProfiles.length ||
+        if (_loading)
+          SizedBox(
+            width: width - 80,
+            height: height - 200,
+            child: Center(child: MyLoader()),
+          )
+        else if (_i >= _suggestionWithProfiles.length ||
             Provider.of<User>(context, listen: false)
                     .privateInfo
                     .numRightSwiped >=

@@ -5,7 +5,7 @@ import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/pages/chats_list/widgets/chat_tile.dart';
 import 'package:tundr/pages/chats_list/widgets/match_tile.dart';
-import 'package:tundr/repositories/user.dart';
+import 'package:tundr/store/user.dart';
 
 import 'package:tundr/widgets/my_loader.dart';
 

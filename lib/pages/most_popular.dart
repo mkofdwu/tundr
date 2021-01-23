@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:tundr/constants/my_palette.dart';
-import 'package:tundr/repositories/theme_manager.dart';
+import 'package:tundr/store/theme_manager.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/widgets/my_loader.dart';

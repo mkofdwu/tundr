@@ -1,7 +1,6 @@
-// import { migrateChatTyping } from './migrations';
+import generateDailySuggestions from './scheduled/generate-daily-suggestions';
 
-import { removeIncompleteUsers } from './migrations';
-
-// migrateChatTyping().then(() => console.log('DONE'));
-
-removeIncompleteUsers().then(() => console.log('DONE'));
+(async () => {
+  await generateDailySuggestions();
+  console.log('done');
+})();
