@@ -32,7 +32,7 @@ void main() {
   test('change height filter', () async {
     await driver.tap(find.byValueKey('Height'));
     await driver.waitFor(find.byType('RangeSliderFilterPage'));
-    // TODO FIXME dont know how to drag the slider
+    // FIXME dont know how to drag the slider
     await driver.tap(find.byType('MyBackButton'));
   });
 
@@ -43,7 +43,7 @@ void main() {
     await driver.tap(find.text('Cannot contain any of ...'));
     await driver.tap(find.text('Add new'));
     await driver.enterText('Cat');
-    // TODO FIXME dont know how to press enter
+    // FIXME dont know how to press enter
     await driver.tap(find.byType('MyBackButton'));
   });
 

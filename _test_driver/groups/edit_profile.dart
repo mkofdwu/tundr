@@ -66,7 +66,7 @@ void main() {
     // at interestseditpage (browser)
     await driver.tap(find.text('Animals'));
     await driver.tap(find.text('Bird Watching'));
-    // TODO
+    //
   });
 
   test('Preview profile', () async {
