@@ -82,4 +82,9 @@ const Map<String, Map<String, dynamic>> personalInfoFields = {
         "On a scale of 1 to 5, how much do you watch / are you into anime? (1 indicating you don't like it)",
     'options': 5,
   },
+  'Fetishes': {
+    'type': 4,
+    'prompt': 'Describe your fetish',
+    'options': null,
+  },
 };

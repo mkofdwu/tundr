@@ -11,9 +11,10 @@ void main() {
       (tester) async {
     await tester.tap(find.byKey(ValueKey('searchTab')));
     await tester.enterText(find.byKey(ValueKey('searchTextField')), 'test');
-    await tester.waitForAbsent(
-        find.text('test')); // don't show the currently logged in user
-    await tester.waitFor(find.text('test2'));
-    await tester.waitFor(find.text('tester'));
+    // don't show the currently logged in user
+    expect(find.text('test'), findsNothing);
+    await tester.pumpAndSettle();
+    expect(find.text('test2'), findsOneWidget);
+    expect(find.text('tester'), findsOneWidget);
   });
 }

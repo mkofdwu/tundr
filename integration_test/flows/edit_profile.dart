@@ -16,10 +16,11 @@ void main() {
   Future<void> setupTest(WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
-    await tester.waitFor(find.byType(HomePage));
+    expect(find.byType(HomePage), findsOneWidget);
     await tester.tap(find.byKey(ValueKey('meTab')));
     await tester.tap(find.text('Profile'));
-    await tester.waitFor(find.byType(EditProfilePage));
+    await tester.pumpAndSettle();
+    expect(find.byType(EditProfilePage), findsOneWidget);
   }
 
   testWidgets('Change about', (tester) async {
@@ -50,7 +51,8 @@ void main() {
 
   testWidgets('Replace extra media', (tester) async {
     await tester.tap(find.byKey(ValueKey('extraMediaEditTile0')));
-    await tester.waitFor(find.byType(EditExtraMediaPage));
+    await tester.pumpAndSettle();
+    expect(find.byType(EditExtraMediaPage), findsOneWidget);
     await tester.tap(find.byKey(ValueKey('menu')));
     await tester.tap(find.text('Replace with video')); // video
     await tester.tap(find.byType(MyBackButton));
@@ -58,20 +60,24 @@ void main() {
 
   testWidgets('Delete extra media', (tester) async {
     await tester.tap(find.byKey(ValueKey('extraMediaEditTile0')));
-    await tester.waitFor(find.byType(EditExtraMediaPage));
+    await tester.pumpAndSettle();
+    expect(find.byType(EditExtraMediaPage), findsOneWidget);
     await tester.tap(find.byKey(ValueKey('menu')));
     await tester.tap(find.byKey(ValueKey('deleteBtn')));
-    await tester.waitFor(find.byType(EditProfilePage));
+    await tester.pumpAndSettle();
+    expect(find.byType(EditProfilePage), findsOneWidget);
   });
 
   testWidgets('Change all personal info', (tester) async {
-    await tester.scrollIntoView(find.byType(PersonalInfoList));
+    await tester.scrollUntilVisible(find.byType(PersonalInfoList), 100);
     await tester.tap(find.byKey(ValueKey('School')));
     await tester.tap(find.byKey(ValueKey('Height')));
+    // TODO FIXME
   });
 
   testWidgets('Edit interests (includes interestbrowser)', (tester) async {
-    await tester.scrollIntoView(find.byKey(ValueKey('editInterestsBtn')));
+    await tester.scrollUntilVisible(
+        find.byKey(ValueKey('editInterestsBtn')), 100);
     await tester.tap(find.byKey(ValueKey('editInterestsBtn')));
     // at interestseditpage (browser)
     await tester.tap(find.text('Animals'));
@@ -81,9 +87,10 @@ void main() {
 
   testWidgets('Preview profile', (tester) async {
     await tester.tap(find.byKey(ValueKey('previewProfileBtn')));
-    await tester.waitFor(find.byType(MainProfilePage));
-    await tester.waitFor(find.text('test, 15'));
-    await tester.waitForAbsent(find.byKey(ValueKey('chatWithUserBtn')));
+    await tester.pumpAndSettle();
+    expect(find.byType(MainProfilePage), findsOneWidget);
+    expect(find.text('test, 15'), findsOneWidget);
+    expect(find.byKey(ValueKey('chatWithUserBtn')), findsNothing);
     await tester.tap(find.byType(MyBackButton));
   });
 }

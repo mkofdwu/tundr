@@ -23,13 +23,13 @@ export default async () => {
       ...algorithmData.data(),
     });
   }
-  console.log('Users:');
-  console.log(users);
+  // console.log('Users:');
+  // console.log(users);
 
   const uidToSuggestions = makeMatches(users);
 
-  console.log('Generated suggestions:');
-  console.log(uidToSuggestions);
+  // console.log('Generated suggestions:');
+  // console.log(uidToSuggestions);
   for (const [uid, suggestions] of uidToSuggestions) {
     await usersPrivateInfoRef.doc(uid).update({
       dailyGeneratedSuggestions: suggestions,

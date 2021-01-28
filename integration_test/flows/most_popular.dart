@@ -8,9 +8,10 @@ import '../utils/auth.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Loads pictures within 7 seconds', (tester) async {
+  testWidgets('Loads pictures within 6 seconds', (tester) async {
+    await startApp(tester);
     await tester.tap(find.byKey(ValueKey('mostPopularTab')));
-    await tester.waitFor(find.byType(CachedNetworkImage),
-        timeout: Duration(seconds: 7));
+    await tester.pump(Duration(seconds: 6));
+    expect(find.byType(CachedNetworkImage), findsWidgets);
   });
 }

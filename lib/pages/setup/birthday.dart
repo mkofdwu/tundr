@@ -163,7 +163,6 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
             child: Row(
               children: <Widget>[
                 DigitEntry(
-                  key: ValueKey('digit1'),
                   hintChar: 'D',
                   validDigits: [0, 1, 2, 3],
                   controller: _day1Controller,

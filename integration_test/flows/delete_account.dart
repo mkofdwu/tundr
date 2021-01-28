@@ -17,6 +17,7 @@ void main() {
     await tester.enterText(
         find.byKey(ValueKey('confirmPasswordField')), USER_PASSWORD);
     await tester.tap(find.byKey(ValueKey('confirmDeleteAccountBtn')));
-    await tester.waitFor(find.byType(WelcomePage));
+    await tester.pumpAndSettle();
+    expect(find.byType(WelcomePage), findsOneWidget);
   });
 }
