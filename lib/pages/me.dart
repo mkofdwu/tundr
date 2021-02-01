@@ -131,7 +131,7 @@ class _MePageState extends State<MePage> {
                                     ),
                               SizedBox(height: 5),
                               Text(
-                                'Born ${DateFormat.yMd().format(profile.birthday)}',
+                                'Born ${DateFormat("dd/MM/yyyy").format(profile.birthday)}',
                                 style: TextStyle(
                                   color: MyPalette.white,
                                   fontSize: 16,

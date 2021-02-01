@@ -52,26 +52,22 @@ class TundrApp extends StatefulWidget {
 }
 
 class _TundrAppState extends State<TundrApp> {
-  bool _loadingUser = true;
+  bool _isLoadingUser = true;
+  String _loadingLabel;
   bool _setupTheme = false;
 
   Future<void> _loadUser() async {
     await Firebase.initializeApp();
     AuthService.currentUserStream().listen((firebaseUser) async {
       if (!mounted) return;
-      setState(() => _loadingUser = true);
+      setState(() => _isLoadingUser = true);
       if (firebaseUser == null) {
-        setState(() => _loadingUser = false);
+        setState(() => _isLoadingUser = false);
         return;
       }
       if (Provider.of<RegistrationInfo>(context, listen: false)
           .isCreatingAccount) {
-        // // change the first page to setup theme so it is shown when account has
-        // // been created & navigator pops back to first page.
-        // setState(() {
-        //   _loadingUser = false;
-        //   _setupTheme = true;
-        // });
+        setState(() => _loadingLabel = 'Creating account');
       } else {
         final user = await UsersService.getUserRepo(firebaseUser.uid);
         Provider.of<User>(context, listen: false).profile = user.profile;
@@ -85,7 +81,7 @@ class _TundrAppState extends State<TundrApp> {
           Provider.of<ThemeManager>(context, listen: false).theme =
               user.privateInfo.theme;
         }
-        setState(() => _loadingUser = false);
+        setState(() => _isLoadingUser = false);
       }
     });
   }
@@ -102,8 +98,8 @@ class _TundrAppState extends State<TundrApp> {
       builder: (context, user, child) {
         Widget home;
 
-        if (_loadingUser) {
-          home = LoadingPage();
+        if (_isLoadingUser) {
+          home = LoadingPage(label: _loadingLabel);
         } else if (!user.loggedIn) {
           home = WelcomePage();
         } else if (_setupTheme) {

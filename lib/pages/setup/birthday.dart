@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tundr/constants/numbers.dart';
 import 'package:tundr/store/registration_info.dart';
 import 'package:tundr/pages/setup/gender.dart';
 import 'package:tundr/constants/my_palette.dart';
@@ -78,11 +79,12 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
           title: 'Invalid birthday',
           content: 'Are you sure you entered your birthday correctly?',
         );
-      } else if (DateTime.now().difference(birthday).inDays > 365 * 50) {
+      } else if (DateTime.now().difference(birthday).inDays >
+          365 * maxAllowedAge) {
         showErrorDialog(
           context: context,
           title: 'Too old',
-          content: "You can't be above 50 years old",
+          content: "You can't be above $maxAllowedAge years old",
         );
       } else {
         Provider.of<RegistrationInfo>(context, listen: false).birthday =
@@ -196,7 +198,7 @@ class _SetupBirthdayPageState extends State<SetupBirthdayPage> {
               children: <Widget>[
                 DigitEntry(
                   hintChar: 'M',
-                  validDigits: [0, 1, 2, 3],
+                  validDigits: [0, 1],
                   controller: _month1Controller,
                   onChanged: (digit) => setState(() => _month1 = digit),
                 ),

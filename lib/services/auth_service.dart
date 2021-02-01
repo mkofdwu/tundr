@@ -109,7 +109,6 @@ class AuthService {
           'lastSeen': null,
         });
         await result.user.updatePhoneNumber(phoneCredential);
-        print(FirebaseAuth.instance.currentUser);
         // get suggestions for new user
         await callHttpsFunction('generateSuggestionsForNewUser');
         return true;

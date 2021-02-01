@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/features.dart';
+import 'package:tundr/constants/numbers.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/store/user.dart';
 import 'package:tundr/store/theme_manager.dart';
@@ -179,24 +180,25 @@ class _MainSettingsPageState extends State<MainSettingsPage> {
                 ),
               ),
               SizedBox(height: 20),
-              SettingField(
-                title: 'Age range',
-                child: SimpleRangeSlider(
-                  min: 13,
-                  max: 50,
-                  defaultRange: RangeValues(
-                    algorithmData.ageRangeMin.toDouble(),
-                    algorithmData.ageRangeMax.toDouble(),
+              if (algorithmData.ageRangeMax <= maxAllowedAge)
+                SettingField(
+                  title: 'Age range',
+                  child: SimpleRangeSlider(
+                    min: minAllowedAge.toDouble(),
+                    max: maxAllowedAge.toDouble(),
+                    defaultRange: RangeValues(
+                      algorithmData.ageRangeMin.toDouble(),
+                      algorithmData.ageRangeMax.toDouble(),
+                    ),
+                    onChanged: (newRangeValues) {
+                      Provider.of<User>(context, listen: false)
+                          .updateAlgorithmData({
+                        'ageRangeMin': newRangeValues.start.toInt(),
+                        'ageRangeMax': newRangeValues.end.toInt(),
+                      });
+                    },
                   ),
-                  onChanged: (newRangeValues) {
-                    Provider.of<User>(context, listen: false)
-                        .updateAlgorithmData({
-                      'ageRangeMin': newRangeValues.start.toInt(),
-                      'ageRangeMax': newRangeValues.end.toInt(),
-                    });
-                  },
                 ),
-              ),
               SizedBox(height: 20),
               SeparatePageSettingField(
                 title: 'Filters',

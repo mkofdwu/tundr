@@ -1,3 +1,5 @@
+const int minAllowedAge = 13;
+const int maxAllowedAge = 50;
 const int millisecondsInADay = 86400000;
 const int millisecondsInTwoHours = 7200000;
 const int numSuggestionsEveryTwoHours = 40;
