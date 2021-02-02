@@ -8,6 +8,7 @@ class PlainTextField extends StatelessWidget {
   final double fontSize;
   final String fontFamily;
   final Function(String) onChanged;
+  final Function onEditingComplete;
 
   PlainTextField({
     Key key,
@@ -18,6 +19,7 @@ class PlainTextField extends StatelessWidget {
     this.fontSize = 20,
     this.fontFamily,
     this.onChanged,
+    this.onEditingComplete,
   }) : super(key: key);
 
   @override
@@ -39,6 +41,7 @@ class PlainTextField extends StatelessWidget {
         border: InputBorder.none,
       ),
       onChanged: onChanged,
+      onEditingComplete: onEditingComplete,
     );
   }
 }
