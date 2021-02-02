@@ -39,7 +39,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void _editInterests() => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => EditInterestsPage()),
+        MaterialPageRoute(
+          builder: (context) => EditInterestsPage(
+            onChanged: () => setState(() {}),
+          ),
+        ),
       );
 
   Widget _buildInterests(List<String> allInterests) {
@@ -74,7 +78,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final profile = Provider.of<User>(context, listen: false).profile;
+    final profile = Provider.of<User>(context).profile; // listen: false
     _aboutMeController.text = profile.aboutMe;
     return Scaffold(
       resizeToAvoidBottomInset: false,

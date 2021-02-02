@@ -130,7 +130,10 @@ class _PersonalInfoProfilePageState extends State<PersonalInfoProfilePage> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          InterestsWrap(interests: profile.interests),
+                          InterestsWrap(
+                            interests:
+                                profile.interests + profile.customInterests,
+                          ),
                         ],
                       ),
               ],

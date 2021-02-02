@@ -7,6 +7,10 @@ import 'package:tundr/widgets/buttons/back.dart';
 import 'package:tundr/pages/interests/widgets/interests_browser.dart';
 
 class EditInterestsPage extends StatelessWidget {
+  final Function onChanged;
+
+  EditInterestsPage({this.onChanged});
+
   // cannot have less than 10 interests?
   @override
   Widget build(BuildContext context) {
@@ -30,10 +34,12 @@ class EditInterestsPage extends StatelessWidget {
           onInterestsChanged: () {
             Provider.of<User>(context, listen: false)
                 .writeField('interests', UserProfile);
+            onChanged();
           },
           onCustomInterestsChanged: () {
             Provider.of<User>(context, listen: false)
                 .writeField('customInterests', UserProfile);
+            onChanged();
           },
         ),
       ),
