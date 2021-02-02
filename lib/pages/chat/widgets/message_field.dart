@@ -232,6 +232,7 @@ class _MessageFieldState extends State<MessageField> {
                         },
                       );
                     },
+                    onEditingComplete: _sendMessage,
                   ),
                 ),
                 SizedBox(width: 10),
