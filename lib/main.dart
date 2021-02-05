@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart' as sentry;
 import 'package:tundr/pages/about.dart';
 import 'package:tundr/pages/edit_profile.dart';
 import 'package:tundr/pages/me.dart';
@@ -32,18 +36,22 @@ import 'package:tundr/widgets/handlers/app_state_handler.dart';
 import 'package:tundr/widgets/handlers/notification_handler.dart';
 import 'package:tundr/widgets/rebuilder.dart';
 
-void main() {
-  runApp(Rebuilder(
-    child: MultiProvider(
-      providers: [
-        Provider<User>(create: (context) => User()),
-        Provider<RegistrationInfo>(create: (context) => RegistrationInfo()),
-        ChangeNotifierProvider<ThemeManager>(
-            create: (context) => ThemeManager()),
-      ],
-      child: TundrApp(),
-    ),
-  ));
+Future<void> main() async {
+  await sentry.SentryFlutter.init(
+    (options) => options.dsn =
+        'https://c38d4857443748fb89d574fb7bd963a7@o517043.ingest.sentry.io/5624275',
+    appRunner: () => runApp(Rebuilder(
+      child: MultiProvider(
+        providers: [
+          Provider<User>(create: (context) => User()),
+          Provider<RegistrationInfo>(create: (context) => RegistrationInfo()),
+          ChangeNotifierProvider<ThemeManager>(
+              create: (context) => ThemeManager()),
+        ],
+        child: TundrApp(),
+      ),
+    )),
+  );
 }
 
 class TundrApp extends StatefulWidget {
@@ -94,6 +102,8 @@ class _TundrAppState extends State<TundrApp> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Consumer<User>(
       builder: (context, user, child) {
         Widget home;

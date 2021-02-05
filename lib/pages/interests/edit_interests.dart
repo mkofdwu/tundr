@@ -34,12 +34,12 @@ class EditInterestsPage extends StatelessWidget {
           onInterestsChanged: () {
             Provider.of<User>(context, listen: false)
                 .writeField('interests', UserProfile);
-            onChanged();
+            if (onChanged != null) onChanged();
           },
           onCustomInterestsChanged: () {
             Provider.of<User>(context, listen: false)
                 .writeField('customInterests', UserProfile);
-            onChanged();
+            if (onChanged != null) onChanged();
           },
         ),
       ),

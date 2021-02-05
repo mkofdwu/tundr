@@ -27,6 +27,15 @@ class ChatsService {
             Future.wait(querySnapshot.docs.map((doc) => Message.fromDoc(doc))));
   }
 
+  static Future<String> startConversation(String otherUid, Message message) =>
+      callHttpsFunction<String>('startConversation', {
+        'otherUid': otherUid,
+        'message': {
+          ...message.toMap(),
+          'sentOn': null, // will be determined to the server
+        },
+      });
+
   static Future<String> sendMessage(String chatId, Message message) async {
     return (await chatsRef
             .doc(chatId)
@@ -46,15 +55,6 @@ class ChatsService {
     return await Message.fromDoc(
         await chatsRef.doc(chatId).collection('messages').doc(messageId).get());
   }
-
-  static Future<String> startConversation(String otherUid, Message message) =>
-      callHttpsFunction<String>('startConversation', {
-        'otherUid': otherUid,
-        'message': {
-          ...message.toMap(),
-          'sentOn': null, // will be determined to the server
-        },
-      });
 
   static Future<void> deleteChat(String uid, String chatId) async {
     await chatsRef.doc(chatId).update({

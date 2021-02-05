@@ -6,15 +6,14 @@ import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/models/user_status.dart';
+import 'package:tundr/pages/chat/message_sender.dart';
+import 'package:tundr/pages/chat/widgets/chat_description.dart';
 import 'package:tundr/pages/chat/widgets/message_field.dart';
 import 'package:tundr/pages/chat/widgets/popup_menu.dart';
 
 import 'package:tundr/store/user.dart';
 import 'package:tundr/services/chats_service.dart';
-import 'package:tundr/services/storage_service.dart';
 import 'package:tundr/services/users_service.dart';
-import 'package:tundr/utils/format_date.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/get_network_image.dart';
 import 'package:tundr/utils/show_info_dialog.dart';
@@ -41,10 +40,11 @@ class _ChatPageState extends State<ChatPage> {
   int _pages = 1;
 
   final ScrollController _scrollController = ScrollController();
-  Media _media;
+  Media _messageMedia;
   Message _referencedMessage;
   bool _showChatOptions = false;
-  final List<Message> _unsentMessages = [];
+  // final List<Message> _unsentMessages = [];
+  MessageSender messageSender;
 
   final Map<String, GlobalKey> messageIdToGlobalKey = {};
 
@@ -52,12 +52,11 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((duration) async {
+      final user = Provider.of<User>(context, listen: false);
+      messageSender = MessageSender(uid: user.profile.uid, chat: widget.chat);
       if (widget.chat.type != ChatType.nonExistent &&
           widget.chat.type != ChatType.newMatch) {
-        if (Provider.of<User>(context, listen: false)
-            .privateInfo
-            .settings
-            .readReceipts) {
+        if (user.privateInfo.settings.readReceipts) {
           // only send read receipts if the user's settings allows
           await ChatsService.readOtherUsersMessages(
             widget.chat.otherProfile.uid,
@@ -98,84 +97,6 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  void _deleteMessage(String messageId) {
-    ChatsService.deleteMessage(
-      chatId: widget.chat.id,
-      messageId: messageId,
-    );
-  }
-
-  void _sendMessage(String text) async {
-    final profile = Provider.of<User>(context, listen: false).profile;
-    final unsentMessageIndex = _unsentMessages.length;
-    final sentOn = DateTime.now();
-
-    final message = Message(
-      sender: profile,
-      sentOn: sentOn,
-      readOn: null,
-      referencedMessage: _referencedMessage,
-      text: text,
-      media: _media,
-    );
-
-    setState(() {
-      _media = null;
-      _referencedMessage = null;
-      _unsentMessages.add(message);
-      widget.chat.lastReadMessageId = null;
-    });
-
-    if (message.media != null) {
-      message.media.url = await StorageService.uploadMedia(
-          uid: profile.uid, media: message.media);
-      message.media.isLocalFile = false;
-    }
-
-    if (widget.chat.type == ChatType.nonExistent) {
-      widget.chat.id = await ChatsService.startConversation(
-        widget.chat.otherProfile.uid,
-        message,
-      );
-    } else if (widget.chat.type == ChatType.newMatch) {
-      await ChatsService.updateChatDetails(
-        profile.uid,
-        widget.chat.id,
-        {'type': 3},
-      ); // normal
-    } else if (widget.chat.type == ChatType.unknown) {
-      await ChatsService.updateChatDetails(
-        profile.uid,
-        widget.chat.id,
-        {'type': 3},
-      );
-    }
-
-    if (widget.chat.type != ChatType.nonExistent) {
-      // when calling the startConversation http function a message is already created
-      await ChatsService.sendMessage(widget.chat.id, message);
-    }
-
-    if (mounted) {
-      setState(() {
-        widget.chat.type = ChatType.normal;
-        _unsentMessages.removeAt(unsentMessageIndex);
-      });
-    }
-  }
-
-  Widget _buildUserStatusText() => StreamBuilder<UserStatus>(
-        stream: UsersService.getUserStatusStream(widget.chat.otherProfile.uid),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return SizedBox.shrink();
-          final status = snapshot.data;
-          return Text(
-            status.online ? 'online' : formatDate(status.lastSeen),
-            style: TextStyle(fontSize: 12, color: MyPalette.white),
-          );
-        },
-      );
-
   Widget _buildTopBar() => SizedBox(
         height: 50,
         child: Row(
@@ -196,22 +117,8 @@ class _ChatPageState extends State<ChatPage> {
                       widget.chat.otherProfile.name,
                       style: TextStyle(fontSize: 20, color: MyPalette.white),
                     ),
-                    StreamBuilder<bool>(
-                      stream: ChatsService.otherUserIsTypingStream(widget.chat),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) return SizedBox.shrink();
-                        if (snapshot.data) {
-                          return Text(
-                            'typing',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: MyPalette.white,
-                            ),
-                          );
-                        }
-                        return _buildUserStatusText();
-                      },
-                    ),
+                    if (widget.chat.type != ChatType.nonExistent)
+                      ChatDescription(chat: widget.chat)
                   ],
                 ),
                 onTap: () async => Navigator.pushNamed(
@@ -231,13 +138,13 @@ class _ChatPageState extends State<ChatPage> {
       );
 
   Widget _buildMessagesList() => StreamBuilder<List<Message>>(
-        stream: widget.chat.type == ChatType.nonExistent ||
-                widget.chat.type == ChatType.newMatch
+        stream: widget.chat.type == ChatType.nonExistent
             ? null
             : ChatsService.messagesStream(
                 widget.chat.id, _pages * messagesPerPage),
         builder: (context, snapshot) {
           final messages = snapshot.data ?? [];
+          final unsentMessages = messageSender?.unsentMessages ?? [];
           return NotificationListener(
             onNotification: (ScrollNotification notification) {
               if (notification is ScrollStartNotification &&
@@ -252,17 +159,17 @@ class _ChatPageState extends State<ChatPage> {
               padding: EdgeInsets.only(
                 top: 100,
                 bottom: 120.0 +
-                    (_media == null ? 0 : 220) +
+                    (_messageMedia == null ? 0 : 220) +
                     (_referencedMessage == null ? 0 : 160),
               ),
-              itemCount: _unsentMessages.length + messages.length,
+              itemCount: unsentMessages.length + messages.length,
               itemBuilder: (context, i) {
-                if (i < _unsentMessages.length) {
+                if (i < unsentMessages.length) {
                   return UnsentMessageTile(
-                    message: _unsentMessages[_unsentMessages.length - i - 1],
+                    message: unsentMessages[unsentMessages.length - i - 1],
                   );
                 }
-                final messageIndex = i - _unsentMessages.length;
+                final messageIndex = i - unsentMessages.length;
                 final message = messages[messageIndex];
                 final fromMe = message.sender.uid ==
                     Provider.of<User>(context, listen: false).profile.uid;
@@ -304,7 +211,10 @@ class _ChatPageState extends State<ChatPage> {
                                   context, <String>['dismissible_reply']);
                             },
                             onDeleteMessage: () {
-                              _deleteMessage(message.id);
+                              ChatsService.deleteMessage(
+                                chatId: widget.chat.id,
+                                messageId: message.id,
+                              );
                             },
                           ),
                         ),
@@ -365,7 +275,7 @@ class _ChatPageState extends State<ChatPage> {
               Positioned(
                 bottom: 0,
                 child: Container(
-                  height: _media == null ? 140 : 300,
+                  height: _messageMedia == null ? 140 : 300,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     gradient: fromTheme(
@@ -403,18 +313,34 @@ class _ChatPageState extends State<ChatPage> {
                         );
                       }
                       return MessageField(
-                        media: _media,
+                        media: _messageMedia,
                         referencedMessage: _referencedMessage,
                         onRemoveMedia: () {
-                          setState(() => _media = null);
+                          setState(() => _messageMedia = null);
                         },
                         onRemoveReferencedMessage: () {
                           setState(() => _referencedMessage = null);
                         },
                         onChangeMedia: (newMedia) {
-                          setState(() => _media = newMedia);
+                          setState(() => _messageMedia = newMedia);
                         },
-                        onSendMessage: _sendMessage,
+                        onSendMessage: (text) async {
+                          final message = Message(
+                            sender: Provider.of<User>(context, listen: false)
+                                .profile,
+                            sentOn: DateTime.now(),
+                            readOn: null,
+                            referencedMessage: _referencedMessage,
+                            text: text,
+                            media: _messageMedia,
+                          );
+                          setState(() {
+                            _messageMedia = null;
+                            _referencedMessage = null;
+                            widget.chat.lastReadMessageId = null;
+                          });
+                          await messageSender.send(message);
+                        },
                         onStartTyping: () => ChatsService.toggleTyping(
                           widget.chat.id,
                           Provider.of<User>(context, listen: false).profile.uid,

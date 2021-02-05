@@ -58,11 +58,10 @@ class _SwipingPageState extends State<SwipingPage> {
     }
     setState(() => _loading = true);
     final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
-    final suggestions = Map<String, bool>.from(
-        privateInfo.respondedSuggestions); // create a copy
-    suggestions.addAll(privateInfo.dailyGeneratedSuggestions
+    final suggestions = privateInfo.dailyGeneratedSuggestions
         .asMap()
-        .map((__i, uid) => MapEntry<String, bool>(uid, null)));
+        .map((__i, uid) => MapEntry<String, bool>(uid, null));
+    suggestions.addAll(privateInfo.respondedSuggestions); // create a copy
     for (final uid in suggestions.keys) {
       _suggestionWithProfiles.add(SuggestionWithProfile(
         profile: await UsersService.getUserProfile(uid),
@@ -215,21 +214,22 @@ class _SwipingPageState extends State<SwipingPage> {
                     .numRightSwiped >=
                 10)
           SizedBox(
-            width: width - 80,
+            width: 260,
             height: height - 200,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "You've gone through everyone",
+                    "That's everyone for today",
                     style: TextStyle(
                       fontSize: 20,
                     ),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Try editing your filters to see more people',
+                    'Try editing your filters to see more people next time',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: MyPalette.grey,
                       fontSize: 14,

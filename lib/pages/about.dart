@@ -44,13 +44,13 @@ class AboutPage extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Developed by Jia Jie',
+                  'Developed by someone single', // Jia Jie
                   style: TextStyle(
                     fontSize: 14,
                   ),
                 ),
                 Text(
-                  'Version: 0.1.0a',
+                  'Version: 0.2.1',
                   style: TextStyle(
                     fontSize: 14,
                   ),

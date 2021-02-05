@@ -10,6 +10,7 @@ import 'package:tundr/pages/setup/phone_number.dart';
 import 'package:tundr/pages/setup/phone_verification.dart';
 import 'package:tundr/pages/setup/profile_pic.dart';
 import 'package:tundr/pages/setup/theme.dart';
+import 'package:tundr/pages/welcome.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 import 'package:tundr/widgets/textfields/digit.dart';
 
@@ -25,6 +26,7 @@ void main() {
     String password,
     String confirmPassword,
   ) async {
+    expect(find.byType(WelcomePage), findsOneWidget);
     await tester.tap(find.byKey(ValueKey('registerBtn')));
     await tester.enterText(find.byKey(ValueKey('usernameField')), username);
     await tester.enterText(find.byKey(ValueKey('passwordField')), password);
