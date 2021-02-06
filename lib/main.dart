@@ -7,11 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart' as sentry;
 import 'package:tundr/pages/about.dart';
-import 'package:tundr/pages/edit_profile.dart';
+import 'package:tundr/pages/edit_profile/edit_profile.dart';
 import 'package:tundr/pages/me.dart';
 import 'package:tundr/pages/login.dart';
 import 'package:tundr/pages/profile/about_me.dart';
 import 'package:tundr/pages/profile/extra_media.dart';
+import 'package:tundr/pages/profile/homework.dart';
 import 'package:tundr/pages/profile/personal_info.dart';
 import 'package:tundr/pages/register.dart';
 import 'package:tundr/pages/search.dart';
@@ -148,6 +149,7 @@ class _TundrAppState extends State<TundrApp> {
                   '/edit_profile': (context) => EditProfilePage(),
                   '/profile': (context) => MainProfilePage(),
                   '/profile/about_me': (context) => AboutMeProfilePage(),
+                  '/profile/homework': (context) => HomeworkProfilePage(),
                   '/profile/extra_media': (context) => ExtraMediaProfilePage(),
                   '/profile/personal_info': (context) =>
                       PersonalInfoProfilePage(),

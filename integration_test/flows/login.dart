@@ -1,42 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tundr/pages/home.dart';
+import 'package:tundr/pages/welcome.dart';
 
-import '../utils/auth.dart';
-import '../utils/processes.dart';
+import '../accounts.dart';
+import '../utils.dart';
 
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+Future<void> loginWith(
+  WidgetTester tester, {
+  @required Account account,
+  bool expectHome = true,
+}) async {
+  assert(account.exists);
 
-  Future<void> invalidLoginWith(
-      WidgetTester tester, String username, String password) async {
-    await loginWith(
-      tester,
-      username: username,
-      password: password,
-      expectHome: false,
-    );
-    expect(find.byType(AlertDialog), findsOneWidget);
-    await tester.tap(find.text('CLOSE'));
-    await back();
-    await tester.pumpAndSettle();
-  }
+  expect(find.byType(WelcomePage), findsOneWidget);
+  await tester.tap(find.byKey(ValueKey('loginBtn')));
+  await tester.pumpAndSettle();
+  await tester.enterText(
+      find.byKey(ValueKey('usernameField')), account.username);
+  await tester.enterText(
+      find.byKey(ValueKey('passwordField')), account.password);
+  await tester.tap(find.byKey(ValueKey('loginSubmitBtn')));
+  await tester.pumpAndSettle();
+  await tester.pump(Duration(seconds: 4));
+  if (expectHome) expect(find.byType(HomePage), findsOneWidget);
 
-  testWidgets('Shows error with incorrect credentials', (tester) async {
-    await startApp(tester, expectHome: false);
-    await invalidLoginWith(tester, 'nonexistentuser', '123456');
-    await invalidLoginWith(tester, 'test', 'wrongpw');
-  });
+  Accounts.current = account;
+}
 
-  testWidgets('Shows error with badly formatted credentials', (tester) async {
-    await startApp(tester, expectHome: false);
-    await invalidLoginWith(tester, '', '');
-    await invalidLoginWith(tester, 'e\tu q\ntesting', '');
-    await invalidLoginWith(tester, '', 'a \n\r\tpw');
-  });
+Future<void> testInvalidLoginWith(
+    WidgetTester tester, String username, String password) async {
+  await loginWith(
+    tester,
+    account: Account(username, password, exists: false),
+    expectHome: false,
+  );
+  expect(find.byType(AlertDialog), findsOneWidget);
+  await tester.tap(find.text('CLOSE'));
+  await back();
+  await tester.pumpAndSettle();
+}
 
-  testWidgets('Logs in with correct credentials', (tester) async {
-    await startApp(tester, expectHome: false);
-    await loginWith(tester);
-  });
+Future<void> logoutWith(WidgetTester tester) async {
+  expect(find.byType(HomePage), findsOneWidget);
+  await tester.tap(find.byKey(ValueKey('meTab')));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text('Settings'));
+  await tester.pumpAndSettle();
+  await tester.scrollUntilVisible(find.text('Logout'), 100);
+  await tester.tap(find.text('Logout'));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text('OK'));
+  await tester.pump(Duration(seconds: 2));
+  expect(find.byType(WelcomePage), findsOneWidget);
+}
+
+Future<void> switchAccount({Account to, WidgetTester tester}) async {
+  await logoutWith(tester);
+  await loginWith(tester, account: to);
 }

@@ -10,6 +10,7 @@ const Map<String, Map<String, dynamic>> personalInfoFields = {
       'NUS High School',
       'Nanyang Girls High',
       'School of the Arts',
+      'National Junior College',
     ],
   },
   'Height': {
@@ -86,5 +87,10 @@ const Map<String, Map<String, dynamic>> personalInfoFields = {
     'type': 4,
     'prompt': 'Describe your fetish',
     'options': null,
+  },
+  'Typing speed': {
+    'type': 0,
+    'prompt': "What's your typing speed in WPM?",
+    'options': 300,
   },
 };

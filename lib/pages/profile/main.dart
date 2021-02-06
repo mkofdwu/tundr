@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
+import 'package:tundr/pages/profile/utils/find_next_route.dart';
 import 'package:tundr/store/user.dart';
 
 import 'package:tundr/pages/chat/chat.dart';
@@ -24,25 +25,12 @@ class MainProfilePage extends StatefulWidget {
 }
 
 class _MainProfilePageState extends State<MainProfilePage> {
-  bool _hasInfoLeft(UserProfile profile) =>
-      profile.aboutMe.isNotEmpty ||
-      profile.extraMedia.any((media) => media != null) ||
-      profile.interests.isNotEmpty ||
-      profile.personalInfo.isNotEmpty;
-
-  void _nextPage(UserProfile profile) {
-    String route;
-    if (profile.aboutMe.isNotEmpty) {
-      route = '/profile/about_me';
-    } else if (profile.extraMedia.any((media) => media != null)) {
-      route = '/profile/extra_media';
-    } else if (profile.interests.isNotEmpty ||
-        profile.personalInfo.isNotEmpty) {
-      route = '/profile/personal_info';
-    } else {
-      throw Exception('No pages left');
-    }
-    Navigator.pushNamed(context, route, arguments: profile);
+  void _nextPage(profile) {
+    Navigator.pushNamed(
+      context,
+      findNextRoute('/profile/main', profile),
+      arguments: profile,
+    );
   }
 
   Widget _buildUserAction(myProfile, otherProfile) => SafeArea(
@@ -180,7 +168,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                     ),
                   ),
                   SizedBox(height: 40),
-                  _hasInfoLeft(otherProfile)
+                  findNextRoute('/profile/main', otherProfile) != null
                       ? ScrollDownArrow(
                           dark: true,
                           onNextPage: () => _nextPage(otherProfile),
@@ -194,7 +182,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
         ],
       ),
       canScrollUp: false,
-      canScrollDown: _hasInfoLeft(otherProfile),
+      canScrollDown: findNextRoute('/profile/main', otherProfile) != null,
       onScrollDown: () => _nextPage(otherProfile),
     );
   }

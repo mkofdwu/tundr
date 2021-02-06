@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/models/user_profile.dart';
+import 'package:tundr/pages/profile/utils/find_next_route.dart';
 import 'package:tundr/store/theme_manager.dart';
 
 import 'package:tundr/widgets/buttons/tile_icon.dart';
@@ -27,20 +28,17 @@ class _ExtraMediaProfilePageState extends State<ExtraMediaProfilePage> {
           _scrollController.position.maxScrollExtent) {
         final profile =
             ModalRoute.of(context).settings.arguments as UserProfile;
-        if (_hasInfoLeft(profile)) {
+        if (findNextRoute('/profile/extra_media', profile) != null) {
           _nextPage(profile);
         }
       }
     });
   }
 
-  bool _hasInfoLeft(profile) =>
-      profile.interests.isNotEmpty || profile.personalInfo.isNotEmpty;
-
   void _nextPage(profile) {
     Navigator.pushNamed(
       context,
-      '/profile/personal_info',
+      findNextRoute('/profile/extra_media', profile),
       arguments: profile,
     );
   }
@@ -90,7 +88,7 @@ class _ExtraMediaProfilePageState extends State<ExtraMediaProfilePage> {
               ),
             ),
           ),
-          _hasInfoLeft(profile)
+          findNextRoute('/profile/extra_media', profile) != null
               ? Positioned(
                   left: width * 179 / 375,
                   bottom: 20,

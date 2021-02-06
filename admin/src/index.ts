@@ -1,6 +1,6 @@
-import generateDailySuggestions from './scheduled/generate-daily-suggestions';
+import { addHomeworkList } from './migrations';
 
 (async () => {
-  await generateDailySuggestions();
+  await addHomeworkList();
   console.log('done');
 })();

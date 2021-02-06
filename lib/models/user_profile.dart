@@ -13,6 +13,7 @@ class UserProfile {
   String profileImageUrl;
   List<Media> extraMedia;
   Map<String, dynamic> personalInfo;
+  List<String> homework;
   List<String> interests;
   List<String> customInterests;
   bool verified;
@@ -27,6 +28,7 @@ class UserProfile {
     this.profileImageUrl,
     this.extraMedia,
     this.personalInfo,
+    this.homework,
     this.interests,
     this.customInterests,
     this.verified,
@@ -45,6 +47,7 @@ class UserProfile {
           .map<Media>((m) => m == null ? null : Media.fromMap(m))
           .toList(),
       personalInfo: Map<String, dynamic>.from(map['personalInfo']),
+      homework: List<String>.from(map['homework']),
       interests: List<String>.from(map['interests']),
       customInterests: List<String>.from(map['customInterests']),
       verified: map['verified'],
@@ -62,6 +65,7 @@ class UserProfile {
       profileImageUrl: info.profilePic.url,
       extraMedia: info.extraMedia,
       personalInfo: info.personalInfo,
+      homework: [],
       interests: info.interests,
       customInterests: info.customInterests,
       verified: false,
@@ -77,6 +81,7 @@ class UserProfile {
       profileImageUrl: null,
       aboutMe: 'I have deleted my account',
       birthday: DateTime(0, 0, 0),
+      homework: [],
       interests: [],
       customInterests: [],
       extraMedia: List.filled(9, null),
@@ -100,6 +105,7 @@ class UserProfile {
       'profileImageUrl': profileImageUrl,
       'extraMedia': extraMedia.map((m) => m?.toMap()).toList(),
       'personalInfo': personalInfo,
+      'homework': homework,
       'interests': interests,
       'customInterests': customInterests,
       'verified': verified,

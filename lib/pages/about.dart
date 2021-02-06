@@ -37,7 +37,7 @@ class AboutPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "Primarily made as a dating app for my high school. I can't really remember what motivated me to make this.",
+                  'Modern problems require modern solutions. I need a girlfriend so I made a dating app.',
                   style: TextStyle(
                     fontSize: 14,
                   ),

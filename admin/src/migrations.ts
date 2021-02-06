@@ -73,3 +73,12 @@ export const removeIncompleteUsers = async () => {
     }
   }
 };
+
+export const addHomeworkList = async () => {
+  const userProfileDocs = (await userProfilesRef.get()).docs;
+  for (const profileDoc of userProfileDocs) {
+    await profileDoc.ref.update({
+      homework: [],
+    });
+  }
+};

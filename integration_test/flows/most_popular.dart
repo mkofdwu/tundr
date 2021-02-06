@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../utils/auth.dart';
+import 'login.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('Loads pictures within 6 seconds', (tester) async {
-    await startApp(tester);
+    await loginWith(tester);
     await tester.tap(find.byKey(ValueKey('mostPopularTab')));
     await tester.pump(Duration(seconds: 6));
     expect(find.byType(CachedNetworkImage), findsWidgets);

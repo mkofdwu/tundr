@@ -1,23 +1,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
+import 'package:tundr/pages/home.dart';
 import 'package:tundr/pages/welcome.dart';
 
-import '../utils/constants.dart';
+import '../accounts.dart';
 
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+void deleteAccount(WidgetTester tester) async {
+  expect(find.byType(HomePage), findsOneWidget);
+  await tester.tap(find.byKey(ValueKey('meTab')));
+  await tester.tap(find.byKey(ValueKey('settingsBtn')));
+  await tester.scrollUntilVisible(
+      find.byKey(ValueKey('deleteAccountBtn')), 100);
+  await tester.tap(find.byKey(ValueKey('deleteAccountBtn')));
+  await tester.enterText(
+      find.byKey(ValueKey('confirmPasswordField')), Accounts.current.password);
+  await tester.tap(find.byKey(ValueKey('confirmDeleteAccountBtn')));
+  await tester.pumpAndSettle();
+  expect(find.byType(WelcomePage), findsOneWidget);
 
-  testWidgets('Delete account', (tester) async {
-    await tester.tap(find.byKey(ValueKey('meTab')));
-    await tester.tap(find.byKey(ValueKey('settingsBtn')));
-    await tester.scrollUntilVisible(
-        find.byKey(ValueKey('deleteAccountBtn')), 100);
-    await tester.tap(find.byKey(ValueKey('deleteAccountBtn')));
-    await tester.enterText(
-        find.byKey(ValueKey('confirmPasswordField')), USER_PASSWORD);
-    await tester.tap(find.byKey(ValueKey('confirmDeleteAccountBtn')));
-    await tester.pumpAndSettle();
-    expect(find.byType(WelcomePage), findsOneWidget);
-  });
+  Accounts.current.exists = false;
+  Accounts.current = null;
 }
