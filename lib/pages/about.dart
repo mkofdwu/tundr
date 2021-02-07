@@ -48,7 +48,7 @@ class AboutPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Version: 0.2.1',
+                  'Version: 0.2.5',
                   style: TextStyle(
                     fontSize: 14,
                   ),
@@ -60,7 +60,7 @@ class AboutPage extends StatelessWidget {
                     style: TextStyle(color: MyPalette.gold),
                   ),
                   onTap: () => showLicensePage(
-                      context: context, applicationVersion: '0.1.0a'),
+                      context: context, applicationVersion: '0.2.5'),
                 ),
               ],
             ),
