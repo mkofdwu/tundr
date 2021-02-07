@@ -17,9 +17,7 @@ class AboutPage extends StatelessWidget {
             right: 50,
             child: Text(
               'About',
-              style: TextStyle(
-                fontSize: 40,
-              ),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
             ),
           ),
           Positioned(
@@ -44,7 +42,7 @@ class AboutPage extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Developed by someone single', // Jia Jie
+                  'Developed by someone', // Jia Jie
                   style: TextStyle(
                     fontSize: 14,
                   ),

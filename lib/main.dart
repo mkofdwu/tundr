@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -38,21 +39,28 @@ import 'package:tundr/widgets/handlers/notification_handler.dart';
 import 'package:tundr/widgets/rebuilder.dart';
 
 Future<void> main() async {
-  await sentry.SentryFlutter.init(
-    (options) => options.dsn =
-        'https://c38d4857443748fb89d574fb7bd963a7@o517043.ingest.sentry.io/5624275',
-    appRunner: () => runApp(Rebuilder(
-      child: MultiProvider(
-        providers: [
-          Provider<User>(create: (context) => User()),
-          Provider<RegistrationInfo>(create: (context) => RegistrationInfo()),
-          ChangeNotifierProvider<ThemeManager>(
-              create: (context) => ThemeManager()),
-        ],
-        child: TundrApp(),
-      ),
-    )),
-  );
+  final appRunner = () => runApp(Rebuilder(
+        child: MultiProvider(
+          providers: [
+            Provider<User>(create: (context) => User()),
+            Provider<RegistrationInfo>(create: (context) => RegistrationInfo()),
+            ChangeNotifierProvider<ThemeManager>(
+                create: (context) => ThemeManager()),
+          ],
+          child: TundrApp(),
+        ),
+      ));
+
+  if (kReleaseMode) {
+    await sentry.SentryFlutter.init(
+      (options) => options
+        ..dsn =
+            'https://c38d4857443748fb89d574fb7bd963a7@o517043.ingest.sentry.io/5624275',
+      appRunner: appRunner,
+    );
+  } else {
+    appRunner();
+  }
 }
 
 class TundrApp extends StatefulWidget {

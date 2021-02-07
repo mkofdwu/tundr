@@ -51,7 +51,7 @@ class _ScrollDownArrowState extends State<ScrollDownArrow>
         child: Stack(
           children: <Widget>[
             Positioned(
-              bottom: _animationController.value * 20,
+              bottom: _animationController.value * 10,
               child: Image.asset(
                 'assets/images/down-${widget.dark ? 'dark' : 'light'}.png',
                 width: 20,

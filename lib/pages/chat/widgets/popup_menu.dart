@@ -14,8 +14,9 @@ import 'package:tundr/widgets/popup_menu.dart';
 
 class ChatPopupMenu extends StatelessWidget {
   final Chat chat;
+  final Function onUpdate;
 
-  ChatPopupMenu({@required this.chat});
+  ChatPopupMenu({@required this.chat, @required this.onUpdate});
 
   void _blockAndDeleteChat(context) async {
     final confirm = await showQuestionDialog(
@@ -58,16 +59,20 @@ class ChatPopupMenu extends StatelessWidget {
       chat.id,
       {'wallpaperUrl': wallpaperUrl},
     );
+    chat.wallpaperUrl = wallpaperUrl;
+    onUpdate();
   }
 
   void _starChat(context) {
     final uid = Provider.of<User>(context, listen: false).profile.uid;
     ChatsService.updateChatDetails(uid, chat.id, {'type': 2});
+    onUpdate();
   }
 
   void _unstarChat(context) {
     final uid = Provider.of<User>(context, listen: false).profile.uid;
     ChatsService.updateChatDetails(uid, chat.id, {'type': 3});
+    onUpdate();
   }
 
   @override

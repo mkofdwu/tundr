@@ -90,7 +90,7 @@ const Map<String, Map<String, dynamic>> personalInfoFields = {
   },
   'Typing speed': {
     'type': 0,
-    'prompt': "What's your typing speed in WPM?",
-    'options': 300,
+    'prompt': "What's your average typing speed in WPM?",
+    'options': 250,
   },
 };

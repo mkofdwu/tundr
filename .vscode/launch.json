@@ -41,7 +41,7 @@
       "name": "tundr integration tests: launch app",
       "request": "launch",
       "type": "dart",
-      "program": "test_driver/app.dart",
+      "program": "integration_test/app.dart",
       "args": [
         "--flavor",
         "dev",
@@ -50,14 +50,18 @@
         "--disable-service-auth-codes"
       ]
     },
-    // {
-    //   "name": "tundr integration tests: launch driver",
-    //   "request": "launch",
-    //   "env": {
-    //     "VM_SERVICE_URL": "http://localhost:8888"
-    //   },
-    //   "type": "dart",
-    //   "program": "${file}" // "test_driver/app_test.dart"
-    // }
+    {
+      "name": "tundr integration tests: launch driver",
+      "request": "launch",
+      // "env": {
+      //   "VM_SERVICE_URL": "http://localhost:8888"
+      // },
+      "type": "dart",
+      "program": "integration_test/app_test.dart",
+      "args": [
+        "--flavor",
+        "dev"
+      ]
+    },
   ]
 }

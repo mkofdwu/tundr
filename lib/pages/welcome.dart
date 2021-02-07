@@ -39,7 +39,7 @@ class _WelcomePageState extends State<WelcomePage> {
           left: 186,
           top: height * 44 / 736 + 110,
           child: Text(
-            'By A Student',
+            'By Someone',
             style: TextStyle(
               color: MyPalette.black,
               fontSize: 20,

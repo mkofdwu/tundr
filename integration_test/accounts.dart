@@ -8,8 +8,8 @@ class Account {
 
 class Accounts {
   // john will be created and then deleted after test is completed
-  static final john = Account('john', 'password2', exists: false);
-  static final mary = Account('mary', 'testee', exists: false);
+  static final john = Account('johncremley', 'password2', exists: false);
+  static final mary = Account('maryauter', 'testee', exists: false);
   static final test = Account('test', '123456', exists: true);
 
   static Account current;

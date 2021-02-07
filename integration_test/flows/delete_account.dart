@@ -8,10 +8,13 @@ import '../accounts.dart';
 void deleteAccount(WidgetTester tester) async {
   expect(find.byType(HomePage), findsOneWidget);
   await tester.tap(find.byKey(ValueKey('meTab')));
+  await tester.pumpAndSettle();
   await tester.tap(find.byKey(ValueKey('settingsBtn')));
+  await tester.pumpAndSettle();
   await tester.scrollUntilVisible(
       find.byKey(ValueKey('deleteAccountBtn')), 100);
   await tester.tap(find.byKey(ValueKey('deleteAccountBtn')));
+  await tester.pumpAndSettle();
   await tester.enterText(
       find.byKey(ValueKey('confirmPasswordField')), Accounts.current.password);
   await tester.tap(find.byKey(ValueKey('confirmDeleteAccountBtn')));

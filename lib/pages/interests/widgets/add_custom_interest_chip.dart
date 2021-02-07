@@ -49,6 +49,7 @@ class _AddCustomInterestChipState extends State<AddCustomInterestChip> {
                 ),
           label: _inputting
               ? TextField(
+                  key: ValueKey('addCustomInterestField'),
                   cursorColor: MyPalette.black,
                   decoration: InputDecoration(
                     isDense: true,

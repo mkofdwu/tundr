@@ -45,6 +45,7 @@ class _ChatPageState extends State<ChatPage> {
   bool _showChatOptions = false;
   // final List<Message> _unsentMessages = [];
   MessageSender messageSender;
+  bool _wasBlocked = false;
 
   final Map<String, GlobalKey> messageIdToGlobalKey = {};
 
@@ -53,7 +54,11 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((duration) async {
       final user = Provider.of<User>(context, listen: false);
-      messageSender = MessageSender(uid: user.profile.uid, chat: widget.chat);
+      messageSender = MessageSender(
+        uid: user.profile.uid,
+        chat: widget.chat,
+        onUpdate: () => setState(() {}),
+      );
       if (widget.chat.type != ChatType.nonExistent &&
           widget.chat.type != ChatType.newMatch) {
         if (user.privateInfo.settings.readReceipts) {
@@ -66,6 +71,9 @@ class _ChatPageState extends State<ChatPage> {
       }
       if (mounted) {
         FeatureDiscovery.discoverFeatures(context, <String>['message_tile']);
+        _wasBlocked =
+            await UsersService.isBlockedBy(widget.chat.otherProfile.uid);
+        setState(() {});
       }
     });
   }
@@ -287,14 +295,10 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               Positioned(
-                bottom: 0,
-                width: MediaQuery.of(context).size.width,
-                child: FutureBuilder<bool>(
-                    future:
-                        UsersService.isBlockedBy(widget.chat.otherProfile.uid),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData && snapshot.data) {
-                        return Padding(
+                  bottom: 0,
+                  width: MediaQuery.of(context).size.width,
+                  child: _wasBlocked
+                      ? Padding(
                           padding: const EdgeInsets.only(
                             left: 40,
                             right: 40,
@@ -310,56 +314,60 @@ class _ChatPageState extends State<ChatPage> {
                               color: MyPalette.white,
                             ),
                           ),
-                        );
-                      }
-                      return MessageField(
-                        media: _messageMedia,
-                        referencedMessage: _referencedMessage,
-                        onRemoveMedia: () {
-                          setState(() => _messageMedia = null);
-                        },
-                        onRemoveReferencedMessage: () {
-                          setState(() => _referencedMessage = null);
-                        },
-                        onChangeMedia: (newMedia) {
-                          setState(() => _messageMedia = newMedia);
-                        },
-                        onSendMessage: (text) async {
-                          final message = Message(
-                            sender: Provider.of<User>(context, listen: false)
-                                .profile,
-                            sentOn: DateTime.now(),
-                            readOn: null,
-                            referencedMessage: _referencedMessage,
-                            text: text,
-                            media: _messageMedia,
-                          );
-                          setState(() {
-                            _messageMedia = null;
-                            _referencedMessage = null;
-                            widget.chat.lastReadMessageId = null;
-                          });
-                          await messageSender.send(message);
-                        },
-                        onStartTyping: () => ChatsService.toggleTyping(
-                          widget.chat.id,
-                          Provider.of<User>(context, listen: false).profile.uid,
-                          true,
-                        ),
-                        onStopTyping: () => ChatsService.toggleTyping(
-                          widget.chat.id,
-                          Provider.of<User>(context, listen: false).profile.uid,
-                          false,
-                        ),
-                      );
-                    }),
-              ),
+                        )
+                      : MessageField(
+                          media: _messageMedia,
+                          referencedMessage: _referencedMessage,
+                          onRemoveMedia: () {
+                            setState(() => _messageMedia = null);
+                          },
+                          onRemoveReferencedMessage: () {
+                            setState(() => _referencedMessage = null);
+                          },
+                          onChangeMedia: (newMedia) {
+                            setState(() => _messageMedia = newMedia);
+                          },
+                          onSendMessage: (text) async {
+                            final message = Message(
+                              sender: Provider.of<User>(context, listen: false)
+                                  .profile,
+                              sentOn: DateTime.now(),
+                              readOn: null,
+                              referencedMessage: _referencedMessage,
+                              text: text,
+                              media: _messageMedia,
+                            );
+                            setState(() {
+                              _messageMedia = null;
+                              _referencedMessage = null;
+                              widget.chat.lastReadMessageId = null;
+                            });
+                            await messageSender.send(message);
+                          },
+                          onStartTyping: () => ChatsService.toggleTyping(
+                            widget.chat.id,
+                            Provider.of<User>(context, listen: false)
+                                .profile
+                                .uid,
+                            true,
+                          ),
+                          onStopTyping: () => ChatsService.toggleTyping(
+                            widget.chat.id,
+                            Provider.of<User>(context, listen: false)
+                                .profile
+                                .uid,
+                            false,
+                          ),
+                        )),
               if (_showChatOptions)
                 Positioned(
                   top: 10,
                   right: 10,
                   child: SafeArea(
-                    child: ChatPopupMenu(chat: widget.chat),
+                    child: ChatPopupMenu(
+                      chat: widget.chat,
+                      onUpdate: () => setState(() => _showChatOptions = false),
+                    ),
                   ),
                 ),
             ],

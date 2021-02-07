@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tundr/pages/home.dart';
+import 'package:tundr/pages/login.dart';
 import 'package:tundr/pages/welcome.dart';
 
 import '../accounts.dart';
-import '../utils.dart';
 
 Future<void> loginWith(
   WidgetTester tester, {
   @required Account account,
   bool expectHome = true,
 }) async {
-  assert(account.exists);
-
-  expect(find.byType(WelcomePage), findsOneWidget);
-  await tester.tap(find.byKey(ValueKey('loginBtn')));
-  await tester.pumpAndSettle();
+  expect(find.byType(LoginPage), findsOneWidget);
   await tester.enterText(
       find.byKey(ValueKey('usernameField')), account.username);
   await tester.enterText(
       find.byKey(ValueKey('passwordField')), account.password);
   await tester.tap(find.byKey(ValueKey('loginSubmitBtn')));
+  // await tester.pump(Duration(seconds: 4));
   await tester.pumpAndSettle();
-  await tester.pump(Duration(seconds: 4));
   if (expectHome) expect(find.byType(HomePage), findsOneWidget);
 
   Accounts.current = account;
@@ -37,7 +33,6 @@ Future<void> testInvalidLoginWith(
   );
   expect(find.byType(AlertDialog), findsOneWidget);
   await tester.tap(find.text('CLOSE'));
-  await back();
   await tester.pumpAndSettle();
 }
 

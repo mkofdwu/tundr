@@ -8,12 +8,14 @@ import 'package:tundr/services/storage_service.dart';
 class MessageSender {
   final String uid; // authenticated user's id
   final Chat chat;
+  final Function onUpdate;
 
   final List<Message> unsentMessages = [];
 
   MessageSender({
     @required this.uid,
     @required this.chat,
+    this.onUpdate,
   });
 
   Future<void> send(Message message) async {
@@ -54,6 +56,10 @@ class MessageSender {
       unsentMessages.remove(unsent);
     }
     chat.type = ChatType.normal;
+
+    // TEMPORARY FIX:
+    // for some reason the unsent messages update previously but not here
+    if (onUpdate != null) onUpdate();
   }
 
   Future<void> _uploadMessageMedia(Message message) async {
