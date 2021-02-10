@@ -195,6 +195,7 @@ class _ChatPageState extends State<ChatPage> {
                           vertical: 10,
                         ),
                         child: MyFeature(
+                          key: ValueKey('messageTileFeature'),
                           featureId: 'message_tile',
                           tapTarget: SizedBox.shrink(),
                           title: 'Message options',

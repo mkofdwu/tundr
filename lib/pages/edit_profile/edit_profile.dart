@@ -98,6 +98,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         title: Text('My profile'),
         actions: <Widget>[
           MyFeature(
+            key: ValueKey('previewProfileFeature'),
             featureId: 'preview_profile',
             tapTarget: Icon(Icons.remove_red_eye),
             title: 'Preview profile',

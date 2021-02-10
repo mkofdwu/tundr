@@ -10,11 +10,9 @@ import 'package:tundr/models/message.dart';
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/utils/from_theme.dart';
 import 'package:tundr/utils/show_options_dialog.dart';
-import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/media/media_thumbnail.dart';
 import 'package:tundr/widgets/buttons/simple_icon.dart';
 import 'package:tundr/widgets/my_feature.dart';
-import 'package:tundr/widgets/textfields/plain.dart';
 import 'referenced_message_tile.dart';
 
 class MessageField extends StatefulWidget {
@@ -91,27 +89,148 @@ class _MessageFieldState extends State<MessageField> {
     });
   }
 
-  Widget _buildMediaTileDark() => Container(
-        width: double.infinity,
-        height: 200,
-        margin: const EdgeInsets.only(bottom: 20),
-        decoration: BoxDecoration(
-          border: Border.all(color: MyPalette.white),
-          boxShadow: [MyPalette.primaryShadow],
+  Widget _buildAttachedMedia() => Padding(
+        padding: const EdgeInsets.only(top: 5),
+        child: MyFeature(
+          key: ValueKey('dismissibleMediaFeature'),
+          featureId: 'dismissible_media',
+          tapTarget: SizedBox.shrink(),
+          title: 'Swipe to remove',
+          description:
+              'If you later decide to remove this image or video simply swipe left or right',
+          child: Dismissible(
+            key: Key('dismissible_media'),
+            child: Container(
+              width: double.infinity,
+              height: 200,
+              margin: const EdgeInsets.only(bottom: 20),
+              decoration: fromTheme(
+                context,
+                light: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: const [MyPalette.primaryShadow],
+                ),
+                dark: BoxDecoration(
+                  border: Border.all(color: MyPalette.white),
+                ),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: MediaThumbnail(widget.media),
+            ),
+            onDismissed: (_) => widget.onRemoveMedia(),
+          ),
         ),
-        child: MediaThumbnail(widget.media),
       );
 
-  Widget _buildMediaTileLight() => Container(
-        width: double.infinity,
-        height: 200,
-        margin: const EdgeInsets.only(bottom: 20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [MyPalette.primaryShadow],
+  Widget _buildReferencedMessage() => Padding(
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
+        child: MyFeature(
+          key: ValueKey('dismissibleReplyFeature'),
+          featureId: 'dismissible_reply',
+          tapTarget: SizedBox.shrink(),
+          title: 'Swipe to remove',
+          description: 'To remove this reply simply swipe left or right',
+          child: Dismissible(
+            key: Key('dismissible_reply'),
+            child: ReferencedMessageTile(
+              message: widget.referencedMessage,
+              fontSize: 20,
+              borderRadius: 20,
+            ),
+            onDismissed: (_) => widget.onRemoveReferencedMessage(),
+          ),
         ),
-        clipBehavior: Clip.antiAlias,
-        child: MediaThumbnail(widget.media),
+      );
+
+  Widget _buildTextField() => TextField(
+        controller: _textController,
+        cursorColor: MyPalette.white,
+        style: TextStyle(
+          color: MyPalette.white,
+          fontSize: 20,
+        ),
+        decoration: InputDecoration(
+          isDense: true,
+          contentPadding: const EdgeInsets.only(bottom: 8),
+          hintText: 'Say something',
+          hintStyle: TextStyle(color: MyPalette.white, fontSize: 20),
+          border: InputBorder.none,
+        ),
+        minLines: 1,
+        maxLines: 4,
+        onChanged: (_) {
+          if (!_isTyping) {
+            widget.onStartTyping();
+            _isTyping = true;
+          }
+
+          _stopTypingTimer?.cancel();
+          _stopTypingTimer = Timer(
+            Duration(
+              seconds: 3,
+            ), // if not typing for 3 seconds the user is considered to have stopped typing
+            () {
+              widget.onStopTyping();
+              _isTyping = false;
+            },
+          );
+        },
+      );
+
+  Widget _buildMediaSelectorAndTextField() => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            if (widget.media == null)
+              Container(
+                height: 40,
+                decoration: fromTheme(
+                  context,
+                  dark: BoxDecoration(
+                    border: Border(
+                      right: BorderSide(width: 2, color: MyPalette.white),
+                    ),
+                  ),
+                  light: BoxDecoration(
+                    color: MyPalette.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [MyPalette.primaryShadow],
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: <Widget>[
+                    SimpleIconButton(
+                      icon: Icons.photo_camera,
+                      activeColor: MyPalette.black.withOpacity(0.8),
+                      onPressed: () => _selectMedia(MediaType.image),
+                    ),
+                    SizedBox(width: 10),
+                    SimpleIconButton(
+                      icon: Icons.videocam,
+                      activeColor: MyPalette.black.withOpacity(0.8),
+                      onPressed: () => _selectMedia(MediaType.video),
+                    ),
+                  ],
+                ),
+              ),
+            SizedBox(width: 20),
+            Expanded(
+              child: _buildTextField(),
+            ),
+            SizedBox(width: 10),
+            if (_textController.text.isNotEmpty)
+              GestureDetector(
+                child: SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: Icon(Icons.send, color: MyPalette.white),
+                ),
+                onTap: _sendMessage,
+              )
+          ],
+        ),
       );
 
   @override
@@ -133,117 +252,9 @@ class _MessageFieldState extends State<MessageField> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (widget.referencedMessage != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 5, bottom: 5),
-                child: MyFeature(
-                  featureId: 'dismissible_reply',
-                  tapTarget: SizedBox.shrink(),
-                  title: 'Swipe to remove',
-                  description:
-                      'To remove this reply simply swipe left or right',
-                  child: Dismissible(
-                    key: Key('dismissible_reply'),
-                    child: ReferencedMessageTile(
-                      message: widget.referencedMessage,
-                      fontSize: 20,
-                      borderRadius: 20,
-                    ),
-                    onDismissed: (_) => widget.onRemoveReferencedMessage(),
-                  ),
-                ),
-              ),
-            if (widget.media != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: MyFeature(
-                  featureId: 'dismissible_media',
-                  tapTarget: SizedBox.shrink(),
-                  title: 'Swipe to remove',
-                  description:
-                      'If you later decide to remove this image or video simply swipe left or right',
-                  child: Dismissible(
-                    key: Key('dismissible_media'),
-                    child: fromTheme(
-                      context,
-                      dark: _buildMediaTileDark(),
-                      light: _buildMediaTileLight(),
-                    ),
-                    onDismissed: (_) => widget.onRemoveMedia(),
-                  ),
-                ),
-              ),
-            Row(
-              children: <Widget>[
-                if (widget.media == null)
-                  Container(
-                    height: 40,
-                    decoration: fromTheme(
-                      context,
-                      dark: BoxDecoration(
-                        border: Border(
-                          right: BorderSide(width: 2, color: MyPalette.white),
-                        ),
-                      ),
-                      light: BoxDecoration(
-                        color: MyPalette.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [MyPalette.primaryShadow],
-                      ),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      children: <Widget>[
-                        SimpleIconButton(
-                          icon: Icons.photo_camera,
-                          activeColor: MyPalette.black.withOpacity(0.8),
-                          onPressed: () => _selectMedia(MediaType.image),
-                        ),
-                        SizedBox(width: 10),
-                        SimpleIconButton(
-                          icon: Icons.videocam,
-                          activeColor: MyPalette.black.withOpacity(0.8),
-                          onPressed: () => _selectMedia(MediaType.video),
-                        ),
-                      ],
-                    ),
-                  ),
-                SizedBox(width: 20),
-                Expanded(
-                  child: PlainTextField(
-                    controller: _textController,
-                    hintText: 'Say something',
-                    hintTextColor: MyPalette.white,
-                    color: MyPalette.white,
-                    onChanged: (_) {
-                      if (!_isTyping) {
-                        widget.onStartTyping();
-                        _isTyping = true;
-                      }
-
-                      _stopTypingTimer?.cancel();
-                      _stopTypingTimer = Timer(
-                        Duration(
-                          seconds: 3,
-                        ), // if not typing for 3 seconds the user is considered to have stopped typing
-                        () {
-                          widget.onStopTyping();
-                          _isTyping = false;
-                        },
-                      );
-                    },
-                    onEditingComplete: _sendMessage,
-                  ),
-                ),
-                SizedBox(width: 10),
-                if (_textController.text.isNotEmpty)
-                  TileIconButton(
-                    icon: Icons.send,
-                    iconColor: MyPalette.white,
-                    onPressed: _sendMessage,
-                  )
-              ],
-            ),
+            if (widget.referencedMessage != null) _buildReferencedMessage(),
+            if (widget.media != null) _buildAttachedMedia(),
+            _buildMediaSelectorAndTextField(),
           ],
         ),
       ),

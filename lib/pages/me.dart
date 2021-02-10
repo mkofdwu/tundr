@@ -200,6 +200,7 @@ class _MePageState extends State<MePage> {
                             child: SizedBox(
                               width: double.infinity,
                               child: MyFeature(
+                                key: ValueKey('popularityHistoryFeature'),
                                 featureId: 'popularity_history_chart',
                                 tapTarget: SizedBox.shrink(),
                                 title: 'Popularity history chart',

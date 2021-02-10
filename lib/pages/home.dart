@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage>
               Tab(
                 key: ValueKey('mostPopularTab'),
                 child: MyFeature(
+                  key: ValueKey('mostPopularFeature'),
                   featureId: 'most_popular_tab',
                   tapTarget: const Icon(Icons.people),
                   title: 'Most popular people',
@@ -79,6 +80,7 @@ class _HomePageState extends State<HomePage>
               Tab(
                 key: ValueKey('searchTab'),
                 child: MyFeature(
+                  key: ValueKey('searchFeature'),
                   featureId: 'search_tab',
                   tapTarget: const Icon(Icons.search),
                   title: 'Find anyone',

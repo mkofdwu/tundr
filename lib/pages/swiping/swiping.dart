@@ -243,6 +243,7 @@ class _SwipingPageState extends State<SwipingPage> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: MyFeature(
+              key: ValueKey('suggestionCardFeature'),
               featureId: 'suggestion_card',
               tapTarget: SizedBox.shrink(),
               title: 'View a profile',

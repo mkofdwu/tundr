@@ -5,6 +5,7 @@ import 'package:tundr/pages/login.dart';
 import 'package:tundr/pages/welcome.dart';
 
 import '../accounts.dart';
+import '../utils.dart';
 
 Future<void> loginWith(
   WidgetTester tester, {
@@ -17,11 +18,11 @@ Future<void> loginWith(
   await tester.enterText(
       find.byKey(ValueKey('passwordField')), account.password);
   await tester.tap(find.byKey(ValueKey('loginSubmitBtn')));
-  // await tester.pump(Duration(seconds: 4));
-  await tester.pumpAndSettle();
-  if (expectHome) expect(find.byType(HomePage), findsOneWidget);
-
-  Accounts.current = account;
+  await pump(tester, Duration(seconds: 1), 3);
+  if (expectHome) {
+    expect(find.byType(HomePage), findsOneWidget);
+    Accounts.current = account;
+  }
 }
 
 Future<void> testInvalidLoginWith(
@@ -31,6 +32,7 @@ Future<void> testInvalidLoginWith(
     account: Account(username, password, exists: false),
     expectHome: false,
   );
+  await tester.pump(Duration(seconds: 1));
   expect(find.byType(AlertDialog), findsOneWidget);
   await tester.tap(find.text('CLOSE'));
   await tester.pumpAndSettle();
@@ -46,7 +48,8 @@ Future<void> logoutWith(WidgetTester tester) async {
   await tester.tap(find.text('Logout'));
   await tester.pumpAndSettle();
   await tester.tap(find.text('OK'));
-  await tester.pump(Duration(seconds: 2));
+  await tester.pump(Duration(seconds: 1));
+  await tester.pumpAndSettle();
   expect(find.byType(WelcomePage), findsOneWidget);
 }
 

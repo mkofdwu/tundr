@@ -5,8 +5,8 @@ import 'package:tundr/pages/welcome.dart';
 
 import '../accounts.dart';
 import '../flows/delete_account.dart';
-import '../flows/registration.dart';
 import '../flows/login.dart';
+import '../flows/registration.dart';
 import '../utils.dart';
 
 void main() {
@@ -31,13 +31,14 @@ void main() {
   testWidgets('Register and login tests', (tester) async {
     await startApp(tester);
 
-    expect(find.byType(WelcomePage), findsOneWidget);
     await tester.tap(find.byKey(ValueKey('registerBtn')));
     await tester.pumpAndSettle();
 
     await invalidRegistration(tester);
     await registerWith(tester, Accounts.john);
     await logoutWith(tester);
+    await tester.tap(find.byKey(ValueKey('loginBtn')));
+    await tester.pumpAndSettle();
     await loginWith(tester, account: Accounts.john);
   });
 
@@ -50,6 +51,9 @@ void main() {
 
   testWidgets('Delete account', (tester) async {
     await startApp(tester);
+    await tester.tap(find.byKey(ValueKey('loginBtn')));
+    await tester.pumpAndSettle();
+    await loginWith(tester, account: Accounts.john);
     await deleteAccount(tester);
   });
 }

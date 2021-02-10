@@ -7,6 +7,14 @@ import '../accounts.dart';
 
 void deleteAccount(WidgetTester tester) async {
   expect(find.byType(HomePage), findsOneWidget);
+  for (final featureKey in [
+    'suggestionCardFeature',
+    'searchFeature',
+    'mostPopularFeature'
+  ]) {
+    await tester.tap(find.byKey(ValueKey(featureKey)));
+    await tester.pump(Duration(seconds: 1));
+  }
   await tester.tap(find.byKey(ValueKey('meTab')));
   await tester.pumpAndSettle();
   await tester.tap(find.byKey(ValueKey('settingsBtn')));

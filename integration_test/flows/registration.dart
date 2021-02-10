@@ -10,6 +10,7 @@ import 'package:tundr/pages/setup/phone_number.dart';
 import 'package:tundr/pages/setup/phone_verification.dart';
 import 'package:tundr/pages/setup/profile_pic.dart';
 import 'package:tundr/pages/setup/theme.dart';
+import 'package:tundr/pages/swiping/widgets/suggestion_card.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 import 'package:tundr/widgets/textfields/digit.dart';
 
@@ -147,8 +148,18 @@ Future<void> registerWith(WidgetTester tester, Account account) async {
   expect(find.byType(SetupThemePage), findsOneWidget);
   await tester.tap(find.text('Light'));
 
-  await tester.pump(Duration(seconds: 2));
+  await pump(tester, Duration(seconds: 1), 4);
+  for (final featureKey in [
+    'suggestionCardFeature',
+    'searchFeature',
+    'mostPopularFeature'
+  ]) {
+    await tester.tap(find.byKey(ValueKey(featureKey)));
+    await tester.pump(Duration(seconds: 1));
+  }
+  await tester.pumpAndSettle();
   expect(find.byType(HomePage), findsOneWidget);
+  expect(find.byType(SuggestionCard), findsOneWidget);
 
   Accounts.current = account;
 }

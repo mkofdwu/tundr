@@ -5,9 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:image_cropper/image_cropper.dart';
+// import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tundr/constants/my_palette.dart';
+// import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/utils/show_error_dialog.dart';
@@ -24,15 +24,16 @@ class MediaPickerService {
         case MediaType.image:
           final imageFile = await ImagePicker().getImage(source: source);
           if (imageFile == null) return null;
-          final croppedImage = await ImageCropper.cropImage(
-            sourcePath: imageFile.path,
-            androidUiSettings: AndroidUiSettings(
-              activeControlsWidgetColor: MyPalette.gold,
-            ),
-            // TODO FIXME: iOS UI settings
-          );
-          if (croppedImage == null) return null;
-          mediaFile = croppedImage;
+          // final croppedImage = await ImageCropper.cropImage(
+          //   sourcePath: imageFile.path,
+          //   androidUiSettings: AndroidUiSettings(
+          //     activeControlsWidgetColor: MyPalette.gold,
+          //   ),
+          //   // TODO FIXME: iOS UI settings
+          // );
+          // if (croppedImage == null) return null;
+          // mediaFile = croppedImage;
+          mediaFile = File(imageFile.path);
           break;
         case MediaType.video:
           final videoFile = await ImagePicker().getVideo(source: source);

@@ -1,6 +1,7 @@
-import { addHomeworkList } from './migrations';
+import { deleteAccount } from './management/delete-account';
+// import { addHomeworkList } from './migrations';
 
 (async () => {
-  await addHomeworkList();
+  await deleteAccount('johncremley');
   console.log('done');
 })();

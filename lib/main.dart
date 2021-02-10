@@ -39,6 +39,8 @@ import 'package:tundr/widgets/handlers/notification_handler.dart';
 import 'package:tundr/widgets/rebuilder.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   final appRunner = () => runApp(Rebuilder(
         child: MultiProvider(
           providers: [
