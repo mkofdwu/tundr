@@ -102,7 +102,7 @@ class _PersonalInfoProfilePageState extends State<PersonalInfoProfilePage> {
                   })),
                 ),
                 SizedBox(height: 30),
-                profile.interests.isEmpty
+                (profile.interests + profile.customInterests).isEmpty
                     ? Text(
                         'No interests',
                         style: TextStyle(

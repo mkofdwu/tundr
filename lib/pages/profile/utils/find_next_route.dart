@@ -10,7 +10,10 @@ final pages = [
   ],
   [
     '/profile/personal_info',
-    (profile) => profile.interests.isNotEmpty || profile.personalInfo.isNotEmpty
+    (profile) =>
+        profile.interests.isNotEmpty ||
+        profile.customInterests.isNotEmpty ||
+        profile.personalInfo.isNotEmpty
   ],
 ];
 
