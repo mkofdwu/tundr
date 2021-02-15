@@ -23,8 +23,10 @@ export default functions.firestore
     const sender = (
       await userProfilesRef.doc(message['senderUid']).get()
     ).data();
-    if (sender == null)
+    if (sender == null) {
+      // sender account has been deleted?
       throw 'could not find message sender with uid: ' + message['senderUid'];
+    }
 
     const tokens: string[] = [];
     for (const uid of participants) {

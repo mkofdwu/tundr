@@ -21,7 +21,7 @@ const _canTalkTo = async (
     .where('uid', '==', otherUid)
     .limit(1)
     .get();
-  if (snapshot.docs.length !== 0) return true;
+  if (snapshot.docs.length > 0) return true;
   // check if user blocks unknown messages
   const otherUserPrivateInfo = (
     await usersPrivateInfoRef.doc(otherUid).get()

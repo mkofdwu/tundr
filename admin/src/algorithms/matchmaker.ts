@@ -15,16 +15,23 @@ const N = 10; // maximum amount of suggestions generated per day for each user
 const valuePassesFilter = (value: any, filter: Filter) => {
   if (filter.options == null) return true; // no preference
   switch (filter.name) {
+    // types 0 (number input), 2 (slider),
     case 'Height':
+    case 'Weight':
     case 'Personality':
     case 'K-Pop':
     case 'Anime':
+    case 'Typing speed':
       return filter.options[0] <= value && value <= filter.options[1];
+    // types 1 (string), 3 (radio group)
     case 'Religion':
     case 'Star sign':
     case 'Relationship status':
+    case 'School':
       return filter.options.includes(value);
+    // type 4 (string list)
     case 'Pets':
+    case 'Fetishes':
       switch (filter.method) {
         case FilterMethod.none:
           return true;
@@ -49,6 +56,10 @@ const otherUserPassesFilters = (
   otherUser: FirebaseFirestore.DocumentData
 ) => {
   // NOTE: gender is already verified to be acceptable
+  // if the user is bisexual, dont show him/herself
+  if (user.uid === otherUser.uid) {
+    return false;
+  }
   // already gone through
   if (Object.keys(user.suggestionsGoneThrough).includes(otherUser.uid))
     return false;

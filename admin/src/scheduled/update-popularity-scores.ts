@@ -1,6 +1,7 @@
 import admin = require('firebase-admin');
 
 import { usersAlgorithmDataRef, usersPrivateInfoRef } from '../constants';
+import countLikes from '../utils/count-likes';
 import pageRank from '../utils/pagerank';
 
 const round2dp = (num: number) =>
@@ -24,7 +25,8 @@ export default async () => {
     likedGraph.push(userLiked);
   });
 
-  let userPopularityScores: number[] = pageRank(likedGraph);
+  // let userPopularityScores: number[] = pageRank(likedGraph);
+  let userPopularityScores: number[] = countLikes(likedGraph); // temporary quick fix
 
   if (userPopularityScores.length != uids.length)
     throw 'pagerank returned a different amount of users';
@@ -37,7 +39,7 @@ export default async () => {
     const updatedScore = round2dp(
       userPopularityScores[i] * (100 / averagePopularityScore)
     );
-    usersPrivateInfoRef.doc(uids[i]).update({
+    await usersPrivateInfoRef.doc(uids[i]).update({
       popularityScore: updatedScore,
       popularityHistory: admin.firestore.FieldValue.arrayUnion(
         Date.now() + ':' + updatedScore

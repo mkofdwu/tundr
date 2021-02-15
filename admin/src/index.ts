@@ -1,7 +1,6 @@
-import { deleteAccount } from './management/delete-account';
-// import { addHomeworkList } from './migrations';
+import generateDailySuggestions from './scheduled/generate-daily-suggestions';
 
 (async () => {
-  await deleteAccount('johncremley');
+  await generateDailySuggestions();
   console.log('done');
 })();

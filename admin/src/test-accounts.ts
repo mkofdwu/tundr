@@ -203,3 +203,13 @@ export const deleteTestAccounts = async () => {
   }
   console.log('done deleting accounts');
 };
+
+export const deleteTestAccountsFromAuth = async () => {
+  const users = (await admin.auth().listUsers()).users;
+  for (const userRec of users) {
+    console.log('user email: ' + userRec.email);
+    if (userRec.email?.endsWith('_test@example.com')) {
+      await admin.auth().deleteUser(userRec.uid);
+    }
+  }
+};

@@ -82,24 +82,18 @@ class _PersonalInfoProfilePageState extends State<PersonalInfoProfilePage> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(
-                            name,
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
+                          Text(name, style: TextStyle(fontSize: 20)),
                           ConstrainedBox(
                             constraints: BoxConstraints(maxWidth: 100),
                             child: Text(
                               value is List
                                   ? value.join(', ')
                                   : value.toString(),
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.end,
                             ),
                           ),
                         ],

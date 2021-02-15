@@ -18,6 +18,11 @@ const Map<String, Map<String, dynamic>> personalInfoFields = {
     'prompt': 'Enter your height in cm',
     'options': 300,
   },
+  'Weight': {
+    'type': 0,
+    'prompt': 'Enter your weight in kg',
+    'options': 300,
+  },
   'Personality': {
     'type': 2,
     'prompt':

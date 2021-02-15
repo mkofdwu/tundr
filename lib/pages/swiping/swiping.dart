@@ -63,10 +63,14 @@ class _SwipingPageState extends State<SwipingPage> {
         .map((__i, uid) => MapEntry<String, bool>(uid, null));
     suggestions.addAll(privateInfo.respondedSuggestions); // create a copy
     for (final uid in suggestions.keys) {
-      _suggestionWithProfiles.add(SuggestionWithProfile(
-        profile: await UsersService.getUserProfile(uid),
-        wasLiked: suggestions[uid],
-      ));
+      final profile =
+          await UsersService.getUserProfile(uid, returnDeletedUser: false);
+      if (profile != null) {
+        _suggestionWithProfiles.add(SuggestionWithProfile(
+          profile: profile,
+          wasLiked: suggestions[uid],
+        ));
+      }
     }
     if (mounted) setState(() => _loading = false);
   }

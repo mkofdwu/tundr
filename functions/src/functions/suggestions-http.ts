@@ -19,7 +19,7 @@ export const generateSuggestionsForNewUser = functions.https.onCall(
     const profile = (await userProfilesRef.doc(uid).get()).data();
     const algorithmData = (await usersAlgorithmDataRef.doc(uid).get()).data();
     if (profile == null || algorithmData == null)
-      throw 'could not get profile or algorithm data for user ' + uid;
+      throw 'could not get profile or algorithm data for new user ' + uid;
 
     const showMeBoys = algorithmData['showMeBoys'];
     const showMeGirls = algorithmData['showMeGirls'];
@@ -105,9 +105,13 @@ export const respondToSuggestion = functions.https.onCall(
     const otherUid = data.otherUid;
     const liked = data.liked;
     if (uid == null || otherUid == null || typeof liked !== 'boolean') return;
-    await usersPrivateInfoRef
-      .doc(otherUid)
-      .set({ respondedSuggestions: { [uid]: liked } }, { merge: true });
+    const privateInfoDoc = await usersPrivateInfoRef.doc(otherUid).get();
+    if (privateInfoDoc.exists) {
+      await privateInfoDoc.ref.set(
+        { respondedSuggestions: { [uid]: liked } },
+        { merge: true }
+      );
+    }
   }
 );
 
@@ -116,12 +120,15 @@ export const undoSuggestionResponse = functions.https.onCall(
     const uid = context.auth?.uid;
     const otherUid = data.otherUid;
     if (uid == null || otherUid == null) return;
-    await usersPrivateInfoRef.doc(otherUid).set(
-      {
-        respondedSuggestions: { [uid]: admin.firestore.FieldValue.delete() },
-      },
-      { merge: true }
-    );
+    const privateInfoDoc = await usersPrivateInfoRef.doc(otherUid).get();
+    if (privateInfoDoc.exists) {
+      await privateInfoDoc.ref.set(
+        {
+          respondedSuggestions: { [uid]: admin.firestore.FieldValue.delete() },
+        },
+        { merge: true }
+      );
+    }
   }
 );
 
@@ -136,8 +143,10 @@ export const matchWith = functions.https.onCall(async (data, context) => {
   const otherAlgorithmData = (
     await usersAlgorithmDataRef.doc(otherUid).get()
   ).data();
-  if (algorithmData == null || otherAlgorithmData == null)
-    throw 'could not get either user algorithm data';
+  if (algorithmData == null || otherAlgorithmData == null) {
+    // one of their accounts was probably deleted
+    return { result: null };
+  }
   if (!otherAlgorithmData['suggestionsGoneThrough'][uid]) {
     // verify that the other user also liked this user (note that the user invoking the function has not updated suggestionsGoneThrough yet)
     throw 'failed to match, both users did not like each other';

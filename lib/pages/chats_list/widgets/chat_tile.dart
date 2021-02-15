@@ -181,13 +181,12 @@ class _ChatTileState extends State<ChatTile> {
           ),
           child: Stack(
             children: <Widget>[
-                  widget.chat.otherProfile.profileImageUrl == null
-                      ? null
-                      : getNetworkImage(
-                          widget.chat.otherProfile.profileImageUrl,
-                          width: 150,
-                          height: 250,
-                        ),
+                  if (widget.chat.otherProfile.profileImageUrl != null)
+                    getNetworkImage(
+                      widget.chat.otherProfile.profileImageUrl,
+                      width: 150,
+                      height: 250,
+                    ),
                 ] +
                 fromTheme(
                   context,

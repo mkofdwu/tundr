@@ -48,7 +48,10 @@ export const isBlockedBy = functions.https.onCall(async (data, context) => {
   const otherPrivateInfo = (
     await usersPrivateInfoRef.doc(otherUid).get()
   ).data();
-  if (otherPrivateInfo == null) throw "could not get other user's private info";
+  if (otherPrivateInfo == null) {
+    // other user probably deleted their account
+    return { result: false };
+  }
   return {
     result: otherPrivateInfo['blocked'].includes(uid),
   };

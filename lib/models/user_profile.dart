@@ -78,7 +78,7 @@ class UserProfile {
       username: 'deleted',
       name: 'Deleted',
       gender: null,
-      profileImageUrl: null,
+      profileImageUrl: '',
       aboutMe: 'I have deleted my account',
       birthday: DateTime(0, 0, 0),
       homework: [],

@@ -32,6 +32,7 @@ export default async () => {
   // console.log(uidToSuggestions);
   for (const [uid, suggestions] of uidToSuggestions) {
     await usersPrivateInfoRef.doc(uid).update({
+      numRightSwiped: 0,
       dailyGeneratedSuggestions: suggestions,
     });
   }
