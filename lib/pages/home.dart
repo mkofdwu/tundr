@@ -101,12 +101,7 @@ class _HomePageState extends State<HomePage>
         controller: _tabController,
         children: <Widget>[
           SizedBox.shrink(),
-          LayoutBuilder(
-            builder: (context, constraints) => MostPopularPage(
-              height: constraints.maxHeight * 2,
-              width: constraints.maxWidth,
-            ),
-          ),
+          MostPopularPage(),
           SwipingPage(),
           SizedBox.shrink(),
           ChatsListPage(),

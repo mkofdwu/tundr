@@ -17,28 +17,28 @@ export const phoneNumberExists = functions.https.onCall(
   }
 );
 
-const N_MOST_POPULAR = 10;
+const N_MOST_POPULAR = 10; // number of users to load each time
 
-export const getMostPopular = functions.https.onCall(
-  async (_data, _context) => {
-    const userPrivateInfoDocs = (
-      await usersPrivateInfoRef
-        .where('settings.showInMostPopular', '==', true)
-        .orderBy('popularityScore', 'desc')
-        .limit(N_MOST_POPULAR)
-        .get()
-    ).docs;
-    const popularUsers = [];
-    for (const privateInfoDoc of userPrivateInfoDocs) {
-      const uid = privateInfoDoc.id;
-      popularUsers.push({
-        profile: (await userProfilesRef.doc(uid).get()).data(),
-        popularityScore: privateInfoDoc.data().popularityScore,
-      });
-    }
-    return { result: popularUsers };
+export const getMostPopular = functions.https.onCall(async (data, _context) => {
+  const page = data.page ?? 0;
+  const userPrivateInfoDocs = (
+    await usersPrivateInfoRef
+      .where('settings.showInMostPopular', '==', true)
+      .orderBy('popularityScore', 'desc')
+      .offset(N_MOST_POPULAR * page)
+      .limit(N_MOST_POPULAR)
+      .get()
+  ).docs;
+  const popularUsers = [];
+  for (const privateInfoDoc of userPrivateInfoDocs) {
+    const uid = privateInfoDoc.id;
+    popularUsers.push({
+      profile: (await userProfilesRef.doc(uid).get()).data(),
+      popularityScore: privateInfoDoc.data().popularityScore,
+    });
   }
-);
+  return { result: popularUsers };
+});
 
 export const isBlockedBy = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;

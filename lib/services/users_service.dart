@@ -8,6 +8,8 @@ import 'package:tundr/models/user_status.dart';
 import 'package:tundr/store/user.dart';
 import 'package:tundr/utils/call_https_function.dart';
 
+const NUM_POPULAR_USERS_PER_PAGE = 10;
+
 class UsersService {
   static Future<UserProfile> getUserProfile(
     String uid, {
@@ -95,20 +97,29 @@ class UsersService {
   static Future<bool> isBlockedBy(String otherUid) =>
       callHttpsFunction<bool>('isBlockedBy', {'otherUid': otherUid});
 
-  static Future<List<PopularUser>> getMostPopular() async {
-    final mostPopularUsers = await callHttpsFunction<List>('getMostPopular');
-    return mostPopularUsers.map<PopularUser>((popUser) {
-      final unserializedBirthday = popUser['profile']['birthday'];
-      popUser['profile']['birthday'] = Timestamp(
-        unserializedBirthday['_seconds'],
-        unserializedBirthday['_nanoseconds'],
-      );
-      return PopularUser(
-        profile:
-            UserProfile.fromMap(Map<String, dynamic>.from(popUser['profile'])),
-        popularityScore: popUser['popularityScore'],
-      );
-    }).toList();
+  static Future<List<PopularUser>> getMostPopular(int page) async {
+    final mostPopularUsers =
+        await callHttpsFunction<List>('getMostPopular', {'page': page});
+    return mostPopularUsers
+        .asMap()
+        .map((i, popUser) {
+          final unserializedBirthday = popUser['profile']['birthday'];
+          popUser['profile']['birthday'] = Timestamp(
+            unserializedBirthday['_seconds'],
+            unserializedBirthday['_nanoseconds'],
+          );
+          return MapEntry(
+            i,
+            PopularUser(
+              profile: UserProfile.fromMap(
+                  Map<String, dynamic>.from(popUser['profile'])),
+              popularityScore: popUser['popularityScore'],
+              position: page * NUM_POPULAR_USERS_PER_PAGE + i + 1,
+            ),
+          );
+        })
+        .values
+        .toList();
   }
 
   static Future<bool> canTalkTo(String otherUid) =>

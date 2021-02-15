@@ -1,7 +1,7 @@
 name: tundr
 description: tundr clean up removing support for web.
 
-version: 0.2.6+22
+version: 0.2.8+24
 
 environment:
   sdk: '>=2.2.2 <3.0.0'
