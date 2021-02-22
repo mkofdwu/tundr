@@ -25,8 +25,8 @@ export default async () => {
     likedGraph.push(userLiked);
   });
 
-  // let userPopularityScores: number[] = pageRank(likedGraph);
-  let userPopularityScores: number[] = countLikes(likedGraph); // temporary quick fix
+  let userPopularityScores: number[] = pageRank(likedGraph);
+  // let userPopularityScores: number[] = countLikes(likedGraph); // temporary quick fix
 
   if (userPopularityScores.length != uids.length)
     throw 'pagerank returned a different amount of users';

@@ -1,4 +1,3 @@
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:tundr/pages/chats_list/chats_list.dart';
 import 'package:tundr/pages/most_popular.dart';
@@ -28,12 +27,6 @@ class _HomePageState extends State<HomePage>
         Navigator.pushNamed(context, '/search').then(
             (_) => _tabController.animateTo(_tabController.previousIndex));
       }
-    });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      FeatureDiscovery.discoverFeatures(
-        context,
-        <String>['suggestion_card', 'search_tab', 'most_popular_tab', 'me_tab'],
-      );
     });
   }
 

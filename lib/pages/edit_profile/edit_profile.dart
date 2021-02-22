@@ -1,4 +1,3 @@
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/my_palette.dart';
@@ -72,14 +71,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
             onTap: _editInterests,
           )
         : InterestsWrap(interests: allInterests);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      FeatureDiscovery.discoverFeatures(context, <String>['preview_profile']);
-    });
   }
 
   @override

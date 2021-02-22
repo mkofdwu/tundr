@@ -128,7 +128,6 @@ export const generateTestAccounts = async (
     const birthdayMonth: number = 1 + Math.floor(Math.random() * 12);
     const birthday: Date = new Date(birthdayYear, birthdayMonth, 1);
 
-    // PAID
     const res = await fetch('https://picsum.photos/700/900');
     console.log(res.url);
 

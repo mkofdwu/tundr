@@ -1,7 +1,5 @@
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:tundr/constants/features.dart';
-import 'package:tundr/constants/my_palette.dart';
 
 class MyFeature extends StatelessWidget {
   final String featureId;
@@ -19,20 +17,9 @@ class MyFeature extends StatelessWidget {
       this.child})
       : super(key: key);
 
-  //static void discoverFeatures(BuildContext context, )
-
   @override
   Widget build(BuildContext context) {
     assert(features.contains(featureId));
-    return DescribedFeatureOverlay(
-      featureId: featureId,
-      tapTarget: tapTarget,
-      title: Text(title),
-      description: Text(description),
-      targetColor: MyPalette.white.withOpacity(0.8),
-      backgroundColor: Theme.of(context).accentColor,
-      overflowMode: OverflowMode.extendBackground,
-      child: child,
-    );
+    return child;
   }
 }

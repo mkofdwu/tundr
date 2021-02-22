@@ -1,4 +1,3 @@
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -278,14 +277,6 @@ class _MainSettingsPageState extends State<MainSettingsPage> {
                   settings.readReceipts = value;
                   Provider.of<User>(context, listen: false)
                       .writeField('settings', UserPrivateInfo);
-                },
-              ),
-              SizedBox(height: 20),
-              SeparatePageSettingField(
-                title: 'Take a tour',
-                onNextPage: () async {
-                  await FeatureDiscovery.clearPreferences(context, features);
-                  Rebuilder.rebuild(context);
                 },
               ),
               SizedBox(height: 20),

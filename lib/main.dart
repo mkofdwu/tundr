@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -141,40 +140,37 @@ class _TundrAppState extends State<TundrApp> {
 
         return Consumer<ThemeManager>(
           builder: (context, themeNotifier, child) {
-            return FeatureDiscovery(
-              child: MaterialApp(
-                title: 'tundr',
-                theme: _lightTheme,
-                darkTheme: _darkTheme,
-                themeMode: themeNotifier.theme,
-                debugShowCheckedModeBanner: false,
-                home: home,
-                routes: {
-                  '/welcome': (context) => WelcomePage(),
-                  '/login': (context) => LoginPage(),
-                  '/register': (context) => RegisterPage(),
-                  '/home': (context) => HomePage(),
-                  '/me': (context) => MePage(),
-                  '/search': (context) => SearchPage(),
-                  '/edit_profile': (context) => EditProfilePage(),
-                  '/profile': (context) => MainProfilePage(),
-                  '/profile/about_me': (context) => AboutMeProfilePage(),
-                  '/profile/homework': (context) => HomeworkProfilePage(),
-                  '/profile/extra_media': (context) => ExtraMediaProfilePage(),
-                  '/profile/personal_info': (context) =>
-                      PersonalInfoProfilePage(),
-                  '/settings': (context) => MainSettingsPage(),
-                  '/settings/filters': (context) => FiltersSettingsPage(),
-                  '/settings/notifications': (context) =>
-                      NotificationsSettingsPage(),
-                  '/settings/change_password': (context) =>
-                      ChangePasswordPage(),
-                  '/settings/blocked_users': (context) => BlockedUsersPage(),
-                  '/settings/confirm_delete_account': (context) =>
-                      ConfirmDeleteAccountPage(),
-                  '/about': (context) => AboutPage(),
-                },
-              ),
+            return MaterialApp(
+              title: 'tundr',
+              theme: _lightTheme,
+              darkTheme: _darkTheme,
+              themeMode: themeNotifier.theme,
+              debugShowCheckedModeBanner: false,
+              home: home,
+              routes: {
+                '/welcome': (context) => WelcomePage(),
+                '/login': (context) => LoginPage(),
+                '/register': (context) => RegisterPage(),
+                '/home': (context) => HomePage(),
+                '/me': (context) => MePage(),
+                '/search': (context) => SearchPage(),
+                '/edit_profile': (context) => EditProfilePage(),
+                '/profile': (context) => MainProfilePage(),
+                '/profile/about_me': (context) => AboutMeProfilePage(),
+                '/profile/homework': (context) => HomeworkProfilePage(),
+                '/profile/extra_media': (context) => ExtraMediaProfilePage(),
+                '/profile/personal_info': (context) =>
+                    PersonalInfoProfilePage(),
+                '/settings': (context) => MainSettingsPage(),
+                '/settings/filters': (context) => FiltersSettingsPage(),
+                '/settings/notifications': (context) =>
+                    NotificationsSettingsPage(),
+                '/settings/change_password': (context) => ChangePasswordPage(),
+                '/settings/blocked_users': (context) => BlockedUsersPage(),
+                '/settings/confirm_delete_account': (context) =>
+                    ConfirmDeleteAccountPage(),
+                '/about': (context) => AboutPage(),
+              },
             );
           },
         );

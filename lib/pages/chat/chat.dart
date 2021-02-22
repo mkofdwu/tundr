@@ -1,4 +1,3 @@
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tundr/constants/my_palette.dart';
@@ -70,7 +69,6 @@ class _ChatPageState extends State<ChatPage> {
         }
       }
       if (mounted) {
-        FeatureDiscovery.discoverFeatures(context, <String>['message_tile']);
         _wasBlocked =
             await UsersService.isBlockedBy(widget.chat.otherProfile.uid);
         setState(() {});
@@ -216,8 +214,6 @@ class _ChatPageState extends State<ChatPage> {
                             },
                             onReferenceMessage: () {
                               setState(() => _referencedMessage = message);
-                              FeatureDiscovery.discoverFeatures(
-                                  context, <String>['dismissible_reply']);
                             },
                             onDeleteMessage: () {
                               ChatsService.deleteMessage(

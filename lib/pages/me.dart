@@ -1,4 +1,3 @@
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -34,8 +33,6 @@ class _MePageState extends State<MePage> {
     WidgetsBinding.instance.addPostFrameCallback((duration) {
       _nameController.text =
           Provider.of<User>(context, listen: false).profile.name;
-      FeatureDiscovery.discoverFeatures(
-          context, <String>['popularity_history_chart']);
     });
   }
 

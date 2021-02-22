@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tundr/constants/my_palette.dart';
@@ -79,7 +78,6 @@ class _MessageFieldState extends State<MessageField> {
     );
     if (media == null) return;
     widget.onChangeMedia(media);
-    FeatureDiscovery.discoverFeatures(context, <String>['dismissible_media']);
   }
 
   void _sendMessage() {
