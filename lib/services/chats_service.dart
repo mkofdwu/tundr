@@ -34,7 +34,7 @@ class ChatsService {
     final querySnapshot = await chatsRef
         .doc(chat.id)
         .collection('messages')
-        .orderBy('sentOn', descending: true)
+        .orderBy('sentOn', descending: false)
         .get();
     final dateFormat = DateFormat('yyyy/MM/dd hh:mm a');
     for (final messageDoc in querySnapshot.docs) {

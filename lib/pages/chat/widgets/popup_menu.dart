@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v2.dart' as drive;
@@ -14,7 +12,6 @@ import 'package:tundr/store/user.dart';
 import 'package:tundr/services/chats_service.dart';
 import 'package:tundr/services/media_picker_service.dart';
 import 'package:tundr/services/storage_service.dart';
-import 'package:tundr/utils/show_info_dialog.dart';
 import 'package:tundr/utils/show_question_dialog.dart';
 import 'package:tundr/widgets/popup_menu.dart';
 
