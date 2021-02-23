@@ -5,7 +5,7 @@ import 'package:tundr/enums/chat_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/media.dart';
 import 'package:tundr/models/message.dart';
-import 'package:tundr/pages/chat/message_sender.dart';
+import 'package:tundr/pages/chat/controllers/message_sender.dart';
 import 'package:tundr/pages/chat/widgets/chat_description.dart';
 import 'package:tundr/pages/chat/widgets/message_field.dart';
 import 'package:tundr/pages/chat/widgets/message_tile_content.dart';
@@ -67,11 +67,9 @@ class _ChatPageState extends State<ChatPage> {
           );
         }
       }
-      if (mounted) {
-        _wasBlocked =
-            await UsersService.isBlockedBy(widget.chat.otherProfile.uid);
-        setState(() {});
-      }
+      _wasBlocked =
+          await UsersService.isBlockedBy(widget.chat.otherProfile.uid);
+      if (mounted) setState(() {});
     });
   }
 
@@ -371,6 +369,12 @@ class _ChatPageState extends State<ChatPage> {
                     child: ChatPopupMenu(
                       chat: widget.chat,
                       onUpdate: () => setState(() => _showChatOptions = false),
+                      onSuccessfullyExportChat: () => showInfoDialog(
+                        context: context,
+                        title: 'Done!',
+                        content:
+                            'Your chat with ${widget.chat.otherProfile.name} was exported successfully',
+                      ),
                     ),
                   ),
                 ),

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:tundr/constants/firebase_ref.dart';
 import 'package:tundr/enums/chat_type.dart';
+import 'package:tundr/enums/media_type.dart';
 import 'package:tundr/models/chat.dart';
 import 'package:tundr/models/message.dart';
 import 'package:tundr/models/user_profile.dart';
@@ -25,6 +27,30 @@ class ChatsService {
         .snapshots()
         .asyncMap((querySnapshot) =>
             Future.wait(querySnapshot.docs.map((doc) => Message.fromDoc(doc))));
+  }
+
+  static Future<String> getChatHistory(Chat chat, UserProfile user) async {
+    var chatHistory = '';
+    final querySnapshot = await chatsRef
+        .doc(chat.id)
+        .collection('messages')
+        .orderBy('sentOn', descending: true)
+        .get();
+    final dateFormat = DateFormat('yyyy/MM/dd hh:mm a');
+    for (final messageDoc in querySnapshot.docs) {
+      final data = messageDoc.data();
+      final sentOn = dateFormat.format(data['sentOn'].toDate());
+      final senderName =
+          data['senderUid'] == user.uid ? user.name : chat.otherProfile.name;
+      final mediaType = data['mediaType'] == null
+          ? ''
+          : '<' +
+              MediaType.values[data['mediaType']].toString().substring(10) +
+              '>';
+      final text = data['text'];
+      chatHistory += '$sentOn $senderName: ${mediaType} $text\n';
+    }
+    return chatHistory;
   }
 
   static Future<String> startConversation(String otherUid, Message message) =>

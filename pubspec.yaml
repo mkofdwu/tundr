@@ -1,7 +1,7 @@
 name: tundr
 description: tundr clean up removing support for web.
 
-version: 0.2.8+24
+version: 0.2.9+25
 
 environment:
   sdk: '>=2.2.2 <3.0.0'
@@ -28,6 +28,8 @@ dependencies:
   uuid: ^2.0.4
   video_compress: ^2.1.1
   video_player: ^1.0.1
+  googleapis: ^1.0.0
+  google_sign_in: ^4.5.9
 
 dev_dependencies:
   flutter_driver:

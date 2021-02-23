@@ -48,7 +48,7 @@ class AboutPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Version: 0.2.5',
+                  'Version: 0.2.9',
                   style: TextStyle(
                     fontSize: 14,
                   ),
