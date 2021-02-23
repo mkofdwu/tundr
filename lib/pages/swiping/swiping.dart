@@ -2,13 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/enums/chat_type.dart';
-import 'package:tundr/models/chat.dart';
-import 'package:tundr/models/user_algorithm_data.dart';
-import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/models/user_profile.dart';
-import 'package:tundr/pages/chat/chat.dart';
 import 'package:tundr/pages/swiping/controllers/card_animations_controller.dart';
+import 'package:tundr/pages/swiping/utils.dart';
 import 'package:tundr/pages/swiping/widgets/options_dark.dart';
 import 'package:tundr/pages/swiping/widgets/options_light.dart';
 import 'package:tundr/store/user.dart';
@@ -75,44 +71,11 @@ class _SwipingPageState extends State<SwipingPage> {
     if (mounted) setState(() => _loading = false);
   }
 
-  Future<void> _cleanUp(
-    String otherUid, {
-    bool likedUser,
-    bool isRespondedSuggestion,
-  }) async {
-    final privateInfo = Provider.of<User>(context, listen: false).privateInfo;
-    if (likedUser) privateInfo.numRightSwiped++;
-    if (isRespondedSuggestion) {
-      privateInfo.respondedSuggestions.remove(otherUid);
-    } else {
-      privateInfo.dailyGeneratedSuggestions.remove(otherUid);
-    }
-    await Provider.of<User>(context, listen: false).writeFields(
-      [
-        'numRightSwiped',
-        isRespondedSuggestion
-            ? 'respondedSuggestions'
-            : 'dailyGeneratedSuggestions',
-      ],
-      UserPrivateInfo,
-    );
-
-    Provider.of<User>(context, listen: false)
-        .algorithmData
-        .suggestionsGoneThrough[otherUid] = likedUser;
-    await Provider.of<User>(context, listen: false).writeFields(
-      ['suggestionsGoneThrough'],
-      UserAlgorithmData,
-    );
-  }
-
   void _onNope() async {
     if (_i >= _suggestionWithProfiles.length) return;
     final suggestionWithProfile = _suggestionWithProfiles[_i];
     final otherUid = suggestionWithProfile.profile.uid;
 
-    // FIXME: place this at the end? it may cause race conditions if the user
-    // swipes / undos too quickly
     setState(() {
       _i++;
       _canUndo = true;
@@ -123,7 +86,8 @@ class _SwipingPageState extends State<SwipingPage> {
       await SuggestionsService.respondToSuggestion(
           toUid: otherUid, liked: false);
     }
-    await _cleanUp(
+    await updateNumRightSwipedRemoveFromListAndGoneThrough(
+      context,
       otherUid,
       likedUser: false,
       isRespondedSuggestion: suggestionWithProfile.wasLiked != null,
@@ -149,10 +113,8 @@ class _SwipingPageState extends State<SwipingPage> {
 
     final suggestionWithProfile = _suggestionWithProfiles[_i];
     final otherUid = suggestionWithProfile.profile.uid;
-    var matchChatId;
+    var undo = false;
 
-    // FIXME: place this at the end? it may cause race conditions if user swipes
-    // too fast or undos to quickly
     setState(() {
       _i++;
       _canUndo = suggestionWithProfile.wasLiked != true;
@@ -165,38 +127,21 @@ class _SwipingPageState extends State<SwipingPage> {
         liked: true,
       );
     } else if (suggestionWithProfile.wasLiked) {
-      final matchAction = await Navigator.push(
+      undo = await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) =>
               ItsAMatchPage(profile: suggestionWithProfile.profile),
         ),
       );
-      if (matchAction == MatchAction.undo) return;
-      final chatId = await SuggestionsService.matchWith(otherUid);
-      if (matchAction == MatchAction.saySomething) matchChatId = chatId;
+      if (undo) return;
     }
-    await _cleanUp(
+    await updateNumRightSwipedRemoveFromListAndGoneThrough(
+      context,
       otherUid,
       likedUser: true,
       isRespondedSuggestion: suggestionWithProfile.wasLiked != null,
     );
-    if (matchChatId != null) {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ChatPage(
-            chat: Chat(
-              id: matchChatId,
-              otherProfile: suggestionWithProfile.profile,
-              wallpaperUrl: '',
-              lastReadMessageId: null,
-              type: ChatType.newMatch,
-            ),
-          ),
-        ),
-      );
-    }
   }
 
   @override

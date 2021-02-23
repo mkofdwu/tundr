@@ -8,6 +8,7 @@ import 'package:tundr/models/message.dart';
 import 'package:tundr/pages/chat/message_sender.dart';
 import 'package:tundr/pages/chat/widgets/chat_description.dart';
 import 'package:tundr/pages/chat/widgets/message_field.dart';
+import 'package:tundr/pages/chat/widgets/message_tile_content.dart';
 import 'package:tundr/pages/chat/widgets/popup_menu.dart';
 
 import 'package:tundr/store/user.dart';
@@ -20,7 +21,6 @@ import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/my_feature.dart';
 
 import 'widgets/message_tile.dart';
-import 'widgets/unsent_message_tile.dart';
 
 class ChatPage extends StatefulWidget {
   final Chat chat;
@@ -42,7 +42,6 @@ class _ChatPageState extends State<ChatPage> {
   Media _messageMedia;
   Message _referencedMessage;
   bool _showChatOptions = false;
-  // final List<Message> _unsentMessages = [];
   MessageSender messageSender;
   bool _wasBlocked = false;
 
@@ -171,8 +170,15 @@ class _ChatPageState extends State<ChatPage> {
               itemCount: unsentMessages.length + messages.length,
               itemBuilder: (context, i) {
                 if (i < unsentMessages.length) {
-                  return UnsentMessageTile(
+                  return MessageTileContent(
                     message: unsentMessages[unsentMessages.length - i - 1],
+                    fromMe: true,
+                    statusIcon: SizedBox(
+                      width: 10,
+                      height: 10,
+                      child: CircularProgressIndicator(strokeWidth: 1),
+                    ),
+                    onViewReferencedMessage: () {},
                   );
                 }
                 final messageIndex = i - unsentMessages.length;

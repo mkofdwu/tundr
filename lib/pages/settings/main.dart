@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tundr/constants/features.dart';
 import 'package:tundr/constants/numbers.dart';
 import 'package:tundr/models/user_private_info.dart';
 import 'package:tundr/store/user.dart';

@@ -4,8 +4,6 @@ import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/widgets/buttons/tile_icon.dart';
 import 'package:tundr/widgets/profile_tile.dart';
-import 'package:tundr/store/user.dart';
-import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -13,12 +11,12 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _usernameController.addListener(() => setState(() {}));
+    _nameController.addListener(() => setState(() {}));
   }
 
   void _openUser(user) => Navigator.pushNamed(
@@ -39,7 +37,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
         title: TextField(
           key: ValueKey('searchTextField'),
-          controller: _usernameController,
+          controller: _nameController,
           autofocus: true,
           style: Theme.of(context).textTheme.headline6,
           decoration: InputDecoration(
@@ -53,10 +51,10 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ),
-      body: _usernameController.text.length < 4
+      body: _nameController.text.length < 4
           ? SizedBox.shrink()
           : FutureBuilder(
-              future: UsersService.searchForUsers(_usernameController.text, 10),
+              future: UsersService.searchForUsers(_nameController.text, 10),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return SizedBox.shrink();
                 if (snapshot.data.isEmpty) {
@@ -70,8 +68,6 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   );
                 }
-                final uid =
-                    Provider.of<User>(context, listen: false).profile.uid;
                 return SingleChildScrollView(
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context)
@@ -82,7 +78,6 @@ class _SearchPageState extends State<SearchPage> {
                     key: ValueKey('searchResultsColumn'),
                     children: List<Widget>.from(
                       snapshot.data.map((resultProfile) {
-                        if (resultProfile.uid == uid) return SizedBox.shrink();
                         return Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 40, vertical: 20),

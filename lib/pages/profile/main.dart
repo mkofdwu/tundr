@@ -152,7 +152,8 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                   '${otherProfile.name}, ${otherProfile.ageInYears}',
                               style: TextStyle(
                                 color: MyPalette.white,
-                                fontSize: 40,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 36,
                               ),
                             ),
                             if (otherProfile.verified)
@@ -166,6 +167,11 @@ class _MainProfilePageState extends State<MainProfilePage> {
                         ),
                       ),
                     ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    '@${otherProfile.username}',
+                    style: TextStyle(color: MyPalette.white, fontSize: 20),
                   ),
                   SizedBox(height: 40),
                   findNextRoute('/profile/main', otherProfile) != null

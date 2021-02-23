@@ -24,7 +24,7 @@ class MessageSender {
     if (chat.type == ChatType.nonExistent) {
       // chat hasn't been created yet
       if (unsentMessages.length == 1) {
-        await _createChatThenSendUnsentMessages(message);
+        await _createChatThenSendUnsentMessages();
       } else {
         // do nothing, wait for chat to be created
       }
@@ -38,11 +38,13 @@ class MessageSender {
         await ChatsService.updateChatDetails(uid, chat.id, {'type': 3});
       }
       unsentMessages.remove(message);
+      if (onUpdate != null) onUpdate();
     }
   }
 
-  Future<void> _createChatThenSendUnsentMessages(Message firstMessage) async {
+  Future<void> _createChatThenSendUnsentMessages() async {
     // this is the first message sent, create a chat
+    final firstMessage = unsentMessages[0];
     await _uploadMessageMedia(firstMessage);
     chat.id = await ChatsService.startConversation(
       chat.otherProfile.uid,
@@ -56,9 +58,6 @@ class MessageSender {
       unsentMessages.remove(unsent);
     }
     chat.type = ChatType.normal;
-
-    // TEMPORARY FIX:
-    // for some reason the unsent messages update previously but not here
     if (onUpdate != null) onUpdate();
   }
 

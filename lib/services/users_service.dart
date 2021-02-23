@@ -66,26 +66,24 @@ class UsersService {
           'phoneNumberExists', {'phoneNumber': phoneNumber});
 
   static Future<List<UserProfile>> searchForUsers(
-      String partialUsername, int n) async {
+      String partialName, int n) async {
     final users = <UserProfile>[];
     final uids = <String>[];
     ((await userProfilesRef
-                    .where('username',
-                        isGreaterThanOrEqualTo: partialUsername.toLowerCase())
+                    .where('name',
+                        isGreaterThanOrEqualTo: partialName.toLowerCase())
                     .limit(n ~/ 2)
                     .get())
                 .docs +
             (await userProfilesRef
-                    .where('username',
-                        isGreaterThanOrEqualTo: partialUsername.toUpperCase())
+                    .where('name',
+                        isGreaterThanOrEqualTo: partialName.toUpperCase())
                     .limit(n ~/ 2)
                     .get())
                 .docs)
         .forEach((userDoc) {
       final profile = userDoc.data();
-      if (profile['username']
-              .toLowerCase()
-              .startsWith(partialUsername.toLowerCase()) &&
+      if (profile['name'].toLowerCase().startsWith(partialName.toLowerCase()) &&
           !uids.contains(profile['uid'])) {
         users.add(UserProfile.fromMap(profile));
         uids.add(profile['uid']);
