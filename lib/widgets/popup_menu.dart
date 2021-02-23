@@ -17,7 +17,7 @@ class MenuOption extends StatelessWidget {
     return Material(
       child: InkWell(
         child: Container(
-          height: 50,
+          height: 40,
           padding: const EdgeInsets.symmetric(horizontal: 20),
           alignment: Alignment.centerRight,
           child: Text(text, style: TextStyle(fontSize: 18)),
@@ -32,7 +32,7 @@ class MenuDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
       child: Container(
         width: 70,
         height: 2,
@@ -60,6 +60,7 @@ class PopupMenu extends StatelessWidget {
         ),
       ),
       clipBehavior: Clip.antiAlias,
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: IntrinsicWidth(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,

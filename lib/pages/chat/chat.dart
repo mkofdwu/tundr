@@ -78,6 +78,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void deactivate() {
     print('chat page deactivated');
+    // TODO: dont call this if chat has just been deleted
     ChatsService.updateLastReadMessageId(
       Provider.of<User>(context, listen: false).profile.uid,
       widget.chat.id,

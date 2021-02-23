@@ -18,6 +18,21 @@ class ChatPopupMenu extends StatelessWidget {
 
   ChatPopupMenu({@required this.chat, @required this.onUpdate});
 
+  void _deleteChat(context) async {
+    final confirm = await showQuestionDialog(
+      context: context,
+      title: 'Delete chat?',
+      content: 'You won\'t be able to undo this action',
+    );
+    if (confirm) {
+      await ChatsService.deleteChat(
+        Provider.of<User>(context, listen: false).profile.uid,
+        chat.id,
+      );
+      Navigator.pop(context);
+    }
+  }
+
   void _blockAndDeleteChat(context) async {
     final confirm = await showQuestionDialog(
       context: context,
@@ -66,14 +81,18 @@ class ChatPopupMenu extends StatelessWidget {
   void _starChat(context) {
     final uid = Provider.of<User>(context, listen: false).profile.uid;
     ChatsService.updateChatDetails(uid, chat.id, {'type': 2});
+    chat.type = ChatType.starred;
     onUpdate();
   }
 
   void _unstarChat(context) {
     final uid = Provider.of<User>(context, listen: false).profile.uid;
     ChatsService.updateChatDetails(uid, chat.id, {'type': 3});
+    chat.type = ChatType.normal;
     onUpdate();
   }
+
+  void _exportChat(context) {}
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +102,6 @@ class ChatPopupMenu extends StatelessWidget {
           text: 'Wallpaper',
           onPressed: () => _changeWallpaper(context),
         ),
-        if (chat.type == ChatType.normal || chat.type == ChatType.starred)
-          MenuDivider(),
         if (chat.type == ChatType.normal)
           MenuOption(
             text: 'Star chat',
@@ -96,6 +113,15 @@ class ChatPopupMenu extends StatelessWidget {
             onPressed: () => _unstarChat(context),
           ),
         MenuDivider(),
+        MenuOption(
+          text: 'Export chat',
+          onPressed: () => _exportChat(context),
+        ),
+        MenuDivider(),
+        MenuOption(
+          text: 'Delete chat',
+          onPressed: () => _deleteChat(context),
+        ),
         MenuOption(
           text: 'Block and delete chat',
           onPressed: () => _blockAndDeleteChat(context),

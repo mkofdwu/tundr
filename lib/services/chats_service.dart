@@ -60,11 +60,6 @@ class ChatsService {
     await chatsRef.doc(chatId).update({
       'participants': FieldValue.arrayRemove([uid])
     });
-    // if ((await chatsRef.doc(chatId).collection('participants').limit(1).get())
-    //     .docs
-    //     .isEmpty) {
-    //   await chatsRef.doc(chatId).delete();
-    // }
     final userChatRef = _userChatRef(uid, chatId);
     if (userChatRef.path.isNotEmpty) await userChatRef.delete();
   }
