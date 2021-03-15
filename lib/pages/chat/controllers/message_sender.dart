@@ -54,7 +54,7 @@ class MessageSender {
     // done creating chat, send unsent messages
     for (final unsent in List.from(unsentMessages)) {
       await _uploadMessageMedia(unsent);
-      await ChatsService.sendMessage(chat.id, firstMessage);
+      await ChatsService.sendMessage(chat.id, unsent);
       unsentMessages.remove(unsent);
     }
     chat.type = ChatType.normal;

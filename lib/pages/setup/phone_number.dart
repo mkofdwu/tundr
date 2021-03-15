@@ -7,6 +7,7 @@ import 'package:tundr/pages/setup/phone_verification.dart';
 import 'package:tundr/constants/my_palette.dart';
 import 'package:tundr/services/users_service.dart';
 import 'package:tundr/utils/show_error_dialog.dart';
+import 'package:tundr/utils/show_options_dialog.dart';
 import 'package:tundr/widgets/pages/scroll_down.dart';
 import 'package:tundr/widgets/scroll_down_arrow.dart';
 
@@ -16,17 +17,21 @@ class SetupPhoneNumberPage extends StatefulWidget {
 }
 
 class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
+  String _countryCode = '65';
   bool _loading = false;
+
+  void _selectCountryCode() async {
+    final countryCode = await showOptionsDialog(
+      context: context,
+      options: {'(+65) Singapore': '65', '(+1) US': '1'},
+    );
+    setState(() => _countryCode = countryCode);
+  }
 
   void _nextPage() async {
     setState(() => _loading = true);
     final phoneNumber =
         Provider.of<RegistrationInfo>(context, listen: false).phoneNumber;
-    if (phoneNumber.length != 11) {
-      await showErrorDialog(context: context, title: 'Invalid phone number');
-      setState(() => _loading = false);
-      return;
-    }
 
     if (await UsersService.phoneNumberExists(phoneNumber)) {
       await showErrorDialog(
@@ -44,7 +49,6 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
         pageBuilder: (context, animation1, animation2) =>
             PhoneVerificationPage(),
         transitionsBuilder: (context, animation1, animation2, child) {
-          // ANIMATION: curved animation with set duration
           return SlideTransition(
             position: Tween<Offset>(
               begin: Offset(0, 1),
@@ -104,23 +108,26 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                   width: width - 60,
                   child: Row(
                     children: <Widget>[
-                      Container(
-                        color: MyPalette.white,
-                        height: 60,
-                        width: 90,
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(width: 5),
-                            Icon(Icons.add, color: MyPalette.black, size: 30),
-                            Text(
-                              '65',
-                              style: TextStyle(
-                                color: MyPalette.black,
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold,
+                      GestureDetector(
+                        onTap: _selectCountryCode,
+                        child: Container(
+                          color: MyPalette.white,
+                          height: 60,
+                          width: 90,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(Icons.add, color: MyPalette.black, size: 30),
+                              Text(
+                                _countryCode,
+                                style: TextStyle(
+                                  color: MyPalette.black,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(width: 10),
@@ -147,7 +154,6 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                             ),
                           ),
                           cursorColor: MyPalette.white,
-                          maxLength: 8,
                           keyboardType: TextInputType.number,
                           controller: TextEditingController()
                             ..text = Provider.of<RegistrationInfo>(context,
@@ -157,7 +163,7 @@ class _SetupPhoneNumberPageState extends State<SetupPhoneNumberPage> {
                           onChanged: (value) {
                             Provider.of<RegistrationInfo>(context,
                                     listen: false)
-                                .phoneNumber = '+65' + value;
+                                .phoneNumber = '+' + _countryCode + value;
                           },
                         ),
                       ),
