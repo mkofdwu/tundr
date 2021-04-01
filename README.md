@@ -1,16 +1,5 @@
 # tundr
 
-A new Flutter project.
+tundr is a dating app for high schools. currently, it is only available for android since I can't afford the apple developer license.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+this was my first flutter project and the code is pretty messed up, and this project is not actively maintained. if i have time in the future I may refactor everything with a new architecture and implement a redesign.
