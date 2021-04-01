@@ -113,6 +113,11 @@ class _ChatPageState extends State<ChatPage> {
             SizedBox(width: 10),
             Expanded(
               child: GestureDetector(
+                onTap: () async => Navigator.pushNamed(
+                  context,
+                  '/profile',
+                  arguments: widget.chat.otherProfile,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,11 +129,6 @@ class _ChatPageState extends State<ChatPage> {
                     if (widget.chat.type != ChatType.nonExistent)
                       ChatDescription(chat: widget.chat)
                   ],
-                ),
-                onTap: () async => Navigator.pushNamed(
-                  context,
-                  '/profile',
-                  arguments: widget.chat.otherProfile,
                 ),
               ),
             ),

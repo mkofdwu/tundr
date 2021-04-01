@@ -138,23 +138,28 @@ class AuthService {
     RegistrationInfo info,
     Function(AuthCredential) onVerificationCompleted,
     Function(FirebaseAuthException) onVerificationFailed,
-  }) {
-    FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: info.phoneNumber,
-      timeout: const Duration(seconds: 120),
-      verificationCompleted: (AuthCredential credential) {
-        onVerificationCompleted(credential);
-      },
-      verificationFailed: (FirebaseAuthException exception) {
-        print('verification failed: ' + exception.message);
-        onVerificationFailed(exception);
-      },
-      codeSent: (String verificationId, int forceResendingToken) {
-        info.smsVerificationId = verificationId;
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        info.smsVerificationId = verificationId;
-      },
-    );
+  }) async {
+    try {
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: info.phoneNumber,
+        timeout: const Duration(seconds: 120),
+        verificationCompleted: (AuthCredential credential) {
+          onVerificationCompleted(credential);
+        },
+        verificationFailed: (FirebaseAuthException exception) {
+          print('verification failed: ' + exception.message);
+          onVerificationFailed(exception);
+        },
+        codeSent: (String verificationId, int forceResendingToken) {
+          info.smsVerificationId = verificationId;
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          info.smsVerificationId = verificationId;
+        },
+      );
+    } catch (e) {
+      // temporary fix for invalid phone numbers
+      onVerificationFailed(e);
+    }
   }
 }
